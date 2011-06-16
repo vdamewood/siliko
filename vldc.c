@@ -1,5 +1,10 @@
+#include <stdlib.h>
+
 #include "tokenizer.h"
 #include "parserx.h"
+#include "vldc.h"
+
+static char *error_message = NULL;
 
 int vldc(char *inString)
 {
@@ -9,3 +14,14 @@ int vldc(char *inString)
 	vldcparse();
 	return getvalue();
 }
+
+char *vldc_error(void)
+{
+	return error_message;
+}
+
+void vldc_clean(void)
+{
+	free(error_message);
+}
+
