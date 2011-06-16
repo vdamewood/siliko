@@ -1,0 +1,1 @@
+int vldc(char *inString);
