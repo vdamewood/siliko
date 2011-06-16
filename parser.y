@@ -46,11 +46,15 @@ value: NUMBER
 negnumber: SUB NUMBER { $$ = $2 * -1 } */
 %%
 
-void vldcerror(const char *s)
+/*void vldcerror(const char *s)
 {
+	char **error = vldc_get_error_location();
+	if (!(*error = malloc(strlen(s)+1))) {
+		vldc_set_error_code(1);
+	}
 	fprintf(stderr, "error: %s\n", s);
 }
-
+*/
 int dice(int count, int faces)
 {
 	static int hasSeeded = 0;
