@@ -34,7 +34,7 @@ if __name__ == "__main__":
 				value = vldc(raw_input())
 				print "Value:", value
 			except EOFError as e:
-				print
+				if istty: print
 				keeplooping = False
 			except Exception as e:
 				print "Error:", e
