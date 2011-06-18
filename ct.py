@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
 import ctypes as _ctypes
-
-_clib = _ctypes.CDLL("libvldc.so")
+import ctypes.util as _ctypes_util
+_path = _ctypes_util.find_library("vldc")
+# Hack for debugging on Linux with LD_LIBRARY_PATH set to .
+if _path is None: _path = "libvldc.so"
+_clib = _ctypes.CDLL(_path)
 _clib.vldc_error_message.restype = _ctypes.c_char_p
 
 def vldc(inString):
