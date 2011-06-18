@@ -1,7 +1,9 @@
 PYTHONPATH=/usr/include/python2.7
 LIBSUFFIX=.so
 NAMEPREFIX=vldc_yy
-
+CC=gcc
+CFLAGS=-Wall -fPIC
+LDFLAGS=-Wall
 all: libvldc${LIBSUFFIX} vldc
 
 clean:
@@ -15,7 +17,7 @@ distclean: clean
 buildcheck: all distclean
 
 parserx.o: parserx.h parserx.c
-	gcc -Wall -fPIC -c -o parserx.o parserx.c
+	$(CC) $(CFLAGS) -c -o parserx.o parserx.c
 
 parser.c: parser.y
 	bison --name-prefix=$(NAMEPREFIX) --output=parser.c --defines=parser.h parser.y
@@ -23,7 +25,7 @@ parser.c: parser.y
 parser.h: parser.c
 
 parser.o: parserx.h parser.c
-	gcc -Wall -fPIC -c -o parser.o parser.c
+	$(CC) $(CFLAGS) -c -o parser.o parser.c
 
 tokenizer.c: tokenizer.l
 	flex --prefix=$(NAMEPREFIX) --outfile=tokenizer.c --header-file=tokenizer.h tokenizer.l
@@ -37,12 +39,12 @@ vldc.o: tokenizer.h vldc.c
 	gcc -Wall -fPIC -c -o vldc.o vldc.c
 
 main.o: tokenizer.h main.c
-	gcc -Wall -c -o main.o main.c
+	$(CC) $(CFLAGS) -c -o main.o main.c
 
 libvldc$(LIBSUFFIX): parserx.o parser.o tokenizer.o vldc.o
-	gcc -Wall -shared -o libvldc$(LIBSUFFIX) vldc.o parserx.o tokenizer.o parser.o -ly
+	gcc $(LDFLAGS) -shared -o libvldc$(LIBSUFFIX) vldc.o parserx.o tokenizer.o parser.o
 
 vldc: libvldc$(LIBSUFFIX) main.o
-	gcc -Wall -o vldc main.o -L. -lvldc
-
+	gcc $(LDFLAGS) -o vldc main.o -L. -lvldc
+	
 .PHONY: all clean distclean check
