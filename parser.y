@@ -7,7 +7,7 @@
 #include "parserx.h"
 static int value;
 
-int vldclex(void);
+int vldc_yylex(void);
 int dice(int,int);
 %}
 
@@ -69,7 +69,7 @@ int dice(int count, int faces)
 	return running;
 }
 
-int getvalue()
+int vldc_getvalue()
 {
 	return value;
 }

@@ -17,10 +17,10 @@ void report_lex_error(char);
 "/" { return DIV; }
 "(" { return OPAREN; }
 ")" { return CPAREN; }
-[0-9]+ { vldclval = atoi(vldctext); return NUMBER; }
+[0-9]+ { vldc_yylval = atoi(vldc_yytext); return NUMBER; }
 
 [ \t] {}
-. { report_lex_error(*vldctext); }
+. { report_lex_error(*vldc_yytext); }
 %%
 void report_lex_error(char bad_char)
 {
@@ -31,6 +31,6 @@ void report_lex_error(char bad_char)
 		return;
 	}
 	sprintf(message, t_message, bad_char);
-	vldcerror(message);
+	vldc_yyerror(message);
 	free(message);
 }

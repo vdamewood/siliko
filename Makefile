@@ -1,6 +1,6 @@
 PYTHONPATH=/usr/include/python2.7
 LIBSUFFIX=.so
-NAMEPREFIX=vldc
+NAMEPREFIX=vldc_yy
 
 all: libvldc${LIBSUFFIX} vldc vldc.py _vldc${LIBSUFFIX}
 

@@ -2,8 +2,8 @@
 #define PARSERX_H
 
 #include "parser.h"
-void vldcerror(const char *);
-int  vldcparse(void); 
-int  getvalue(void);
+void vldc_yyerror(const char *);
+int  vldc_yyparse(void); 
+int  vldc_getvalue(void);
 
 #endif /* PARSERX_H */
