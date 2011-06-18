@@ -2,15 +2,15 @@ PYTHONPATH=/usr/include/python2.7
 LIBSUFFIX=.so
 NAMEPREFIX=vldc_yy
 
-all: libvldc${LIBSUFFIX} vldc vldc.py _vldc${LIBSUFFIX}
+all: libvldc${LIBSUFFIX} vldc
 
 clean:
 	rm -f parser.h tokenizer.h
-	rm -f parser.c tokenizer.c _vldc.c
-	rm -f parser.o tokenizer.o _vldc.o parserx.o vldc.o main.o
+	rm -f parser.c tokenizer.c 
+	rm -f parser.o tokenizer.o parserx.o vldc.o main.o
 
 distclean: clean
-	rm -f vldc libvldc${LIBSUFFIX} _vldc${LIBSUFFIX} vldc.py vldc.pyc vldc.pyo
+	rm -f vldc libvldc${LIBSUFFIX} 
 
 buildcheck: all distclean
 
@@ -44,16 +44,5 @@ libvldc$(LIBSUFFIX): parserx.o parser.o tokenizer.o vldc.o
 
 vldc: libvldc$(LIBSUFFIX) main.o
 	gcc -Wall -o vldc main.o -L. -lvldc
-
-_vldc.c: vldc.h
-	swig -python -module vldc -o _vldc.c vldc.h
-
-vldc.py: _vldc.c
-
-_vldc.o: _vldc.c vldc.h
-	gcc -Wall -fPIC -c -o _vldc.o -I$(PYTHONPATH) _vldc.c
-
-_vldc$(LIBSUFFIX): _vldc.o
-	gcc -shared -o _vldc$(LIBSUFFIX) _vldc.o -L. -lvldc
 
 .PHONY: all clean distclean check
