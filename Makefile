@@ -7,19 +7,22 @@ all: libvldc${LIBSUFFIX} vldc vldc.py _vldc${LIBSUFFIX}
 clean:
 	rm -f parser.h tokenizer.h
 	rm -f parser.c tokenizer.c _vldc.c
-	rm -f parser.o tokenizer.o _vldc.o vldc.o main.o
+	rm -f parser.o tokenizer.o _vldc.o parserx.o vldc.o main.o
 
 distclean: clean
 	rm -f vldc libvldc${LIBSUFFIX} _vldc${LIBSUFFIX} vldc.py vldc.pyc vldc.pyo
 
 buildcheck: all distclean
 
+parserx.o: parserx.h parserx.c
+	gcc -Wall -fPIC -c -o parserx.o parserx.c
+
 parser.c: parser.y
 	bison --name-prefix=$(NAMEPREFIX) --output=parser.c --defines=parser.h parser.y
 
 parser.h: parser.c
 
-parser.o: parser.c
+parser.o: parserx.h parser.c
 	gcc -Wall -fPIC -c -o parser.o parser.c
 
 tokenizer.c: tokenizer.l
@@ -36,8 +39,8 @@ vldc.o: tokenizer.h vldc.c
 main.o: tokenizer.h main.c
 	gcc -Wall -c -o main.o main.c
 
-libvldc$(LIBSUFFIX): parser.o tokenizer.o vldc.o
-	gcc -Wall -shared -o libvldc$(LIBSUFFIX) vldc.o tokenizer.o parser.o -ly
+libvldc$(LIBSUFFIX): parserx.o parser.o tokenizer.o vldc.o
+	gcc -Wall -shared -o libvldc$(LIBSUFFIX) vldc.o parserx.o tokenizer.o parser.o -ly
 
 vldc: libvldc$(LIBSUFFIX) main.o
 	gcc -Wall -o vldc main.o -L. -lvldc

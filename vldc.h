@@ -11,5 +11,4 @@ void vldc_clean(void);
 #if defined __cplusplus
 }
 #endif /* __cplusplus */
-
 #endif /* VLDC_H */

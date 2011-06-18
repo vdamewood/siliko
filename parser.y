@@ -5,10 +5,8 @@
 #include <math.h>
 
 #include "parserx.h"
-static int value;
 
 int vldc_yylex(void);
-int dice(int,int);
 %}
 
 %token NUMBER
@@ -19,7 +17,7 @@ int dice(int,int);
 %%
 
 calculation: 
- | calculation expression { value = $2; }
+ | calculation expression { vldci_set_value($2); }
  ;
 
 expression: expression1
@@ -33,7 +31,7 @@ expression1: expression2
  ;
 
 expression2: value
- | expression2 DICE value { $$ = dice($1, $3); }
+ | expression2 DICE value { $$ = vldci_dice($1, $3); }
  ;
 
 value: NUMBER
@@ -45,31 +43,3 @@ value: NUMBER
 
 negnumber: SUB NUMBER { $$ = $2 * -1 } */
 %%
-
-/*void vldcerror(const char *s)
-{
-	char **error = vldc_get_error_location();
-	if (!(*error = malloc(strlen(s)+1))) {
-		vldc_set_error_code(1);
-	}
-	fprintf(stderr, "error: %s\n", s);
-}
-*/
-int dice(int count, int faces)
-{
-	static int hasSeeded = 0;
-	int i;
-	int running = 0;
-	if (!hasSeeded)
-		srand(time(NULL));
-
-	for (i = 1; i <= count; i++)
-		running += (rand() % faces) + 1;
-
-	return running;
-}
-
-int vldc_getvalue()
-{
-	return value;
-}
