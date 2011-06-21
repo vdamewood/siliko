@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.66])
 AC_INIT([vldc], [alpha], [bugs@damewood.us])
-AM_INIT_AUTOMAKE
+dnl AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/vldc.c])
 AC_CONFIG_HEADERS([config.h])
 
