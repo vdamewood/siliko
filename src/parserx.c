@@ -55,6 +55,19 @@ void vldci_clean(void)
 	};
 }
 
+void vldci_report_lex_error(char bad_char)
+{
+	char *message = NULL;
+	char *t_message = "Unknown character %c";
+	if (!(message = malloc(20))) {
+		vldci_set_malloc_error();
+		return;
+	}
+	sprintf(message, t_message, bad_char);
+	vldc_yyerror(message);
+	free(message);
+}
+
 void vldc_yyerror(const char *s)
 {
 	if(!(error_message = malloc(strlen(s)+1))) {

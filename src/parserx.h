@@ -8,6 +8,7 @@ int   vldci_get_error_status(void);
 void  vldci_set_malloc_error(void);
 char *vldci_get_error_message(void);
 void  vldci_clean(void);
+void  vldci_report_lex_error(char);
 void  vldc_yyerror(const char *);
 
 #endif /* PARSERX_H */

@@ -29,16 +29,3 @@ void vldc_clean(void)
 {
 	vldci_clean();
 }
-
-/* This should change to vldc_yyerror */
-/*void vldc_yyerror(const char *s)
-{
-	if(!(error_message = malloc(strlen(s)+1))) {
-		error_status = 1;
-		return;
-	}
-	
-        strcpy(error_message, s);
-	error_status = 2;
-}*/
-
