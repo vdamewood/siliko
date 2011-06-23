@@ -53,6 +53,7 @@ void vldci_clean(void)
 		free(error_message);
 		error_message = NULL;
 	};
+	error_status = 0;
 }
 
 void vldci_report_lex_error(char bad_char)

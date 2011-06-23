@@ -10,8 +10,8 @@
 %token UNEG
 %token EOL 0
 %%
-calculation: 
- | calculation expression EOL { vldci_set_value($2); }
+calculation: { vldci_set_value(0); }
+ | expression EOL { vldci_set_value($2); }
  ;
 
 expression: NUMBER
