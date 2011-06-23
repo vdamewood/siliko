@@ -11,7 +11,7 @@
 %token EOL 0
 %%
 calculation: { vldci_set_value(0); }
- | expression EOL { vldci_set_value($2); }
+ | expression EOL { vldci_set_value($1); }
  ;
 
 expression: NUMBER
