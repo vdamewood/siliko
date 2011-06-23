@@ -9,10 +9,12 @@
 int vldc_yylex(void);
 %}
 
+%left '+' '-'
+%left '*' '/'
+%nonassoc 'd' UNEG
+
 %token NUMBER
-%token ADD SUB MUL DIV DICE
-%token OPAREN CPAREN
-%token FUNCTION
+%token UNEG
 %token EOL 0
 
 %%
@@ -21,26 +23,13 @@ calculation:
  | calculation expression EOL { vldci_set_value($2); }
  ;
 
-expression: expression1
- | expression ADD expression1 { $$ = $1 + $3; }
- | expression SUB expression1 { $$ = $1 - $3; }
- ;
-
-expression1: expression2
- | expression1 MUL expression2 { $$ = $1 * $3; }
- | expression1 DIV expression2 { $$ = $1 / $3; }
- ;
-
-expression2: value
- | expression2 DICE value { $$ = vldci_dice($1, $3); }
- ;
-
-value: NUMBER
- | SUB NUMBER { $$ = $2 * -1 }
- | OPAREN expression CPAREN { $$ = $2 }
-
-/* numeric: NUMBER
- | negnumber
-
-negnumber: SUB NUMBER { $$ = $2 * -1 } */
+expression: NUMBER
+ | expression '+' expression { $$ = $1 + $3; }
+ | expression '-' expression { $$ = $1 - $3; }
+ | expression '*' expression { $$ = $1 * $3; }
+ | expression '/' expression { $$ = $1 / $3; }
+ | '-' NUMBER %prec UNEG { $$ = $2 * -1 }
+ | expression 'd' NUMBER { $$ = vldci_dice($1, $3); }
+ | '(' expression ')' { $$ = $2 }
+;
 %%

@@ -9,13 +9,13 @@
 void report_lex_error(char);
 %}
 %%
-"d" { return DICE; }
-"+" { return ADD; }
-"-" { return SUB; }
-"*" { return MUL; }
-"/" { return DIV; }
-"(" { return OPAREN; }
-")" { return CPAREN; }
+"d" |
+"+" |
+"-" |
+"*" |
+"/" |
+"(" |
+")" { return *yytext; }
 [0-9]+ { vldc_yylval = atoi(vldc_yytext); return NUMBER; }
 
 [ \t] {}
