@@ -1,9 +1,4 @@
 %{
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <math.h>
-
 #include "parserx.h"
 
 int vldc_yylex(void);
