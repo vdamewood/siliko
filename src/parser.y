@@ -1,9 +1,7 @@
 %{
+#include "tokenizer.h"
 #include "parserx.h"
-
-int vldc_yylex(void);
 %}
-
 %left '+' '-'
 %left '*' '/'
 %nonassoc 'd' UNEG
@@ -11,9 +9,7 @@ int vldc_yylex(void);
 %token NUMBER
 %token UNEG
 %token EOL 0
-
 %%
-
 calculation: 
  | calculation expression EOL { vldci_set_value($2); }
  ;

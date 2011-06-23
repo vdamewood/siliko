@@ -24,7 +24,7 @@ parser.c: parser.y
 
 parser.h: parser.c
 
-parser.o: parserx.h parser.c
+parser.o: parserx.h parser.c tokenizer.h
 	$(CC) $(CFLAGS) -c -o parser.o parser.c
 
 tokenizer.c: tokenizer.l

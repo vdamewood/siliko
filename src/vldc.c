@@ -1,5 +1,3 @@
-/*#include <stdlib.h>*/
-
 #include "tokenizer.h"
 #include "parserx.h"
 #include "vldc.h"
