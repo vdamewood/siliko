@@ -1,6 +1,6 @@
 #include "tokenizer.h"
 #include "parserx.h"
-#include "vldc.h"
+#include "libvldc.h"
 
 int  vldc_yyparse(void);
 

@@ -1,2 +1,1 @@
-all clean distclean:
-	cd src && $(MAKE) $@
+SUBDIRS=src

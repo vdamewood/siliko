@@ -1,3 +1,4 @@
+%option prefix="vldc_yy"
 %option noyywrap
 %{
 #include "parser.h"

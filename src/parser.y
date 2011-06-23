@@ -19,8 +19,8 @@ expression: NUMBER
  | expression '-' expression { $$ = $1 - $3; }
  | expression '*' expression { $$ = $1 * $3; }
  | expression '/' expression { $$ = $1 / $3; }
- | '-' NUMBER %prec UNEG { $$ = $2 * -1 }
+ | '-' NUMBER %prec UNEG { $$ = $2 * -1; }
  | expression 'd' NUMBER { $$ = vldci_dice($1, $3); }
- | '(' expression ')' { $$ = $2 }
+ | '(' expression ')' { $$ = $2; }
 ;
 %%
