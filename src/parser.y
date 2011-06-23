@@ -13,11 +13,12 @@ int vldc_yylex(void);
 %token ADD SUB MUL DIV DICE
 %token OPAREN CPAREN
 %token FUNCTION
+%token EOL 0
 
 %%
 
 calculation: 
- | calculation expression { vldci_set_value($2); }
+ | calculation expression EOL { vldci_set_value($2); }
  ;
 
 expression: expression1
