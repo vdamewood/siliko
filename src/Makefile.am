@@ -1,10 +1,11 @@
 lib_LIBRARIES=libvldc.a
-libvldc_a_SOURCES=tokenizer.l parser.y parserx.c libvldc.c parserx.h libvldc.h
+libvldc_a_SOURCES=tokenizer.l parser.y parserx.c libvldc.c tokenizer.h parser.h parserx.h libvldc.h
 
 NAMEPREFIX=vldc_yy
 AM_CFLAGS=-Wall -fPIC
 AM_YFLAGS=--name-prefix=$(NAMEPREFIX) --defines=parser.h
 AM_LFLAGS=--prefix=$(NAMEPREFIX) --header-file=tokenizer.h
+LIBSUFFIX=.so
 
 parser.h: parser.c
 
@@ -22,5 +23,5 @@ parser.o: parserx.h parser.c tokenizer.h
 tokenizer.o: tokenizer.c parser.h parserx.h
 	$(CC) $(AM_CFLAGS) $(CFLAGS) -c -o tokenizer.o tokenizer.c
 
-libvldc$(LIBSUFFIX): parserx.o parser.o tokenizer.o vldc.o
+libvldc$(LIBSUFFIX): parserx.o parser.o tokenizer.o libvldc.o
 	$(LD) -shared -o libvldc$(LIBSUFFIX) libvldc.o parserx.o tokenizer.o parser.o
