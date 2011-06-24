@@ -4,7 +4,7 @@ libvldc_a_SOURCES=tokenizer.l parser.y parserx.c libvldc.c tokenizer.h parser.h 
 NAMEPREFIX=vldc_yy
 AM_CFLAGS=-Wall -fPIC
 AM_YFLAGS=--name-prefix=$(NAMEPREFIX) --defines=parser.h
-AM_LFLAGS=--prefix=$(NAMEPREFIX) --header-file=tokenizer.h
+AM_LFLAGS=--nounistd --prefix=$(NAMEPREFIX) --header-file=tokenizer.h
 LIBSUFFIX=.so
 
 parser.h: parser.c

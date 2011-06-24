@@ -3,7 +3,7 @@ OPTION(BUILD_SHARED_LIBS "Build shared library." ON)
 project (vldc)
 add_custom_command (
   OUTPUT tokenizer.h tokenizer.c
-  COMMAND flex --prefix=vldc_yy --header-file=tokenizer.h --outfile=tokenizer.c tokenizer.l
+  COMMAND flex --nounistd --prefix=vldc_yy --header-file=tokenizer.h --outfile=tokenizer.c tokenizer.l
   DEPENDS tokenizer.l
   )
 add_custom_command (
