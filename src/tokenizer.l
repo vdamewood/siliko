@@ -1,4 +1,3 @@
-%option prefix="vldc_yy"
 %option noyywrap
 %{
 #include "parser.h"
@@ -12,7 +11,7 @@
 "/" |
 "(" |
 ")" { return *yytext; }
-[0-9]+ { vldc_yylval = atoi(vldc_yytext); return NUMBER; }
+[0-9]+ { vldc_yylval = atoi(vldc_yytext); return INTEGER; }
 [ \t] {}
-. { vldci_report_lex_error(*vldc_yytext); }
+. { vldci_report_lex_error(*vldc_yytext); return ERROR; }
 %%

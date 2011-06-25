@@ -6,21 +6,26 @@
 %left '*' '/'
 %nonassoc 'd' UNEG
 
-%token NUMBER
+%token INTEGER
+%token FLOAT
 %token UNEG
+%token ERROR
 %token EOL 0
 %%
-calculation: { vldci_set_value(0); }
- | expression EOL { vldci_set_value($1); }
+calculation: EOL { vldci_set_int(0); }
+ | expression EOL { vldci_set_int($1); }
  ;
 
-expression: NUMBER
+expression: INTEGER
+ | FLOAT
  | expression '+' expression { $$ = $1 + $3; }
  | expression '-' expression { $$ = $1 - $3; }
  | expression '*' expression { $$ = $1 * $3; }
  | expression '/' expression { $$ = $1 / $3; }
- | '-' NUMBER %prec UNEG { $$ = $2 * -1; }
- | expression 'd' NUMBER { $$ = vldci_dice($1, $3); }
+ | '-' INTEGER %prec UNEG { $$ = $2 * -1; }
+ | expression 'd' INTEGER { $$ = vldci_dice($1, $3); }
  | '(' expression ')' { $$ = $2; }
+ | ERROR { YYERROR; }
 ;
+
 %%

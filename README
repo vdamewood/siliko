@@ -1,0 +1,11 @@
+The vldc_calculate() function returns a status code as a char. The following are currently possible
+values:
+
+'e':  Syntax/parse error      -- An error message will be returned by vldc_error_message().
+'m':  Memory alocation error  -- If this is returned, vldc was not able to allocate enough memory
+                                 to complete the operation or alocate memory for a syntax error
+                                 message.
+'i':  Success, int result     -- the result of the calculation will be returned by vldc_get_int()
+'f':  Success, float result   -- the result of the calculation will be returned by vldc_get_float()
+
+Other values may be added in the future.

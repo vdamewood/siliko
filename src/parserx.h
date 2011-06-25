@@ -2,12 +2,9 @@
 #define PARSERX_H
 
 int   vldci_dice(int,int);
-int   vldci_get_value(void);
-void  vldci_set_value(int);
-int   vldci_get_error_status(void);
+void  vldci_set_int(int);
+void  vldci_set_float(float);
 void  vldci_set_malloc_error(void);
-char *vldci_get_error_message(void);
-void  vldci_clean(void);
 void  vldci_report_lex_error(char);
 void  vldc_yyerror(const char *);
 

@@ -6,19 +6,22 @@ _path = _ctypes_util.find_library("vldc")
 # Hack for debugging on Linux with LD_LIBRARY_PATH set to .
 if _path is None: _path = "libvldc.so"
 _clib = _ctypes.CDLL(_path)
+_clib.vldc.restype = _ctypes.c_char
+_clib.vldc_get_float.restype = _ctypes.c_float
 _clib.vldc_error_message.restype = _ctypes.c_char_p
 
 def vldc(inString):
-	rValue = _clib.vldc(inString)
-	state = _clib.vldc_error_status()
-	exception_message = None
-	if state == 1:
-		exception_message = "Error making calculation. Also can't get error message."
-	if state == 2:
-		exception_message = _clib.vldc_error_message()
+	status = _clib.vldc(inString)
+	if False: pass
+	elif status == "i": rValue = _clib.vldc_get_int()
+	elif status == "f": rValue = _clib.vldc_get_float()
+	elif status == "m": exception_message = "Out of memory."
+	elif status == "e": exception_message = _clib.vldc_error_message()
+	else: exception_message = "Unknown status: " + status
+
 	_clib.vldc_clean()
-	if state != 0:
-		raise Exception(exception_message)
+
+	if status != "i" and status != "f": raise Exception(exception_message)
 	return rValue
 
 if __name__ == "__main__":
