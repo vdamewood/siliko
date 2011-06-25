@@ -1,7 +1,7 @@
 %option noyywrap
 %{
 #include "parser.h"
-#include "parserx.h"
+#include "xvcalcix.h"
 %}
 %%
 "d" |

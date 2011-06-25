@@ -1,6 +1,6 @@
-#include "tokenizer.h"
-#include "parserx.h"
 #include "xvcalc.h"
+#include "tokenize.h"
+#include "xvcalcix.h"
 
 int xvcalc_intx_yyparse(void);
 

@@ -3,9 +3,9 @@ OPTION(BUILD_SHARED_LIBS "Build shared library." ON)
 project (XVCalc)
 
 add_custom_command (
-  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tokenizer.h ${CMAKE_CURRENT_SOURCE_DIR}/tokenizer.c
-  COMMAND flex --nounistd --prefix=xvcalc_intx_yy --header-file=${CMAKE_CURRENT_SOURCE_DIR}/tokenizer.h --outfile=${CMAKE_CURRENT_SOURCE_DIR}/tokenizer.c ${CMAKE_CURRENT_SOURCE_DIR}/tokenizer.l
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tokenizer.l
+  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.h ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.c
+  COMMAND flex --nounistd --prefix=xvcalc_intx_yy --header-file=${CMAKE_CURRENT_SOURCE_DIR}/tokenize.h --outfile=${CMAKE_CURRENT_SOURCE_DIR}/tokenize.c ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.l
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.l
   )
 add_custom_command (
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/parser.h ${CMAKE_CURRENT_SOURCE_DIR}/parser.c
@@ -13,4 +13,4 @@ add_custom_command (
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/parser.y
 )
 
-add_library(xvcalc xvcalc.c parser.c tokenizer.c)
+add_library(xvcalc xvcalc.c parser.c tokenize.c)

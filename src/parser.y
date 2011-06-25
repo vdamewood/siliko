@@ -1,6 +1,6 @@
 %{
-#include "tokenizer.h"
-#include "parserx.h"
+#include "tokenize.h"
+#include "xvcalcix.h"
 %}
 %left '+' '-'
 %left '*' '/'
@@ -23,6 +23,7 @@ expression: INTEGER
  | expression '*' expression { $$ = $1 * $3; }
  | expression '/' expression { $$ = $1 / $3; }
  | '-' INTEGER %prec UNEG { $$ = $2 * -1; }
+ | '-' FLOAT %prec UNEG   { $$ = $2 * -1.0; }
  | expression 'd' INTEGER { $$ = xvcalc_intx_dice($1, $3); }
  | '(' expression ')' { $$ = $2; }
  | ERROR { YYERROR; }
