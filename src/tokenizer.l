@@ -11,7 +11,7 @@
 "/" |
 "(" |
 ")" { return *yytext; }
-[0-9]+ { vldc_yylval = atoi(vldc_yytext); return INTEGER; }
+[0-9]+ { xvcalc_intx_yylval = atoi(xvcalc_intx_yytext); return INTEGER; }
 [ \t] {}
-. { vldci_report_lex_error(*vldc_yytext); return ERROR; }
+. { xvcalc_intx_report_lex_error(*xvcalc_intx_yytext); return ERROR; }
 %%

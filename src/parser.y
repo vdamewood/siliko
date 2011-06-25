@@ -12,8 +12,8 @@
 %token ERROR
 %token EOL 0
 %%
-calculation: EOL { vldci_set_int(0); }
- | expression EOL { vldci_set_int($1); }
+calculation: EOL { xvcalc_intx_set_int(0); }
+ | expression EOL { xvcalc_intx_set_int($1); }
  ;
 
 expression: INTEGER
@@ -23,7 +23,7 @@ expression: INTEGER
  | expression '*' expression { $$ = $1 * $3; }
  | expression '/' expression { $$ = $1 / $3; }
  | '-' INTEGER %prec UNEG { $$ = $2 * -1; }
- | expression 'd' INTEGER { $$ = vldci_dice($1, $3); }
+ | expression 'd' INTEGER { $$ = xvcalc_intx_dice($1, $3); }
  | '(' expression ')' { $$ = $2; }
  | ERROR { YYERROR; }
 ;

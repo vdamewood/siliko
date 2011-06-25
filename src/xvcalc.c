@@ -1,39 +1,39 @@
 #include "tokenizer.h"
 #include "parserx.h"
-#include "vldc.h"
+#include "xvcalc.h"
 
-int vldc_yyparse(void);
+int xvcalc_intx_yyparse(void);
 
 static char   status         = '\0';
 static int    value_as_int   = 0;
 static float  value_as_float = 0.0;
 static char * error_message  = NULL;
 
-char vldc(char *inString)
+char xvcalc(char *inString)
 {
 	YY_BUFFER_STATE buffer;
-	buffer = vldc_yy_scan_string(inString);
-	vldc_yy_switch_to_buffer(buffer);
-	vldc_yyparse();
+	buffer = xvcalc_intx_yy_scan_string(inString);
+	xvcalc_intx_yy_switch_to_buffer(buffer);
+	xvcalc_intx_yyparse();
 	return status;
 }
 
-int vldc_get_int(void)
+int xvcalc_get_int(void)
 {
 	return value_as_int;
 }
 
-float vldc_get_float(void)
+float xvcalc_get_float(void)
 {
 	return value_as_float;
 }
 
-char *vldc_error_message(void)
+char *xvcalc_error_message(void)
 {
         return error_message;
 }
 
-void vldc_clean(void)
+void xvcalc_clean(void)
 {
 	status = '\0';
 	value_as_int = 0;
@@ -46,7 +46,7 @@ void vldc_clean(void)
 
 /* The following are internal-use only. */
 
-int vldci_dice(int count, int faces)
+int xvcalc_intx_dice(int count, int faces)
 {
 	static int hasSeeded = 0;
 	int i;
@@ -60,47 +60,47 @@ int vldci_dice(int count, int faces)
 	return running;
 }
 
-void vldci_set_int(int new_value)
+void xvcalc_intx_set_int(int new_value)
 {
 	status = 'i';
 	value_as_int = new_value;
 	value_as_float = (float) new_value;
 }
 
-void vldci_set_float(float new_value)
+void xvcalc_intx_set_float(float new_value)
 {
 	status = 'f';
 	value_as_int = (int) new_value;
 	value_as_float = new_value;
 }
 
-void vldci_set_value(int new_value)
+void xvcalc_intx_set_value(int new_value)
 {
-	vldci_set_int(new_value);
+	xvcalc_intx_set_int(new_value);
 }
 
-void vldci_set_malloc_error(void)
+void xvcalc_intx_set_malloc_error(void)
 {
 	status = 'm';
 }
 
-void vldci_report_lex_error(char bad_char)
+void xvcalc_intx_report_lex_error(char bad_char)
 {
 	char *message = NULL;
 	char *t_message = "Unknown character %c";
 	if (!(message = malloc(20))) {
-		vldci_set_malloc_error();
+		xvcalc_intx_set_malloc_error();
 		return;
 	}
 	sprintf(message, t_message, bad_char);
-	vldc_yyerror(message);
+	xvcalc_intx_yyerror(message);
 	free(message);
 }
 
-void vldc_yyerror(const char *s)
+void xvcalc_intx_yyerror(const char *s)
 {
 	if(!(error_message = malloc(strlen(s)+1))) {
-		vldci_set_malloc_error();
+		xvcalc_intx_set_malloc_error();
 		return;
 	}
 	
