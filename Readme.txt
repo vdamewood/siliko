@@ -1,7 +1,11 @@
 XVCalc Overview
 
-XVCalc is a library for handling mathematical expressions. Currently it supports
-the following features:
+XVCalc is a library for handling mathematical expressions.
+
+XVCalc may be copied, modified, and distributed under the terms of the GNU
+GPL, version 3. See the file License.txt for details.
+
+Currently XVCalc supports the following features:
 
 * Integer four-function calculations, such as "2 + 2", "3 * 4", "9 - 3" and
   "8 / 2".
@@ -14,7 +18,7 @@ XVCalc ignores space and tab characters in its input.
 
 The following features are planned for future versions:
 
-* mixed integer/double calculations
+* mixed integer (or long) / float (or double) calculations
 * constants: the library will recognize e, and pi constants as numbers
   representing their respective values.
 * functions, including:
@@ -27,20 +31,18 @@ The following features are planned for future versions:
 * thread safety, if feasible.
 * integer values may be handled as long ints instead.
 
-Once mixed integer/double calculations are implemented, XVCalc will handle
+Once mixed integer/float calculations are implemented, XVCalc will handle
 the type of the resulting value in a 'smart' way. Calculations involving
-integers that would result in a fractional answer (such as 5/2) or
-floating-point values will result in floating-point results. Calculations
-involving only integers will give integer results.
+integers that would result in a fractional answer (such as 5/2) and
+calculations involving floating-point values will result in floating-point
+results. Calculations involving only integers with integer results will give
+integer results.
 
 Support for the plug-in interface is currently planned for systems that support
 dlopen(3). Support for Windows may be included as well.
 
 XVCalc uses a Flex-generated tokenizer and a Bison-generated parser. Currently,
 the parser is not 'pure', and thus XVCalc is not thread safe.
-
-XVCalc may be copied, modified, and distributed under the terms of the GNU
-GPL, version 3. 
 
 XVcalc Interface
 
@@ -79,7 +81,7 @@ Other values may be added in the future. The 'f' option may change if double
 values are used instead. If that happens the xvcalc_get_float() function will
 change to the following:
 
-double xvcalc_get_float(void)
+double xvcalc_get_double(void)
 
 Once you have retrieved the value of the calculation, you must clean the state
 of the library by calling the xvcalc_clean() function. This function must be
