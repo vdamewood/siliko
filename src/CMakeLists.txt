@@ -14,3 +14,5 @@ add_custom_command (
 )
 
 add_library(xvcalc xvcalc.c tree.c parser.c tokenize.c)
+install (TARGETS xvcalc DESTINATION lib)
+install (FILES xvcalc.h DESTINATION include)
