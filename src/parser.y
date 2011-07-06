@@ -28,10 +28,10 @@ calculation: EOL { xvcalc_set_int(0); }
 	xvcalc_delete_tree($1);
 };
 
-expression: INTEGER            { $$ = xvcalc_new_int($1);        }
- | '-'      INTEGER %prec UNEG { $$ = xvcalc_new_int($2 * -1);   }
- |          FLOAT              { $$ = xvcalc_new_float($1);      }
- | '-'      FLOAT %prec UNEG   { $$ = xvcalc_new_int($2 * -1.0); }
+expression: INTEGER            { $$ = xvcalc_new_int($1);          }
+ | '-'      INTEGER %prec UNEG { $$ = xvcalc_new_int($2 * -1);     }
+ |          FLOAT              { $$ = xvcalc_new_float($1);        }
+ | '-'      FLOAT %prec UNEG   { $$ = xvcalc_new_float($2 * -1.0); }
  | expression '+' expression { $$ = xvcalc_new_operation('+', $1, $3); }
  | expression '-' expression { $$ = xvcalc_new_operation('-', $1, $3); }
  | expression '*' expression { $$ = xvcalc_new_operation('*', $1, $3); }
