@@ -4,7 +4,7 @@
 %}
 
 %union {
-	struct xvcalc_intx_tree * t;
+	struct xvcalc_tree * t;
 	int i;
 	float f;
 }
@@ -22,22 +22,22 @@
 %type <t> expression
 
 %%
-calculation: EOL { xvcalc_intx_set_int(0); }
+calculation: EOL { xvcalc_set_int(0); }
  | expression EOL {
-	xvcalc_intx_set_int(xvcalc_intx_evaluate_tree($1));
-	xvcalc_intx_delete_tree($1);
+	xvcalc_set_int(xvcalc_evaluate_tree($1));
+	xvcalc_delete_tree($1);
 };
 
-expression: INTEGER            { $$ = xvcalc_intx_new_int($1);        }
- | '-'      INTEGER %prec UNEG { $$ = xvcalc_intx_new_int($2 * -1);   }
- |          FLOAT              { $$ = xvcalc_intx_new_float($1);      }
- | '-'      FLOAT %prec UNEG   { $$ = xvcalc_intx_new_int($2 * -1.0); }
- | expression '+' expression { $$ = xvcalc_intx_new_operation('+', $1, $3); }
- | expression '-' expression { $$ = xvcalc_intx_new_operation('-', $1, $3); }
- | expression '*' expression { $$ = xvcalc_intx_new_operation('*', $1, $3); }
- | expression '/' expression { $$ = xvcalc_intx_new_operation('/', $1, $3); }
+expression: INTEGER            { $$ = xvcalc_new_int($1);        }
+ | '-'      INTEGER %prec UNEG { $$ = xvcalc_new_int($2 * -1);   }
+ |          FLOAT              { $$ = xvcalc_new_float($1);      }
+ | '-'      FLOAT %prec UNEG   { $$ = xvcalc_new_int($2 * -1.0); }
+ | expression '+' expression { $$ = xvcalc_new_operation('+', $1, $3); }
+ | expression '-' expression { $$ = xvcalc_new_operation('-', $1, $3); }
+ | expression '*' expression { $$ = xvcalc_new_operation('*', $1, $3); }
+ | expression '/' expression { $$ = xvcalc_new_operation('/', $1, $3); }
  | expression 'd' INTEGER {
-	$$ = xvcalc_intx_new_operation('d', $1, xvcalc_intx_new_int($3));
+	$$ = xvcalc_new_operation('d', $1, xvcalc_new_int($3));
    }
  | '(' expression ')' { $$ = $2; }
  | ERROR { YYERROR; }

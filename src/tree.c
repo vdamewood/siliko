@@ -2,15 +2,15 @@
 #include "xvcalcix.h"
 
 
-struct xvcalc_intx_tree *
-xvcalc_intx_new_operation(
+struct xvcalc_tree *
+xvcalc_new_operation(
         char type,
-        struct xvcalc_intx_tree *left,
-        struct xvcalc_intx_tree *right)
+        struct xvcalc_tree *left,
+        struct xvcalc_tree *right)
 {
-	struct xvcalc_intx_tree * rVal;
-	rVal = malloc(sizeof(struct xvcalc_intx_tree));
-	rVal->op = malloc(sizeof(struct xvcalc_intx_operation));
+	struct xvcalc_tree * rVal;
+	rVal = malloc(sizeof(struct xvcalc_tree));
+	rVal->op = malloc(sizeof(struct xvcalc_operation));
 	rVal->type = 'o';
 	rVal->op->type = type;
 	rVal->op->left = left;
@@ -18,29 +18,29 @@ xvcalc_intx_new_operation(
 	return rVal;
 }
 
-struct xvcalc_intx_tree * xvcalc_intx_new_int(int value)
+struct xvcalc_tree * xvcalc_new_int(int value)
 {
-	struct xvcalc_intx_tree * rVal;
-	rVal = malloc(sizeof(struct xvcalc_intx_tree));
-	rVal->num = malloc(sizeof(struct xvcalc_intx_number));
+	struct xvcalc_tree * rVal;
+	rVal = malloc(sizeof(struct xvcalc_tree));
+	rVal->num = malloc(sizeof(struct xvcalc_number));
 	rVal->type = 'n';
 	rVal->num->type = 'i';
 	rVal->num->i = value;
 	return rVal;
 }
 
-struct xvcalc_intx_tree * xvcalc_intx_new_float(float value)
+struct xvcalc_tree * xvcalc_new_float(float value)
 {
-	struct xvcalc_intx_tree * rVal;
-	rVal = malloc(sizeof(struct xvcalc_intx_tree));
-	rVal->num = malloc(sizeof(struct xvcalc_intx_number));
+	struct xvcalc_tree * rVal;
+	rVal = malloc(sizeof(struct xvcalc_tree));
+	rVal->num = malloc(sizeof(struct xvcalc_number));
 	rVal->type = 'n';
 	rVal->num->type = 'f';
 	rVal->num->f = value;
 	return rVal;
 }
 
-int xvcalc_intx_evaluate_tree(struct xvcalc_intx_tree * tree)
+int xvcalc_evaluate_tree(struct xvcalc_tree * tree)
 {
 	if (!tree) return 0;
 
@@ -55,28 +55,28 @@ int xvcalc_intx_evaluate_tree(struct xvcalc_intx_tree * tree)
 	case 'o':
 		switch (tree->op->type) {
 		case '+':
-			return xvcalc_intx_evaluate_tree(tree->op->left)
-				+ xvcalc_intx_evaluate_tree(tree->op->right);
+			return xvcalc_evaluate_tree(tree->op->left)
+				+ xvcalc_evaluate_tree(tree->op->right);
 		case '-':
-			return xvcalc_intx_evaluate_tree(tree->op->left)
-				- xvcalc_intx_evaluate_tree(tree->op->right);
+			return xvcalc_evaluate_tree(tree->op->left)
+				- xvcalc_evaluate_tree(tree->op->right);
 		case '*':
-			return xvcalc_intx_evaluate_tree(tree->op->left)
-				* xvcalc_intx_evaluate_tree(tree->op->right);
+			return xvcalc_evaluate_tree(tree->op->left)
+				* xvcalc_evaluate_tree(tree->op->right);
 		case '/':
-			return xvcalc_intx_evaluate_tree(tree->op->left)
-				/ xvcalc_intx_evaluate_tree(tree->op->right);
+			return xvcalc_evaluate_tree(tree->op->left)
+				/ xvcalc_evaluate_tree(tree->op->right);
 		case 'd':
-			return xvcalc_intx_dice(
-				xvcalc_intx_evaluate_tree(tree->op->left),
-				xvcalc_intx_evaluate_tree(tree->op->right));
+			return xvcalc_dice(
+				xvcalc_evaluate_tree(tree->op->left),
+				xvcalc_evaluate_tree(tree->op->right));
 		}
 	case 'f':
 		return 1;
 	}
 }
 
-void xvcalc_intx_delete_tree(struct xvcalc_intx_tree * tree)
+void xvcalc_delete_tree(struct xvcalc_tree * tree)
 {
 	if (tree) {
 		switch (tree->type) {
@@ -84,8 +84,8 @@ void xvcalc_intx_delete_tree(struct xvcalc_intx_tree * tree)
 				free(tree->num);
 				break;
 			case 'o':
-				xvcalc_intx_delete_tree(tree->op->left);
-				xvcalc_intx_delete_tree(tree->op->right);
+				xvcalc_delete_tree(tree->op->left);
+				xvcalc_delete_tree(tree->op->right);
 				free(tree->op);
 				break;
 			case 'f':
