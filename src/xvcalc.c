@@ -46,37 +46,25 @@ void xvcalc_clean(void)
 
 /* The following are internal-use only. */
 
-int xvcalc_dice(int count, int faces)
-{
-	static int hasSeeded = 0;
-	int i;
-	int running = 0;
-	if (!hasSeeded)
-		srand(time(NULL));
-
-	for (i = 1; i <= count; i++)
-		running += (rand() % faces) + 1;
-
-	return running;
-}
-
-void xvcalc_set_int(int new_value)
+void xvcalc_set_nil()
 {
 	status = 'i';
-	value_as_int = new_value;
-	value_as_float = (float) new_value;
+	value_as_int = 0;
+	value_as_float = 0.0;
 }
 
-void xvcalc_set_float(float new_value)
+void xvcalc_set_value(xv_number new_value)
 {
-	status = 'f';
-	value_as_int = (int) new_value;
-	value_as_float = new_value;
-}
-
-void xvcalc_set_value(int new_value)
-{
-	xvcalc_set_int(new_value);
+	status = new_value.type;
+	switch (status) {
+	case 'i':
+		value_as_int = new_value.i;
+		value_as_float = (int) new_value.f;
+		break;
+	case 'f':
+		value_as_int = (int) new_value.f;
+		value_as_float = new_value.f;
+	};
 }
 
 void xvcalc_set_malloc_error(void)

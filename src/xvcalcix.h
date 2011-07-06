@@ -35,6 +35,11 @@ struct xvcalc_function {
 	void *arg_vector; // TODO: Change this to a list of arguments.
 };
 
+typedef struct xvcalc_tree      xv_tree;
+typedef struct xvcalc_operation xv_operation;
+typedef struct xvcalc_number    xv_number;
+typedef struct xvcalc_function  xv_function;
+
 struct xvcalc_tree *
 xvcalc_new_operation(
 	char type,
@@ -43,12 +48,11 @@ xvcalc_new_operation(
 struct xvcalc_tree * xvcalc_new_int(int value);
 struct xvcalc_tree * xvcalc_new_float(float value);
 
-int xvcalc_evaluate_tree(struct xvcalc_tree * tree);
+xv_number xvcalc_evaluate_tree(struct xvcalc_tree * tree);
 void xvcalc_delete_tree(struct xvcalc_tree * tree);
 
-int   xvcalc_dice(int,int);
-void  xvcalc_set_int(int);
-void  xvcalc_set_float(float);
+void  xvcalc_set_nil();
+void  xvcalc_set_value(xv_number);
 void  xvcalc_set_malloc_error(void);
 void  vxcalc_report_lex_error(char);
 void  xvcalc_yyerror(const char *);
