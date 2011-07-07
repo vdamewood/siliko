@@ -4,7 +4,9 @@
 %}
 
 %union {
-	struct xvcalc_tree * t;
+	tree * t;
+	arglist * a;
+	char * s;
 	int i;
 	float f;
 }
@@ -16,10 +18,12 @@
 %token <i> INTEGER
 %token <f> FLOAT
 %token UNEG
+%token <s> ID
 %token ERROR
 %token EOL 0
 
-%type <t> expression
+%type <t> expression fcall
+%type <a> arglist
 
 %%
 calculation: EOL { xvcalc_set_nil(); }
@@ -40,7 +44,14 @@ expression: INTEGER            { $$ = xvcalc_new_int($1);          }
 	$$ = xvcalc_new_operation('d', $1, xvcalc_new_int($3));
    }
  | '(' expression ')' { $$ = $2; }
+ | fcall
  | ERROR { YYERROR; }
 ;
 
+fcall: ID '(' arglist ')' { $$ = xvcalc_new_function($1, $3); free($1);};
+
+arglist: { $$ = NULL; }
+ | expression { $$ = xvcalc_add_argument($1, NULL); }
+ | expression ',' arglist { $$ = xvcalc_add_argument($1, $3); };
+;
 %%

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "xvcalcix.h"
 
 
@@ -37,6 +38,37 @@ struct xvcalc_tree * xvcalc_new_float(float value)
 	rVal->type = 'n';
 	rVal->num->type = 'f';
 	rVal->num->f = value;
+	return rVal;
+}
+
+void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist)
+{
+	*array = in_arglist->value;
+	if (in_arglist->next)
+		xvcalc_arglist_to_array(array+1, in_arglist->next);
+	free(in_arglist);
+}
+
+tree * xvcalc_new_function(char * name, arglist * in_arglist)
+{
+	struct xvcalc_tree * rVal;
+	rVal = malloc(sizeof(struct xvcalc_tree));
+	rVal->type = 'f';
+
+	rVal->func = malloc(sizeof(xv_function));
+	rVal->func->name = malloc(strlen(name) + 1);
+	strcpy(rVal->func->name, name);
+	
+	if(in_arglist) {
+		rVal->func->arg_count = in_arglist->depth;
+		rVal->func->arg_vector = malloc(sizeof(tree *) * in_arglist->depth);
+		xvcalc_arglist_to_array(rVal->func->arg_vector, in_arglist);
+	}
+	else {
+		rVal->func->arg_count = 0;
+		rVal->func->arg_vector = NULL;
+	}
+	
 	return rVal;
 }
 
@@ -167,11 +199,26 @@ xv_number xvcalc_dice(xv_number n_count, xv_number n_faces)
 	return rVal;
 }
 
+number xvcalc_evaluate_function(char * name, int count, number * arguments)
+{
+	number rVal;
+	rVal = arguments[0];
+	if (strcmp(name, "abs") == 0) {
+		if (rVal.type == 'f' && rVal.f < 0.0)
+			rVal.f = rVal.f * -1.0;
+		else if (rVal.type == 'i' && rVal.i < 0)
+			rVal.i = rVal.i * -1;
+	}
+	return rVal;
+}
+
 struct xvcalc_number xvcalc_evaluate_tree(struct xvcalc_tree * tree)
 {
 	xv_number rVal;
+	int i;
 	/* FIXME: set an error */
 	if (!tree) return rVal;
+	number * evaluated_arguments = NULL;
 
 	switch (tree->type) {
 	case 'n':
@@ -200,12 +247,35 @@ struct xvcalc_number xvcalc_evaluate_tree(struct xvcalc_tree * tree)
 				xvcalc_evaluate_tree(tree->op->right));
 			break;
 		}
+		break;
+	case 'f':
+		if (tree->func->arg_count) {
+			evaluated_arguments =
+				malloc(sizeof(number) * tree->func->arg_count);
+			for(i = 0; i < tree->func->arg_count; i++) {
+				evaluated_arguments[i] = xvcalc_evaluate_tree(
+					tree->func->arg_vector[i]);
+			}
+		}
+		rVal = xvcalc_evaluate_function(tree->func->name,
+					 tree->func->arg_count,
+					 evaluated_arguments);
+		if (tree->func->arg_count) {
+			for(i = 0; i < tree->func->arg_count; i++) {
+				/*free(evaluated_arguments[i]);*/
+			}
+
+			free(evaluated_arguments);
+			evaluated_arguments = NULL;
+		}
 	}
+		
 	return rVal;
 }
 
 void xvcalc_delete_tree(struct xvcalc_tree * tree)
 {
+	int i;
 	if (tree) {
 		switch (tree->type) {
 			case 'n':
@@ -217,9 +287,26 @@ void xvcalc_delete_tree(struct xvcalc_tree * tree)
 				free(tree->op);
 				break;
 			case 'f':
+				free(tree->func->name);
+				for (i = 0; i <  tree->func->arg_count; i++) {
+					xvcalc_delete_tree(
+						tree->func->arg_vector[i]);
+				}
+				free(tree->func->arg_vector);
 				free(tree->func);
 				break;
 		}
 		free(tree);
 	}
+}
+
+arglist * xvcalc_add_argument(tree * new_arg, arglist * old_list)
+{
+	arglist * rVal;
+	rVal = malloc(sizeof(arglist));
+	if (old_list) rVal->depth = old_list->depth + 1;
+	else rVal->depth = 1;
+	rVal->value = new_arg;
+	rVal->next = old_list;
+	return rVal;
 }

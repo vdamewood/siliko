@@ -14,20 +14,17 @@ Currently XVCalc supports the following features:
 * parenthetic expressions, such as "2 * (3 + 4)".
 * Random number generation using a d operator to simulate dice rolls. such as
   "3d6" or "1d20".
-
+* Functions, currently XVcalc supports a basic abs() function. Function handling
+  is slightly buggy right now, however.
 XVCalc ignores space and tab characters in its input.
 
 The following features are planned for future versions:
 
-* functions, including:
-  * build-in support for an abs() function that will work with the C abs(),
-  labs(), and fabs() functions as needed.
-  * built-in support for the following functions from C's math.h: sin(), cos(),
-    tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(), exp(),
-    log(), log10(), pow(), sqrt(), ceil(), floor(), and ldexp().
-  * user-defined functions through a plug-in interface.
+* built-in support for the following functions from C's math.h: sin(), cos(),
+  tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(), exp(),
+  log(), log10(), pow(), sqrt(), ceil(), floor(), and ldexp().
+* user-defined functions through a plug-in interface.
 * thread safety, if feasible.
-* integer values may be handled as long ints instead.
 
 Currently, XVCalc handled mixing integers and floating-point numbers in a
 manner similar to other languages: operations involving only integers will give
