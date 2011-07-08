@@ -63,20 +63,6 @@ tree * xvcalc_new_function(char * name, arglist * in_arglist)
 	return rVal;
 }
 
-/* FIXME: Make this a function that returns a pointer to a function given
- * a string */
-number xvcalc_evaluate_function(char * name, int count, number * arguments)
-{
-	/*number rVal;
-	rVal = arguments[0];
-	if (strcmp(name, "abs") == 0) {
-		if (rVal.type == 'f' && rVal.f < 0.0)
-			rVal.f = rVal.f * -1.0;
-		else if (rVal.type == 'i' && rVal.i < 0)
-			rVal.i = rVal.i * -1;
-	}*/
-}
-
 number xvcalc_evaluate_tree(tree * tree)
 {
 	number rVal;
@@ -128,10 +114,6 @@ number xvcalc_evaluate_tree(tree * tree)
 		rVal = func(tree->func->arg_count, evaluated_arguments);
 
 		if (tree->func->arg_count) {
-			for(i = 0; i < tree->func->arg_count; i++) {
-				/*free(evaluated_arguments[i]);*/
-			}
-
 			free(evaluated_arguments);
 			evaluated_arguments = NULL;
 		}
