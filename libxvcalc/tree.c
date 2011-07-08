@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
-#include "xvcalcix.h"
 
+#include "tree.h"
+#include "operators.h"
+#include "xvcalcix.h"
 
 tree * xvcalc_new_operation(char type, tree * left, tree * right)
 {
@@ -26,7 +28,7 @@ tree * xvcalc_new_int(int value)
 	return rVal;
 }
 
-struct xvcalc_tree * xvcalc_new_float(float value)
+tree * xvcalc_new_float(float value)
 {
 	struct xvcalc_tree * rVal;
 	rVal = malloc(sizeof(tree));
@@ -35,14 +37,6 @@ struct xvcalc_tree * xvcalc_new_float(float value)
 	rVal->num->type = 'f';
 	rVal->num->f = value;
 	return rVal;
-}
-
-void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist)
-{
-	*array = in_arglist->value;
-	if (in_arglist->next)
-		xvcalc_arglist_to_array(array+1, in_arglist->next);
-	free(in_arglist);
 }
 
 tree * xvcalc_new_function(char * name, arglist * in_arglist)
@@ -68,133 +62,8 @@ tree * xvcalc_new_function(char * name, arglist * in_arglist)
 	return rVal;
 }
 
-number xvcalc_add(number left, number right)
-{
-	number rVal;
-	if (left.type == 'f') {
-		if (right.type == 'f') {
-			rVal.type = 'f';
-			rVal.f = left.f + right.f;
-		}
-		else {
-			rVal.type = 'f';
-			rVal.f = left.f + (float) right.i;
-		}
-	}
-	else {
-		if (right.type == 'f') {
-			rVal.type = 'f';
-			rVal.f = (float) left.i + right.f;
-		}
-		else {
-			rVal.type = 'i';
-			rVal.i = left.i + right.i;
-		}
-	}
-	return rVal;
-}
-
-number xvcalc_sub(number left, number right)
-{
-	number rVal;
-	if (left.type == 'f') {
-		if (right.type == 'f') {
-			rVal.type = 'f';
-			rVal.f = left.f - right.f;
-		}
-		else {
-			rVal.type = 'f';
-			rVal.f = left.f - (float) right.i;
-		}
-	}
-	else {
-		if (right.type == 'f') {
-			rVal.type = 'f';
-			rVal.f = (float) left.i - right.f;
-		}
-		else {
-			rVal.type = 'i';
-			rVal.i = left.i - right.i;
-		}
-	}
-	return rVal;
-}
-
-number xvcalc_mul(number left, number right)
-{
-	number rVal;
-	if (left.type == 'f') {
-		if (right.type == 'f') {
-			rVal.type = 'f';
-			rVal.f = left.f * right.f;
-		}
-		else {
-			rVal.type = 'f';
-			rVal.f = left.f * (float) right.i;
-		}
-	}
-	else {
-		if (right.type == 'f') {
-			rVal.type = 'f';
-			rVal.f = (float) left.i * right.f;
-		}
-		else {
-			rVal.type = 'i';
-			rVal.i = left.i * right.i;
-		}
-	}
-	return rVal;
-}
-
-number xvcalc_div(number left, number right)
-{
-	// TOOD: Add division by zero check.
-	number rVal;
-	if (left.type == 'f') {
-		if (right.type == 'f') {
-			rVal.type = 'f';
-			rVal.f = left.f / right.f;
-		}
-		else {
-			rVal.type = 'f';
-			rVal.f = left.f / (float) right.i;
-		}
-	}
-	else {
-		if (right.type == 'f') {
-			rVal.type = 'f';
-			rVal.f = (float) left.i / right.f;
-		}
-		else {
-			rVal.type = 'i';
-			rVal.i = left.i / right.i;
-		}
-	}
-	return rVal;
-}
-
-number xvcalc_dice(number n_count, number n_faces)
-{
-	number rVal;
-	int count;
-	int faces;
-	if (n_count.type == 'f') count = (int) n_count.f;
-	else count = n_count.i;
-	faces = n_faces.i;
-
-	static int hasSeeded = 0;
-	int i;
-	int running = 0;
-	if (!hasSeeded)
-		srand(time(NULL));
-
-	for (i = 1; i <= count; i++)
-		running += (rand() % faces) + 1;
-	rVal.type = 'i';
-	rVal.i = running;
-	return rVal;
-}
-
+/* FIXME: Make this a function that returns a pointer to a function given
+ * a string */
 number xvcalc_evaluate_function(char * name, int count, number * arguments)
 {
 	number rVal;
@@ -294,6 +163,14 @@ void xvcalc_delete_tree(tree * tree)
 		}
 		free(tree);
 	}
+}
+
+void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist)
+{
+	*array = in_arglist->value;
+	if (in_arglist->next)
+		xvcalc_arglist_to_array(array+1, in_arglist->next);
+	free(in_arglist);
 }
 
 arglist * xvcalc_add_argument(tree * new_arg, arglist * old_list)

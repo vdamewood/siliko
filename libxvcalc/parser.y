@@ -1,5 +1,6 @@
 %{
 #include "tokenize.h"
+#include "tree.h"
 #include "xvcalcix.h"
 %}
 

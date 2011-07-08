@@ -13,6 +13,6 @@ add_custom_command (
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/parser.y
 )
 
-add_library(xvcalc xvcalc.c tree.c parser.c tokenize.c)
+add_library(xvcalc xvcalc.c tree.c operators.c parser.c tokenize.c)
 install (TARGETS xvcalc DESTINATION lib)
 install (FILES xvcalc.h DESTINATION include)
