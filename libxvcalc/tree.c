@@ -3,15 +3,11 @@
 #include "xvcalcix.h"
 
 
-struct xvcalc_tree *
-xvcalc_new_operation(
-        char type,
-        struct xvcalc_tree *left,
-        struct xvcalc_tree *right)
+tree * xvcalc_new_operation(char type, tree * left, tree * right)
 {
-	struct xvcalc_tree * rVal;
-	rVal = malloc(sizeof(struct xvcalc_tree));
-	rVal->op = malloc(sizeof(struct xvcalc_operation));
+	tree * rVal;
+	rVal = malloc(sizeof(tree));
+	rVal->op = malloc(sizeof(operation));
 	rVal->type = 'o';
 	rVal->op->type = type;
 	rVal->op->left = left;
@@ -19,11 +15,11 @@ xvcalc_new_operation(
 	return rVal;
 }
 
-struct xvcalc_tree * xvcalc_new_int(int value)
+tree * xvcalc_new_int(int value)
 {
-	struct xvcalc_tree * rVal;
-	rVal = malloc(sizeof(struct xvcalc_tree));
-	rVal->num = malloc(sizeof(struct xvcalc_number));
+	tree * rVal;
+	rVal = malloc(sizeof(tree));
+	rVal->num = malloc(sizeof(number));
 	rVal->type = 'n';
 	rVal->num->type = 'i';
 	rVal->num->i = value;
@@ -33,8 +29,8 @@ struct xvcalc_tree * xvcalc_new_int(int value)
 struct xvcalc_tree * xvcalc_new_float(float value)
 {
 	struct xvcalc_tree * rVal;
-	rVal = malloc(sizeof(struct xvcalc_tree));
-	rVal->num = malloc(sizeof(struct xvcalc_number));
+	rVal = malloc(sizeof(tree));
+	rVal->num = malloc(sizeof(number));
 	rVal->type = 'n';
 	rVal->num->type = 'f';
 	rVal->num->f = value;
@@ -51,11 +47,11 @@ void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist)
 
 tree * xvcalc_new_function(char * name, arglist * in_arglist)
 {
-	struct xvcalc_tree * rVal;
-	rVal = malloc(sizeof(struct xvcalc_tree));
+	tree * rVal;
+	rVal = malloc(sizeof(tree));
 	rVal->type = 'f';
 
-	rVal->func = malloc(sizeof(xv_function));
+	rVal->func = malloc(sizeof(function));
 	rVal->func->name = malloc(strlen(name) + 1);
 	strcpy(rVal->func->name, name);
 	
@@ -72,9 +68,9 @@ tree * xvcalc_new_function(char * name, arglist * in_arglist)
 	return rVal;
 }
 
-xv_number xvcalc_add(xv_number left, xv_number right)
+number xvcalc_add(number left, number right)
 {
-	xv_number rVal;
+	number rVal;
 	if (left.type == 'f') {
 		if (right.type == 'f') {
 			rVal.type = 'f';
@@ -98,9 +94,9 @@ xv_number xvcalc_add(xv_number left, xv_number right)
 	return rVal;
 }
 
-xv_number xvcalc_sub(xv_number left, xv_number right)
+number xvcalc_sub(number left, number right)
 {
-	xv_number rVal;
+	number rVal;
 	if (left.type == 'f') {
 		if (right.type == 'f') {
 			rVal.type = 'f';
@@ -124,9 +120,9 @@ xv_number xvcalc_sub(xv_number left, xv_number right)
 	return rVal;
 }
 
-xv_number xvcalc_mul(xv_number left, xv_number right)
+number xvcalc_mul(number left, number right)
 {
-	xv_number rVal;
+	number rVal;
 	if (left.type == 'f') {
 		if (right.type == 'f') {
 			rVal.type = 'f';
@@ -150,10 +146,10 @@ xv_number xvcalc_mul(xv_number left, xv_number right)
 	return rVal;
 }
 
-xv_number xvcalc_div(xv_number left, xv_number right)
+number xvcalc_div(number left, number right)
 {
 	// TOOD: Add division by zero check.
-	xv_number rVal;
+	number rVal;
 	if (left.type == 'f') {
 		if (right.type == 'f') {
 			rVal.type = 'f';
@@ -177,9 +173,9 @@ xv_number xvcalc_div(xv_number left, xv_number right)
 	return rVal;
 }
 
-xv_number xvcalc_dice(xv_number n_count, xv_number n_faces)
+number xvcalc_dice(number n_count, number n_faces)
 {
-	xv_number rVal;
+	number rVal;
 	int count;
 	int faces;
 	if (n_count.type == 'f') count = (int) n_count.f;
@@ -212,9 +208,9 @@ number xvcalc_evaluate_function(char * name, int count, number * arguments)
 	return rVal;
 }
 
-struct xvcalc_number xvcalc_evaluate_tree(struct xvcalc_tree * tree)
+number xvcalc_evaluate_tree(tree * tree)
 {
-	xv_number rVal;
+	number rVal;
 	int i;
 	/* FIXME: set an error */
 	if (!tree) return rVal;
@@ -273,7 +269,7 @@ struct xvcalc_number xvcalc_evaluate_tree(struct xvcalc_tree * tree)
 	return rVal;
 }
 
-void xvcalc_delete_tree(struct xvcalc_tree * tree)
+void xvcalc_delete_tree(tree * tree)
 {
 	int i;
 	if (tree) {

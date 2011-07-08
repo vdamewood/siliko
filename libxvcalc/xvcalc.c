@@ -53,7 +53,7 @@ void xvcalc_set_nil()
 	value_as_float = 0.0;
 }
 
-void xvcalc_set_value(xv_number new_value)
+void xvcalc_set_value(number new_value)
 {
 	status = new_value.type;
 	switch (status) {
