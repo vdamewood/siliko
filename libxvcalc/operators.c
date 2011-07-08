@@ -81,7 +81,10 @@ number xvcalc_mul(number left, number right)
 
 number xvcalc_div(number left, number right)
 {
-	// TOOD: Add division by zero check.
+	/* TOOD:
+	 * Add division by zero check.
+	 * Change integer/integer to return a float if needed.
+	 */
 	number rVal;
 	if (left.type == 'f') {
 		if (right.type == 'f') {
