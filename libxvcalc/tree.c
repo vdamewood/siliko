@@ -75,15 +75,13 @@ number xvcalc_evaluate_function(char * name, int count, number * arguments)
 		else if (rVal.type == 'i' && rVal.i < 0)
 			rVal.i = rVal.i * -1;
 	}*/
-	function_ptr func;
-	func = get_function(name);
-	return func(count, arguments);
 }
 
 number xvcalc_evaluate_tree(tree * tree)
 {
 	number rVal;
 	int i;
+	function_ptr func;
 	/* FIXME: set an error */
 	if (!tree) return rVal;
 	number * evaluated_arguments = NULL;
@@ -125,9 +123,10 @@ number xvcalc_evaluate_tree(tree * tree)
 					tree->func->arg_vector[i]);
 			}
 		}
-		rVal = xvcalc_evaluate_function(tree->func->name,
-					 tree->func->arg_count,
-					 evaluated_arguments);
+
+		func = get_function(tree->func->name);
+		rVal = func(tree->func->arg_count, evaluated_arguments);
+
 		if (tree->func->arg_count) {
 			for(i = 0; i < tree->func->arg_count; i++) {
 				/*free(evaluated_arguments[i]);*/
