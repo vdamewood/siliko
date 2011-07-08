@@ -3,6 +3,7 @@
 
 #include "tree.h"
 #include "operators.h"
+#include "functions.h"
 #include "xvcalcix.h"
 
 tree * xvcalc_new_operation(char type, tree * left, tree * right)
@@ -66,15 +67,17 @@ tree * xvcalc_new_function(char * name, arglist * in_arglist)
  * a string */
 number xvcalc_evaluate_function(char * name, int count, number * arguments)
 {
-	number rVal;
+	/*number rVal;
 	rVal = arguments[0];
 	if (strcmp(name, "abs") == 0) {
 		if (rVal.type == 'f' && rVal.f < 0.0)
 			rVal.f = rVal.f * -1.0;
 		else if (rVal.type == 'i' && rVal.i < 0)
 			rVal.i = rVal.i * -1;
-	}
-	return rVal;
+	}*/
+	function_ptr func;
+	func = get_function(name);
+	return func(count, arguments);
 }
 
 number xvcalc_evaluate_tree(tree * tree)
