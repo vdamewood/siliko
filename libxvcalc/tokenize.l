@@ -25,6 +25,6 @@
 	strcpy(xvcalc_yylval.s, xvcalc_yytext);
 	return ID;
 }
-[ \t] {}
+[ \t\n] {}
 . { xvcalc_report_lex_error(*xvcalc_yytext); return ERROR; }
 %%
