@@ -40,6 +40,7 @@ struct xvcalc_function {
 	char * name;
 	int arg_count;
 	tree ** arg_vector;
+	number * eval_args;
 };
 
 struct xvcalc_arglist {

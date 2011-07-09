@@ -54,10 +54,12 @@ tree * xvcalc_new_function(char * name, arglist * in_arglist)
 		rVal->func->arg_count = in_arglist->depth;
 		rVal->func->arg_vector = malloc(sizeof(tree *) * in_arglist->depth);
 		xvcalc_arglist_to_array(rVal->func->arg_vector, in_arglist);
+		rVal->func->eval_args = malloc(sizeof(number) * rVal->func->arg_count);
 	}
 	else {
 		rVal->func->arg_count = 0;
 		rVal->func->arg_vector = NULL;
+		rVal->func->eval_args = NULL;
 	}
 	
 	return rVal;
@@ -102,21 +104,14 @@ number xvcalc_evaluate_tree(tree * tree)
 		break;
 	case 'f':
 		if (tree->func->arg_count) {
-			evaluated_arguments =
-				malloc(sizeof(number) * tree->func->arg_count);
 			for(i = 0; i < tree->func->arg_count; i++) {
-				evaluated_arguments[i] = xvcalc_evaluate_tree(
+				tree->func->eval_args[i] = xvcalc_evaluate_tree(
 					tree->func->arg_vector[i]);
 			}
 		}
 
 		func = get_function(tree->func->name);
-		rVal = func(tree->func->arg_count, evaluated_arguments);
-
-		if (tree->func->arg_count) {
-			free(evaluated_arguments);
-			evaluated_arguments = NULL;
-		}
+		rVal = func(tree->func->arg_count, tree->func->eval_args);
 	}
 		
 	return rVal;
@@ -142,6 +137,7 @@ void xvcalc_delete_tree(tree * tree)
 						tree->func->arg_vector[i]);
 				}
 				free(tree->func->arg_vector);
+				free(tree->func->eval_args);
 				free(tree->func);
 				break;
 		}
