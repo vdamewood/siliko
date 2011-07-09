@@ -45,11 +45,14 @@ XVcalc Interface
 
 XVCalc's interface consists of the following functions:
 
-char   xvcalc(char * in_string)
-int    xvcalc_get_int(void)
-float  xvcalc_get_float(void)
-char * xvcalc_error_message(void)
-void   xvcalc_clean(void)
+enum xvcalc_status xvcalc(char * in_string)
+int                xvcalc_get_int(void)
+float              xvcalc_get_float(void)
+char             * xvcalc_error_message(void)
+void               xvcalc_clean(void)
+
+The xvcalc_status ennumeration is found in xvcalc.h with comments on what each
+status means.
 
 Other symbols starting with xvcalc_ will be found in the library but are not
 part of the public interface, so don't use them.
@@ -59,40 +62,13 @@ to a null-terminated series of characters. When called, the xvcalc() function
 parses the string passed to it and sets internal conditions allowing other
 functions to be called to retrieve the results and any messages.
 
-The xvcalc() function returns a status code as a char. The following are
-currently possible values:
-
-'e':  syntax/parse error      -- An error message will be returned by
-                                 xvcalc_error_message(). The pointer returned
-                                 points to section of memory allocated with
-                                 malloc(). This section of memory will be
-                                 free()ed by a call to xvcalc_clean().
-'m':  memory alocation error  -- If this is returned, xvcalc was not able to
-                                 allocate enough memory to complete an operation
-                                 or alocate memory for a syntax error message.
-'i':  success, int result     -- The result of the calculation will be returned
-                                 by xvcalc_get_int()
-'f':  success, float result   -- the result of the calculation will be returned
-                                 by xvcalc_get_float(). While this status code
-                                 is supported, floating-point operations have
-                                 not yet been implemented.
-
-Other values may be added in the future. The 'f' option may change if double
-values are used instead. If that happens the xvcalc_get_float() function will
-change to the following:
-
-double xvcalc_get_double(void)
+The xvcalc() function returns a status code. The meaning of these status
+codes are detaild in xvcalc.h.
 
 Once you have retrieved the value of the calculation, you must clean the state
 of the library by calling the xvcalc_clean() function. This function must be
 called at least after each call to xvcalc(), before program termination and
 before any subsequent calls to xvcalc().
-
-For historical reasons, a Python script is included with the distribution. The
-Python script can be used as a binding module for the library and as a script
-to test the library. It defines a single function, vldc() which, when called,
-returns the value of xvcalc_get_int() or xvcalc_get_float(), which ever is
-appropriate. If an error is encountered, it throws an exception.
 
 Known Issues
 
