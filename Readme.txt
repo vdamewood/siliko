@@ -26,7 +26,7 @@ The following features are planned for future versions:
 * user-defined functions through a plug-in interface.
 * thread safety, if feasible.
 
-Currently, XVCalc handled mixing integers and floating-point numbers in a
+Currently, XVCalc handles mixing integers and floating-point numbers in a
 manner similar to other languages: operations involving only integers will give
 and integer result while operations involving a floating-point number will
 give a floating-point result. Eventually, XVCalc will handle the type of the
