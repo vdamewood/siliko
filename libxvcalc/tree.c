@@ -4,7 +4,6 @@
 
 #include "xvcalc.h"
 #include "tree.h"
-#include "operators.h"
 #include "functions.h"
 #include "xvcalcix.h"
 

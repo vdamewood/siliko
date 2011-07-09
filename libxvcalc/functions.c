@@ -1,4 +1,7 @@
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
 #include "xvcalc.h"
 #include "functions.h"
 
