@@ -3,13 +3,13 @@
 #include "xvcalcix.h"
 
 int xvcalc_yyparse(void);
-
-static char   status         = '\0';
+void xvcalc_set_status(xvcalc_status new_status);
+static xvcalc_status status = NONE;
 static int    value_as_int   = 0;
 static float  value_as_float = 0.0;
 static char * error_message  = NULL;
 
-char xvcalc(char *inString)
+xvcalc_status xvcalc(char *inString)
 {
 	YY_BUFFER_STATE buffer;
 	buffer = xvcalc_yy_scan_string(inString);
@@ -28,14 +28,14 @@ float xvcalc_get_float(void)
 	return value_as_float;
 }
 
-char *xvcalc_error_message(void)
+char * xvcalc_error_message(void)
 {
         return error_message;
 }
 
 void xvcalc_clean(void)
 {
-	status = '\0';
+	xvcalc_set_status(NONE);
 	value_as_int = 0;
 	value_as_float = 0.0;
         if(error_message) {
@@ -46,22 +46,28 @@ void xvcalc_clean(void)
 
 /* The following are internal-use only. */
 
+void xvcalc_set_status(xvcalc_status new_status)
+{
+	status = new_status;
+}
+
 void xvcalc_set_nil()
 {
-	status = 'i';
+	xvcalc_set_status(S_INTEGER);
 	value_as_int = 0;
 	value_as_float = 0.0;
 }
 
 void xvcalc_set_value(number new_value)
 {
-	status = new_value.type;
-	switch (status) {
+	switch (new_value.type) {
 	case 'i':
+		xvcalc_set_status(S_INTEGER);
 		value_as_int = new_value.i;
-		value_as_float = (int) new_value.f;
+		value_as_float = (float) new_value.i;
 		break;
 	case 'f':
+		xvcalc_set_status(S_FLOAT);
 		value_as_int = (int) new_value.f;
 		value_as_float = new_value.f;
 	};
@@ -69,7 +75,7 @@ void xvcalc_set_value(number new_value)
 
 void xvcalc_set_malloc_error(void)
 {
-	status = 'm';
+	xvcalc_set_status(E_MEMORY);
 }
 
 void xvcalc_report_lex_error(char bad_char)
@@ -93,5 +99,5 @@ void xvcalc_yyerror(const char *s)
 	}
 	
         strcpy(error_message, s);
-	status = 'e';
+	xvcalc_set_status(E_SYNTAX);
 }

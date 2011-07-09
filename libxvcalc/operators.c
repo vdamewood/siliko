@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
-#include "operatiors.h"
+#include "operators.h"
 
 number xvcalc_add(number left, number right)
 {

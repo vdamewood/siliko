@@ -3,10 +3,8 @@
 
 int main(int argc, char *argv[])
 {
-	char status;
+	xvcalc_status status;
 	char * expression;
-	int int_val;
-	float flt_val;
 
 	if (argc >= 2)
 		expression = argv[1];
@@ -14,15 +12,29 @@ int main(int argc, char *argv[])
 		expression = "";
 
 	status = xvcalc(expression);
-	if (status == 'i' || status == 'f') {
-		int_val = xvcalc_get_int();
-		flt_val = xvcalc_get_float();
+	switch (status) {
+	case S_INTEGER:
+		printf("Value: %i\n", xvcalc_get_int());
+		break;
+	case S_FLOAT:
+		printf("Value: %f\n", xvcalc_get_float());
+		break;
+	case E_SYNTAX:
+		printf("Syntax error.");
+		break;
+	case E_MEMORY:
+		printf("Out of memory.");
+		break;
+	case E_ZERO_DIV:
+		printf("Division by zero error.");
+		break;
+	case E_FUNCTION:
+		printf("Function not found.");
+		break;
+	case E_ARGUMENTS:
+		printf("Bad argument count.");
+		break;
 	}
-	else if (status == 'm') printf("Out of memory.");
-	else if (status == 'e') printf("%s\n", xvcalc_error_message());
-	else printf("Oops\n");
 	xvcalc_clean();
-
-	printf("%c: %d %f\n", status, int_val, flt_val);
 	return 0;
 }
