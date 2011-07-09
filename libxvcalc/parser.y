@@ -51,8 +51,7 @@ expression: INTEGER            { $$ = xvcalc_new_int($1);          }
 
 fcall: ID '(' arglist ')' { $$ = xvcalc_new_function($1, $3); free($1);};
 
-arglist: { $$ = NULL; }
- | expression { $$ = xvcalc_add_argument($1, NULL); }
+arglist: expression { $$ = xvcalc_add_argument($1, NULL); }
  | expression ',' arglist { $$ = xvcalc_add_argument($1, $3); };
 ;
 %%

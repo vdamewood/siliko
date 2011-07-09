@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -5,155 +6,177 @@
 #include "xvcalc.h"
 #include "functions.h"
 
-number xvcalc_op_add(int count, number * arguments, jmp_buf jb)
+number xvcalc_op_add(int argc, number * args, jmp_buf jb)
 {
 	number rVal;
-	number left = arguments[0];
-	number right = arguments[1];
-	if (left.type == 'f') {
-		if (right.type == 'f') {
+	
+	/* Operators take exactly two arguments. */
+	if (argc != 2) longjmp(jb, E_ARGUMENTS);
+
+	if (args[0].type == 'f') {
+		if (args[1].type == 'f') {
 			rVal.type = 'f';
-			rVal.f = left.f + right.f;
+			rVal.f = args[0].f + args[1].f;
 		}
 		else {
 			rVal.type = 'f';
-			rVal.f = left.f + (float) right.i;
+			rVal.f = args[0].f + (float) args[1].i;
 		}
 	}
 	else {
-		if (right.type == 'f') {
+		if (args[1].type == 'f') {
 			rVal.type = 'f';
-			rVal.f = (float) left.i + right.f;
+			rVal.f = (float) args[0].i + args[1].f;
 		}
 		else {
 			rVal.type = 'i';
-			rVal.i = left.i + right.i;
+			rVal.i = args[0].i + args[1].i;
 		}
 	}
 	return rVal;
 }
 
-number xvcalc_op_sub(int count, number * arguments, jmp_buf jb)
+number xvcalc_op_sub(int argc, number * args, jmp_buf jb)
 {
 	number rVal;
-	number left = arguments[0];
-	number right = arguments[1];
-	if (left.type == 'f') {
-		if (right.type == 'f') {
+	
+	/* Operators take exactly two arguments. */
+	if (argc != 2) longjmp(jb, E_ARGUMENTS);
+
+	if (args[0].type == 'f') {
+		if (args[1].type == 'f') {
 			rVal.type = 'f';
-			rVal.f = left.f - right.f;
+			rVal.f = args[0].f - args[1].f;
 		}
 		else {
 			rVal.type = 'f';
-			rVal.f = left.f - (float) right.i;
+			rVal.f = args[0].f - (float) args[1].i;
 		}
 	}
 	else {
-		if (right.type == 'f') {
+		if (args[1].type == 'f') {
 			rVal.type = 'f';
-			rVal.f = (float) left.i - right.f;
+			rVal.f = (float) args[0].i - args[1].f;
 		}
 		else {
 			rVal.type = 'i';
-			rVal.i = left.i - right.i;
+			rVal.i = args[0].i - args[1].i;
 		}
 	}
 	return rVal;
 }
 
-number xvcalc_op_mul(int count, number * arguments, jmp_buf jb)
+number xvcalc_op_mul(int argc, number * args, jmp_buf jb)
 {
 	number rVal;
-	number left = arguments[0];
-	number right = arguments[1];
-	if (left.type == 'f') {
-		if (right.type == 'f') {
+	
+	/* Operators take exactly two arguments. */
+	if (argc != 2) longjmp(jb, E_ARGUMENTS);
+
+	if (args[0].type == 'f') {
+		if (args[1].type == 'f') {
 			rVal.type = 'f';
-			rVal.f = left.f * right.f;
+			rVal.f = args[0].f * args[1].f;
 		}
 		else {
 			rVal.type = 'f';
-			rVal.f = left.f * (float) right.i;
+			rVal.f = args[0].f * (float) args[1].i;
 		}
 	}
 	else {
-		if (right.type == 'f') {
+		if (args[1].type == 'f') {
 			rVal.type = 'f';
-			rVal.f = (float) left.i * right.f;
+			rVal.f = (float) args[0].i * args[1].f;
 		}
 		else {
 			rVal.type = 'i';
-			rVal.i = left.i * right.i;
+			rVal.i = args[0].i * args[1].i;
 		}
 	}
 	return rVal;
 }
 
-number xvcalc_op_div(int count, number * arguments, jmp_buf jb)
+number xvcalc_op_div(int argc, number * args, jmp_buf jb)
 {
-	/* TOOD:
-	 * Add division by zero check.
-	 * Change integer/integer to return a float if needed.
-	 */
 	number rVal;
-	number left = arguments[0];
-	number right = arguments[1];
-	if (left.type == 'f') {
-		if (right.type == 'f') {
+	
+	/* Operators take exactly two arguments. */
+	if (argc != 2) longjmp(jb, E_ARGUMENTS);
+
+	/* Division-by-Zero Error */
+	if ((args[1].type = 'f' && args[1].f == 0.0)
+		|| (args[1].type = 'i' && args[1].f == 0)) {
+		longjmp(jb, E_ZERO_DIV);
+	}
+
+	if (args[0].type == 'f') {
+		if (args[1].type == 'f') {
 			rVal.type = 'f';
-			rVal.f = left.f / right.f;
+			rVal.f = args[0].f / args[1].f;
 		}
 		else {
 			rVal.type = 'f';
-			rVal.f = left.f / (float) right.i;
+			rVal.f = args[0].f / (float) args[1].i;
 		}
 	}
 	else {
-		if (right.type == 'f') {
+		if (args[1].type == 'f') {
 			rVal.type = 'f';
-			rVal.f = (float) left.i / right.f;
+			rVal.f = (float) args[0].i / args[1].f;
 		}
 		else {
+			/* TODO: Make this return a float if it's fractional */
 			rVal.type = 'i';
-			rVal.i = left.i / right.i;
+			rVal.i = args[0].i / args[1].i;
 		}
 	}
 	return rVal;
 }
 
-number xvcalc_op_dice(int countx, number * arguments, jmp_buf jb)
+number xvcalc_op_dice(int argc, number * args, jmp_buf jb)
 {
+	/* TODO: Make this function handle fractional dice. */
+	static int has_seeded = 0;
+	int running = 0;
 	number rVal;
-	number n_count = arguments[0];
-	number n_faces = arguments[1];
 	int count;
 	int faces;
-	if (n_count.type == 'f') count = (int) n_count.f;
-	else count = n_count.i;
-	faces = n_faces.i;
-
-	static int hasSeeded = 0;
 	int i;
-	int running = 0;
-	if (!hasSeeded)
-		srand(time(NULL));
+	
+	/* Operators take exactly two arguments.*/
+	if (argc != 2) longjmp(jb, E_ARGUMENTS);
 
-	for (i = 1; i <= count; i++)
-		running += (rand() % faces) + 1;
+	if (args[0].type == 'f') count = (int) args[0].f;
+	else count = args[0].i;
+
+	/* Due to the grammar, args[1] is guarenteed to be an integer. */
+	faces = args[1].i;
+
+	if (!has_seeded) srand(time(NULL));
+	for (i = 1; i <= count; i++) running += (rand() % faces) + 1;
 	rVal.type = 'i';
 	rVal.i = running;
 	return rVal;
 }
 
-number xvcalc_func_abs(int count, number * arguments, jmp_buf jb)
+number xvcalc_func_abs(int argc, number * args, jmp_buf jb)
 {
 	number rVal;
-	rVal = arguments[0];
-	if (rVal.type == 'f' && rVal.f < 0.0)
-		rVal.f = rVal.f * -1.0;
-	else if (rVal.type == 'i' && rVal.i < 0)
-		rVal.i = rVal.i * -1;
+
+	/* Operators take exactly two arguments. */
+	if (argc != 1) longjmp(jb, E_ARGUMENTS);
+
+	rVal = args[0];
+	if (rVal.type == 'f')
+		rVal.f = fabs(rVal.f);
+	else if (rVal.type == 'i')
+		rVal.i = abs(rVal.i);
 	return rVal;
+}
+
+number xvcalc_func_dummy(int argc, number * args, jmp_buf jb)
+{
+	return args[0];
 }
 
 function_ptr xvcalc_get_operator(char operator)
@@ -181,5 +204,8 @@ function_ptr xvcalc_get_operator(char operator)
 
 function_ptr xvcalc_get_function(char * name)
 {
-	return xvcalc_func_abs;
+	if (strcmp(name, "abs") == 0)
+		return xvcalc_func_abs;
+	else
+		return xvcalc_func_dummy;
 }
