@@ -20,19 +20,19 @@ int main(int argc, char *argv[])
 		printf("Value: %f\n", xvcalc_get_float());
 		break;
 	case E_SYNTAX:
-		printf("Syntax error.");
+		printf("Syntax error.\n");
 		break;
 	case E_MEMORY:
-		printf("Out of memory.");
+		printf("Out of memory.\n");
 		break;
 	case E_ZERO_DIV:
-		printf("Division by zero error.");
+		printf("Division by zero error.\n");
 		break;
 	case E_FUNCTION:
-		printf("Function not found.");
+		printf("Function not found.\n");
 		break;
 	case E_ARGUMENTS:
-		printf("Bad argument count.");
+		printf("Bad argument count.\n");
 		break;
 	}
 	xvcalc_clean();

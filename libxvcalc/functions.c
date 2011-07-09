@@ -104,8 +104,8 @@ number xvcalc_op_div(int argc, number * args, jmp_buf jb)
 	if (argc != 2) longjmp(jb, E_ARGUMENTS);
 
 	/* Division-by-Zero Error */
-	if ((args[1].type = 'f' && args[1].f == 0.0)
-		|| (args[1].type = 'i' && args[1].f == 0)) {
+	if ((args[1].type == 'f' && args[1].f == 0.0)
+		|| (args[1].type == 'i' && args[1].i == 0)) {
 		longjmp(jb, E_ZERO_DIV);
 	}
 
