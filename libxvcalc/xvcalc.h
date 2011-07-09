@@ -11,7 +11,9 @@ enum xvcalc_status {
 	E_MEMORY,
 	E_ZERO_DIV,
 	E_FUNCTION,
-	E_ARGUMENTS
+	E_ARGUMENTS,
+	E_DOMAIN,
+	E_RANGE
 };
 typedef enum xvcalc_status xvcalc_status;
 

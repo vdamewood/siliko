@@ -6,6 +6,7 @@ tree * xvcalc_new_operation(char, tree *, tree *);
 tree * xvcalc_new_int(int);
 tree * xvcalc_new_float(float);
 tree * xvcalc_new_function(char *, arglist *);
+void  xvcalc_set_value_from_tree(tree *);
 number xvcalc_evaluate_tree(tree *);
 void xvcalc_delete_tree(tree *);
 

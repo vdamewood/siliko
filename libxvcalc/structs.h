@@ -26,6 +26,7 @@ struct xvcalc_operation {
 	char type;
 	tree * left;
 	tree * right;
+	number * args;
 };
 
 struct xvcalc_number {

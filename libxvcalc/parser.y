@@ -29,7 +29,7 @@
 %%
 calculation: EOL { xvcalc_set_nil(); }
  | expression EOL {
-	xvcalc_set_value(xvcalc_evaluate_tree($1));
+	xvcalc_set_value_from_tree($1);
 	xvcalc_delete_tree($1);
 };
 

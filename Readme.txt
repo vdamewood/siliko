@@ -93,3 +93,7 @@ Python script can be used as a binding module for the library and as a script
 to test the library. It defines a single function, vldc() which, when called,
 returns the value of xvcalc_get_int() or xvcalc_get_float(), which ever is
 appropriate. If an error is encountered, it throws an exception.
+
+Known Issues
+
+VXcalc will leak memory if a syntax error is encountered.
