@@ -49,7 +49,7 @@ expression: INTEGER            { $$ = xvcalc_new_int($1);          }
  | ERROR { YYERROR; }
 ;
 
-fcall: ID '(' arglist ')' { $$ = xvcalc_new_function($1, $3); free($1);};
+fcall: ID '(' arglist ')' { $$ = xvcalc_new_function($1, $3);};
 
 arglist: expression { $$ = xvcalc_add_argument($1, NULL); }
  | expression ',' arglist { $$ = xvcalc_add_argument($1, $3); };

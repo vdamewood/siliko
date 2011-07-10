@@ -49,9 +49,8 @@ tree * xvcalc_new_function(char * name, arglist * in_arglist)
 	rVal->type = 'f';
 
 	rVal->func = malloc(sizeof(function));
-	rVal->func->name = malloc(strlen(name) + 1);
-	strcpy(rVal->func->name, name);
-	
+	rVal->func->name = name;
+
 	if(in_arglist) {
 		rVal->func->arg_count = in_arglist->depth;
 		rVal->func->arg_vector = malloc(sizeof(tree *) * in_arglist->depth);
@@ -159,4 +158,14 @@ arglist * xvcalc_add_argument(tree * new_arg, arglist * old_list)
 	rVal->value = new_arg;
 	rVal->next = old_list;
 	return rVal;
+}
+
+char * xvcalc_make_id(char * in_token)
+{
+	return malloc(strlen(in_token)+1);
+}
+
+void xvcalc_delete_id(char * in_token)
+{
+	free(in_token);
 }
