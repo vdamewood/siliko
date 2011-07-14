@@ -6,17 +6,21 @@
 #include "tree.h"
 #include "functions.h"
 #include "xvcalcix.h"
+#include "cleanup.h"
 
 tree * xvcalc_new_operation(char type, tree * left, tree * right)
 {
 	tree * rVal;
 	rVal = malloc(sizeof(tree));
+	xvcalc_mem_append_tree(rVal);
 	rVal->op = malloc(sizeof(operation));
 	rVal->op->args = malloc(sizeof(number) * 2);
 	rVal->type = 'o';
 	rVal->op->type = type;
 	rVal->op->left = left;
+	xvcalc_mem_remove_tree(left);
 	rVal->op->right = right;
+	xvcalc_mem_remove_tree(right);
 	return rVal;
 }
 
@@ -24,6 +28,7 @@ tree * xvcalc_new_int(int value)
 {
 	tree * rVal;
 	rVal = malloc(sizeof(tree));
+	xvcalc_mem_append_tree(rVal);
 	rVal->num = malloc(sizeof(number));
 	rVal->type = 'n';
 	rVal->num->type = 'i';
@@ -35,6 +40,7 @@ tree * xvcalc_new_float(float value)
 {
 	struct xvcalc_tree * rVal;
 	rVal = malloc(sizeof(tree));
+	xvcalc_mem_append_tree(rVal);
 	rVal->num = malloc(sizeof(number));
 	rVal->type = 'n';
 	rVal->num->type = 'f';
@@ -46,9 +52,11 @@ tree * xvcalc_new_function(char * name, arglist * in_arglist)
 {
 	tree * rVal;
 	rVal = malloc(sizeof(tree));
+	xvcalc_mem_append_tree(rVal);
 	rVal->type = 'f';
 
 	rVal->func = malloc(sizeof(function));
+	xvcalc_mem_clear_id();
 	rVal->func->name = name;
 
 	if(in_arglist) {
@@ -137,6 +145,7 @@ void xvcalc_delete_tree(tree * tree)
 				free(tree->func);
 				break;
 		}
+		xvcalc_mem_remove_tree(tree);
 		free(tree);
 	}
 }
@@ -147,6 +156,7 @@ void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist)
 	if (in_arglist->next)
 		xvcalc_arglist_to_array(array+1, in_arglist->next);
 	free(in_arglist);
+	xvcalc_mem_clear_arglist();
 }
 
 arglist * xvcalc_add_argument(tree * new_arg, arglist * old_list)
@@ -157,15 +167,21 @@ arglist * xvcalc_add_argument(tree * new_arg, arglist * old_list)
 	else rVal->depth = 1;
 	rVal->value = new_arg;
 	rVal->next = old_list;
+	xvcalc_mem_set_arglist(rVal);
 	return rVal;
 }
 
 char * xvcalc_make_id(char * in_token)
 {
-	return malloc(strlen(in_token)+1);
+	char * rVal;
+	rVal = malloc(strlen(in_token)+1);
+	strcpy(rVal, in_token);
+	xvcalc_mem_set_id(rVal);
+	return rVal;
 }
 
 void xvcalc_delete_id(char * in_token)
 {
+	xvcalc_mem_clear_id();
 	free(in_token);
 }

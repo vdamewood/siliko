@@ -1,6 +1,7 @@
 %option noyywrap nodefault
 %{
 #include "xvcalcix.h"
+#include "tree.h"
 #include "parser.h"
 
 /* Values taken from Google Calculator 2011-07-06 */
@@ -21,7 +22,7 @@
 "e"  { xvcalc_yylval.f = EULER; return FLOAT; }
 "pi" { xvcalc_yylval.f = PI;    return FLOAT; }
 ([a-ce-z][a-z0-9]*)|(d[a-z][a-z0-9]*) {
-	xvcalc_yylval.s = malloc(strlen(xvcalc_yytext)+1);
+	xvcalc_yylval.s = xvcalc_make_id(xvcalc_yytext);
 	strcpy(xvcalc_yylval.s, xvcalc_yytext);
 	return ID;
 }
