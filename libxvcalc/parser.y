@@ -30,7 +30,7 @@
 calculation: EOL { xvcalc_set_nil(); }
  | expression EOL {
 	xvcalc_set_value_from_tree($1);
-	xvcalc_delete_tree($1);
+	xvcalc_clear_memory($1);
 };
 
 expression: INTEGER            { $$ = xvcalc_new_int($1);          }
