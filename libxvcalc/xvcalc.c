@@ -42,6 +42,7 @@ void xvcalc_clean(void)
 		free(error_message);
 		error_message = NULL;
 	}
+	xvcalc_error();
 }
 
 /* The following are internal-use only. */

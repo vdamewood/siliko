@@ -129,11 +129,19 @@ number xvcalc_evaluate_tree(tree * tree)
 	return rVal;
 }
 
-void xvcalc_clear_memory(tree * in_tree) {
+void xvcalc_clear_memory(tree * in_tree)
+{
 	if (in_tree) {
 		xvcalc_delete_tree(in_tree);
 		xvcalc_release_dangling_tree(in_tree);
 	}
+}
+
+void xvcalc_error()
+{
+	xvcalc_clear_dangling_trees();
+	xvcalc_clear_dangling_arglists();
+	xvcalc_clear_dangling_ids();
 }
 
 void xvcalc_delete_tree(tree * tree)
@@ -161,9 +169,16 @@ void xvcalc_delete_tree(tree * tree)
 				free(tree->func);
 				break;
 		}
-		/* FIXME: Not sure if I should release dangling tree here
-		xvcalc_release_dangling_tree(tree); /**/
 		free(tree);
+	}
+}
+
+void xvcalc_delete_arglist(arglist * in_arglist)
+{
+	if (in_arglist) {
+		xvcalc_delete_arglist(in_arglist->next);
+		xvcalc_delete_tree(in_arglist->value);
+		free(in_arglist);
 	}
 }
 
@@ -203,4 +218,9 @@ void xvcalc_delete_id(char * in_token)
 {
 	xvcalc_release_dangling_id(in_token);
 	free(in_token);
+}
+typedef void (*ptrDel)(char *);
+ptrDel xvcalc_ptr_delid()
+{
+	return xvcalc_delete_id;
 }

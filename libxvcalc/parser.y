@@ -46,7 +46,7 @@ expression: INTEGER            { $$ = xvcalc_new_int($1);          }
    }
  | '(' expression ')' { $$ = $2; }
  | fcall
- | ERROR { YYERROR; }
+ | ERROR { xvcalc_error(); YYERROR; }
 ;
 
 fcall: ID '(' arglist ')' { $$ = xvcalc_new_function($1, $3);};
