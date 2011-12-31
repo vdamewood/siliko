@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "tree.h"
 #include "cleanup.h"
 
 typedef void (*del_fptr)(void*);
@@ -26,9 +27,9 @@ static int id_count = 0;
 /* Scan through the list of items and save item. */
 static void cache_item(void *** list, int * count, void * item)
 {
-	int i;
+	int i = 0;
 	int item_is_saved = 0;
-	void * relist;
+	void * relist = NULL;
 
 	/* If the list given is empty, initialize it with a single empty space. */
 	if (!(*list)) {
@@ -99,7 +100,6 @@ static void xvcalc_clear_dangling_items(void *** list, int *size, del_fptr delet
 	for (i=0; i < *size; i++) {
 		debug_report( __FUNCTION__, *list[i]);
 		if (*list[i]) {
-			debug_report( __FUNCTION__, 0xBAADBEEF);
 			delete((*list)[i]);
 			(*list)[i] = NULL;
 		}

@@ -11,6 +11,7 @@ number xvcalc_evaluate_tree(tree *);
 void xvcalc_delete_tree(tree *);
 
 arglist * xvcalc_add_argument(tree *, arglist *);
+void xvcalc_delete_arglist(arglist *);
 void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist);
 
 char * xvcalc_make_id(char * in_token);
