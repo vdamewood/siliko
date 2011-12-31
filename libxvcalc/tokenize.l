@@ -1,7 +1,5 @@
-%option noyywrap nodefault
+%option noyywrap nodefault nounput
 %{
-#include "xvcalcix.h"
-#include "tree.h"
 #include "parser.h"
 
 /* Values taken from Google Calculator 2011-07-06 */
@@ -22,10 +20,9 @@
 "e"  { xvcalc_yylval.f = EULER; return FLOAT; }
 "pi" { xvcalc_yylval.f = PI;    return FLOAT; }
 ([a-ce-z][a-z0-9]*)|(d[a-z][a-z0-9]*) {
-	xvcalc_yylval.s = xvcalc_make_id(xvcalc_yytext);
-	strcpy(xvcalc_yylval.s, xvcalc_yytext);
+	xvcalc_yylval.s = yytext;
 	return ID;
 }
 [ \t\n] {}
-. { xvcalc_report_lex_error(*xvcalc_yytext); return ERROR; }
+. { xvcalc_yylval.s = yytext; return ERROR; }
 %%
