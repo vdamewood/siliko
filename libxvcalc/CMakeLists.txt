@@ -13,7 +13,10 @@ add_custom_command (
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/parser.y
 )
 
-add_library(xvcalc xvcalc.c tree.c cleanup.c functions.c parser.c tokenize.c)
+add_library(xvcalc
+	xvcalc.c
+	XvcOperators.c
+	tree.c cleanup.c functions.c parser.c tokenize.c)
 add_executable(xvctest xvctest.c)
 target_link_libraries(xvctest xvcalc)
 
