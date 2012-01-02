@@ -100,7 +100,6 @@ number xvcalc_evaluate_tree(tree * tree)
 {
 	number rVal;
 	int i;
-	function_ptr func;
 	if (!tree) longjmp(escape, E_SYNTAX);
 
 	switch (tree->type) {
@@ -111,8 +110,10 @@ number xvcalc_evaluate_tree(tree * tree)
 		tree->op->args[0] = xvcalc_evaluate_tree(tree->op->left);
 		tree->op->args[1] = xvcalc_evaluate_tree(tree->op->right);
 
-		func = xvcalc_get_operator(tree->op->type);
-		rVal = func(2, tree->op->args, escape);
+		rVal = xvcalc_call_operator(tree->op->type,
+									tree->op->args,
+									escape);
+		
 		break;
 	case 'f':
 		if (tree->func->arg_count) {
@@ -122,8 +123,10 @@ number xvcalc_evaluate_tree(tree * tree)
 			}
 		}
 
-		func = xvcalc_get_function(tree->func->name);
-		rVal = func(tree->func->arg_count, tree->func->eval_args, escape);
+		rVal = xvcalc_call_function(tree->func->name,
+									tree->func->arg_count,
+									tree->func->eval_args,
+									escape);
 	}
 		
 	return rVal;

@@ -2,7 +2,7 @@
 #define FUNCTIONS_H
 #include <setjmp.h>
 #include "structs.h"
-typedef number (*function_ptr)(int, number *,jmp_buf);
-function_ptr xvcalc_get_operator(char);
-function_ptr xvcalc_get_function(char *);
+
+number xvcalc_call_operator(char operator, number * operands, jmp_buf jb);
+number xvcalc_call_function(const char * name, int argc, number * args, jmp_buf jb);
 #endif /* FUNCTIONS_H */

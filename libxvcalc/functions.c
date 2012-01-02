@@ -179,6 +179,15 @@ number xvcalc_func_dummy(int argc, number * args, jmp_buf jb)
 	return args[0];
 }
 
+/*********************************\
+|* Begin old external interface. *|
+|* To be phased out.             *|
+\*********************************/
+
+typedef number (*function_ptr)(int, number *,jmp_buf);
+function_ptr xvcalc_get_operator(char);
+function_ptr xvcalc_get_function(const char *);
+
 function_ptr xvcalc_get_operator(char operator)
 {
 	function_ptr rVal;
@@ -202,10 +211,29 @@ function_ptr xvcalc_get_operator(char operator)
 	return rVal;
 }
 
-function_ptr xvcalc_get_function(char * name)
+function_ptr xvcalc_get_function(const char * name)
 {
 	if (strcmp(name, "abs") == 0)
 		return xvcalc_func_abs;
 	else
 		return xvcalc_func_dummy;
+}
+
+/****************************************\
+|* Begin module's external interface.   *|
+\****************************************/
+
+number xvcalc_call_operator(char operator, number * operands, jmp_buf jb)
+{
+	function_ptr f;
+	f = xvcalc_get_operator(operator);
+	// FIXME: Remove argc from the operators' interface.
+	return f(2, operands, jb);
+}
+
+number xvcalc_call_function(const char * name, int argc, number * args, jmp_buf jb)
+{
+	function_ptr f;
+	f = xvcalc_get_function(name);
+	return f(argc, args, jb);
 }
