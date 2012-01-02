@@ -50,12 +50,12 @@ expression: INTEGER            { $$ = xvcalc_new_int($1);          }
    }
  | '(' expression ')' { $$ = $2; }
  | fcall
- | ERROR { xvcalc_report_lex_error(*xvcalc_yylval.s); /*xvcalc_error();*/ YYERROR; }
+ | ERROR { xvcalc_report_lex_error(*xvcalc_yylval.s); YYERROR; }
 ;
 
-fcall: id '(' arglist ')' { $$ = xvcalc_new_function($1, $3); printf("Function(%s)\n", $1);};
+fcall: id '(' arglist ')' { $$ = xvcalc_new_function($1, $3); };
 
-id: ID { $$ = xvcalc_make_id(xvcalc_yylval.s); printf("ID(%s)\n", $1); }
+id: ID { $$ = xvcalc_make_id(xvcalc_yylval.s); }
 
 arglist: expression { $$ = xvcalc_add_argument($1, NULL); }
  | expression ',' arglist { $$ = xvcalc_add_argument($1, $3); };

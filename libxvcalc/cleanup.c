@@ -79,18 +79,18 @@ static void release_item(void *** list, int * count, void * item)
 
 static void delete_dangling_tree(void * dangling)
 {
-	debug_report( __FUNCTION__, dangling);
-	xvcalc_delete_tree(dangling);
+	//debug_report( __FUNCTION__, dangling);
+	//xvcalc_delete_tree(dangling);
 }
 
 static void delete_dangling_arglist(void * dangling)
 {
-	xvcalc_delete_arglist(dangling);
+	//xvcalc_delete_arglist(dangling);
 }
 
 static void delete_dangling_id(void * dangling)
 {
-	xvcalc_delete_id(dangling);
+	//xvcalc_delete_id(dangling);
 }
 
 static void xvcalc_clear_dangling_items(void *** list, int *size, del_fptr delete)
@@ -115,54 +115,54 @@ static void xvcalc_clear_dangling_items(void *** list, int *size, del_fptr delet
 
 void xvcalc_cache_dangling_tree(tree * cache_tree)
 {
-	debug_report( __FUNCTION__, cache_tree);
-	cache_item(&dangling_trees, &tree_count, cache_tree);
+	/*debug_report( __FUNCTION__, cache_tree);
+	cache_item(&dangling_trees, &tree_count, cache_tree);*/
 }
 
 void xvcalc_release_dangling_tree(tree * release_tree)
 {
-	debug_report( __FUNCTION__, release_tree);
-	release_item(&dangling_trees, &tree_count, release_tree);
+	/*debug_report( __FUNCTION__, release_tree);
+	release_item(&dangling_trees, &tree_count, release_tree);*/
 }
 
 void xvcalc_clear_dangling_trees()
 {
-	debug_report( __FUNCTION__, NULL);
-	xvcalc_clear_dangling_items(&dangling_trees, &tree_count, delete_dangling_tree);
+	/*debug_report( __FUNCTION__, NULL);
+	xvcalc_clear_dangling_items(&dangling_trees, &tree_count, delete_dangling_tree);*/
 }
 
 void xvcalc_cache_dangling_arglist(arglist * cache_arglist)
 {
-	debug_report( __FUNCTION__, cache_arglist);
-	cache_item(&dangling_arglists, &arglist_count, cache_arglist);
+	/*debug_report( __FUNCTION__, cache_arglist);
+	cache_item(&dangling_arglists, &arglist_count, cache_arglist);*/
 }
 
 void xvcalc_release_dangling_arglist(arglist * release_arglist)
 {
-	debug_report( __FUNCTION__, release_arglist);
-	release_item(&dangling_arglists, &arglist_count, release_arglist);
+	/*debug_report( __FUNCTION__, release_arglist);
+	release_item(&dangling_arglists, &arglist_count, release_arglist);*/
 }
 
 void xvcalc_clear_dangling_arglists()
 {
-	debug_report( __FUNCTION__, NULL);
-	xvcalc_clear_dangling_items(&dangling_arglists, &arglist_count, delete_dangling_arglist);
+	/*debug_report( __FUNCTION__, NULL);
+	xvcalc_clear_dangling_items(&dangling_arglists, &arglist_count, delete_dangling_arglist);*/
 }
 
 void xvcalc_cache_dangling_id(char * cache_id)
 {
-	debug_report( __FUNCTION__, cache_id);
-	cache_item(&dangling_ids, &id_count, cache_id);
+	/*debug_report( __FUNCTION__, cache_id);
+	cache_item(&dangling_ids, &id_count, cache_id);*/
 }
 
 void xvcalc_release_dangling_id(char * release_id)
 {
-	debug_report( __FUNCTION__, release_id);
-	release_item(&dangling_ids, &id_count, release_id);
+	/*debug_report( __FUNCTION__, release_id);
+	release_item(&dangling_ids, &id_count, release_id);*/
 }
 
 void xvcalc_clear_dangling_ids()
 {
-	debug_report( __FUNCTION__, NULL);
-	xvcalc_clear_dangling_items(&dangling_ids, &id_count, delete_dangling_id);
+	/*debug_report( __FUNCTION__, NULL);
+	xvcalc_clear_dangling_items(&dangling_ids, &id_count, delete_dangling_id);*/
 }
