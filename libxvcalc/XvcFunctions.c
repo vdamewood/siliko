@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "xvcalc.h" // For error codes
-#include "functions.h" // For xvcalc_call_function() declaration
+#include "XvcFunctions.h" // For xvcalc_call_function() declaration
 
 static number xvcalc_func_abs(int argc, number * argv, jmp_buf jb)
 {

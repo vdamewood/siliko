@@ -15,8 +15,8 @@ add_custom_command (
 
 add_library(xvcalc
 	xvcalc.c
-	XvcOperators.c
-	tree.c cleanup.c functions.c parser.c tokenize.c)
+	XvcFunctions.c XvcOperators.c
+	tree.c cleanup.c parser.c tokenize.c)
 add_executable(xvctest xvctest.c)
 target_link_libraries(xvctest xvcalc)
 
