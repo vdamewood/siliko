@@ -1,4 +1,9 @@
 INCLUDE_DIRECTORIES(${XVCALC_SOURCE_DIR}/libxvcalc)
 
-add_executable(XvcBasicTest XvcBasicTest.c)
-target_link_libraries(XvcBasicTest xvcalc)
+add_executable(XvcTestLinkage
+	XvcTestLinkage.c)
+target_link_libraries(XvcTestLinkage xvcalc)
+
+add_executable(XvcTestFunctions
+	XvcTestFunctions.c
+	${XVCALC_SOURCE_DIR}/libxvcalc/XvcFunctions.c)
