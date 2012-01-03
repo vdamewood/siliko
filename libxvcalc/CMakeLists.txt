@@ -1,6 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
 OPTION(BUILD_SHARED_LIBS "Build shared library." ON)
-project (XVCalc)
 
 add_custom_command (
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.h ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.c
@@ -17,8 +16,6 @@ add_library(xvcalc
 	xvcalc.c
 	XvcFunctions.c XvcOperators.c
 	tree.c cleanup.c parser.c tokenize.c)
-add_executable(xvctest xvctest.c)
-target_link_libraries(xvctest xvcalc)
 
 install (TARGETS xvcalc DESTINATION lib)
 install (FILES xvcalc.h DESTINATION include)
