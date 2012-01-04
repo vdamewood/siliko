@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "XvcTree.h"
 #include "xvcalc.h"
 #include "tree.h"
 #include "XvcFunctions.h"
@@ -9,11 +10,11 @@
 #include "xvcalcix.h"
 #include "cleanup.h"
 
-#define XvcTreeNewOperator  xvcalc_new_operation
+/*#define XvcTreeNewOperator  xvcalc_new_operation
 #define XvcTreeNewInteger   xvcalc_new_int
 #define XvcTreeNewFloat     xvcalc_new_float
 #define XvcTreeNewFunction  xvcalc_new_function
-#define XvcTreeDelete       xvcalc_delete_tree
+#define XvcTreeDelete       xvcalc_delete_tree*/
 
 tree * XvcTreeNewOperator(char type, tree * left, tree * right)
 {
@@ -99,16 +100,16 @@ void XvcTreeDelete(tree * tree)
 				free(tree->num);
 				break;
 			case 'o':
-				xvcalc_delete_tree(tree->op->left);
-				xvcalc_delete_tree(tree->op->right);
+				XvcTreeDelete(tree->op->left);
+				XvcTreeDelete(tree->op->right);
 				free(tree->op->args);
 				free(tree->op);
 				break;
 			case 'f':
+				// FIXME: Should call XvcFunctionIdDelete()
 				free(tree->func->name);
 				for (i = 0; i <  tree->func->arg_count; i++) {
-					xvcalc_delete_tree(
-						tree->func->arg_vector[i]);
+					XvcTreeDelete(tree->func->arg_vector[i]);
 				}
 				free(tree->func->arg_vector);
 				free(tree->func->eval_args);

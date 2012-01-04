@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "XvcTree.h"
 #include "xvcalc.h"
 #include "tree.h"
 #include "XvcFunctions.h"
@@ -61,7 +62,7 @@ number xvcalc_evaluate_tree(tree * tree)
 void xvcalc_clear_memory(tree * in_tree)
 {
 	if (in_tree) {
-		xvcalc_delete_tree(in_tree);
+		XvcTreeDelete(in_tree);
 		xvcalc_release_dangling_tree(in_tree);
 	}
 }

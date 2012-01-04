@@ -2,6 +2,16 @@
 #include "tokenize.h"
 #include "tree.h"
 #include "xvcalcix.h"
+#include "XvcTree.h"
+#include "XvcArglist.h"
+#include "XvcFunctionId.h"
+	
+#define xvcalc_new_operation XvcTreeNewOperator
+#define xvcalc_new_int       XvcTreeNewInteger
+#define xvcalc_new_float     XvcTreeNewFloat
+#define xvcalc_new_function  XvcTreeNewFunction
+#define xvcalc_make_id       XvcFunctionIdNew
+#define xvcalc_add_argument  XvcArglistNew
 %}
 
 %code requires {

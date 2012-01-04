@@ -1,16 +1,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "XvcFunctionId.h"
 #include "structs.h"
-/*#include "xvcalc.h"
-#include "tree.h"
-#include "XvcFunctions.h"
-#include "XvcOperators.h"
-#include "xvcalcix.h"*/
 #include "cleanup.h"
 
-#define XvcFunctionIdNew xvcalc_make_id
-#define XvcFunctionIdDelete xvcalc_delete_id
+
 
 char * XvcFunctionIdNew(char * in_token)
 {

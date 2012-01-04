@@ -2,15 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "XvcTree.h"
 #include "xvcalc.h"
 #include "tree.h"
 #include "XvcFunctions.h"
 #include "XvcOperators.h"
 #include "xvcalcix.h"
 #include "cleanup.h"
-
-#define XvcArglistNew    xvcalc_add_argument
-#define XvcArglistDelete xvcalc_delete_arglist
 
 arglist * XvcArglistNew(tree * new_arg, arglist * old_list)
 {
@@ -29,8 +27,8 @@ arglist * XvcArglistNew(tree * new_arg, arglist * old_list)
 void XvcArglistDelete(arglist * in_arglist)
 {
 	if (in_arglist) {
-		xvcalc_delete_arglist(in_arglist->next);
-		xvcalc_delete_tree(in_arglist->value);
+		XvcArglistDelete(in_arglist->next);
+		XvcTreeDelete(in_arglist->value);
 		free(in_arglist);
 	 }
 }
@@ -42,18 +40,7 @@ void XvcArglistDissolve(arglist * InArglist)
 	free(InArglist);
 }
 
-// Deprecated
-void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist)
-{
-	*array = in_arglist->value;
-	if (in_arglist->next)
-		xvcalc_arglist_to_array(array+1, in_arglist->next);
-	free(in_arglist);
-}
-
-
-// FIXME: This belongs in the XvcTree.c
-tree ** XvcTreeNewListFromArglist(arglist * InArglist)
+tree ** XvcArglistGetTrees(arglist * InArglist)
 {
 	tree ** rVal = malloc(InArglist->depth * sizeof(tree*));
 	arglist * current = InArglist;
@@ -65,4 +52,14 @@ tree ** XvcTreeNewListFromArglist(arglist * InArglist)
 			current = current->next;
 		}
 	}
+}
+
+
+// Deprecated
+void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist)
+{
+	*array = in_arglist->value;
+	if (in_arglist->next)
+		xvcalc_arglist_to_array(array+1, in_arglist->next);
+	free(in_arglist);
 }
