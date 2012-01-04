@@ -52,14 +52,5 @@ tree ** XvcArglistGetTrees(arglist * InArglist)
 			current = current->next;
 		}
 	}
-}
-
-
-// Deprecated
-void xvcalc_arglist_to_array(tree ** array, arglist * in_arglist)
-{
-	*array = in_arglist->value;
-	if (in_arglist->next)
-		xvcalc_arglist_to_array(array+1, in_arglist->next);
-	free(in_arglist);
+	return rVal;
 }

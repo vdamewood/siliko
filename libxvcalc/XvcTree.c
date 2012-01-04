@@ -3,18 +3,13 @@
 #include <string.h>
 
 #include "XvcTree.h"
+#include "XvcArglist.h"
 #include "xvcalc.h"
 #include "tree.h"
 #include "XvcFunctions.h"
 #include "XvcOperators.h"
 #include "xvcalcix.h"
 #include "cleanup.h"
-
-/*#define XvcTreeNewOperator  xvcalc_new_operation
-#define XvcTreeNewInteger   xvcalc_new_int
-#define XvcTreeNewFloat     xvcalc_new_float
-#define XvcTreeNewFunction  xvcalc_new_function
-#define XvcTreeDelete       xvcalc_delete_tree*/
 
 tree * XvcTreeNewOperator(char type, tree * left, tree * right)
 {
@@ -74,13 +69,11 @@ tree * XvcTreeNewFunction(char * name, arglist * in_arglist)
 	
 	if(in_arglist) {
 		rVal->func->arg_count = in_arglist->depth;
-		rVal->func->arg_vector = malloc(sizeof(tree *) * in_arglist->depth);
-		/* FIXME: Make arglist_to_array non-descructive on the arglist. That
-		   way the trees in the arglist can be released here instead of in
-		   arglist to array */
-		xvcalc_arglist_to_array(rVal->func->arg_vector, in_arglist);
-		xvcalc_release_dangling_arglist(in_arglist);
 		rVal->func->eval_args = malloc(sizeof(number) * rVal->func->arg_count);
+
+		rVal->func->arg_vector = XvcArglistGetTrees(in_arglist);
+		xvcalc_release_dangling_arglist(in_arglist);
+		XvcArglistDissolve(in_arglist);		
 	}
 	else {
 		rVal->func->arg_count = 0;
