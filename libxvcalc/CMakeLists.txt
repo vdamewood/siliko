@@ -15,6 +15,7 @@ add_custom_command (
 add_library(xvcalc
 	xvcalc.c
 	XvcFunctions.c XvcOperators.c
+	XvcArglist.c XvcFunctionId.c XvcTree.c
 	tree.c cleanup.c parser.c tokenize.c)
 
 install (TARGETS xvcalc DESTINATION lib)
