@@ -1,4 +1,5 @@
-#if !defined XVCALC_H
+#if !defined XVC_H
+#define XVC_H
 #if defined __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -23,13 +24,16 @@ enum xvcalc_status {
 };
 typedef enum xvcalc_status xvcalc_status;
 
+void xvcalc_open(void);
+void xvcalc_close(void);
+	
 xvcalc_status xvcalc(char *inString);
 int   xvcalc_get_int(void);
 float xvcalc_get_float(void);
-char *xvcalc_error_message(void);
+const char *xvcalc_error_message(void);
 void  xvcalc_clean(void);
 
 #if defined __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* XVCALC_H */
+#endif /* XVC_H */

@@ -113,6 +113,10 @@ static void xvcalc_clear_dangling_items(void *** list, int *size, del_fptr delet
 
 /* End Generics */
 
+void XvcCleanup()
+{
+}
+
 void xvcalc_cache_dangling_tree(tree * cache_tree)
 {
 	/*debug_report( __FUNCTION__, cache_tree);

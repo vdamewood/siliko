@@ -14,6 +14,7 @@ add_custom_command (
 
 add_library(xvcalc
 	xvcalc.c
+	XvcState.c
 	XvcFunctions.c XvcOperators.c
 	XvcArglist.c XvcFunctionId.c XvcTree.c
 	XvcEvaluate.c

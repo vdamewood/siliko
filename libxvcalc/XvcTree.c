@@ -8,7 +8,6 @@
 #include "XvcEvaluate.h"
 #include "XvcFunctions.h"
 #include "XvcOperators.h"
-#include "xvcalcix.h"
 #include "cleanup.h"
 
 tree * XvcTreeNewOperator(char type, tree * left, tree * right)
