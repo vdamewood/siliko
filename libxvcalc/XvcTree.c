@@ -5,7 +5,7 @@
 #include "XvcTree.h"
 #include "XvcArglist.h"
 #include "xvcalc.h"
-#include "tree.h"
+#include "XvcEvaluate.h"
 #include "XvcFunctions.h"
 #include "XvcOperators.h"
 #include "xvcalcix.h"

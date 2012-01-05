@@ -1,6 +1,6 @@
 %{
 #include "tokenize.h"
-#include "tree.h"
+#include "XvcEvaluate.h"
 #include "xvcalcix.h"
 #include "XvcTree.h"
 #include "XvcArglist.h"
