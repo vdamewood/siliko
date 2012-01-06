@@ -49,7 +49,7 @@ static void xvcalc_yyerror(const char *);
 calculation: EOL { xvcalc_set_nil(); }
  | expression EOL {
 	xvcalc_set_value_from_tree($1);
-	xvcalc_clear_memory($1);
+	XvcMemoryCleanup($1);
 };
 
 expression: INTEGER            { $$ = xvcalc_new_int($1);          }
@@ -86,13 +86,13 @@ static void LexError(char bad_char)
 		return;
 	}
 	sprintf(message, t_message, bad_char);
-	XvcStateSetErrorMessage(message);
+	xvcalc_yyerror(message);
 	free(message);
-	XvcStateSetStatus(E_SYNTAX);
 }
 
 static void xvcalc_yyerror(const char *s)
 {	
 	XvcStateSetErrorMessage(s);
 	XvcStateSetStatus(E_SYNTAX);
+	XvcMemoryCleanup();
 }

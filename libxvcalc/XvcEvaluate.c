@@ -57,11 +57,3 @@ number xvcalc_evaluate_tree(tree * tree)
 		
 	return rVal;
 }
-
-void xvcalc_clear_memory(tree * in_tree)
-{
-	if (in_tree) {
-		XvcTreeDelete(in_tree);
-		xvcalc_release_dangling_tree(in_tree);
-	}
-}
