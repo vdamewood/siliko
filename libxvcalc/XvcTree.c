@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "XVCalc.h"
 #include "XvcTree.h"
+#include "XvcFunctionId.h"
 #include "XvcArglist.h"
-#include "xvcalc.h"
 #include "XvcEvaluate.h"
-#include "XvcFunctions.h"
-#include "XvcOperators.h"
-#include "cleanup.h"
+#include "XvcCleanup.h"
 
 tree * XvcTreeNewOperator(char type, tree * left, tree * right)
 {

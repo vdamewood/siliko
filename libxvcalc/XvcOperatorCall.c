@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
-#include "xvcalc.h" // For error codes
-#include "XvcOperators.h" // For xvcalc_call_operator() declarationxcode 
+#include "XVCalc.h"
+#include "XvcOperatorCall.h"
 
-static number add(number left, number right, jmp_buf jb)
+static XvcNumber Add(XvcNumber left, XvcNumber right, jmp_buf jb)
 {
-	number rVal;
+	XvcNumber rVal;
 
 	if (left.type == 'f') {
 		if (right.type == 'f') {
@@ -31,9 +32,9 @@ static number add(number left, number right, jmp_buf jb)
 	return rVal;
 }
 
-static number subtract(number left, number right, jmp_buf jb)
+static XvcNumber Subtract(XvcNumber left, XvcNumber right, jmp_buf jb)
 {
-	number rVal;
+	XvcNumber rVal;
 
 	if (left.type == 'f') {
 		if (right.type == 'f') {
@@ -58,9 +59,9 @@ static number subtract(number left, number right, jmp_buf jb)
 	return rVal;
 }
 
-static number multiply(number left, number right, jmp_buf jb)
+static XvcNumber Multiply(XvcNumber left, XvcNumber right, jmp_buf jb)
 {
-	number rVal;
+	XvcNumber rVal;
 
 	if (left.type == 'f') {
 		if (right.type == 'f') {
@@ -85,9 +86,9 @@ static number multiply(number left, number right, jmp_buf jb)
 	return rVal;
 }
 
-static number divide(number left, number right, jmp_buf jb)
+static XvcNumber Divide(XvcNumber left, XvcNumber right, jmp_buf jb)
 {
-	number rVal;
+	XvcNumber rVal;
 
 	/* Division-by-Zero Error */
 	if ((right.type == 'f' && right.f == 0.0)
@@ -119,12 +120,37 @@ static number divide(number left, number right, jmp_buf jb)
 	return rVal;
 }
 
-static number dice(number left, number right, jmp_buf jb)
+static XvcNumber Power(XvcNumber left, XvcNumber right, jmp_buf jb)
+{
+	XvcNumber rVal;
+	float myLeft;
+	float myRight;
+
+	if (left.type = 'i') {
+		myLeft = (float) left.i;
+	}
+	else {
+		myLeft = left.f;
+	}
+
+	if (left.type = 'i') {
+		myLeft = (float) left.i;
+	}
+	else {
+		myLeft = left.f;
+	}
+	
+	rVal.type = 'f';
+	rVal.f = pow(myLeft, myRight);
+	return rVal;
+}
+
+static XvcNumber Dice(XvcNumber left, XvcNumber right, jmp_buf jb)
 {
 	/* TODO: Make this function handle fractional dice. */
 	static int has_seeded = 0;
 	int running = 0;
-	number rVal;
+	XvcNumber rVal;
 	int count;
 	int faces;
 	int i;
@@ -142,29 +168,27 @@ static number dice(number left, number right, jmp_buf jb)
 	return rVal;
 }
 
-typedef number (*function_ptr)(number, number, jmp_buf);
+typedef XvcNumber (*OperatorPointer)(XvcNumber, XvcNumber, jmp_buf);
 
-static function_ptr xvcalc_get_operator(char operator)
+static OperatorPointer GetOperator(char operator)
 {
 	switch (operator) {
-		case '+': return add;
-		case '-': return subtract;
-		case '*': return multiply;
-		case '/': return divide;
-		case 'd': return dice;
+		case '+': return Add;
+		case '-': return Subtract;
+		case '*': return Multiply;
+		case '/': return Divide;
+		case '^': return Power;
+		case 'd': return Dice;
 	}
 	return NULL;
 }
 
-/****************************************\
-|* Begin module's external interface.   *|
-\****************************************/
-
-number xvcalc_call_operator(char operator, number * operands, jmp_buf jb)
+XvcNumber XvcOperatorCall(char operator, XvcNumber left, XvcNumber right, jmp_buf jb)
 {
-	function_ptr f;
+	OperatorPointer f;
 
-	f = xvcalc_get_operator(operator);
+	f = GetOperator(operator);
+	// FIXME: Give missing operators their own status.
 	if (!f) longjmp(jb, E_FUNCTION);
-	return f(operands[0], operands[1], jb);
+	return f(left, right, jb);
 }

@@ -1,7 +1,7 @@
 #if !defined XVC_TREE_H
 #define XVC_TREE_H
 
-#include "structs.h"
+#include "XvcStructs.h"
 
 tree * XvcTreeNewOperator(char type, tree * left, tree * right);
 tree * XvcTreeNewInteger(int value);

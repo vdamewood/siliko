@@ -5,9 +5,7 @@
 #include "XvcTree.h"
 #include "xvcalc.h"
 #include "XvcEvaluate.h"
-#include "XvcFunctions.h"
-#include "XvcOperators.h"
-#include "cleanup.h"
+#include "XvcCleanup.h"
 
 arglist * XvcArglistNew(tree * new_arg, arglist * old_list)
 {

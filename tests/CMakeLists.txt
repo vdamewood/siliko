@@ -6,4 +6,4 @@ target_link_libraries(XvcTestLinkage xvcalc)
 
 add_executable(XvcTestFunctions
 	XvcTestFunctions.c
-	${XVCALC_SOURCE_DIR}/libxvcalc/XvcFunctions.c)
+	${XVCALC_SOURCE_DIR}/libxvcalc/XvcFunctionCall.c)

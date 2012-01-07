@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "XvcEvaluate.h"
-#include "cleanup.h"
+#include "XvcCleanup.h"
 
 
 void debug_report(const char * function, void * address)

@@ -1,10 +1,10 @@
-#if !defined XVC_H
-#define XVC_H
+#if !defined XVCALC_H
+#define XVCALC_H
 #if defined __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-enum xvcalc_status {
+enum XvcStatus {
 	NONE = 0,	/* The xvcalc() function hasn't been called. */
 	S_INTEGER,	/* Success: The integer result may be retrieved with
 				xvcalc_get_integer(); */
@@ -22,18 +22,15 @@ enum xvcalc_status {
 	E_DOMAIN,	/* Error: Not yet used. */
 	E_RANGE		/* Error: Not yet used. */
 };
-typedef enum xvcalc_status xvcalc_status;
-
-void xvcalc_open(void);
-void xvcalc_close(void);
+typedef enum XvcStatus XvcStatus;
 	
-xvcalc_status xvcalc(char *inString);
-int   xvcalc_get_int(void);
-float xvcalc_get_float(void);
-const char *xvcalc_error_message(void);
-void  xvcalc_clean(void);
+void         XvcOpen(void);
+void         XvcClose(void);
+XvcStatus    XvcParse(char * inString);
+int          XvcGetInteger(void);
+float        XvcGetFloat(void);
 
 #if defined __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* XVC_H */
+#endif /* XVCALC_H */

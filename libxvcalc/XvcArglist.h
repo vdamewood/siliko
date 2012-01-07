@@ -1,7 +1,7 @@
 #if !defined XVC_ARGLIST_H
 #define XVC_ARGLIST_H
 
-#include "structs.h"
+#include "XvcStructs.h"
 
 arglist * XvcArglistNew(tree * new_arg, arglist * old_list);
 void XvcArglistDelete(arglist * in_arglist);

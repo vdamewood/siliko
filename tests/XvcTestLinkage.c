@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include "xvcalc.h"
+#include "XVCalc.h"
 
 int main(int argc, char *argv[])
 {
-	xvcalc_status status;
+	XvcStatus status;
 	char * expression;
 
 	if (argc >= 2)
@@ -11,13 +11,14 @@ int main(int argc, char *argv[])
 	else
 		expression = "";
 
-	status = xvcalc(expression);
+	XvcOpen();
+	status = XvcParse(expression);
 	switch (status) {
 	case S_INTEGER:
-		printf("Value: %i\n", xvcalc_get_int());
+		printf("Value: %i\n", XvcGetInteger());
 		break;
 	case S_FLOAT:
-		printf("Value: %f\n", xvcalc_get_float());
+		printf("Value: %f\n", XvcGetFloat());
 		break;
 	case E_SYNTAX:
 		printf("Syntax error.\n");
@@ -34,7 +35,13 @@ int main(int argc, char *argv[])
 	case E_ARGUMENTS:
 		printf("Bad argument count.\n");
 		break;
+	case E_DOMAIN:
+		printf("Domain error.\n");
+		break;
+	case E_RANGE:
+		printf("Range error.\n");
+		break;
 	}
-	xvcalc_clean();
+	XvcClose();
 	return 0;
 }

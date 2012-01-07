@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "xvcalc.h" // For error codes
-#include "XvcFunctions.h" // For xvcalc_call_function() declaration
+#include "XVCalc.h"
+#include "XvcFunctionCall.h"
 
-static number xvcalc_func_abs(int argc, number * argv, jmp_buf jb)
+static XvcNumber XvcFunction_abs(int argc, XvcNumber * argv, jmp_buf jb)
 {
-	number rVal;
+	XvcNumber rVal;
 
 	if (argc != 1) longjmp(jb, E_ARGUMENTS);
 
@@ -19,9 +19,9 @@ static number xvcalc_func_abs(int argc, number * argv, jmp_buf jb)
 	return rVal;
 }
 
-static number xvcalc_func_sqrt(int argc, number * argv, jmp_buf jb)
+static XvcNumber XvcFunction_sqrt(int argc, XvcNumber * argv, jmp_buf jb)
 {
-	number rVal;
+	XvcNumber rVal;
 	float inVal;
 	if (argc != 1) longjmp(jb, E_ARGUMENTS);
 	
@@ -44,34 +44,30 @@ static number xvcalc_func_sqrt(int argc, number * argv, jmp_buf jb)
 }
 
 // This will be removed when more functions are implemented.
-static number xvcalc_func_dummy(int argc, number * argv, jmp_buf jb)
+static XvcNumber XvcFunction_dummy(int argc, XvcNumber * argv, jmp_buf jb)
 {
 	return argv[0];
 }
 
-typedef number (*function_ptr)(int, number *,jmp_buf);
+typedef XvcNumber (*FunctionPointer)(int, XvcNumber *,jmp_buf);
 
-static function_ptr xvcalc_get_function(const char * name)
+static FunctionPointer GetFunction(const char * name)
 {
 	if (strcmp(name, "abs") == 0)
-		return xvcalc_func_abs;
+		return XvcFunction_abs;
 	else if (strcmp(name, "sqrt") == 0)
-		return xvcalc_func_sqrt;
+		return XvcFunction_sqrt;
 	else if (strcmp(name, "dummy") == 0)
-		return xvcalc_func_dummy;
+		return XvcFunction_dummy;
 	else
 		return NULL;
 }
 
-/****************************************\
-|* Begin module's external interface.   *|
-\****************************************/
-
-number xvcalc_call_function(const char * name, int argc, number * argv, jmp_buf jb)
+XvcNumber XvcFunctionCall(const char * name, int argc, XvcNumber * argv, jmp_buf jb)
 {
-	function_ptr f;
+	FunctionPointer f;
 
-	f = xvcalc_get_function(name);
+	f = GetFunction(name);
 	if (!f) longjmp(jb, E_FUNCTION);
 	return f(argc, argv, jb);
 }

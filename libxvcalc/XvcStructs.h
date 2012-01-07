@@ -1,5 +1,5 @@
-#if !defined STRUCTS_H
-#define STRUCTS_H
+#if !defined XVC_STRUCTS_H
+#define XVC_STRUCTS_H
 
 struct xvcalc_tree;
 struct xvcalc_operation;
@@ -12,6 +12,12 @@ typedef struct xvcalc_operation operation;
 typedef struct xvcalc_number    number;
 typedef struct xvcalc_function  function;
 typedef struct xvcalc_arglist	arglist;
+
+typedef struct xvcalc_tree      XvcTree;
+typedef struct xvcalc_operation XvcOperator;
+typedef struct xvcalc_number    XvcNumber;
+typedef struct xvcalc_function  XvcFunction;
+typedef struct xvcalc_arglist	XvcArglist;
 
 struct xvcalc_tree {
 	char type;
@@ -50,4 +56,4 @@ struct xvcalc_arglist {
 	arglist * next;
 };
 
-#endif /* STRUCTS_H */
+#endif // XVC_STRUCTS_H

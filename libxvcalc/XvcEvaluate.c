@@ -2,29 +2,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "XvcTree.h"
-#include "xvcalc.h"
+#include "XVCalc.h"
+#include "XvcState.h"
 #include "XvcEvaluate.h"
-#include "XvcFunctions.h"
-#include "XvcOperators.h"
-#include "cleanup.h"
+#include "XvcFunctionCall.h"
+#include "XvcOperatorCall.h"
 
-static jmp_buf escape;
+static XvcNumber Evaluate(XvcTree * tree, jmp_buf escape);
 
-void xvcalc_set_value_from_tree(tree * in_tree)
+void XvcEvaluate(XvcTree * in)
 {
-	xvcalc_status jmp_value = 0;
+	jmp_buf escape;
+	XvcStatus jmp_value = 0;
 	if ((jmp_value = setjmp(escape)) == 0) {
-		xvcalc_set_value(xvcalc_evaluate_tree(in_tree));
+		XvcStateSetValue(Evaluate(in, escape));
 	}
 	else {
-		xvcalc_set_status(jmp_value);
+		XvcStateSetNil();
+		XvcStateSetStatus(jmp_value);
 	}
 }
 
-number xvcalc_evaluate_tree(tree * tree)
+static XvcNumber Evaluate(XvcTree * tree, jmp_buf escape)
 {
 	number rVal;
+	XvcNumber * EvaluatedArguments = NULL;
 	int i;
 	if (!tree) longjmp(escape, E_SYNTAX);
 
@@ -33,26 +35,28 @@ number xvcalc_evaluate_tree(tree * tree)
 		rVal = *(tree->num);
 		break;
 	case 'o':
-		tree->op->args[0] = xvcalc_evaluate_tree(tree->op->left);
-		tree->op->args[1] = xvcalc_evaluate_tree(tree->op->right);
+		rVal = XvcOperatorCall(tree->op->type,
+							   Evaluate(tree->op->left, escape),
+							   Evaluate(tree->op->right, escape),
+							   escape);
 
-		rVal = xvcalc_call_operator(tree->op->type,
-									tree->op->args,
-									escape);
-		
 		break;
 	case 'f':
 		if (tree->func->arg_count) {
+			EvaluatedArguments = malloc(sizeof(XvcNumber)
+										* tree->func->arg_count);
+
 			for(i = 0; i < tree->func->arg_count; i++) {
-				tree->func->eval_args[i] = xvcalc_evaluate_tree(
-					tree->func->arg_vector[i]);
+				EvaluatedArguments[i]
+					= Evaluate(tree->func->arg_vector[i], escape);
 			}
 		}
 
-		rVal = xvcalc_call_function(tree->func->name,
+		rVal = XvcFunctionCall(tree->func->name,
 									tree->func->arg_count,
-									tree->func->eval_args,
+									EvaluatedArguments,
 									escape);
+		free(EvaluatedArguments);
 	}
 		
 	return rVal;

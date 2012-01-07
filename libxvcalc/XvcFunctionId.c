@@ -2,8 +2,8 @@
 #include <string.h>
 
 #include "XvcFunctionId.h"
-#include "structs.h"
-#include "cleanup.h"
+#include "XvcStructs.h"
+#include "XvcCleanup.h"
 
 
 

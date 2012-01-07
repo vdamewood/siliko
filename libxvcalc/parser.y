@@ -1,13 +1,12 @@
 %{
-#include "xvcalc.h"
+#include "XVCalc.h"
 #include "XvcState.h"
 #include "tokenize.h"
 #include "XvcEvaluate.h"
 #include "XvcTree.h"
 #include "XvcArglist.h"
 #include "XvcFunctionId.h"
-	
-static void LexError(char);
+
 static void xvcalc_yyerror(const char *);
 	
 #define xvcalc_new_operation XvcTreeNewOperator
@@ -16,11 +15,12 @@ static void xvcalc_yyerror(const char *);
 #define xvcalc_new_function  XvcTreeNewFunction
 #define xvcalc_make_id       XvcFunctionIdNew
 #define xvcalc_add_argument  XvcArglistNew
-	
+#define xvcalc_set_nil       XvcStateSetNil
+#define xvcalc_set_value_from_tree XvcEvaluate
 %}
 
 %code requires {
-#include "structs.h"
+#include "XvcStructs.h"
 }
 %union {
 	tree * t;
@@ -65,7 +65,7 @@ expression: INTEGER            { $$ = xvcalc_new_int($1);          }
    }
  | '(' expression ')' { $$ = $2; }
  | fcall
- | ERROR { LexError(*xvcalc_yylval.s); YYERROR; }
+ | ERROR { YYERROR; }
 ;
 
 fcall: id '(' arglist ')' { $$ = xvcalc_new_function($1, $3); };
@@ -77,22 +77,8 @@ arglist: expression { $$ = xvcalc_add_argument($1, NULL); }
 ;
 %%
 
-static void LexError(char bad_char)
-{
-	char *message = NULL;
-	char *t_message = "Unknown character %c";
-	if (!(message = malloc(20))) {
-		xvcalc_set_malloc_error();
-		return;
-	}
-	sprintf(message, t_message, bad_char);
-	xvcalc_yyerror(message);
-	free(message);
-}
-
 static void xvcalc_yyerror(const char *s)
 {	
-	XvcStateSetErrorMessage(s);
 	XvcStateSetStatus(E_SYNTAX);
 	XvcMemoryCleanup();
 }

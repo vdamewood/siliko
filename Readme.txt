@@ -14,9 +14,8 @@ Currently XVCalc supports the following features:
 * parenthetic expressions, such as "2 * (3 + 4)".
 * Random number generation using a d operator to simulate dice rolls. such as
   "3d6" or "1d20".
-* Functions, currently XVcalc supports a basic abs() function. Function handling
-  is slightly buggy right now, however.
-XVCalc ignores space and tab characters in its input.
+* Functions, currently XVcalc supports  abs() and sqrt() functions.
+* XVCalc ignores space and tab characters in its input.
 
 The following features are planned for future versions:
 
@@ -39,23 +38,30 @@ Support for the plug-in interface is currently planned for systems that support
 dlopen(3). Support for Windows may be included as well.
 
 XVCalc uses a Flex-generated tokenizer and a Bison-generated parser. Currently,
-the parser is not 'pure', and thus XVCalc is not thread safe.
+the parser is not 'pure', and some other components have static 'state' values.
+Thus XVCalc is not thread safe.
 
 XVcalc Interface
 
 XVCalc's interface consists of the following functions:
 
+void               xvcalc_open();
+void               xvcalc_close();
 enum xvcalc_status xvcalc(char * in_string)
 int                xvcalc_get_int(void)
 float              xvcalc_get_float(void)
 char             * xvcalc_error_message(void)
 void               xvcalc_clean(void)
 
+Use xvcalc_open() before calling any other functions. Call xvcalc_close() after
+you are finished with xvcalc and before your program terminates. These
+functionsa are used to initialize and finalize xvcalc.
+
 The xvcalc_status ennumeration is found in xvcalc.h with comments on what each
 status means.
 
-Other symbols starting with xvcalc_ will be found in the library but are not
-part of the public interface, so don't use them.
+Other symbols starting with Xvc (and xvcalc_)  will be found in the library but
+are not part of the public interface, so don't use them.
 
 The xvcalc() functon takes the expression to be evaluated as a typical pointer
 to a null-terminated series of characters. When called, the xvcalc() function
@@ -66,10 +72,5 @@ The xvcalc() function returns a status code. The meaning of these status
 codes are detaild in xvcalc.h.
 
 Once you have retrieved the value of the calculation, you must clean the state
-of the library by calling the xvcalc_clean() function. This function must be
-called at least after each call to xvcalc(), before program termination and
-before any subsequent calls to xvcalc().
-
-Known Issues
-
-VXcalc will leak memory if a syntax error is encountered.
+of the library by calling the xvcalc_clean() function between calls to
+xvcalc().

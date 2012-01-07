@@ -1,95 +1,70 @@
-#include <stdlib.h>
-#include <string.h>
-
-#include "structs.h"
+#include "XvcStructs.h"
 #include "XvcState.h"
 
-static xvcalc_status status = NONE;
-static int    value_as_int   = 0;
-static float  value_as_float = 0.0;
-static char * error_message  = NULL;
+static XvcStatus Status = NONE;
+static int       ValueAsInteger = 0;
+static float     ValueAsFloat   = 0.0;
 
-xvcalc_status XvcStateStatus()
+XvcStatus XvcStateStatus()
 {
-	return status;
+	return Status;
 }
 
-void XvcStateSetStatus(xvcalc_status NewStatus)
+void XvcStateSetStatus(XvcStatus NewStatus)
 {
-	status = NewStatus;
+	Status = NewStatus;
 }
 
 int XvcStateInteger()
 {
-	return value_as_int;
+	return ValueAsInteger;
 }
 
 void XvcStateSetInteger(int NewInteger)
 {
-	value_as_int = NewInteger;
+	ValueAsInteger = NewInteger;
 }
 
 float XvcStateFloat()
 {
-	return value_as_float;
+	return ValueAsFloat;
 }
 
 void XvcStateSetFloat(float NewFloat)
 {
-	value_as_float = NewFloat;
+	ValueAsFloat = NewFloat;
 }
 
-const char * XvcStateErrorMessage()
+void XvcStateClear(void)
 {
-	return error_message;
+	XvcStateSetStatus(NONE);
+	XvcStateSetInteger(0);
+	XvcStateSetFloat(0.0);
 }
 
-void XvcStateSetErrorMessage(const char * NewErrorMessage)
+void XvcStateSetNil(void)
 {
-	free(error_message);
-
-	if (NewErrorMessage) {
-		if(!(error_message = malloc(strlen(NewErrorMessage)+1))) {
-			xvcalc_set_malloc_error();
-			return;
-		}
-		strcpy(error_message, NewErrorMessage);
-	}
-	else {
-		error_message = NULL;
-	}
+	Status = S_INTEGER;
+	ValueAsInteger = 0;
+	ValueAsFloat = 0.0;
 }
 
-void xvcalc_set_status(xvcalc_status new_status)
+void XvcStateSetValue(XvcNumber NewNumber)
 {
-	status = new_status;
-}
-
-void xvcalc_set_nil()
-{
-	xvcalc_set_status(S_INTEGER);
-	value_as_int = 0;
-	value_as_float = 0.0;
-}
-
-void xvcalc_set_value(number new_value)
-{
-	switch (new_value.type) {
+	switch (NewNumber.type) {
 		case 'i':
-			xvcalc_set_status(S_INTEGER);
-			value_as_int = new_value.i;
-			value_as_float = (float) new_value.i;
+			Status = S_INTEGER;
+			ValueAsInteger = NewNumber.i;
+			ValueAsFloat = (float) NewNumber.i;
 			break;
 		case 'f':
-			xvcalc_set_status(S_FLOAT);
-			value_as_int = (int) new_value.f;
-			value_as_float = new_value.f;
+			Status = S_FLOAT;
+			ValueAsInteger = (int) NewNumber.i;
+			ValueAsFloat = NewNumber.i;
 	};
 }
 
-void xvcalc_set_malloc_error(void)
+void XvcStateSetOutOfMemoryError(void)
 {
-	xvcalc_set_status(E_MEMORY);
-	free(error_message);
-	error_message = NULL;
+	Status = E_MEMORY;
 }

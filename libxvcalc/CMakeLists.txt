@@ -13,12 +13,13 @@ add_custom_command (
 )
 
 add_library(xvcalc
-	xvcalc.c
+	XVCalc.c
 	XvcState.c
-	XvcFunctions.c XvcOperators.c
+	XvcFunctionCall.c XvcOperatorCall.c
 	XvcArglist.c XvcFunctionId.c XvcTree.c
 	XvcEvaluate.c
-	cleanup.c parser.c tokenize.c)
+	XvcCleanup.c
+	parser.c tokenize.c)
 
 install (TARGETS xvcalc DESTINATION lib)
-install (FILES xvcalc.h DESTINATION include)
+install (FILES XVCalc.h DESTINATION include)
