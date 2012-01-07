@@ -3,7 +3,7 @@
 
 #include "XvcStructs.h"
 
-char * XvcFunctionIdNew(char * in_token);
-void XvcFunctionIdDelete(char * in_token);
+char * XvcFunctionIdNew(char * NewFunctionId);
+void XvcFunctionIdDelete(char * OldFunctionId);
 
 #endif // XVC_FUNCTION_ID_H

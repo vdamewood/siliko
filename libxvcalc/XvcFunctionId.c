@@ -6,19 +6,17 @@
 #include "XvcCleanup.h"
 
 
-
-char * XvcFunctionIdNew(char * in_token)
+char * XvcFunctionIdNew(char * NewId)
 {
 	char * rVal;
-	rVal = malloc(strlen(in_token)+1);
-	xvcalc_cache_dangling_id(rVal);
-
-	strcpy(rVal, in_token);
+	rVal = malloc(strlen(NewId)+1);
+	XvcCleanupCacheFunctionId(rVal);
+	strcpy(rVal, NewId);
 	return rVal;
 }
 
-void XvcFunctionIdDelete(char * in_token)
+void XvcFunctionIdDelete(char * InId)
 {
-	xvcalc_release_dangling_id(in_token);
-	free(in_token);
+	XvcCleanupReleaseFunctionId(InId);
+	free(InId);
 }

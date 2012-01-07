@@ -5,7 +5,7 @@
 #include "XvcCleanup.h"
 
 
-void debug_report(const char * function, void * address)
+static void debug_report(const char * function, void * address)
 {
 	if (!address) {
 		printf("[NULL]:      %s\n", function);
@@ -38,10 +38,6 @@ static struct IdList * DanglingIds = NULL;
 void print_tree_list();
 void print_arglist_list();
 void print_id_list();
-
-void xvcalc_clear_dangling_trees();
-void xvcalc_clear_dangling_arglists();
-void xvcalc_clear_dangling_ids();
 
 void XvcMemoryCleanup()
 {

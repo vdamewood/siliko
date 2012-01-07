@@ -1,12 +1,6 @@
-#include <setjmp.h>
 #include <stdlib.h>
-#include <string.h>
 
-#include "XVCalc.h"
-#include "XvcTree.h"
-#include "XvcFunctionId.h"
 #include "XvcArglist.h"
-#include "XvcEvaluate.h"
 #include "XvcCleanup.h"
 
 tree * XvcTreeNewOperator(char type, tree * left, tree * right)
@@ -97,8 +91,7 @@ void XvcTreeDelete(tree * tree)
 				free(tree->op);
 				break;
 			case 'f':
-				// FIXME: Should call XvcFunctionIdDelete()
-				free(tree->func->name);
+				XvcFunctionIdDelete(tree->func->name);
 				for (i = 0; i <  tree->func->arg_count; i++) {
 					XvcTreeDelete(tree->func->arg_vector[i]);
 				}
