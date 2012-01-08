@@ -15,14 +15,14 @@
 "," |
 "(" |
 ")" { return *yytext; }
-[0-9]+ { xvcalc_yylval.i = atoi(xvcalc_yytext); return INTEGER; }
-[0-9]+\.[0-9]+ { xvcalc_yylval.f = atof(xvcalc_yytext); return FLOAT; }
-"e"  { xvcalc_yylval.f = EULER; return FLOAT; }
-"pi" { xvcalc_yylval.f = PI;    return FLOAT; }
+[0-9]+ { Xvc_yylval.i = atoi(Xvc_yytext); return INTEGER; }
+[0-9]+\.[0-9]+ { Xvc_yylval.f = atof(Xvc_yytext); return FLOAT; }
+"e"  { Xvc_yylval.f = EULER; return FLOAT; }
+"pi" { Xvc_yylval.f = PI;    return FLOAT; }
 ([a-ce-z][a-z0-9]*)|(d[a-z][a-z0-9]*) {
-	xvcalc_yylval.s = yytext;
+	Xvc_yylval.s = yytext;
 	return ID;
 }
 [ \t\n] {}
-. { xvcalc_yylval.s = yytext; return ERROR; }
+. { Xvc_yylval.s = yytext; return ERROR; }
 %%

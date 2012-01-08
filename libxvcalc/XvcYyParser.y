@@ -7,7 +7,7 @@
 #include "XvcFunctionId.h"
 #include "XvcYyLexer.h"
 
-static void xvcalc_yyerror(const char *);
+static void Xvc_yyerror(const char *);
 	
 #define xvcalc_new_operation XvcTreeNewOperator
 #define xvcalc_new_int       XvcTreeNewInteger
@@ -87,14 +87,14 @@ expression: INTEGER            { $$ = xvcalc_new_int($1);          }
 
 fcall: id '(' arglist ')' { $$ = xvcalc_new_function($1, $3); };
 
-id: ID { $$ = xvcalc_make_id(xvcalc_yylval.s); }
+id: ID { $$ = xvcalc_make_id(Xvc_yylval.s); }
 
 arglist: expression { $$ = xvcalc_add_argument($1, NULL); }
  | expression ',' arglist { $$ = xvcalc_add_argument($1, $3); };
 ;
 %%
 
-static void xvcalc_yyerror(const char *s)
+static void Xvc_yyerror(const char *s)
 {	
 	XvcStateSetStatus(E_SYNTAX);
 	XvcMemoryCleanup();

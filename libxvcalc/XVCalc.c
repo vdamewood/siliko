@@ -17,9 +17,9 @@ XvcStatus XvcParse(char *inString)
 {
 	XvcStateClear();
 	YY_BUFFER_STATE buffer;
-	buffer = xvcalc_yy_scan_string(inString);
-	xvcalc_yy_switch_to_buffer(buffer);
-	xvcalc_yyparse();
+	buffer = Xvc_yy_scan_string(inString);
+	Xvc_yy_switch_to_buffer(buffer);
+	Xvc_yyparse();
 	return XvcStateStatus();
 }
 
