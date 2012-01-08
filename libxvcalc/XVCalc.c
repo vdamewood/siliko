@@ -1,6 +1,6 @@
 #include "XVCalc.h"
 #include "XvcState.h"
-#include "tokenize.h"
+#include "XvcYyLexer.h"
 
 int xvcalc_yyparse(void);
 

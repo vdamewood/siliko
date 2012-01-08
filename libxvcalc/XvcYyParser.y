@@ -1,11 +1,11 @@
 %{
 #include "XVCalc.h"
 #include "XvcState.h"
-#include "tokenize.h"
 #include "XvcEvaluate.h"
 #include "XvcTree.h"
 #include "XvcArglist.h"
 #include "XvcFunctionId.h"
+#include "XvcYyLexer.h"
 
 static void xvcalc_yyerror(const char *);
 	

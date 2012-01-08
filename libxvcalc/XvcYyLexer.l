@@ -1,6 +1,6 @@
 %option noyywrap nodefault nounput
 %{
-#include "parser.h"
+#include "XvcYyParser.h"
 
 /* Values taken from Google Calculator 2011-07-06 */
 #define EULER 2.71828183

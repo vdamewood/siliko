@@ -2,14 +2,14 @@ cmake_minimum_required (VERSION 2.6)
 OPTION(BUILD_SHARED_LIBS "Build shared library." ON)
 
 add_custom_command (
-  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.h ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.c
-  COMMAND flex --nounistd --prefix=xvcalc_yy --header-file=${CMAKE_CURRENT_SOURCE_DIR}/tokenize.h --outfile=${CMAKE_CURRENT_SOURCE_DIR}/tokenize.c ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.l
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tokenize.l
+  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/XvcYyLexer.h ${CMAKE_CURRENT_SOURCE_DIR}/XvcYyLexer.c
+  COMMAND flex --nounistd --prefix=xvcalc_yy --header-file=${CMAKE_CURRENT_SOURCE_DIR}/XvcYyLexer.h --outfile=${CMAKE_CURRENT_SOURCE_DIR}/XvcYyLexer.c ${CMAKE_CURRENT_SOURCE_DIR}/XvcYyLexer.l
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/XvcYyLexer.l
   )
 add_custom_command (
-  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/parser.h ${CMAKE_CURRENT_SOURCE_DIR}/parser.c
-  COMMAND bison --name-prefix=xvcalc_yy --defines=${CMAKE_CURRENT_SOURCE_DIR}/parser.h --output=${CMAKE_CURRENT_SOURCE_DIR}/parser.c ${CMAKE_CURRENT_SOURCE_DIR}/parser.y
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/parser.y
+  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/XvcYyParser.h ${CMAKE_CURRENT_SOURCE_DIR}/XvcYyParser.c
+  COMMAND bison --name-prefix=xvcalc_yy --defines=${CMAKE_CURRENT_SOURCE_DIR}/XvcYyParser.h --output=${CMAKE_CURRENT_SOURCE_DIR}/XvcYyParser.c ${CMAKE_CURRENT_SOURCE_DIR}/XvcYyParser.y
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/XvcYyParser.y
 )
 
 add_library(xvcalc
@@ -19,7 +19,7 @@ add_library(xvcalc
 	XvcArglist.c XvcFunctionId.c XvcTree.c
 	XvcEvaluate.c
 	XvcCleanup.c
-	parser.c tokenize.c)
+	XvcYyParser.c XvcYyLexer.c)
 
 install (TARGETS xvcalc DESTINATION lib)
 install (FILES XVCalc.h DESTINATION include)
