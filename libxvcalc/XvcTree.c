@@ -1,33 +1,34 @@
 #include <stdlib.h>
 
+#include "XvcTree.h"
 #include "XvcArglist.h"
 #include "XvcCleanup.h"
 
-tree * XvcTreeNewOperator(char type, tree * left, tree * right)
+XvcTree * XvcTreeNewOperator(char type, XvcTree * left, XvcTree * right)
 {
-	tree * rVal;
-	rVal = malloc(sizeof(tree));
-	rVal->op = malloc(sizeof(operation));
-	rVal->op->args = malloc(sizeof(number) * 2);
-	xvcalc_cache_dangling_tree(rVal);
+	XvcTree * rVal;
+	rVal = malloc(sizeof(XvcTree));
+	rVal->op = malloc(sizeof(XvcOperator));
+	rVal->op->args = malloc(sizeof(XvcNumber) * 2);
+	XvcCleanupCacheTree(rVal);
 
 	rVal->type = 'o';
 	rVal->op->type = type;
 
 	rVal->op->left = left;
-	xvcalc_release_dangling_tree(left);
+	XvcCleanupReleaseTree(left);
 
 	rVal->op->right = right;
-	xvcalc_release_dangling_tree(right);
+	XvcCleanupReleaseTree(right);
 	return rVal;
 }
 
-tree * XvcTreeNewInteger(int value)
+XvcTree * XvcTreeNewInteger(int value)
 {
-	tree * rVal;
-	rVal = malloc(sizeof(tree));
-	rVal->num = malloc(sizeof(number));
-	xvcalc_cache_dangling_tree(rVal);
+	XvcTree * rVal;
+	rVal = malloc(sizeof(XvcTree));
+	rVal->num = malloc(sizeof(XvcNumber));
+	XvcCleanupCacheTree(rVal);
 
 	rVal->type = 'n';
 	rVal->num->type = 'i';
@@ -35,12 +36,12 @@ tree * XvcTreeNewInteger(int value)
 	return rVal;
 }
 
-tree * XvcTreeNewFloat(float value)
+XvcTree * XvcTreeNewFloat(float value)
 {
-	struct xvcalc_tree * rVal;
-	rVal = malloc(sizeof(tree));
-	rVal->num = malloc(sizeof(number));
-	xvcalc_cache_dangling_tree(rVal);
+	XvcTree * rVal;
+	rVal = malloc(sizeof(XvcTree));
+	rVal->num = malloc(sizeof(XvcNumber));
+	XvcCleanupCacheTree(rVal);
 	
 	rVal->type = 'n';
 	rVal->num->type = 'f';
@@ -48,35 +49,33 @@ tree * XvcTreeNewFloat(float value)
 	return rVal;
 }
 
-tree * XvcTreeNewFunction(char * name, arglist * in_arglist)
+XvcTree * XvcTreeNewFunction(char * name, XvcArglist * in_arglist)
 {
-	tree * rVal;
-	rVal = malloc(sizeof(tree));
-	rVal->func = malloc(sizeof(function));
-	xvcalc_cache_dangling_tree(rVal);
+	XvcTree * rVal;
+	rVal = malloc(sizeof(XvcTree));
+	rVal->func = malloc(sizeof(XvcFunction));
+	XvcCleanupCacheTree(rVal);
 	
 	rVal->type = 'f';
 	rVal->func->name = name;
-	xvcalc_release_dangling_id(name);
+	XvcCleanupReleaseFunctionId(name);
 	
 	if(in_arglist) {
 		rVal->func->arg_count = in_arglist->depth;
-		rVal->func->eval_args = malloc(sizeof(number) * rVal->func->arg_count);
 
 		rVal->func->arg_vector = XvcArglistGetTrees(in_arglist);
-		xvcalc_release_dangling_arglist(in_arglist);
+		XvcCleanupReleaseArglist(in_arglist);
 		XvcArglistDissolve(in_arglist);		
 	}
 	else {
 		rVal->func->arg_count = 0;
 		rVal->func->arg_vector = NULL;
-		rVal->func->eval_args = NULL;
 	}
 	
 	return rVal;
 }
 
-void XvcTreeDelete(tree * tree)
+void XvcTreeDelete(XvcTree * tree)
 {
 	int i;
 	if (tree) {
@@ -96,7 +95,6 @@ void XvcTreeDelete(tree * tree)
 					XvcTreeDelete(tree->func->arg_vector[i]);
 				}
 				free(tree->func->arg_vector);
-				free(tree->func->eval_args);
 				free(tree->func);
 				break;
 		}

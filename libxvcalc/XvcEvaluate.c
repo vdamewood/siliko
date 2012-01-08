@@ -1,11 +1,10 @@
 #include <setjmp.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "XVCalc.h"
-#include "XvcState.h"
 #include "XvcEvaluate.h"
 #include "XvcFunctionCall.h"
+#include "XvcState.h"
 #include "XvcOperatorCall.h"
 
 static XvcNumber Evaluate(XvcTree * tree, jmp_buf escape);
@@ -25,7 +24,7 @@ void XvcEvaluate(XvcTree * in)
 
 static XvcNumber Evaluate(XvcTree * tree, jmp_buf escape)
 {
-	number rVal;
+	XvcNumber rVal;
 	XvcNumber * EvaluatedArguments = NULL;
 	int i;
 	if (!tree) longjmp(escape, E_SYNTAX);

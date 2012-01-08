@@ -17,10 +17,27 @@ static void xvcalc_yyerror(const char *);
 #define xvcalc_add_argument  XvcArglistNew
 #define xvcalc_set_nil       XvcStateSetNil
 #define xvcalc_set_value_from_tree XvcEvaluate
+	
+#define XvcMemoryCleanup				XvcCleanupClearAll
+#define xvcalc_cache_dangling_arglist	XvcCleanupCacheArglist
+#define xvcalc_release_dangling_arglist	XvcCleanupReleaseArglist
+#define xvcalc_clear_dangling_arglists	XvcCleanupClearArglists
+#define xvcalc_cache_dangling_tree		XvcCleanupCacheTree
+#define xvcalc_release_dangling_tree	XvcCleanupReleaseTree
+#define xvcalc_clear_dangling_trees		XvcCleanupClearTrees
+#define xvcalc_cache_dangling_id		XvcCleanupCacheFunctionId
+#define xvcalc_release_dangling_id		XvcCleanupReleaseFunctionId
+#define xvcalc_clear_dangling_id		XvcCleanupClearFunctionIds
+	
 %}
 
 %code requires {
 #include "XvcStructs.h"
+typedef struct XvcTree      tree;
+typedef struct XvcOperator  operation;
+typedef struct XvcNumber    number;
+typedef struct XvcFunction  function;
+typedef struct XvcArglist	arglist;
 }
 %union {
 	tree * t;

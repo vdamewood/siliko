@@ -3,10 +3,10 @@
 
 #include "XvcStructs.h"
 
-tree * XvcTreeNewOperator(char type, tree * left, tree * right);
-tree * XvcTreeNewInteger(int value);
-tree * XvcTreeNewFloat(float value);
-tree * XvcTreeNewFunction(char * name, arglist * in_arglist);
-void XvcTreeDelete(tree * tree);
+XvcTree * XvcTreeNewOperator(char Operator, XvcTree * LeftOperand, XvcTree * RightOperand);
+XvcTree * XvcTreeNewInteger(int Value);
+XvcTree * XvcTreeNewFloat(float Value);
+XvcTree * XvcTreeNewFunction(char * FunctionName, XvcArglist * FunctionArguments);
+void XvcTreeDelete(XvcTree * TreeToDelete);
 
 #endif // XVC_TREE_H

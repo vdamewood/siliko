@@ -1,41 +1,35 @@
 #if !defined XVC_STRUCTS_H
 #define XVC_STRUCTS_H
 
-struct xvcalc_tree;
-struct xvcalc_operation;
-struct xvcalc_number;
-struct xvcalc_function;
-struct xvcalc_arglist;
+struct XvcTree;
+struct XvcOperator;
+struct XvcNumber;
+struct XvcFunction;
+struct XvcArglist;
 
-typedef struct xvcalc_tree      tree;
-typedef struct xvcalc_operation operation;
-typedef struct xvcalc_number    number;
-typedef struct xvcalc_function  function;
-typedef struct xvcalc_arglist	arglist;
+typedef struct XvcTree      XvcTree;
+typedef struct XvcOperator  XvcOperator;
+typedef struct XvcNumber    XvcNumber;
+typedef struct XvcFunction  XvcFunction;
+typedef struct XvcArglist	XvcArglist;
 
-typedef struct xvcalc_tree      XvcTree;
-typedef struct xvcalc_operation XvcOperator;
-typedef struct xvcalc_number    XvcNumber;
-typedef struct xvcalc_function  XvcFunction;
-typedef struct xvcalc_arglist	XvcArglist;
-
-struct xvcalc_tree {
+struct XvcTree {
 	char type;
 	union {
-		number * num;
-		operation * op;
-		function * func;
+		XvcNumber * num;
+		XvcOperator * op;
+		XvcFunction * func;
 	};
 };
 
-struct xvcalc_operation {
+struct XvcOperator {
 	char type;
-	tree * left;
-	tree * right;
-	number * args;
+	XvcTree * left;
+	XvcTree * right;
+	XvcNumber * args;
 };
 
-struct xvcalc_number {
+struct XvcNumber {
 	char type;
 	union {
 		int i;
@@ -43,17 +37,16 @@ struct xvcalc_number {
 	};
 };
 
-struct xvcalc_function {
+struct XvcFunction {
 	char * name;
 	int arg_count;
-	tree ** arg_vector;
-	number * eval_args;
+	XvcTree ** arg_vector;
 };
 
-struct xvcalc_arglist {
+struct XvcArglist {
 	int depth;
-	tree * value;
-	arglist * next;
+	XvcTree * value;
+	XvcArglist * next;
 };
 
 #endif // XVC_STRUCTS_H

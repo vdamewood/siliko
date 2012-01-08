@@ -1,52 +1,50 @@
-#include <setjmp.h>
 #include <stdlib.h>
-#include <string.h>
 
-#include "XvcTree.h"
-#include "xvcalc.h"
-#include "XvcEvaluate.h"
+#include "XvcArglist.h"
 #include "XvcCleanup.h"
+#include "XvcStructs.h"
+#include "XvcTree.h"
 
-arglist * XvcArglistNew(tree * new_arg, arglist * old_list)
+XvcArglist * XvcArglistNew(XvcTree * NewTree, XvcArglist * OldList)
 {
-	arglist * rVal;
-	rVal = malloc(sizeof(arglist));
-	xvcalc_cache_dangling_arglist(rVal);
-	if (old_list) rVal->depth = old_list->depth + 1;
+	XvcArglist * rVal;
+	rVal = malloc(sizeof(XvcArglist));
+	XvcCleanupCacheArglist(rVal);
+	if (OldList) rVal->depth = OldList->depth + 1;
 	else rVal->depth = 1;
-	rVal->value = new_arg;
-	rVal->next = old_list;
-	xvcalc_release_dangling_tree(new_arg);
-	xvcalc_release_dangling_arglist(old_list);
+	rVal->value = NewTree;
+	rVal->next = OldList;
+	XvcCleanupReleaseTree(NewTree);
+	XvcCleanupReleaseArglist(OldList);
 	return rVal;
 }
 
-void XvcArglistDelete(arglist * in_arglist)
+void XvcArglistDelete(XvcArglist * OldArglist)
 {
-	if (in_arglist) {
-		XvcArglistDelete(in_arglist->next);
-		XvcTreeDelete(in_arglist->value);
-		free(in_arglist);
+	if (OldArglist) {
+		XvcArglistDelete(OldArglist->next);
+		XvcTreeDelete(OldArglist->value);
+		free(OldArglist);
 	 }
 }
 
 // Destroy the arglist, but leave the trees contained therein intact.
-void XvcArglistDissolve(arglist * InArglist)
+void XvcArglistDissolve(XvcArglist * OldArglist)
 {
-	if (InArglist && InArglist->next) XvcArglistDissolve(InArglist->next);
-	free(InArglist);
+	if (OldArglist && OldArglist->next) XvcArglistDissolve(OldArglist->next);
+	free(OldArglist);
 }
 
-tree ** XvcArglistGetTrees(arglist * InArglist)
+XvcTree ** XvcArglistGetTrees(XvcArglist * InArglist)
 {
-	tree ** rVal = malloc(InArglist->depth * sizeof(tree*));
-	arglist * current = InArglist;
+	XvcTree ** rVal = malloc(InArglist->depth * sizeof(XvcTree *));
+	XvcArglist * Current = InArglist;
 	int i;
 	
 	if (rVal) {
 		for (i = 0; i < InArglist->depth; i++) {
-			rVal[i] = current->value;
-			current = current->next;
+			rVal[i] = Current->value;
+			Current = Current->next;
 		}
 	}
 	return rVal;

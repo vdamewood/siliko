@@ -3,9 +3,9 @@
 
 #include "XvcStructs.h"
 
-arglist * XvcArglistNew(tree * new_arg, arglist * old_list);
-void XvcArglistDelete(arglist * in_arglist);
-void XvcArglistDissolve(arglist * InArglist);
-tree ** XvcArglistGetTrees(arglist * InArglist);
+XvcArglist * XvcArglistNew(XvcTree * NewArgument, XvcArglist * ListToExtend);
+void XvcArglistDelete(XvcArglist * ArglistToDelete);
+void XvcArglistDissolve(XvcArglist * ArglistToDissolve);
+XvcTree ** XvcArglistGetTrees(XvcArglist * ArglistToExtract);
 
 #endif // XVC_ARGLIST_H

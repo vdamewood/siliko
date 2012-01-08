@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "XvcCleanup.h"
 #include "XvcFunctionId.h"
 #include "XvcStructs.h"
-#include "XvcCleanup.h"
 
 
 char * XvcFunctionIdNew(char * NewId)

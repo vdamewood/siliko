@@ -2,5 +2,5 @@
 #define XVC_EVALUATE_H
 #include "XvcStructs.h"
 
-void  XvcEvaluate(tree *);
+void  XvcEvaluate(XvcTree * TreeToEvaluate);
 #endif // XVC_EVALUATE_H
