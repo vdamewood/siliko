@@ -3,23 +3,6 @@
 
 #include "XvcCleanup.h"
 
-#define XvcMemoryCleanup                XvcCleanupClearAll
-#define xvcalc_cache_dangling_arglist   XvcCleanupCacheArglist
-#define xvcalc_release_dangling_arglist XvcCleanupReleaseArglist
-#define xvcalc_clear_dangling_arglists  XvcCleanupClearArglists
-#define xvcalc_cache_dangling_tree      XvcCleanupCacheTree
-#define xvcalc_release_dangling_tree    XvcCleanupReleaseTree
-#define xvcalc_clear_dangling_trees     XvcCleanupClearTrees
-#define xvcalc_cache_dangling_id        XvcCleanupCacheFunctionId
-#define xvcalc_release_dangling_id      XvcCleanupReleaseFunctionId
-#define xvcalc_clear_dangling_ids       XvcCleanupClearFunctionIds
-
-typedef struct XvcTree      tree;
-typedef struct XvcOperator  operation;
-typedef struct XvcNumber    number;
-typedef struct XvcFunction  function;
-typedef struct XvcArglist	arglist;
-
 static void debug_report(const char * function, void * address)
 {
 	if (!address) {
@@ -32,12 +15,12 @@ static void debug_report(const char * function, void * address)
 
 struct TreeList {
 	struct TreeList * next;
-	tree * tree;
+	XvcTree * tree;
 };
 
 struct ArglistList { // Yeah, I know.
 	struct ArglistList * next;
-	arglist * item;
+	XvcArglist * item;
 };
 
 struct IdList {
@@ -54,12 +37,11 @@ void print_tree_list();
 void print_arglist_list();
 void print_id_list();
 
-void XvcMemoryCleanup()
+void XvcCleanupClearAll()
 {
-	//debug_report(__FUNCTION__, NULL);
-	xvcalc_clear_dangling_trees();
-	xvcalc_clear_dangling_arglists();
-	xvcalc_clear_dangling_ids();
+	XvcCleanupClearTrees();
+	XvcCleanupClearArglists();
+	XvcCleanupClearFunctionIds();
 }
 
 void print_tree_list()
@@ -93,7 +75,7 @@ void print_id_list()
 }
 
 
-void xvcalc_cache_dangling_tree(tree * in)
+void XvcCleanupCacheTree(XvcTree * in)
 {
 	//debug_report(__FUNCTION__, in);
 	struct TreeList * NewNode;
@@ -118,7 +100,7 @@ void xvcalc_cache_dangling_tree(tree * in)
 	//print_tree_list();
 }
 
-void xvcalc_release_dangling_tree(tree * in)
+void XvcCleanupReleaseTree(XvcTree * in)
 {
 	//debug_report(__FUNCTION__, in);
 	struct TreeList ** ParentPointer;
@@ -147,7 +129,7 @@ void xvcalc_release_dangling_tree(tree * in)
 	}
 }
 
-void xvcalc_clear_dangling_trees()
+void XvcCleanupClearTrees()
 {
 	//debug_report(__FUNCTION__, NULL);
 	struct TreeList * CurrentNode;
@@ -167,7 +149,7 @@ void xvcalc_clear_dangling_trees()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void xvcalc_cache_dangling_arglist(arglist * in)
+void XvcCleanupCacheArglist(XvcArglist * in)
 {
 	//debug_report(__FUNCTION__, in);
 	struct ArglistList * NewNode;
@@ -192,7 +174,7 @@ void xvcalc_cache_dangling_arglist(arglist * in)
 	//print_tree_list();
 }
 
-void xvcalc_release_dangling_arglist(arglist * in)
+void XvcCleanupReleaseArglist(XvcArglist * in)
 {
 	//debug_report(__FUNCTION__, in);
 	struct ArglistList ** ParentPointer;
@@ -221,7 +203,7 @@ void xvcalc_release_dangling_arglist(arglist * in)
 	}
 }
 
-void xvcalc_clear_dangling_arglists()
+void XvcCleanupClearArglists()
 {
 	//debug_report(__FUNCTION__, NULL);
 	struct ArglistList * CurrentNode;
@@ -241,7 +223,7 @@ void xvcalc_clear_dangling_arglists()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void xvcalc_cache_dangling_id(char * in)
+void XvcCleanupCacheFunctionId(char * in)
 {
 	//debug_report(__FUNCTION__, in);
 	struct IdList * NewNode;
@@ -266,7 +248,7 @@ void xvcalc_cache_dangling_id(char * in)
 	//print_tree_list();
 }
 
-void xvcalc_release_dangling_id(char * in)
+void XvcCleanupReleaseFunctionId(char * in)
 {
 	//debug_report(__FUNCTION__, in);
 	struct IdList ** ParentPointer;
@@ -295,7 +277,7 @@ void xvcalc_release_dangling_id(char * in)
 	}
 }
 
-void xvcalc_clear_dangling_ids()
+void XvcCleanupClearFunctionIds()
 {
 	//debug_report(__FUNCTION__, NULL);
 	struct IdList * CurrentNode;
