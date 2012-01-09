@@ -3,7 +3,10 @@ XVCalc Overview
 XVCalc is a library for handling mathematical expressions.
 
 XVCalc may be copied, modified, and distributed under the terms of the GNU
-GPL, version 3. See the file License.txt for details.
+LGPL, version 3 or later. See the files LGPL-3.0.txt and GPL-3.0.txt for
+details. The source distribution of XVCalc also includes test programs.
+These programs may be copied, modified, and distributed under the terms of
+the GNU GPL, version 3 or later. See the file GPL-3.0.txt for details.
 
 Currently XVCalc supports the following features:
 
@@ -17,7 +20,7 @@ Currently XVCalc supports the following features:
 * Functions, currently XVcalc supports  abs() and sqrt() functions.
 * XVCalc ignores space and tab characters in its input.
 
-The following features are planned for future versions:
+The following features are planned for the first release:
 
 * built-in support for the following functions from C's math.h: sin(), cos(),
   tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(), exp(),
@@ -45,32 +48,26 @@ XVcalc Interface
 
 XVCalc's interface consists of the following functions:
 
-void               xvcalc_open();
-void               xvcalc_close();
-enum xvcalc_status xvcalc(char * in_string)
-int                xvcalc_get_int(void)
-float              xvcalc_get_float(void)
-char             * xvcalc_error_message(void)
-void               xvcalc_clean(void)
+void               XvcOpen();
+void               XvcClose();
+enum XvcStatus     XvcParse(const char * StringToBeParsed)
+int                XvcGetInteger(void)
+float              XvcGetFloat(void)
 
-Use xvcalc_open() before calling any other functions. Call xvcalc_close() after
-you are finished with xvcalc and before your program terminates. These
-functionsa are used to initialize and finalize xvcalc.
+Call XvcOpen() before calling any other functions. Call XvcClose()
+after you are finished with XVCalc and before your program terminates. These
+functions are used to setup and tear down resources used by XVCalc.
 
-The xvcalc_status ennumeration is found in xvcalc.h with comments on what each
-status means.
-
-Other symbols starting with Xvc (and xvcalc_)  will be found in the library but
+Other symbols starting with Xvc will be found in the library but
 are not part of the public interface, so don't use them.
 
-The xvcalc() functon takes the expression to be evaluated as a typical pointer
-to a null-terminated series of characters. When called, the xvcalc() function
-parses the string passed to it and sets internal conditions allowing other
-functions to be called to retrieve the results and any messages.
+The XVCParse() function takes a pointer to the first of a series of characters
+that represent a mathematical expression, terminated by a null character. When
+called, the XvxParse() function parses the string passed to it and sets
+internal conditions allowing other functions to be called to retrieve the
+results and any messages.
 
-The xvcalc() function returns a status code. The meaning of these status
-codes are detaild in xvcalc.h.
-
-Once you have retrieved the value of the calculation, you must clean the state
-of the library by calling the xvcalc_clean() function between calls to
-xvcalc().
+The XvcParse() function returns a value in the XvcStatus enumeration. The
+XvcStatus enumeration is found in XVCalc.h with comments on what each
+status means. Depending on the status returned by XvcParse(), you may retrieve
+the value using either XvcGetInteger() or XvcGetFloat().
