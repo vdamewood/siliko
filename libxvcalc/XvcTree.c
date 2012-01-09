@@ -3,6 +3,7 @@
 #include "XvcTree.h"
 #include "XvcArglist.h"
 #include "XvcCleanup.h"
+#include "XvcFunctionId.h"
 
 XvcTree * XvcTreeNewOperator(char type, XvcTree * left, XvcTree * right)
 {
