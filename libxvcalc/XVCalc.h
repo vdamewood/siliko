@@ -37,7 +37,7 @@ typedef enum XvcStatus XvcStatus;
 	
 API void XvcOpen(void);
 API void XvcClose(void);
-API XvcStatus XvcParse(char * StringToParse);
+API XvcStatus XvcParse(const char * StringToParse);
 API int XvcGetInteger(void);
 API float XvcGetFloat(void);
 

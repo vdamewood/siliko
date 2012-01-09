@@ -13,7 +13,7 @@ void XvcClose(void)
 	XvcStateClear();
 }
 
-XvcStatus XvcParse(char *inString)
+XvcStatus XvcParse(const char *inString)
 {
 	YY_BUFFER_STATE buffer;
 	XvcStateClear();
