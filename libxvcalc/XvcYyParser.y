@@ -49,6 +49,7 @@ typedef struct XvcArglist	arglist;
 
 %left '+' '-'
 %left '*' '/'
+%right '^'
 %nonassoc 'd' UNEG
 
 %token <i> INTEGER
@@ -77,6 +78,7 @@ expression: INTEGER            { $$ = xvcalc_new_int($1);          }
  | expression '-' expression { $$ = xvcalc_new_operation('-', $1, $3); }
  | expression '*' expression { $$ = xvcalc_new_operation('*', $1, $3); }
  | expression '/' expression { $$ = xvcalc_new_operation('/', $1, $3); }
+ | expression '^' expression { $$ = xvcalc_new_operation('^', $1, $3); }
  | expression 'd' INTEGER {
 	$$ = xvcalc_new_operation('d', $1, xvcalc_new_int($3));
    }

@@ -139,9 +139,23 @@ static XvcNumber Power(XvcNumber left, XvcNumber right, jmp_buf jb)
 	else {
 		myLeft = left.f;
 	}
+
+	if (right.type = 'i') {
+		myRight = (float) right.i;
+	}
+	else {
+		myRight = right.f;
+	}
+	
+	if (right.type = 'i') {
+		myRight = (float) right.i;
+	}
+	else {
+		myRight = right.f;
+	}
 	
 	rVal.type = 'f';
-	rVal.f = pow(myLeft, myRight);
+	rVal.f = (float) pow(myLeft, myRight);
 	return rVal;
 }
 

@@ -59,8 +59,8 @@ void XvcStateSetValue(XvcNumber NewNumber)
 			break;
 		case 'f':
 			Status = S_FLOAT;
-			ValueAsInteger = (int) NewNumber.i;
-			ValueAsFloat = NewNumber.i;
+			ValueAsInteger = (int) NewNumber.f;
+			ValueAsFloat = NewNumber.f;
 	};
 }
 
