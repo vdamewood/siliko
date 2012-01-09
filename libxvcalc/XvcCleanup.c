@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "XvcArglist.h"
 #include "XvcCleanup.h"
+#include "XvcFunctionId.h"
+#include "XvcTree.h"
 
 static void debug_report(const char * function, void * address)
 {
