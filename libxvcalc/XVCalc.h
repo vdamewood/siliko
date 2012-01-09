@@ -1,5 +1,16 @@
 #if !defined XVCALC_H
 #define XVCALC_H
+
+#if defined _WIN32 && defined _MSC_VER
+	#if defined xvcalc_EXPORTS
+		#define API __declspec(dllexport)
+	#else xvcalc_EXPORTS
+		#define API __declspec(dllimport)
+	#endif // xvcalc_EXPORTS
+#else // _WIN32 && __MSC_VER
+	#define API
+#endif
+
 #if defined __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -24,11 +35,11 @@ enum XvcStatus {
 };
 typedef enum XvcStatus XvcStatus;
 	
-void XvcOpen(void);
-void XvcClose(void);
-XvcStatus XvcParse(char * StringToParse);
-int XvcGetInteger(void);
-float XvcGetFloat(void);
+API void XvcOpen(void);
+API void XvcClose(void);
+API XvcStatus XvcParse(char * StringToParse);
+API int XvcGetInteger(void);
+API float XvcGetFloat(void);
 
 #if defined __cplusplus
 }

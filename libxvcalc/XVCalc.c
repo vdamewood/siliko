@@ -2,7 +2,7 @@
 #include "XvcState.h"
 #include "XvcYyLexer.h"
 
-int xvcalc_yyparse(void);
+int Xvc_yyparse(void);
 
 void XvcOpen(void)
 {
@@ -15,8 +15,8 @@ void XvcClose(void)
 
 XvcStatus XvcParse(char *inString)
 {
-	XvcStateClear();
 	YY_BUFFER_STATE buffer;
+	XvcStateClear();
 	buffer = Xvc_yy_scan_string(inString);
 	Xvc_yy_switch_to_buffer(buffer);
 	Xvc_yyparse();

@@ -10,6 +10,7 @@ int XvcStateInteger(void);
 void XvcStateSetInteger(int NewInteger);
 float XvcStateFloat(void);
 void XvcStateSetFloat(float NewFloat);
+void XvcStateClear(void);
 void XvcStateSetNil(void);
 void XvcStateSetValue(XvcNumber);
 void XvcStateSetOutOfMemoryError(void);
