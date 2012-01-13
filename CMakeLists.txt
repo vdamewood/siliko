@@ -1,6 +1,14 @@
 cmake_minimum_required (VERSION 2.6)
 project(XVCalc)
 
+#IF(APPLE)
+#set(GUI_APP MACOSX_BUNDLE)
+#ELSE(APPLE)
+#SET(GUI_APP <SomethingElse>)
+#ENDIF(APPLE)
+
+FIND_PACKAGE(Qt4)
+
 IF (UNIX AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET(MATH_LIB "m")
 ELSE(UNIX)
@@ -8,4 +16,10 @@ ELSE(UNIX)
 ENDIF(UNIX AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 add_subdirectory("libxvcalc")
+IF(QT4_FOUND)
+	MESSAGE("Qt4 Was found. Configuring XvcGui.")
+	add_subdirectory("XvcGui")
+ELSE(QT4_FOUND)
+	MESSAGE("Qt4 was not found. Skipping XvcGui.")
+ENDIF(QT4_FOUND)
 add_subdirectory("tests")
