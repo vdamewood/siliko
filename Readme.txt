@@ -71,3 +71,13 @@ The XvcParse() function returns a value in the XvcStatus enumeration. The
 XvcStatus enumeration is found in XVCalc.h with comments on what each
 status means. Depending on the status returned by XvcParse(), you may retrieve
 the value using either XvcGetInteger() or XvcGetFloat().
+
+Known Issue / Goals
+
+* The API is more complicated than it needs to be.
+* The CMakeFile.txt file in libxvcalc doesn't generate files with Flex/Bison
+  correctly.
+* Flex and Bison may not be the best solution if XVCalc is going to support
+  Windows.
+* Not all functions have been implemented.
+* The method for selecting a function needs to be replaced by a hash table.

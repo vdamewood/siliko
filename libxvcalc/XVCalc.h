@@ -40,10 +40,11 @@ enum XvcStatus {
 	                XvcGetInteger(); */
 	S_FLOAT,     /* Success. The floating-point result may be retrieved
 	                with XvcGetFloat(); */
-	E_SYNTAX,    /* Error: A syntax error was encountered. */
+	E_INTERNAL,  /* Error: This indicated a bug in XVCalc. */
 	E_MEMORY,    /* Error: XVCalc attempted to allocate memory to
 	                process the expression and failed. (i.e.
 	                malloc() returned NULL.) */
+	E_SYNTAX,    /* Error: A syntax error was encountered. */
 	E_ZERO_DIV,  /* Error: Division by zero was attempted. */
 	E_FUNCTION,	 /* Error: The expression contains a function call that
 	                could not be resolved to a valid function. */
