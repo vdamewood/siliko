@@ -1,18 +1,24 @@
-#FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE (${QT_USE_FILE})
 
 INCLUDE_DIRECTORIES (
 	${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
 	${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR}
 	${XVCalc_SOURCE_DIR}/libxvcalc .)
-SET (XvcGui_HDRS ${XVCalc_SOURCE_DIR}/libxvcalc/XVCalc.h)
-SET (XvcGui_SRCS XvcGui.cpp XvcWindow.cpp)
-SET (XvcGui_UIS  XvcWindow.ui)
-SET (XvcGui_MOCS XvcWindow.h)
 
-QT4_WRAP_UI(UIS ${XvcGui_UIS})
-QT4_WRAP_CPP(MOCS ${XvcGui_MOCS})
+SET (XvcGui_HEADERS     ${XVCalc_SOURCE_DIR}/libxvcalc/XVCalc.h)
+SET (XvcGui_MOC_HEADERS XvcWindow.h)
+SET (XvcGui_SOURCES     XvcGui.cpp XvcWindow.cpp)
+SET (XvcGui_UIS         XvcWindow.ui)
 
-add_executable ( XvcGui ${XvcGui_SRCS} ${UIS} ${RSCS} ${TRS} ${MOCS} )
-target_link_libraries ( XvcGui xvcalc ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
-install (TARGETS XvcGui DESTINATION bin)
+QT4_WRAP_UI(XvcGui_UI_SOURCES ${XvcGui_UIS})
+QT4_WRAP_CPP(XvcGui_MOC_SOURCES ${XvcGui_MOC_HEADERS})
+
+ADD_EXECUTABLE(XvcGui ${GUI_APP}
+	${XvcGui_SOURCES}
+	${XvcGui_UI_SOURCES}
+	${XvcGui_MOC_SOURCES})
+TARGET_LINK_LIBRARIES(XvcGui
+	xvcalc
+	${QT_QTCORE_LIBRARY}
+	${QT_QTGUI_LIBRARY})
+INSTALL(TARGETS XvcGui DESTINATION bin)

@@ -1,11 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
 project(XVCalc)
 
-#IF(APPLE)
-#set(GUI_APP MACOSX_BUNDLE)
-#ELSE(APPLE)
-#SET(GUI_APP <SomethingElse>)
-#ENDIF(APPLE)
+IF(APPLE)
+	set(GUI_APP MACOSX_BUNDLE)
+ELSE(APPLE)
+	SET(GUI_APP )
+ENDIF(APPLE)
 
 FIND_PACKAGE(Qt4)
 
