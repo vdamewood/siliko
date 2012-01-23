@@ -195,7 +195,11 @@ static XvcNumber Dice(XvcNumber left, XvcNumber right, jmp_buf jb)
 	/* Due to the grammar, right is guarenteed to be an integer. */
 	faces = right.i;
 
-	if (!has_seeded) srand((unsigned int)time(NULL));
+	if (!has_seeded) {
+		has_seeded = 1;
+		srand((unsigned int)time(NULL));
+	}
+
 	for (i = 1; i <= count; i++) running += (rand() % faces) + 1;
 	rVal.type = 'i';
 	rVal.i = running;
