@@ -5,7 +5,7 @@ set(XVC_VERSION_MAJOR 0)
 set(XVC_VERSION_MINOR 0)
 set(XVC_VERSION_PATCH 0)
 
-find_package(BISON 2.4.2 REQUIRED)
+find_package(BISON 2.4.1 REQUIRED)
 find_package(FLEX 2.5.35 REQUIRED)
 find_package(Qt4)
 
