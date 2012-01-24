@@ -1,28 +1,28 @@
-INCLUDE_DIRECTORIES (
-	${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-	${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR}
-	${XVCalc_SOURCE_DIR}/libxvcalc .)
+# XvcGui
+include_directories(
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${XVCalc_SOURCE_DIR}/libxvcalc
+  ${QT_INCLUDE_DIR})
 
-SET (XvcGui_HEADERS     ${XVCalc_SOURCE_DIR}/libxvcalc/XVCalc.h)
-SET (XvcGui_MOC_HEADERS XvcWindow.h)
-SET (XvcGui_SOURCES     XvcGui.cpp XvcWindow.cpp)
-SET (XvcGui_UIS         XvcWindow.ui)
+set(XvcGui_HEADERS ${XVCalc_SOURCE_DIR}/libxvcalc/XVCalc.h)
+set(XvcGui_MOC_HEADERS XvcWindow.h)
+set(XvcGui_SOURCES XvcGui.cpp XvcWindow.cpp)
+set(XvcGui_UIS XvcWindow.ui)
 
-QT4_WRAP_UI(XvcGui_UI_SOURCES ${XvcGui_UIS})
-QT4_WRAP_CPP(XvcGui_MOC_SOURCES ${XvcGui_MOC_HEADERS})
+qt4_wrap_ui(XvcGui_UI_SOURCES ${XvcGui_UIS})
+qt4_wrap_cpp(XvcGui_MOC_SOURCES ${XvcGui_MOC_HEADERS})
 
-IF(WIN32)
-	SET(QT_USE_QTMAIN TRUE)
-ENDIF(WIN32)
+set(QT_USE_QTMAIN TRUE)
+include(${QT_USE_FILE})
+add_definitions(${QT_DEFINITIONS})
 
-INCLUDE(${QT_USE_FILE})
-ADD_DEFINITIONS(${QT_DEFINITIONS})
+add_executable(XvcGui
+  WIN32 MACOSX_BUNDLE
+  ${XvcGui_SOURCES}
+  ${XvcGui_UI_SOURCES}
+  ${XvcGui_MOC_SOURCES})
+target_link_libraries(XvcGui
+  xvcalc
+  ${QT_LIBRARIES})
 
-ADD_EXECUTABLE(XvcGui WIN32 MACOSX_BUNDLE
-	${XvcGui_SOURCES}
-	${XvcGui_UI_SOURCES}
-	${XvcGui_MOC_SOURCES})
-TARGET_LINK_LIBRARIES(XvcGui
-	xvcalc
-	${QT_LIBRARIES})
-INSTALL(TARGETS XvcGui DESTINATION bin)
+install(TARGETS XvcGui DESTINATION bin)
