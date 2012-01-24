@@ -8,7 +8,7 @@ XvcWindow::XvcWindow(QWidget * parent)
 {
 	XvcOpen();
 	setupUi(this);
-	output->setText(QString("Constructor Called!"));
+	output->setNum(0);
 	connect(calculateButton, SIGNAL(clicked(bool)),
 		this, SLOT(calculate()));
 }

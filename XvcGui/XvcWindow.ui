@@ -86,14 +86,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>input</sender>
-   <signal>returnPressed()</signal>
+   <sender>calculateButton</sender>
+   <signal>clicked()</signal>
    <receiver>input</receiver>
    <slot>selectAll()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>241</x>
-     <y>22</y>
+     <x>420</x>
+     <y>83</y>
     </hint>
     <hint type="destinationlabel">
      <x>241</x>
