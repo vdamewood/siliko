@@ -75,9 +75,10 @@ the value using either XvcGetInteger() or XvcGetFloat().
 Known Issue / Goals
 
 * The API is more complicated than it needs to be.
-* The CMakeFile.txt file in libxvcalc doesn't generate files with Flex/Bison
-  correctly.
-* Flex and Bison may not be the best solution if XVCalc is going to support
-  Windows.
 * Not all functions have been implemented.
 * The method for selecting a function needs to be replaced by a hash table.
+* The method for selecting an operator implementation function needs to be
+  replaced.
+* The GUI program needs to be documented.
+* The CMake files need to generate frameworks and correct Application bundles
+  on Macintosh OS X.
