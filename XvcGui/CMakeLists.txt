@@ -22,7 +22,5 @@ add_executable(XvcGui
   ${XvcGui_UI_SOURCES}
   ${XvcGui_MOC_SOURCES})
 target_link_libraries(XvcGui
-  xvcalc
+  XVCalc
   ${QT_LIBRARIES})
-
-install(TARGETS XvcGui DESTINATION bin)

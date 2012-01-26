@@ -3,7 +3,7 @@ include_directories(${XVCalc_SOURCE_DIR}/libxvcalc)
 
 add_executable(XvcTestLinkage
     XvcTestLinkage.c)
-target_link_libraries(XvcTestLinkage xvcalc)
+target_link_libraries(XvcTestLinkage XVCalc)
 
 add_executable(XvcTestFunctions
     XvcTestFunctions.c
