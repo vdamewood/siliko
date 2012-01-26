@@ -65,3 +65,8 @@ set_target_properties(XVCalc
   PROPERTIES
     FRAMEWORK     TRUE
     PUBLIC_HEADER ${XVCalc_PUBLIC_HEADERS})
+
+if(APPLE)
+install(TARGETS XVCalc
+  FRAMEWORK DESTINATION . COMPONENT Runtime)
+endif()
