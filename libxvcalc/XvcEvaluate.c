@@ -25,13 +25,51 @@
 #include "XvcFunctionCall.h"
 #include "XvcOperatorCall.h"
 
+static int IsNumber(XvcNumber n) {
+	return n.status == S_INTEGER || n.status == S_FLOAT;
+}
+
+static XvcNumber EvaluateOperator(XvcOperator * op)
+{
+	XvcNumber opLeft;
+	XvcNumber opRight;
+
+	opLeft = XvcEvaluate(op->left);
+	if (!IsNumber(opLeft)) return opLeft;
+
+	opRight = XvcEvaluate(op->right);
+	if (!IsNumber(opRight)) return opRight;
+
+	return XvcOperatorCall(op->type, opLeft, opRight);
+}
+
+XvcNumber EvaluateFunction(XvcFunction * func)
+{
+	XvcNumber rVal;
+	XvcNumber * arguments = NULL;
+	int i;
+
+	if (func->arg_count) {
+		arguments = malloc(sizeof(XvcNumber) * func->arg_count);
+		
+		for(i = 0; i < func->arg_count; i++) {
+			arguments[i] = XvcEvaluate(func->arg_vector[i]);
+			if(!IsNumber(arguments[i])) {
+				rVal = arguments[i];
+				free(arguments);
+				return rVal;
+			}
+		}
+	}
+	
+	rVal = XvcFunctionCall(func->name, func->arg_count, arguments);
+	free(arguments);
+	return rVal;
+}
+
 XvcNumber XvcEvaluate(XvcTree * tree)
 {
 	XvcNumber rVal;
-	XvcNumber opLeft;
-	XvcNumber opRight;
-	XvcNumber * EvaluatedArguments = NULL;
-	int i;
 
 	if (!tree) {
 		rVal.status = E_SYNTAX;
@@ -39,47 +77,10 @@ XvcNumber XvcEvaluate(XvcTree * tree)
 	}
 
 	switch (tree->type) {
-	case 'n':
-		rVal = *(tree->num);
-		break;
-	case 'o':
-			opLeft = XvcEvaluate(tree->op->left);
-			if (opLeft.status != S_INTEGER &&
-				opLeft.status != S_FLOAT) {
-				return opLeft;
-			}
-			opRight = XvcEvaluate(tree->op->right);
-			if (opLeft.status != S_INTEGER &&
-				opLeft.status != S_FLOAT) {
-				return opRight;
-			}
-			rVal = XvcOperatorCall(tree->op->type,
-							   opLeft,
-							   opRight);
-
-		break;
-	case 'f':
-		if (tree->func->arg_count) {
-			EvaluatedArguments = malloc(sizeof(XvcNumber)
-										* tree->func->arg_count);
-
-			for(i = 0; i < tree->func->arg_count; i++) {
-				EvaluatedArguments[i]
-					= XvcEvaluate(tree->func->arg_vector[i]);
-				if(EvaluatedArguments[i].status != S_INTEGER &&
-				   EvaluatedArguments[i].status != S_FLOAT) {
-					rVal = EvaluatedArguments[i];
-					free(EvaluatedArguments);
-					return rVal;
-				}
-			}
-		}
-
-		rVal = XvcFunctionCall(tree->func->name,
-									tree->func->arg_count,
-									EvaluatedArguments);
-		free(EvaluatedArguments);
+	case 'n': return *tree->num;
+	case 'o': return EvaluateOperator(tree->op);
+	case 'f': return EvaluateFunction(tree->func);
 	}
-		
+	rVal.status = E_INTERNAL;
 	return rVal;
 }
