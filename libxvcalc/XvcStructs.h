@@ -21,6 +21,8 @@
 #if !defined XVC_STRUCTS_H
 #define XVC_STRUCTS_H
 
+#include "XVCalc.h"
+
 struct XvcTree;
 struct XvcOperator;
 struct XvcNumber;
@@ -50,7 +52,8 @@ struct XvcOperator {
 };
 
 struct XvcNumber {
-	char type;
+	XvcStatus status;
+	//char type;
 	union {
 		int i;
 		float f;

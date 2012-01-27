@@ -52,7 +52,7 @@ XvcTree * XvcTreeNewInteger(int value)
 	XvcCleanupCacheTree(rVal);
 
 	rVal->type = 'n';
-	rVal->num->type = 'i';
+	rVal->num->status = S_INTEGER;
 	rVal->num->i = value;
 	return rVal;
 }
@@ -65,7 +65,7 @@ XvcTree * XvcTreeNewFloat(float value)
 	XvcCleanupCacheTree(rVal);
 	
 	rVal->type = 'n';
-	rVal->num->type = 'f';
+	rVal->num->status = S_FLOAT;
 	rVal->num->f = value;
 	return rVal;
 }

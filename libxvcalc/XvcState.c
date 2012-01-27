@@ -71,14 +71,13 @@ void XvcStateSetNil(void)
 
 void XvcStateSetValue(XvcNumber NewNumber)
 {
-	switch (NewNumber.type) {
-		case 'i':
-			Status = S_INTEGER;
+	Status = NewNumber.status;
+	switch (NewNumber.status) {
+		case S_INTEGER:
 			ValueAsInteger = NewNumber.i;
 			ValueAsFloat = (float) NewNumber.i;
 			break;
-		case 'f':
-			Status = S_FLOAT;
+		case S_FLOAT:
 			ValueAsInteger = (int) NewNumber.f;
 			ValueAsFloat = NewNumber.f;
 	};

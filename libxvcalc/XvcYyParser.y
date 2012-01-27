@@ -86,7 +86,8 @@ typedef struct XvcArglist	arglist;
 %%
 calculation: EOL { xvcalc_set_nil(); }
  | expression EOL {
-	xvcalc_set_value_from_tree($1);
+	 XvcStateSetValue(XvcEvaluate($1));
+	 /*xvcalc_set_value_from_tree($1);*/
 	XvcMemoryCleanup($1);
 };
 

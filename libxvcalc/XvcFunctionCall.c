@@ -25,51 +25,59 @@
 #include "XVCalc.h"
 #include "XvcFunctionCall.h"
 
-static XvcNumber XvcFunction_abs(int argc, XvcNumber * argv, jmp_buf jb)
+static XvcNumber XvcFunction_abs(int argc, XvcNumber * argv)
 {
 	XvcNumber rVal;
 
-	if (argc != 1) longjmp(jb, E_ARGUMENTS);
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
 
 	rVal = argv[0];
-	if (rVal.type == 'f')
+	if (rVal.status == S_FLOAT)
 		rVal.f = fabs(rVal.f);
-	else if (rVal.type == 'i')
+	else if (rVal.status == S_INTEGER)
 		rVal.i = abs(rVal.i);
 	return rVal;
 }
 
-static XvcNumber XvcFunction_sqrt(int argc, XvcNumber * argv, jmp_buf jb)
+static XvcNumber XvcFunction_sqrt(int argc, XvcNumber * argv)
 {
 	XvcNumber rVal;
 	float inVal;
-	if (argc != 1) longjmp(jb, E_ARGUMENTS);
-	
-	if (
-		(argv[0].type == 'i' && argv[0].i < 0)
-		|| (argv[0].type == 'f' && argv[0].f < 0.0)) {
-		longjmp(jb, E_DOMAIN);
+
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
 	}
 	
-	if (argv[0].type == 'f') {
+	if (
+		(argv[0].status == S_INTEGER && argv[0].i < 0)
+		|| (argv[0].status == S_FLOAT && argv[0].f < 0.0)) {
+			rVal.status = E_DOMAIN;
+			return rVal;
+	}
+	
+	if (argv[0].status == S_FLOAT) {
 		inVal = argv[0].f;
 	}
 	else {
 		inVal = (float) argv[0].i;
 	}
-	rVal.type = 'f';
+	rVal.status = S_FLOAT;
 	rVal.f = sqrt(inVal);
 	
 	return rVal;
 }
 
 // This will be removed when more functions are implemented.
-static XvcNumber XvcFunction_dummy(int argc, XvcNumber * argv, jmp_buf jb)
+static XvcNumber XvcFunction_dummy(int argc, XvcNumber * argv)
 {
 	return argv[0];
 }
 
-typedef XvcNumber (*FunctionPointer)(int, XvcNumber *,jmp_buf);
+typedef XvcNumber (*FunctionPointer)(int, XvcNumber *);
 
 static FunctionPointer GetFunction(const char * name)
 {
@@ -83,11 +91,17 @@ static FunctionPointer GetFunction(const char * name)
 		return NULL;
 }
 
-XvcNumber XvcFunctionCall(const char * name, int argc, XvcNumber * argv, jmp_buf jb)
+XvcNumber XvcFunctionCall(const char * name, int argc, XvcNumber * argv)
 {
 	FunctionPointer f;
-
+	XvcNumber rVal;
+	
 	f = GetFunction(name);
-	if (!f) longjmp(jb, E_FUNCTION);
-	return f(argc, argv, jb);
+	if (!f) {
+		rVal.status = E_FUNCTION;
+	}
+	else {
+		rVal = f(argc, argv);
+	}
+	return rVal;
 }

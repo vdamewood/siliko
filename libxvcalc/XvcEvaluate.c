@@ -18,46 +18,44 @@
  * License along with XVCalc. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <setjmp.h>
 #include <stdlib.h>
 
 #include "XVCalc.h"
 #include "XvcEvaluate.h"
 #include "XvcFunctionCall.h"
-#include "XvcState.h"
 #include "XvcOperatorCall.h"
 
-static XvcNumber Evaluate(XvcTree * tree, jmp_buf escape);
-
-void XvcEvaluate(XvcTree * in)
-{
-	jmp_buf escape;
-	XvcStatus jmp_value = 0;
-	if ((jmp_value = setjmp(escape)) == 0) {
-		XvcStateSetValue(Evaluate(in, escape));
-	}
-	else {
-		XvcStateSetNil();
-		XvcStateSetStatus(jmp_value);
-	}
-}
-
-static XvcNumber Evaluate(XvcTree * tree, jmp_buf escape)
+XvcNumber XvcEvaluate(XvcTree * tree)
 {
 	XvcNumber rVal;
+	XvcNumber opLeft;
+	XvcNumber opRight;
 	XvcNumber * EvaluatedArguments = NULL;
 	int i;
-	if (!tree) longjmp(escape, E_SYNTAX);
+
+	if (!tree) {
+		rVal.status = E_SYNTAX;
+		return rVal;
+	}
 
 	switch (tree->type) {
 	case 'n':
 		rVal = *(tree->num);
 		break;
 	case 'o':
-		rVal = XvcOperatorCall(tree->op->type,
-							   Evaluate(tree->op->left, escape),
-							   Evaluate(tree->op->right, escape),
-							   escape);
+			opLeft = XvcEvaluate(tree->op->left);
+			if (opLeft.status != S_INTEGER &&
+				opLeft.status != S_FLOAT) {
+				return opLeft;
+			}
+			opRight = XvcEvaluate(tree->op->right);
+			if (opLeft.status != S_INTEGER &&
+				opLeft.status != S_FLOAT) {
+				return opRight;
+			}
+			rVal = XvcOperatorCall(tree->op->type,
+							   opLeft,
+							   opRight);
 
 		break;
 	case 'f':
@@ -67,14 +65,19 @@ static XvcNumber Evaluate(XvcTree * tree, jmp_buf escape)
 
 			for(i = 0; i < tree->func->arg_count; i++) {
 				EvaluatedArguments[i]
-					= Evaluate(tree->func->arg_vector[i], escape);
+					= XvcEvaluate(tree->func->arg_vector[i]);
+				if(EvaluatedArguments[i].status != S_INTEGER &&
+				   EvaluatedArguments[i].status != S_FLOAT) {
+					rVal = EvaluatedArguments[i];
+					free(EvaluatedArguments);
+					return rVal;
+				}
 			}
 		}
 
 		rVal = XvcFunctionCall(tree->func->name,
 									tree->func->arg_count,
-									EvaluatedArguments,
-									escape);
+									EvaluatedArguments);
 		free(EvaluatedArguments);
 	}
 		

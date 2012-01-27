@@ -25,161 +25,162 @@
 #include "XVCalc.h"
 #include "XvcOperatorCall.h"
 
-static XvcNumber Add(XvcNumber left, XvcNumber right, jmp_buf jb)
+static XvcNumber Add(XvcNumber left, XvcNumber right)
 {
 	XvcNumber rVal;
 
-	if (left.type == 'f') {
-		if (right.type == 'f') {
-			rVal.type = 'f';
+	if (left.status == S_FLOAT) {
+		if (right.status == S_FLOAT) {
+			rVal.status = S_FLOAT;
 			rVal.f = left.f + right.f;
 		}
 		else {
-			rVal.type = 'f';
+			rVal.status = S_FLOAT;
 			rVal.f = left.f + (float) right.i;
 		}
 	}
 	else {
-		if (right.type == 'f') {
-			rVal.type = 'f';
+		if (right.status == S_FLOAT) {
+			rVal.status = S_FLOAT;
 			rVal.f = (float) left.i + right.f;
 		}
 		else {
-			rVal.type = 'i';
+			rVal.status = S_INTEGER;
 			rVal.i = left.i + right.i;
 		}
 	}
 	return rVal;
 }
 
-static XvcNumber Subtract(XvcNumber left, XvcNumber right, jmp_buf jb)
+static XvcNumber Subtract(XvcNumber left, XvcNumber right)
 {
 	XvcNumber rVal;
 
-	if (left.type == 'f') {
-		if (right.type == 'f') {
-			rVal.type = 'f';
+	if (left.status == S_FLOAT) {
+		if (right.status == S_FLOAT) {
+			rVal.status = S_FLOAT;
 			rVal.f = left.f - right.f;
 		}
 		else {
-			rVal.type = 'f';
+			rVal.status = S_FLOAT;
 			rVal.f = left.f - (float) right.i;
 		}
 	}
 	else {
-		if (right.type == 'f') {
-			rVal.type = 'f';
+		if (right.status == S_FLOAT) {
+			rVal.status = S_FLOAT;
 			rVal.f = (float) left.i - right.f;
 		}
 		else {
-			rVal.type = 'i';
+			rVal.status = S_INTEGER;
 			rVal.i = left.i - right.i;
 		}
 	}
 	return rVal;
 }
 
-static XvcNumber Multiply(XvcNumber left, XvcNumber right, jmp_buf jb)
+static XvcNumber Multiply(XvcNumber left, XvcNumber right)
 {
 	XvcNumber rVal;
 
-	if (left.type == 'f') {
-		if (right.type == 'f') {
-			rVal.type = 'f';
+	if (left.status == S_FLOAT) {
+		if (right.status == S_FLOAT) {
+			rVal.status = S_FLOAT;
 			rVal.f = left.f * right.f;
 		}
 		else {
-			rVal.type = 'f';
+			rVal.status = S_FLOAT;
 			rVal.f = left.f * (float) right.i;
 		}
 	}
 	else {
-		if (right.type == 'f') {
-			rVal.type = 'f';
+		if (right.status == S_FLOAT) {
+			rVal.status = S_FLOAT;
 			rVal.f = (float) left.i * right.f;
 		}
 		else {
-			rVal.type = 'i';
+			rVal.status = S_INTEGER;
 			rVal.i = left.i * right.i;
 		}
 	}
 	return rVal;
 }
 
-static XvcNumber Divide(XvcNumber left, XvcNumber right, jmp_buf jb)
+static XvcNumber Divide(XvcNumber left, XvcNumber right)
 {
 	XvcNumber rVal;
 
 	/* Division-by-Zero Error */
-	if ((right.type == 'f' && right.f == 0.0)
-		|| (right.type == 'i' && right.i == 0)) {
-		longjmp(jb, E_ZERO_DIV);
+	if ((right.status == S_FLOAT && right.f == 0.0)
+		|| (right.status == S_INTEGER && right.i == 0)) {
+		rVal.status = E_ZERO_DIV;
+		return rVal;
 	}
 
-	if (left.type == 'f') {
-		if (right.type == 'f') {
-			rVal.type = 'f';
+	if (left.status == S_FLOAT) {
+		if (right.status == S_FLOAT) {
+			rVal.status = S_FLOAT;
 			rVal.f = left.f / right.f;
 		}
 		else {
-			rVal.type = 'f';
+			rVal.status = S_FLOAT;
 			rVal.f = left.f / (float) right.i;
 		}
 	}
 	else {
-		if (right.type == 'f') {
-			rVal.type = 'f';
+		if (right.status == S_FLOAT) {
+			rVal.status = S_FLOAT;
 			rVal.f = (float) left.i / right.f;
 		}
 		else {
 			/* TODO: Make this return a float if it's fractional */
-			rVal.type = 'i';
+			rVal.status = S_INTEGER;
 			rVal.i = left.i / right.i;
 		}
 	}
 	return rVal;
 }
 
-static XvcNumber Power(XvcNumber left, XvcNumber right, jmp_buf jb)
+static XvcNumber Power(XvcNumber left, XvcNumber right)
 {
 	XvcNumber rVal;
 	float myLeft;
 	float myRight;
 
-	if (left.type = 'i') {
+	if (left.status = S_INTEGER) {
 		myLeft = (float) left.i;
 	}
 	else {
 		myLeft = left.f;
 	}
 
-	if (left.type = 'i') {
+	if (left.status = S_INTEGER) {
 		myLeft = (float) left.i;
 	}
 	else {
 		myLeft = left.f;
 	}
 
-	if (right.type = 'i') {
+	if (right.status = S_INTEGER) {
 		myRight = (float) right.i;
 	}
 	else {
 		myRight = right.f;
 	}
 	
-	if (right.type = 'i') {
+	if (right.status = S_INTEGER) {
 		myRight = (float) right.i;
 	}
 	else {
 		myRight = right.f;
 	}
 	
-	rVal.type = 'f';
+	rVal.status = S_FLOAT;
 	rVal.f = (float) pow(myLeft, myRight);
 	return rVal;
 }
 
-static XvcNumber Dice(XvcNumber left, XvcNumber right, jmp_buf jb)
+static XvcNumber Dice(XvcNumber left, XvcNumber right)
 {
 	/* TODO: Make this function handle fractional dice. */
 	static int has_seeded = 0;
@@ -189,7 +190,7 @@ static XvcNumber Dice(XvcNumber left, XvcNumber right, jmp_buf jb)
 	int faces;
 	int i;
 	
-	if (left.type == 'f') count = (int) left.f;
+	if (left.status == S_FLOAT) count = (int) left.f;
 	else count = left.i;
 
 	/* Due to the grammar, right is guarenteed to be an integer. */
@@ -201,12 +202,12 @@ static XvcNumber Dice(XvcNumber left, XvcNumber right, jmp_buf jb)
 	}
 
 	for (i = 1; i <= count; i++) running += (rand() % faces) + 1;
-	rVal.type = 'i';
+	rVal.status = S_INTEGER;
 	rVal.i = running;
 	return rVal;
 }
 
-typedef XvcNumber (*OperatorPointer)(XvcNumber, XvcNumber, jmp_buf);
+typedef XvcNumber (*OperatorPointer)(XvcNumber, XvcNumber);
 
 static OperatorPointer GetOperator(char operator)
 {
@@ -221,12 +222,18 @@ static OperatorPointer GetOperator(char operator)
 	return NULL;
 }
 
-XvcNumber XvcOperatorCall(char operator, XvcNumber left, XvcNumber right, jmp_buf jb)
+XvcNumber XvcOperatorCall(char operator, XvcNumber left, XvcNumber right)
 {
 	OperatorPointer f;
+	XvcNumber rVal;
 
 	f = GetOperator(operator);
 	// FIXME: Give missing operators their own status.
-	if (!f) longjmp(jb, E_FUNCTION);
-	return f(left, right, jb);
+	if (!f) {
+		rVal.status = E_FUNCTION;
+	}
+	else {
+		rVal = f(left, right);
+	}
+	return rVal;
 }
