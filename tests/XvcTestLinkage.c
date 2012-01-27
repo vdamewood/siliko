@@ -21,8 +21,8 @@
 
 int main(int argc, char *argv[])
 {
-	XvcStatus status;
 	char * expression;
+	XvcNumber value;
 
 	if (argc >= 2)
 		expression = argv[1];
@@ -30,13 +30,13 @@ int main(int argc, char *argv[])
 		expression = "";
 
 	XvcOpen();
-	status = XvcParse(expression);
-	switch (status) {
+	value = XvcParse(expression);
+	switch (value.status) {
 	case S_INTEGER:
-		printf("Value: %i\n", XvcGetInteger());
+		printf("Value: %i\n", value.i);
 		break;
 	case S_FLOAT:
-		printf("Value: %f\n", XvcGetFloat());
+		printf("Value: %f\n", value.f);
 		break;
 	case E_SYNTAX:
 		printf("Syntax error.\n");

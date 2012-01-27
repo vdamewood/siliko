@@ -54,10 +54,19 @@ enum XvcStatus {
 	E_RANGE      /* Error: A function call resulted in a range error. */
 };
 typedef enum XvcStatus XvcStatus;
+
+struct XvcNumber {
+	XvcStatus status;
+	union {
+		int i;
+		float f;
+	};
+};
+	typedef struct XvcNumber XvcNumber;	
 	
 API void XvcOpen(void);
 API void XvcClose(void);
-API XvcStatus XvcParse(const char * StringToParse);
+API XvcNumber XvcParse(const char * StringToParse);
 API int XvcGetInteger(void);
 API float XvcGetFloat(void);
 

@@ -33,22 +33,22 @@ void XvcClose(void)
 	XvcStateClear();
 }
 
-XvcStatus XvcParse(const char *inString)
+XvcNumber XvcParse(const char *inString)
 {
 	YY_BUFFER_STATE buffer;
 	XvcStateClear();
+	XvcNumber rVal;
+
 	buffer = Xvc_yy_scan_string(inString);
 	Xvc_yy_switch_to_buffer(buffer);
 	Xvc_yyparse();
-	return XvcStateStatus();
-}
-
-int XvcGetInteger(void)
-{
-	return XvcStateInteger();
-}
-
-float XvcGetFloat(void)
-{
-	return XvcStateFloat();
+	
+	rVal.status = XvcStateStatus();
+	if (rVal.status == S_INTEGER) {
+		rVal.i = XvcStateInteger();
+	}
+	else if (rVal.status == S_FLOAT) {
+		rVal.i = XvcStateFloat();		
+	}
+	return rVal;
 }

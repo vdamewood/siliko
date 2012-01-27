@@ -50,9 +50,7 @@ XVCalc's interface consists of the following functions:
 
 void               XvcOpen();
 void               XvcClose();
-enum XvcStatus     XvcParse(const char * StringToBeParsed)
-int                XvcGetInteger(void)
-float              XvcGetFloat(void)
+struct XvcNumber   XvcParse(const char * StringToBeParsed)
 
 Call XvcOpen() before calling any other functions. Call XvcClose()
 after you are finished with XVCalc and before your program terminates. These
@@ -63,22 +61,16 @@ are not part of the public interface, so don't use them.
 
 The XVCParse() function takes a pointer to the first of a series of characters
 that represent a mathematical expression, terminated by a null character. When
-called, the XvxParse() function parses the string passed to it and sets
-internal conditions allowing other functions to be called to retrieve the
-results and any messages.
-
-The XvcParse() function returns a value in the XvcStatus enumeration. The
-XvcStatus enumeration is found in XVCalc.h with comments on what each
-status means. Depending on the status returned by XvcParse(), you may retrieve
-the value using either XvcGetInteger() or XvcGetFloat().
+called, the XvxParse() function parses the string passed to it and returns
+an XvcNumber structure. The Structure has two members, a status code as an
+enum XvcStatus (status), and the value to which the expression evaluates as
+an anonymous union of int (i) and float (f). XvcStatus enumeration is found
+in XVCalc.h with comments on what each status means.
 
 Known Issue / Goals
 
-* The API is more complicated than it needs to be.
 * Not all functions have been implemented.
 * The method for selecting a function needs to be replaced by a hash table.
 * The method for selecting an operator implementation function needs to be
   replaced.
 * The GUI program needs to be documented.
-* The CMake files need to generate frameworks and correct Application bundles
-  on Macintosh OS X.

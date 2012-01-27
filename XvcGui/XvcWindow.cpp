@@ -37,13 +37,13 @@ XvcWindow::~XvcWindow()
 
 void XvcWindow::calculate()
 {	
-	XvcStatus status = XvcParse(input->text().toUtf8().data());
-	switch (status) {
+	XvcNumber value = XvcParse(input->text().toUtf8().data());
+	switch (value.status) {
 	case S_INTEGER:
-		output->setNum(XvcGetInteger());
+		output->setNum(value.i);
 		break;
 	case S_FLOAT:
-		output->setNum(XvcGetFloat());
+		output->setNum(value.f);
 		break;
 	default:
 		output->setText("An error occured.");

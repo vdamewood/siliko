@@ -25,13 +25,11 @@
 
 struct XvcTree;
 struct XvcOperator;
-struct XvcNumber;
 struct XvcFunction;
 struct XvcArglist;
 
 typedef struct XvcTree      XvcTree;
 typedef struct XvcOperator  XvcOperator;
-typedef struct XvcNumber    XvcNumber;
 typedef struct XvcFunction  XvcFunction;
 typedef struct XvcArglist	XvcArglist;
 
@@ -49,15 +47,6 @@ struct XvcOperator {
 	XvcTree * left;
 	XvcTree * right;
 	XvcNumber * args;
-};
-
-struct XvcNumber {
-	XvcStatus status;
-	//char type;
-	union {
-		int i;
-		float f;
-	};
 };
 
 struct XvcFunction {
