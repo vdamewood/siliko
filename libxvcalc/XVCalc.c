@@ -19,10 +19,9 @@
  */
 
 #include "XVCalc.h"
-#include "XvcState.h"
 #include "XvcYyLexer.h"
 
-int Xvc_yyparse(void);
+int Xvc_yyparse(XvcNumber *);
 
 void XvcOpen(void)
 {
@@ -30,25 +29,16 @@ void XvcOpen(void)
 
 void XvcClose(void)
 {
-	XvcStateClear();
 }
 
 XvcNumber XvcParse(const char *inString)
 {
 	YY_BUFFER_STATE buffer;
-	XvcStateClear();
 	XvcNumber rVal;
 
 	buffer = Xvc_yy_scan_string(inString);
 	Xvc_yy_switch_to_buffer(buffer);
-	Xvc_yyparse();
-	
-	rVal.status = XvcStateStatus();
-	if (rVal.status == S_INTEGER) {
-		rVal.i = XvcStateInteger();
-	}
-	else if (rVal.status == S_FLOAT) {
-		rVal.i = XvcStateFloat();		
-	}
+	Xvc_yyparse(&rVal);
+
 	return rVal;
 }

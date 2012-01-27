@@ -62,13 +62,11 @@ struct XvcNumber {
 		float f;
 	};
 };
-	typedef struct XvcNumber XvcNumber;	
+typedef struct XvcNumber XvcNumber;	
 	
 API void XvcOpen(void);
 API void XvcClose(void);
 API XvcNumber XvcParse(const char * StringToParse);
-API int XvcGetInteger(void);
-API float XvcGetFloat(void);
 
 #if defined __cplusplus
 }

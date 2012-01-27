@@ -18,29 +18,24 @@
  * License along with XVCalc. If not, see <http://www.gnu.org/licenses/>.
  */
 
+%parse-param {XvcNumber * result}
 %{
 #include "XVCalc.h"
-#include "XvcState.h"
 #include "XvcEvaluate.h"
 #include "XvcTree.h"
 #include "XvcArglist.h"
 #include "XvcFunctionId.h"
 #include "XvcYyLexer.h"
 
-static void Xvc_yyerror(const char *);
+static void Xvc_yyerror(XvcNumber *, const char *);
 %}
 
 %code requires {
 #include "XvcStructs.h"
-typedef struct XvcTree      tree;
-typedef struct XvcOperator  operation;
-typedef struct XvcNumber    number;
-typedef struct XvcFunction  function;
-typedef struct XvcArglist	arglist;
 }
 %union {
-	tree * t;
-	arglist * a;
+	XvcTree * t;
+	XvcArglist * a;
 	char * s;
 	int i;
 	float f;
@@ -63,10 +58,10 @@ typedef struct XvcArglist	arglist;
 %type <s> id
 
 %%
-calculation: EOL { XvcStateSetNil(); }
+calculation: EOL { result->status = S_INTEGER; result->i = 0; }
  | expression EOL {
-	 XvcStateSetValue(XvcEvaluate($1));
-	XvcCleanupClearAll($1);
+	*result = XvcEvaluate($1);
+	XvcCleanupClearAll();
 };
 
 expression: INTEGER            { $$ = XvcTreeNewInteger($1); }
@@ -95,8 +90,8 @@ arglist: expression { $$ = XvcArglistNew($1, NULL); }
 ;
 %%
 
-static void Xvc_yyerror(const char *s)
+static void Xvc_yyerror(XvcNumber * result, const char *s)
 {	
-	XvcStateSetStatus(E_SYNTAX);
+	result->status = E_SYNTAX;
 	XvcCleanupClearAll();
 }

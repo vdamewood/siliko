@@ -13,14 +13,13 @@ set(XVCalc_FLEX_OUTPUT ${XVCalc_FLEX_HEADER} ${XVCalc_FLEX_SOURCE})
 set(XVCalc_PUBLIC_HEADERS XVCalc.h)
 set(XVCalc_INTERNAL_HEADERS
   XvcStructs.h
-  XvcState.h
   XvcFunctionCall.h XvcOperatorCall.h
   XvcArglist.h XvcFunctionId.h XvcTree.h
   XvcEvaluate.h XvcCleanup.h
   ${XVCalc_BISON_HEADER}
   ${XVCalc_FLEX_HEADER})
 set(XVCalc_SOURCES
-  XVCalc.c XvcState.c
+  XVCalc.c
   XvcFunctionCall.c XvcOperatorCall.c
   XvcArglist.c XvcFunctionId.c XvcTree.c
   XvcEvaluate.c XvcCleanup.c
