@@ -23,5 +23,7 @@
 
 #include "XvcStructs.h"
 
+int XvcFunctionCallOpen();
+void XvcFunctionCallClose();
 XvcNumber XvcFunctionCall(const char * FunctionName, int ArgumentCount, XvcNumber * Arguments);
 #endif // XVC_FUNCTIONS_H

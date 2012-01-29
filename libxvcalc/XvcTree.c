@@ -25,7 +25,7 @@
 #include "XvcCleanup.h"
 #include "XvcFunctionId.h"
 
-XvcTree * XvcTreeNewOperator(char type, XvcTree * left, XvcTree * right)
+XvcTree * XvcTreeNewOperator(XvcOperatorSymbol symbol, XvcTree * left, XvcTree * right)
 {
 	XvcTree * rVal;
 	rVal = malloc(sizeof(XvcTree));
@@ -34,7 +34,7 @@ XvcTree * XvcTreeNewOperator(char type, XvcTree * left, XvcTree * right)
 	XvcCleanupCacheTree(rVal);
 
 	rVal->type = 'o';
-	rVal->op->type = type;
+	rVal->op->symbol = symbol;
 
 	rVal->op->left = left;
 	XvcCleanupReleaseTree(left);

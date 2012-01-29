@@ -79,6 +79,15 @@ static XvcNumber XvcFunction_dummy(int argc, XvcNumber * argv)
 
 typedef XvcNumber (*FunctionPointer)(int, XvcNumber *);
 
+int XvcFunctionCallOpen()
+{
+	return 1;
+}
+
+void XvcFunctionCallClose()
+{
+}
+
 static FunctionPointer GetFunction(const char * name)
 {
 	if (strcmp(name, "abs") == 0)

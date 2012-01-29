@@ -23,5 +23,8 @@
 
 #include "XvcStructs.h"
 
-XvcNumber XvcOperatorCall(char Operator, XvcNumber LeftOperand, XvcNumber RightOperand);
+int XvcOperatorCallOpen();
+void XvcOperatorCallClose();
+XvcNumber XvcOperatorCall(XvcOperatorSymbol Operator, XvcNumber LeftOperand, XvcNumber RightOperand);
+
 #endif // XVC_OPERATORS_H

@@ -71,6 +71,4 @@ Known Issue / Goals
 
 * Not all functions have been implemented.
 * The method for selecting a function needs to be replaced by a hash table.
-* The method for selecting an operator implementation function needs to be
-  replaced.
 * The GUI program needs to be documented.

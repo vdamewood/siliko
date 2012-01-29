@@ -23,7 +23,7 @@
 
 #include "XvcStructs.h"
 
-XvcTree * XvcTreeNewOperator(char Operator, XvcTree * LeftOperand, XvcTree * RightOperand);
+XvcTree * XvcTreeNewOperator(XvcOperatorSymbol Operator, XvcTree * LeftOperand, XvcTree * RightOperand);
 XvcTree * XvcTreeNewInteger(int Value);
 XvcTree * XvcTreeNewFloat(float Value);
 XvcTree * XvcTreeNewFunction(char * FunctionName, XvcArglist * FunctionArguments);

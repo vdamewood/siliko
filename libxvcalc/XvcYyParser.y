@@ -68,13 +68,13 @@ expression: INTEGER            { $$ = XvcTreeNewInteger($1); }
  | '-'      INTEGER %prec UNEG { $$ = XvcTreeNewInteger($2 * -1); }
  |          FLOAT              { $$ = XvcTreeNewFloat($1); }
  | '-'      FLOAT %prec UNEG   { $$ = XvcTreeNewFloat($2 * -1.0); }
- | expression '+' expression { $$ = XvcTreeNewOperator('+', $1, $3); }
- | expression '-' expression { $$ = XvcTreeNewOperator('-', $1, $3); }
- | expression '*' expression { $$ = XvcTreeNewOperator('*', $1, $3); }
- | expression '/' expression { $$ = XvcTreeNewOperator('/', $1, $3); }
- | expression '^' expression { $$ = XvcTreeNewOperator('^', $1, $3); }
+ | expression '+' expression { $$ = XvcTreeNewOperator(OP_ADD, $1, $3); }
+ | expression '-' expression { $$ = XvcTreeNewOperator(OP_SUB, $1, $3); }
+ | expression '*' expression { $$ = XvcTreeNewOperator(OP_MUL, $1, $3); }
+ | expression '/' expression { $$ = XvcTreeNewOperator(OP_DIV, $1, $3); }
+ | expression '^' expression { $$ = XvcTreeNewOperator(OP_POW, $1, $3); }
  | expression 'd' INTEGER {
-	$$ = XvcTreeNewOperator('d', $1, XvcTreeNewInteger($3));
+	$$ = XvcTreeNewOperator(OP_DICE, $1, XvcTreeNewInteger($3));
    }
  | '(' expression ')' { $$ = $2; }
  | fcall

@@ -208,32 +208,38 @@ static XvcNumber Dice(XvcNumber left, XvcNumber right)
 }
 
 typedef XvcNumber (*OperatorPointer)(XvcNumber, XvcNumber);
+static OperatorPointer * Operators = NULL;
 
-static OperatorPointer GetOperator(char operator)
+int XvcOperatorCallOpen()
 {
-	switch (operator) {
-		case '+': return Add;
-		case '-': return Subtract;
-		case '*': return Multiply;
-		case '/': return Divide;
-		case '^': return Power;
-		case 'd': return Dice;
+	if (!(Operators = malloc(OP_TOTAL_COUNT * sizeof(OperatorPointer)))) {
+		return 0;
 	}
-	return NULL;
+	Operators[OP_ADD] = Add;
+	Operators[OP_SUB] = Subtract;
+	Operators[OP_MUL] = Multiply;
+	Operators[OP_DIV] = Divide;
+	Operators[OP_POW] = Power;
+	Operators[OP_DICE] = Dice;
+	return 1;
 }
 
-XvcNumber XvcOperatorCall(char operator, XvcNumber left, XvcNumber right)
+void XvcOperatorCallClose()
+{
+	free(Operators);
+}
+
+XvcNumber XvcOperatorCall(XvcOperatorSymbol op, XvcNumber left, XvcNumber right)
 {
 	OperatorPointer f;
 	XvcNumber rVal;
 
-	f = GetOperator(operator);
-	// FIXME: Give missing operators their own status.
-	if (!f) {
-		rVal.status = E_FUNCTION;
+	if (op < OP_TOTAL_COUNT) {
+		f = Operators[op];
+		rVal = f(left, right);
 	}
 	else {
-		rVal = f(left, right);
+		rVal.status = E_INTERNAL;
 	}
 	return rVal;
 }

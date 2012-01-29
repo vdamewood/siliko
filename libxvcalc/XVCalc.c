@@ -19,16 +19,22 @@
  */
 
 #include "XVCalc.h"
+#include "XvcFunctionCall.h"
+#include "XvcOperatorCall.h"
 #include "XvcYyLexer.h"
 
 int Xvc_yyparse(XvcNumber *);
 
 void XvcOpen(void)
 {
+	XvcFunctionCallOpen();
+	XvcOperatorCallOpen();
 }
 
 void XvcClose(void)
 {
+	XvcFunctionCallOpen();
+	XvcOperatorCallClose();
 }
 
 XvcNumber XvcParse(const char *inString)

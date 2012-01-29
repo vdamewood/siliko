@@ -33,6 +33,17 @@ typedef struct XvcOperator  XvcOperator;
 typedef struct XvcFunction  XvcFunction;
 typedef struct XvcArglist	XvcArglist;
 
+enum XvcOperatorSymbol {
+	OP_ADD=0,
+	OP_SUB=1,
+	OP_MUL=2,
+	OP_DIV=3,
+	OP_POW=4,
+	OP_DICE=5,
+	OP_TOTAL_COUNT
+};
+typedef enum XvcOperatorSymbol XvcOperatorSymbol;
+
 struct XvcTree {
 	char type;
 	union {
@@ -43,7 +54,7 @@ struct XvcTree {
 };
 
 struct XvcOperator {
-	char type;
+	XvcOperatorSymbol symbol;
 	XvcTree * left;
 	XvcTree * right;
 	XvcNumber * args;

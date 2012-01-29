@@ -40,7 +40,7 @@ static XvcNumber EvaluateOperator(XvcOperator * op)
 	opRight = XvcEvaluate(op->right);
 	if (!IsNumber(opRight)) return opRight;
 
-	return XvcOperatorCall(op->type, opLeft, opRight);
+	return XvcOperatorCall(op->symbol, opLeft, opRight);
 }
 
 XvcNumber EvaluateFunction(XvcFunction * func)
