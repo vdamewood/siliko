@@ -1,33 +1,33 @@
 /*
- * XvcFunctionCall.c: Function handling.
+ * XaviFunctionCall.c: Function handling.
  * Copyright 2012 Vincent Damewood
  *
- * This file is part of XVCalc.
+ * This file is part of Xavi.
  *
- * XVCalc is free software: you can redistribute it and/or modify
+ * Xavi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
- * XVCalc is distributed in the hope that it will be useful,
+ * Xavi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with XVCalc. If not, see <http://www.gnu.org/licenses/>.
+ * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "XVCalc.h"
-#include "XvcFunctionCall.h"
+#include "Xavi.h"
+#include "XaviFunctionCall.h"
 
-static XvcNumber XvcFunction_abs(int argc, XvcNumber * argv)
+static XaviNumber XaviFunction_abs(int argc, XaviNumber * argv)
 {
-	XvcNumber rVal;
+	XaviNumber rVal;
 
 	if (argc != 1) {
 		rVal.status = E_ARGUMENTS;
@@ -42,9 +42,9 @@ static XvcNumber XvcFunction_abs(int argc, XvcNumber * argv)
 	return rVal;
 }
 
-static XvcNumber XvcFunction_sqrt(int argc, XvcNumber * argv)
+static XaviNumber XaviFunction_sqrt(int argc, XaviNumber * argv)
 {
-	XvcNumber rVal;
+	XaviNumber rVal;
 	float inVal;
 
 	if (argc != 1) {
@@ -72,7 +72,7 @@ static XvcNumber XvcFunction_sqrt(int argc, XvcNumber * argv)
 }
 
 // This will be removed when more functions are implemented.
-static XvcNumber XvcFunction_dummy(int argc, XvcNumber * argv)
+static XaviNumber XaviFunction_dummy(int argc, XaviNumber * argv)
 {
 	return argv[0];
 }
@@ -98,7 +98,7 @@ static void ShiftBits(unsigned char * input, int len)
 #define EXP1 0xEA
 #define EXP2 0x80
 
-static unsigned char XvcCrc8(const unsigned char * input)
+static unsigned char XaviCrc8(const unsigned char * input)
 {
 	int len;
 	unsigned char * divisor;
@@ -141,48 +141,48 @@ static unsigned char XvcCrc8(const unsigned char * input)
 
 ////////////////////////////////////////////////////////////////////////
 
-typedef XvcNumber (*FunctionPointer)(int, XvcNumber *);
+typedef XaviNumber (*FunctionPointer)(int, XaviNumber *);
 
 #define FUNCTION_MAX 2
 static char *functionNames[] = {"abs", "sqrt", "dummy"};
 static FunctionPointer functions[] = {
-	XvcFunction_abs,
-	XvcFunction_sqrt,
-	XvcFunction_dummy};
+	XaviFunction_abs,
+	XaviFunction_sqrt,
+	XaviFunction_dummy};
 
-struct XvcFunctionChain
+struct XaviFunctionChain
 {
 	char * id;
 	FunctionPointer function;
-	struct XvcFunctionChain * next;
+	struct XaviFunctionChain * next;
 };
-typedef struct XvcFunctionChain XvcFunctionChain;
+typedef struct XaviFunctionChain XaviFunctionChain;
 
-static XvcFunctionChain ** functionTable;
+static XaviFunctionChain ** functionTable;
 
-int XvcFunctionCallOpen()
+int XaviFunctionCallOpen()
 {
 	int i;
 	int index;
-	XvcFunctionChain * currentChain;
-	functionTable = malloc(256 * sizeof(XvcFunctionChain));
+	XaviFunctionChain * currentChain;
+	functionTable = malloc(256 * sizeof(XaviFunctionChain));
 	for (i = 0; i<=255; i++) {
 		functionTable[i] = NULL;
 	}
 	
 
 	for (i = 0; i <= FUNCTION_MAX; i++) {
-		index = XvcCrc8(functionNames[i]);
+		index = XaviCrc8(functionNames[i]);
 		if (functionTable[index]) {
 			currentChain = functionTable[index];
 			while (currentChain->next) {
 				currentChain = currentChain->next;
 			}
-			currentChain->next = malloc(sizeof (XvcFunctionChain));
+			currentChain->next = malloc(sizeof (XaviFunctionChain));
 			currentChain = currentChain->next;
 		}
 		else {
-			functionTable[index] = malloc(sizeof (XvcFunctionChain));
+			functionTable[index] = malloc(sizeof (XaviFunctionChain));
 			currentChain = functionTable[index];
 		}
 
@@ -193,11 +193,11 @@ int XvcFunctionCallOpen()
 	return 1;
 }
 
-void XvcFunctionCallClose()
+void XaviFunctionCallClose()
 {
 	int i;
-	XvcFunctionChain * current;
-	XvcFunctionChain * next;
+	XaviFunctionChain * current;
+	XaviFunctionChain * next;
 	
 	for (i = 0; i <= 255; i++)
 	{
@@ -217,9 +217,9 @@ void XvcFunctionCallClose()
 static FunctionPointer GetFunction(const char * name)
 {
 	int index;
-	XvcFunctionChain * current;
+	XaviFunctionChain * current;
 
-	index = XvcCrc8(name);
+	index = XaviCrc8(name);
 
 	current = functionTable[index];
 	while (current) {
@@ -237,10 +237,10 @@ static FunctionPointer GetFunction(const char * name)
 	return NULL;
 }
 
-XvcNumber XvcFunctionCall(const char * name, int argc, XvcNumber * argv)
+XaviNumber XaviFunctionCall(const char * name, int argc, XaviNumber * argv)
 {
 	FunctionPointer f;
-	XvcNumber rVal;
+	XaviNumber rVal;
 	
 	f = GetFunction(name);
 	if (!f) {

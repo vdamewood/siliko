@@ -1,39 +1,39 @@
 /*
- * XvcEvaluate.c: Keep track of dangling objects while composing syntax tree.
+ * XaviEvaluate.c: Keep track of dangling objects while composing syntax tree.
  * Copyright 2012 Vincent Damewood
  *
- * This file is part of XVCalc.
+ * This file is part of Xavi.
  *
- * XVCalc is free software: you can redistribute it and/or modify
+ * Xavi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
- * XVCalc is distributed in the hope that it will be useful,
+ * Xavi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with XVCalc. If not, see <http://www.gnu.org/licenses/>.
+ * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "XvcArglist.h"
-#include "XvcCleanup.h"
-#include "XvcFunctionId.h"
-#include "XvcTree.h"
+#include "XaviArglist.h"
+#include "XaviCleanup.h"
+#include "XaviFunctionId.h"
+#include "XaviTree.h"
 
 struct TreeList {
 	struct TreeList * next;
-	XvcTree * item;
+	XaviTree * item;
 };
 
 struct ArglistList { // Yeah, I know.
 	struct ArglistList * next;
-	XvcArglist * item;
+	XaviArglist * item;
 };
 
 struct IdList {
@@ -46,14 +46,14 @@ static struct TreeList * DanglingTrees = NULL;
 static struct ArglistList * DanglingArglists = NULL;
 static struct IdList * DanglingIds = NULL;
 
-void XvcCleanupClearAll()
+void XaviCleanupClearAll()
 {
-	XvcCleanupClearTrees();
-	XvcCleanupClearArglists();
-	XvcCleanupClearFunctionIds();
+	XaviCleanupClearTrees();
+	XaviCleanupClearArglists();
+	XaviCleanupClearFunctionIds();
 }
 
-void XvcCleanupCacheTree(XvcTree * in)
+void XaviCleanupCacheTree(XaviTree * in)
 {
 	struct TreeList * NewNode;
 	struct TreeList * CurrentNode;
@@ -73,7 +73,7 @@ void XvcCleanupCacheTree(XvcTree * in)
 	}
 }
 
-void XvcCleanupReleaseTree(XvcTree * in)
+void XaviCleanupReleaseTree(XaviTree * in)
 {
 	struct TreeList ** ParentPointer;
 	struct TreeList * CurrentNode;
@@ -98,7 +98,7 @@ void XvcCleanupReleaseTree(XvcTree * in)
 	}
 }
 
-void XvcCleanupClearTrees()
+void XaviCleanupClearTrees()
 {
 	struct TreeList * CurrentNode;
 	struct TreeList * OldNode;
@@ -107,7 +107,7 @@ void XvcCleanupClearTrees()
 	DanglingTrees = NULL;
 	
 	while (CurrentNode) {
-		XvcTreeDelete(CurrentNode->item);
+		XaviTreeDelete(CurrentNode->item);
 		OldNode = CurrentNode;
 		CurrentNode = CurrentNode->next;
 		free(OldNode);
@@ -116,7 +116,7 @@ void XvcCleanupClearTrees()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XvcCleanupCacheArglist(XvcArglist * in)
+void XaviCleanupCacheArglist(XaviArglist * in)
 {
 	struct ArglistList * NewNode;
 	struct ArglistList * CurrentNode;
@@ -136,7 +136,7 @@ void XvcCleanupCacheArglist(XvcArglist * in)
 	}
 }
 
-void XvcCleanupReleaseArglist(XvcArglist * in)
+void XaviCleanupReleaseArglist(XaviArglist * in)
 {
 	struct ArglistList ** ParentPointer;
 	struct ArglistList * CurrentNode;
@@ -161,7 +161,7 @@ void XvcCleanupReleaseArglist(XvcArglist * in)
 	}
 }
 
-void XvcCleanupClearArglists()
+void XaviCleanupClearArglists()
 {
 	struct ArglistList * CurrentNode;
 	struct ArglistList * OldNode;
@@ -170,7 +170,7 @@ void XvcCleanupClearArglists()
 	DanglingArglists = NULL;
 	
 	while (CurrentNode) {
-		XvcArglistDelete(CurrentNode->item);
+		XaviArglistDelete(CurrentNode->item);
 		OldNode = CurrentNode;
 		CurrentNode = CurrentNode->next;
 		free(OldNode);
@@ -179,7 +179,7 @@ void XvcCleanupClearArglists()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XvcCleanupCacheFunctionId(char * in)
+void XaviCleanupCacheFunctionId(char * in)
 {
 	struct IdList * NewNode;
 	struct IdList * CurrentNode;
@@ -199,7 +199,7 @@ void XvcCleanupCacheFunctionId(char * in)
 	}
 }
 
-void XvcCleanupReleaseFunctionId(char * in)
+void XaviCleanupReleaseFunctionId(char * in)
 {
 	struct IdList ** ParentPointer;
 	struct IdList * CurrentNode;
@@ -224,7 +224,7 @@ void XvcCleanupReleaseFunctionId(char * in)
 	}
 }
 
-void XvcCleanupClearFunctionIds()
+void XaviCleanupClearFunctionIds()
 {
 	struct IdList * CurrentNode;
 	struct IdList * OldNode;
@@ -233,7 +233,7 @@ void XvcCleanupClearFunctionIds()
 	DanglingIds = NULL;
 	
 	while (CurrentNode) {
-		XvcFunctionIdDelete(CurrentNode->item);
+		XaviFunctionIdDelete(CurrentNode->item);
 		OldNode = CurrentNode;
 		CurrentNode = CurrentNode->next;
 		free(OldNode);

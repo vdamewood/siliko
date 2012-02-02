@@ -1,33 +1,33 @@
 /*
- * XvcOperatorCall.c: Operator handling.
+ * XaviOperatorCall.c: Operator handling.
  * Copyright 2012 Vincent Damewood
  *
- * This file is part of XVCalc.
+ * This file is part of Xavi.
  *
- * XVCalc is free software: you can redistribute it and/or modify
+ * Xavi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
- * XVCalc is distributed in the hope that it will be useful,
+ * Xavi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with XVCalc. If not, see <http://www.gnu.org/licenses/>.
+ * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
 
-#include "XVCalc.h"
-#include "XvcOperatorCall.h"
+#include "Xavi.h"
+#include "XaviOperatorCall.h"
 
-static XvcNumber Add(XvcNumber left, XvcNumber right)
+static XaviNumber Add(XaviNumber left, XaviNumber right)
 {
-	XvcNumber rVal;
+	XaviNumber rVal;
 
 	if (left.status == S_FLOAT) {
 		if (right.status == S_FLOAT) {
@@ -52,9 +52,9 @@ static XvcNumber Add(XvcNumber left, XvcNumber right)
 	return rVal;
 }
 
-static XvcNumber Subtract(XvcNumber left, XvcNumber right)
+static XaviNumber Subtract(XaviNumber left, XaviNumber right)
 {
-	XvcNumber rVal;
+	XaviNumber rVal;
 
 	if (left.status == S_FLOAT) {
 		if (right.status == S_FLOAT) {
@@ -79,9 +79,9 @@ static XvcNumber Subtract(XvcNumber left, XvcNumber right)
 	return rVal;
 }
 
-static XvcNumber Multiply(XvcNumber left, XvcNumber right)
+static XaviNumber Multiply(XaviNumber left, XaviNumber right)
 {
-	XvcNumber rVal;
+	XaviNumber rVal;
 
 	if (left.status == S_FLOAT) {
 		if (right.status == S_FLOAT) {
@@ -106,9 +106,9 @@ static XvcNumber Multiply(XvcNumber left, XvcNumber right)
 	return rVal;
 }
 
-static XvcNumber Divide(XvcNumber left, XvcNumber right)
+static XaviNumber Divide(XaviNumber left, XaviNumber right)
 {
-	XvcNumber rVal;
+	XaviNumber rVal;
 
 	/* Division-by-Zero Error */
 	if ((right.status == S_FLOAT && right.f == 0.0)
@@ -141,9 +141,9 @@ static XvcNumber Divide(XvcNumber left, XvcNumber right)
 	return rVal;
 }
 
-static XvcNumber Power(XvcNumber left, XvcNumber right)
+static XaviNumber Power(XaviNumber left, XaviNumber right)
 {
-	XvcNumber rVal;
+	XaviNumber rVal;
 	float myLeft;
 	float myRight;
 
@@ -180,12 +180,12 @@ static XvcNumber Power(XvcNumber left, XvcNumber right)
 	return rVal;
 }
 
-static XvcNumber Dice(XvcNumber left, XvcNumber right)
+static XaviNumber Dice(XaviNumber left, XaviNumber right)
 {
 	/* TODO: Make this function handle fractional dice. */
 	static int has_seeded = 0;
 	int running = 0;
-	XvcNumber rVal;
+	XaviNumber rVal;
 	int count;
 	int faces;
 	int i;
@@ -207,10 +207,10 @@ static XvcNumber Dice(XvcNumber left, XvcNumber right)
 	return rVal;
 }
 
-typedef XvcNumber (*OperatorPointer)(XvcNumber, XvcNumber);
+typedef XaviNumber (*OperatorPointer)(XaviNumber, XaviNumber);
 static OperatorPointer * Operators = NULL;
 
-int XvcOperatorCallOpen()
+int XaviOperatorCallOpen()
 {
 	if (!(Operators = malloc(OP_TOTAL_COUNT * sizeof(OperatorPointer)))) {
 		return 0;
@@ -224,15 +224,15 @@ int XvcOperatorCallOpen()
 	return 1;
 }
 
-void XvcOperatorCallClose()
+void XaviOperatorCallClose()
 {
 	free(Operators);
 }
 
-XvcNumber XvcOperatorCall(XvcOperatorSymbol op, XvcNumber left, XvcNumber right)
+XaviNumber XaviOperatorCall(XaviOperatorSymbol op, XaviNumber left, XaviNumber right)
 {
 	OperatorPointer f;
-	XvcNumber rVal;
+	XaviNumber rVal;
 
 	if (op < OP_TOTAL_COUNT) {
 		f = Operators[op];

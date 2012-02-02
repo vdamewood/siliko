@@ -1,43 +1,43 @@
 /*
- *  XvcWindow.cpp: Main window.
+ *  XavistaWindow.cpp: Main window.
  *  Copyright 2012 Vincent Damewood
  *
- *  This file is part of XvcGui.
+ *  This file is part of Xavista.
  *
- *  XvcGui is free software: you can redistribute it and/or modify
+ *  Xavista is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  XvcGui is distributed in the hope that it will be useful,
+ *  Xavista is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with XvcGui. If not, see <http://www.gnu.org/licenses/>.
+ *  along with Xavista. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "XvcWindow.h"
-#include "XVCalc.h"
+#include "XavistaWindow.h"
+#include "Xavi.h"
 
-XvcWindow::XvcWindow(QWidget * parent)
+XavistaWindow::XavistaWindow(QWidget * parent)
 	: QMainWindow(parent)
 {
-	XvcOpen();
+	XaviOpen();
 	setupUi(this);
 	output->setNum(0);
 	connect(calculateButton, SIGNAL(clicked(bool)),
 		this, SLOT(calculate()));
 }
 
-XvcWindow::~XvcWindow()
+XavistaWindow::~XavistaWindow()
 {
-	XvcClose();
+	XaviClose();
 }
 
-void XvcWindow::calculate()
+void XavistaWindow::calculate()
 {	
-	XvcNumber value = XvcParse(input->text().toUtf8().data());
+	XaviNumber value = XaviParse(input->text().toUtf8().data());
 	switch (value.status) {
 	case S_INTEGER:
 		output->setNum(value.i);

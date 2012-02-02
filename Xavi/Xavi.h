@@ -1,31 +1,31 @@
 /*
- * XVCalc.h: Public interface for XVCalc.
+ * Xavi.h: Public interface for Xavi.
  * Copyright 2012 Vincent Damewood
  *
- * This file is part of XVCalc.
+ * This file is part of Xavi.
  *
- * XVCalc is free software: you can redistribute it and/or modify
+ * Xavi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
- * XVCalc is distributed in the hope that it will be useful,
+ * Xavi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with XVCalc. If not, see <http://www.gnu.org/licenses/>.
+ * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
-#if !defined XVCALC_H
-#define XVCALC_H
+#if !defined Xavi_H
+#define Xavi_H
 
 #if defined _WIN32 && defined _MSC_VER
-	#if defined xvcalc_EXPORTS
+	#if defined Xavi_EXPORTS
 		#define API __declspec(dllexport)
-	#else xvcalc_EXPORTS
+	#else Xavi_EXPORTS
 		#define API __declspec(dllimport)
-	#endif // xvcalc_EXPORTS
+	#endif // Xavi_EXPORTS
 #else // _WIN32 && __MSC_VER
 	#define API
 #endif
@@ -34,14 +34,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
-enum XvcStatus {
-	NONE = 0,    /* The XvcParse() function hasn't been called. */
+enum XaviStatus {
+	NONE = 0,    /* The XaviParse() function hasn't been called. */
 	S_INTEGER,   /* Success: The integer result may be retrieved with
-	                XvcGetInteger(); */
+	                XaviGetInteger(); */
 	S_FLOAT,     /* Success. The floating-point result may be retrieved
-	                with XvcGetFloat(); */
-	E_INTERNAL,  /* Error: This indicated a bug in XVCalc. */
-	E_MEMORY,    /* Error: XVCalc attempted to allocate memory to
+	                with XaviGetFloat(); */
+	E_INTERNAL,  /* Error: This indicated a bug in Xavi. */
+	E_MEMORY,    /* Error: Xavi attempted to allocate memory to
 	                process the expression and failed. (i.e.
 	                malloc() returned NULL.) */
 	E_SYNTAX,    /* Error: A syntax error was encountered. */
@@ -53,22 +53,22 @@ enum XvcStatus {
 	E_DOMAIN,    /* Error: A function call resulted in a domain error. */
 	E_RANGE      /* Error: A function call resulted in a range error. */
 };
-typedef enum XvcStatus XvcStatus;
+typedef enum XaviStatus XaviStatus;
 
-struct XvcNumber {
-	XvcStatus status;
+struct XaviNumber {
+	XaviStatus status;
 	union {
 		int i;
 		float f;
 	};
 };
-typedef struct XvcNumber XvcNumber;	
+typedef struct XaviNumber XaviNumber;	
 	
-API void XvcOpen(void);
-API void XvcClose(void);
-API XvcNumber XvcParse(const char * StringToParse);
+API void XaviOpen(void);
+API void XaviClose(void);
+API XaviNumber XaviParse(const char * StringToParse);
 
 #if defined __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* XVCALC_H */
+#endif /* Xavi_H */

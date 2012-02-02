@@ -1,5 +1,5 @@
 /*
- * XvcTestFunctions.c: Program to test XVCalc's function-calling code.
+ * XaviTestFunctions.c: Program to test Xavi's function-calling code.
  * Copyright 2012 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,16 +17,16 @@
  */
 
 #include <stdio.h>
-#include "XvcFunctionCall.h"
+#include "XaviFunctionCall.h"
 
-static int IsNumber(XvcNumber n) {
+static int IsNumber(XaviNumber n) {
 	return n.status == S_INTEGER || n.status == S_FLOAT;
 }
 
 int main()
 {
-	XvcNumber inputs[1]; // Arguments to functions.
-	XvcNumber value;     // Return value of function.
+	XaviNumber inputs[1]; // Arguments to functions.
+	XaviNumber value;     // Return value of function.
 	int total = 0;    // Total number of tests run.
 	int success = 0;  // Number of successful tests.
 
@@ -36,7 +36,7 @@ int main()
 	inputs[0].status = S_INTEGER;
 	inputs[0].i = -400;
 	total++;
-	value = XvcFunctionCall("abs", 1, inputs);
+	value = XaviFunctionCall("abs", 1, inputs);
 	if (value.status == S_INTEGER && value.i == 400) {
 		printf("success.\n");
 		success++;

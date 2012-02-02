@@ -1,59 +1,59 @@
 /*
- * XvcEvaluate.c: Syntax tree evaluation.
+ * XaviEvaluate.c: Syntax tree evaluation.
  * Copyright 2012 Vincent Damewood
  *
- * This file is part of XVCalc.
+ * This file is part of Xavi.
  *
- * XVCalc is free software: you can redistribute it and/or modify
+ * Xavi is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
  *
- * XVCalc is distributed in the hope that it will be useful,
+ * Xavi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with XVCalc. If not, see <http://www.gnu.org/licenses/>.
+ * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdlib.h>
 
-#include "XVCalc.h"
-#include "XvcEvaluate.h"
-#include "XvcFunctionCall.h"
-#include "XvcOperatorCall.h"
+#include "Xavi.h"
+#include "XaviEvaluate.h"
+#include "XaviFunctionCall.h"
+#include "XaviOperatorCall.h"
 
-static int IsNumber(XvcNumber n) {
+static int IsNumber(XaviNumber n) {
 	return n.status == S_INTEGER || n.status == S_FLOAT;
 }
 
-static XvcNumber EvaluateOperator(XvcOperator * op)
+static XaviNumber EvaluateOperator(XaviOperator * op)
 {
-	XvcNumber opLeft;
-	XvcNumber opRight;
+	XaviNumber opLeft;
+	XaviNumber opRight;
 
-	opLeft = XvcEvaluate(op->left);
+	opLeft = XaviEvaluate(op->left);
 	if (!IsNumber(opLeft)) return opLeft;
 
-	opRight = XvcEvaluate(op->right);
+	opRight = XaviEvaluate(op->right);
 	if (!IsNumber(opRight)) return opRight;
 
-	return XvcOperatorCall(op->symbol, opLeft, opRight);
+	return XaviOperatorCall(op->symbol, opLeft, opRight);
 }
 
-XvcNumber EvaluateFunction(XvcFunction * func)
+XaviNumber EvaluateFunction(XaviFunction * func)
 {
-	XvcNumber rVal;
-	XvcNumber * arguments = NULL;
+	XaviNumber rVal;
+	XaviNumber * arguments = NULL;
 	int i;
 
 	if (func->arg_count) {
-		arguments = malloc(sizeof(XvcNumber) * func->arg_count);
+		arguments = malloc(sizeof(XaviNumber) * func->arg_count);
 		
 		for(i = 0; i < func->arg_count; i++) {
-			arguments[i] = XvcEvaluate(func->arg_vector[i]);
+			arguments[i] = XaviEvaluate(func->arg_vector[i]);
 			if(!IsNumber(arguments[i])) {
 				rVal = arguments[i];
 				free(arguments);
@@ -62,14 +62,14 @@ XvcNumber EvaluateFunction(XvcFunction * func)
 		}
 	}
 	
-	rVal = XvcFunctionCall(func->name, func->arg_count, arguments);
+	rVal = XaviFunctionCall(func->name, func->arg_count, arguments);
 	free(arguments);
 	return rVal;
 }
 
-XvcNumber XvcEvaluate(XvcTree * tree)
+XaviNumber XaviEvaluate(XaviTree * tree)
 {
-	XvcNumber rVal;
+	XaviNumber rVal;
 
 	if (!tree) {
 		rVal.status = E_SYNTAX;

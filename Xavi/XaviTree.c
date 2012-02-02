@@ -1,0 +1,124 @@
+/*
+ * Xavitree.c: Functions to manipulate abstract syntax trees.
+ * Copyright 2012 Vincent Damewood
+ *
+ * This file is part of Xavi.
+ *
+ * Xavi is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Xavi is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <stdlib.h>
+
+#include "XaviTree.h"
+#include "XaviArglist.h"
+#include "XaviCleanup.h"
+#include "XaviFunctionId.h"
+
+XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right)
+{
+	XaviTree * rVal;
+	rVal = malloc(sizeof(XaviTree));
+	rVal->op = malloc(sizeof(XaviOperator));
+	rVal->op->args = malloc(sizeof(XaviNumber) * 2);
+	XaviCleanupCacheTree(rVal);
+
+	rVal->type = 'o';
+	rVal->op->symbol = symbol;
+
+	rVal->op->left = left;
+	XaviCleanupReleaseTree(left);
+
+	rVal->op->right = right;
+	XaviCleanupReleaseTree(right);
+	return rVal;
+}
+
+XaviTree * XaviTreeNewInteger(int value)
+{
+	XaviTree * rVal;
+	rVal = malloc(sizeof(XaviTree));
+	rVal->num = malloc(sizeof(XaviNumber));
+	XaviCleanupCacheTree(rVal);
+
+	rVal->type = 'n';
+	rVal->num->status = S_INTEGER;
+	rVal->num->i = value;
+	return rVal;
+}
+
+XaviTree * XaviTreeNewFloat(float value)
+{
+	XaviTree * rVal;
+	rVal = malloc(sizeof(XaviTree));
+	rVal->num = malloc(sizeof(XaviNumber));
+	XaviCleanupCacheTree(rVal);
+	
+	rVal->type = 'n';
+	rVal->num->status = S_FLOAT;
+	rVal->num->f = value;
+	return rVal;
+}
+
+XaviTree * XaviTreeNewFunction(char * name, XaviArglist * in_arglist)
+{
+	XaviTree * rVal;
+	rVal = malloc(sizeof(XaviTree));
+	rVal->func = malloc(sizeof(XaviFunction));
+	XaviCleanupCacheTree(rVal);
+	
+	rVal->type = 'f';
+	rVal->func->name = name;
+	XaviCleanupReleaseFunctionId(name);
+	
+	if(in_arglist) {
+		rVal->func->arg_count = in_arglist->depth;
+
+		rVal->func->arg_vector = XaviArglistGetTrees(in_arglist);
+		XaviCleanupReleaseArglist(in_arglist);
+		XaviArglistDissolve(in_arglist);		
+	}
+	else {
+		rVal->func->arg_count = 0;
+		rVal->func->arg_vector = NULL;
+	}
+	
+	return rVal;
+}
+
+void XaviTreeDelete(XaviTree * tree)
+{
+	int i;
+	if (tree) {
+		switch (tree->type) {
+			case 'n':
+				free(tree->num);
+				break;
+			case 'o':
+				XaviTreeDelete(tree->op->left);
+				XaviTreeDelete(tree->op->right);
+				free(tree->op->args);
+				free(tree->op);
+				break;
+			case 'f':
+				XaviFunctionIdDelete(tree->func->name);
+				for (i = 0; i <  tree->func->arg_count; i++) {
+					XaviTreeDelete(tree->func->arg_vector[i]);
+				}
+				free(tree->func->arg_vector);
+				free(tree->func);
+				break;
+		}
+		free(tree);
+	}
+}

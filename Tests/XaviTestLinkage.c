@@ -1,5 +1,5 @@
 /*
- * XvcTestLinkage.c: Program to test linking to XVCalc.
+ * XaviTestLinkage.c: Program to test linking to Xavi.
  * Copyright 2012 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,20 +17,20 @@
  */
 
 #include <stdio.h>
-#include "XVCalc.h"
+#include "Xavi.h"
 
 int main(int argc, char *argv[])
 {
 	char * expression;
-	XvcNumber value;
+	XaviNumber value;
 
 	if (argc >= 2)
 		expression = argv[1];
 	else
 		expression = "";
 
-	XvcOpen();
-	value = XvcParse(expression);
+	XaviOpen();
+	value = XaviParse(expression);
 	switch (value.status) {
 	case S_INTEGER:
 		printf("Value: %i\n", value.i);
@@ -60,6 +60,6 @@ int main(int argc, char *argv[])
 		printf("Range error.\n");
 		break;
 	}
-	XvcClose();
+	XaviClose();
 	return 0;
 }
