@@ -33,7 +33,7 @@ void XvcOpen(void)
 
 void XvcClose(void)
 {
-	XvcFunctionCallOpen();
+	XvcFunctionCallClose();
 	XvcOperatorCallClose();
 }
 

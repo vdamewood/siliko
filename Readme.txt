@@ -70,5 +70,5 @@ in XVCalc.h with comments on what each status means.
 Known Issue / Goals
 
 * Not all functions have been implemented.
-* The method for selecting a function needs to be replaced by a hash table.
+* The hash table code used to select functions needs to be cleaned up.
 * The GUI program needs to be documented.
