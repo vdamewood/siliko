@@ -216,27 +216,25 @@ void XvcFunctionCallClose()
 
 static FunctionPointer GetFunction(const char * name)
 {
-	int idx;
-	XvcFunctionChain * currentChain;
+	int index;
+	XvcFunctionChain * current;
 
-	idx = XvcCrc8(name);
+	index = XvcCrc8(name);
 
-	currentChain = functionTable[idx];
-	while (currentChain) {
-		if (strcmp(name, currentChain->id) != 0) {
-			currentChain = currentChain->next;
+	current = functionTable[index];
+	while (current) {
+		if (strcmp(name, current->id) != 0) {
+			current = current->next;
 		}
 		else {
 			break;
 		}
 	}
 
-	if (!functionTable[idx]) {
-		return NULL;
+	if (current) {
+		return current->function;
 	}
-	else {
-		return currentChain->function;
-	}	
+	return NULL;
 }
 
 XvcNumber XvcFunctionCall(const char * name, int argc, XvcNumber * argv)
