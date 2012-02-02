@@ -69,6 +69,6 @@ in Xavi.h with comments on what each status means.
 
 Known Issue / Goals
 
+* Documentation needs to be moved into Docbook XML files.
 * Not all functions have been implemented.
-* The hash table code used to select functions needs to be cleaned up.
 * The GUI program needs to be documented.
