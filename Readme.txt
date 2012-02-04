@@ -12,6 +12,7 @@ Currently Xavi supports the following features:
 
 * Mixed integer and floating-point four-function calculations, such as "2 + 2",
   "3 * 4.0", "9.0 - 3.0" and "8 / 2".
+* Exponents with a ^ operator. For example "2^3" is 8.
 * Negative numbers, such as "-4", "-4.0 + 20".
 * constants, e and pi may be used as numbers.
 * parenthetic expressions, such as "2 * (3 + 4)".
@@ -20,29 +21,12 @@ Currently Xavi supports the following features:
 * Functions, currently Xavi supports  abs() and sqrt() functions.
 * Xavi ignores space and tab characters in its input.
 
-The following features are planned for the first release:
+When mixing number types, Xavi will give integer results in calculations
+involving only integers and floating-point results in calculations involving
+either integers and floating-point numbers, or only floating-point numbers.
+If division involves two intergers where the result would not be a whole
+number, a floating-point value is returned.
 
-* built-in support for the following functions from C's math.h: sin(), cos(),
-  tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(), exp(),
-  log(), log10(), pow(), sqrt(), ceil(), floor(), and ldexp().
-* user-defined functions through a plug-in interface.
-* thread safety, if feasible.
-
-Currently, Xavi handles mixing integers and floating-point numbers in a
-manner similar to other languages: operations involving only integers will give
-and integer result while operations involving a floating-point number will
-give a floating-point result. Eventually, Xavi will handle the type of the
-resulting value in a 'smart' way. Calculations involving integers that would
-result in a fractional answer (such as 5/2) and calculations involving
-floating-point values will result in floating-point results. Calculations
-involving only integers with integer results will give integer results.
-
-Support for the plug-in interface is currently planned for systems that support
-dlopen(3). Support for Windows may be included as well.
-
-Xavi uses a Flex-generated tokenizer and a Bison-generated parser. Currently,
-the parser is not 'pure', and some other components have static 'state' values.
-Thus Xavi is not thread safe.
 
 Xavi Interface
 
@@ -52,23 +36,39 @@ void               XaviOpen();
 void               XaviClose();
 struct XaviNumber  XaviParse(const char * StringToBeParsed)
 
-Call XaviOpen() before calling any other functions. Call XaviClose()
+Call XaviOpen() before calling XaviParse(). Call XaviClose()
 after you are finished with Xavi and before your program terminates. These
 functions are used to setup and tear down resources used by Xavi.
 
-Other symbols starting with Xavi will be found in the library but
+Other symbols starting with "Xavi" will be found in the library but
 are not part of the public interface, so don't use them.
 
 The XaviParse() function takes a pointer to the first of a series of characters
 that represent a mathematical expression, terminated by a null character. When
 called, the XvxParse() function parses the string passed to it and returns
-an XaviNumber structure. The Structure has two members, a status code as an
+a XaviNumber structure. The Structure has two members, a status code as an
 enum XaviStatus (status), and the value to which the expression evaluates as
 an anonymous union of int (i) and float (f). XaviStatus enumeration is found
 in Xavi.h with comments on what each status means.
 
+
 Known Issue / Goals
 
+Release Stoppers:
+
+* Division does not work as documented when two integers result in a
+  fractional result.
+* The following functions have not yet been implemented:
+  sin(), cos(), tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(),
+  exp(), log(), log10(), ceil(), floor(), and ldexp().
+* The memory management code currently uses non-reentrant code to keep track
+  of unused AST nodes etc.
+
+Optional:
+
+* A plug-in interface for additional functions.
+
+Documentation:
+
 * Documentation needs to be moved into Docbook XML files.
-* Not all functions have been implemented.
-* The GUI program needs to be documented.
+* Xavista needs to be documented.

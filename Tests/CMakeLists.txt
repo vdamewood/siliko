@@ -9,4 +9,4 @@ target_link_libraries(XaviTestLinkage Xavi)
 add_executable(XaviTestFunctions
     XaviTestFunctions.c
     ${LIBRARY_DIR}/XaviFunctionCall.c)
-target_link_libraries(XvcTestFunctions ${MATH_LIB})
+target_link_libraries(XaviTestFunctions ${MATH_LIB})

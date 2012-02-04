@@ -21,9 +21,10 @@
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
 #include "XaviOperatorCall.h"
+#include "XaviYyParser.h"
 #include "XaviYyLexer.h"
 
-int Xavi_yyparse(XaviNumber *);
+int Xavi_yyparse(XaviNumber *, yyscan_t);
 
 void XaviOpen(void)
 {
@@ -39,12 +40,16 @@ void XaviClose(void)
 
 XaviNumber XaviParse(const char *inString)
 {
-	YY_BUFFER_STATE buffer;
 	XaviNumber rVal;
+	yyscan_t scannerState;
+	YY_BUFFER_STATE buffer;
 
-	buffer = Xavi_yy_scan_string(inString);
-	Xavi_yy_switch_to_buffer(buffer);
-	Xavi_yyparse(&rVal);
+	buffer = Xavi_yy_scan_string(inString, scannerState);
+	Xavi_yy_switch_to_buffer(buffer, scannerState);
+
+	Xavi_yylex_init(&scannerState);
+	Xavi_yyparse(&rVal, scannerState);
+	Xavi_yylex_destroy(scannerState);
 
 	return rVal;
 }

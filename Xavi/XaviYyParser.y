@@ -18,16 +18,20 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+%define api.pure
 %parse-param {XaviNumber * result}
+%parse-param {yyscan_t scannerState}
+%lex-param {yyscan_t scannerState}
 %{
 #include "Xavi.h"
 #include "XaviEvaluate.h"
 #include "XaviTree.h"
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
+#include "XaviYyParser.h"
 #include "XaviYyLexer.h"
 
-static void Xavi_yyerror(XaviNumber *, const char *);
+static void Xavi_yyerror(XaviNumber *, yyscan_t, const char *);
 %}
 
 %code requires {
@@ -90,7 +94,7 @@ arglist: expression { $$ = XaviArglistNew($1, NULL); }
 ;
 %%
 
-static void Xavi_yyerror(XaviNumber * result, const char *s)
+static void Xavi_yyerror(XaviNumber * result, yyscan_t z, const char *s)
 {	
 	result->status = E_SYNTAX;
 	XaviCleanupClearAll();

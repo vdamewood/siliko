@@ -18,6 +18,7 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+%option bison-bridge reentrant
 %option noyywrap nodefault nounput
 %{
 #include "XaviYyParser.h"
@@ -36,14 +37,14 @@
 "," |
 "(" |
 ")" { return *yytext; }
-[0-9]+ { Xavi_yylval.i = atoi(Xavi_yytext); return INTEGER; }
-[0-9]+\.[0-9]+ { Xavi_yylval.f = atof(Xavi_yytext); return FLOAT; }
-"e"  { Xavi_yylval.f = EULER; return FLOAT; }
-"pi" { Xavi_yylval.f = PI;    return FLOAT; }
+[0-9]+ { yylval_param->i = atoi(yytext); return INTEGER; }
+[0-9]+\.[0-9]+ { yylval_param->f = atof(yytext); return FLOAT; }
+"e"  { yylval_param->f = EULER; return FLOAT; }
+"pi" { yylval_param->f = PI;    return FLOAT; }
 ([a-ce-z][a-z0-9]*)|(d[a-z][a-z0-9]*) {
-	Xavi_yylval.s = yytext;
+	yylval_param->s = yytext;
 	return ID;
 }
 [ \t\n] {}
-. { Xavi_yylval.s = yytext; return ERROR; }
+. { yylval_param->s = yytext; return ERROR; }
 %%
