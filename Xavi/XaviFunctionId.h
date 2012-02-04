@@ -23,7 +23,7 @@
 
 #include "XaviStructs.h"
 
-char * XaviFunctionIdNew(char * NewFunctionId);
+char * XaviFunctionIdNew(char * NewFunctionId, XaviMemoryPool *);
 void XaviFunctionIdDelete(char * OldFunctionId);
 
 #endif // Xavi_FUNCTION_ID_H

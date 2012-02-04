@@ -25,31 +25,31 @@
 #include "XaviCleanup.h"
 #include "XaviFunctionId.h"
 
-XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right)
+XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
 	rVal = malloc(sizeof(XaviTree));
 	rVal->op = malloc(sizeof(XaviOperator));
 	rVal->op->args = malloc(sizeof(XaviNumber) * 2);
-	XaviCleanupCacheTree(rVal);
+	XaviCleanupCacheTree(rVal, pool);
 
 	rVal->type = 'o';
 	rVal->op->symbol = symbol;
 
 	rVal->op->left = left;
-	XaviCleanupReleaseTree(left);
+	XaviCleanupReleaseTree(left, pool);
 
 	rVal->op->right = right;
-	XaviCleanupReleaseTree(right);
+	XaviCleanupReleaseTree(right, pool);
 	return rVal;
 }
 
-XaviTree * XaviTreeNewInteger(int value)
+XaviTree * XaviTreeNewInteger(int value, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
 	rVal = malloc(sizeof(XaviTree));
 	rVal->num = malloc(sizeof(XaviNumber));
-	XaviCleanupCacheTree(rVal);
+	XaviCleanupCacheTree(rVal, pool);
 
 	rVal->type = 'n';
 	rVal->num->status = S_INTEGER;
@@ -57,12 +57,12 @@ XaviTree * XaviTreeNewInteger(int value)
 	return rVal;
 }
 
-XaviTree * XaviTreeNewFloat(float value)
+XaviTree * XaviTreeNewFloat(float value, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
 	rVal = malloc(sizeof(XaviTree));
 	rVal->num = malloc(sizeof(XaviNumber));
-	XaviCleanupCacheTree(rVal);
+	XaviCleanupCacheTree(rVal, pool);
 	
 	rVal->type = 'n';
 	rVal->num->status = S_FLOAT;
@@ -70,22 +70,22 @@ XaviTree * XaviTreeNewFloat(float value)
 	return rVal;
 }
 
-XaviTree * XaviTreeNewFunction(char * name, XaviArglist * in_arglist)
+XaviTree * XaviTreeNewFunction(char * name, XaviArglist * in_arglist, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
 	rVal = malloc(sizeof(XaviTree));
 	rVal->func = malloc(sizeof(XaviFunction));
-	XaviCleanupCacheTree(rVal);
+	XaviCleanupCacheTree(rVal, pool);
 	
 	rVal->type = 'f';
 	rVal->func->name = name;
-	XaviCleanupReleaseFunctionId(name);
+	XaviCleanupReleaseFunctionId(name, pool);
 	
 	if(in_arglist) {
 		rVal->func->arg_count = in_arglist->depth;
 
 		rVal->func->arg_vector = XaviArglistGetTrees(in_arglist);
-		XaviCleanupReleaseArglist(in_arglist);
+		XaviCleanupReleaseArglist(in_arglist, pool);
 		XaviArglistDissolve(in_arglist);		
 	}
 	else {

@@ -23,6 +23,7 @@
 
 #include "Xavi.h"
 
+// Abstract Syntax Tree Structures
 struct XaviTree;
 struct XaviOperator;
 struct XaviFunction;
@@ -31,7 +32,7 @@ struct XaviArglist;
 typedef struct XaviTree      XaviTree;
 typedef struct XaviOperator  XaviOperator;
 typedef struct XaviFunction  XaviFunction;
-typedef struct XaviArglist	XaviArglist;
+typedef struct XaviArglist	 XaviArglist;
 
 enum XaviOperatorSymbol {
 	OP_ADD=0,
@@ -70,6 +71,38 @@ struct XaviArglist {
 	int depth;
 	XaviTree * value;
 	XaviArglist * next;
+};
+
+// Memory management structures.
+struct XaviTreeList;
+struct XaviFunctionList;
+struct XaviArglistList;
+struct XaviMemoryPool;
+
+typedef struct XaviTreeList      XaviTreeList;
+typedef struct XaviIdList        XaviIdList;
+typedef struct XaviArglistList	 XaviArglistList;
+typedef struct XaviMemoryPool    XaviMemoryPool;
+
+struct XaviTreeList {
+	XaviTreeList * next;
+	XaviTree * item;
+};
+
+struct XaviArglistList { // Yeah, I know.
+	XaviArglistList * next;
+	XaviArglist * item;
+};
+
+struct XaviIdList {
+	XaviIdList * next;
+	char * item;
+};
+
+struct XaviMemoryPool {
+	XaviTreeList * DanglingTrees;
+	XaviArglistList * DanglingArglists;
+	XaviIdList * DanglingIds;
 };
 
 #endif // Xavi_STRUCTS_H

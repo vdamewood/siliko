@@ -26,46 +26,26 @@
 #include "XaviFunctionId.h"
 #include "XaviTree.h"
 
-struct TreeList {
-	struct TreeList * next;
-	XaviTree * item;
-};
-
-struct ArglistList { // Yeah, I know.
-	struct ArglistList * next;
-	XaviArglist * item;
-};
-
-struct IdList {
-	struct IdList * next;
-	char * item;
-};
-
-
-static struct TreeList * DanglingTrees = NULL;
-static struct ArglistList * DanglingArglists = NULL;
-static struct IdList * DanglingIds = NULL;
-
-void XaviCleanupClearAll()
+void XaviCleanupClearAll(XaviMemoryPool * pool)
 {
-	XaviCleanupClearTrees();
-	XaviCleanupClearArglists();
-	XaviCleanupClearFunctionIds();
+	XaviCleanupClearTrees(pool);
+	XaviCleanupClearArglists(pool);
+	XaviCleanupClearFunctionIds(pool);
 }
 
-void XaviCleanupCacheTree(XaviTree * in)
+void XaviCleanupCacheTree(XaviTree * in, XaviMemoryPool * pool)
 {
-	struct TreeList * NewNode;
-	struct TreeList * CurrentNode;
-	NewNode = malloc(sizeof(struct TreeList));
+	struct XaviTreeList * NewNode;
+	struct XaviTreeList * CurrentNode;
+	NewNode = malloc(sizeof(XaviTreeList));
 	NewNode->item = in;
 	NewNode->next = NULL;
 
-	if (!DanglingTrees) {
-		DanglingTrees = NewNode;
+	if (!pool->DanglingTrees) {
+		pool->DanglingTrees = NewNode;
 	}
 	else {
-		CurrentNode = DanglingTrees;
+		CurrentNode = pool->DanglingTrees;
 		while (CurrentNode->next) {
 			CurrentNode = CurrentNode->next;
 		}
@@ -73,17 +53,17 @@ void XaviCleanupCacheTree(XaviTree * in)
 	}
 }
 
-void XaviCleanupReleaseTree(XaviTree * in)
+void XaviCleanupReleaseTree(XaviTree * in, XaviMemoryPool * pool)
 {
-	struct TreeList ** ParentPointer;
-	struct TreeList * CurrentNode;
+	struct XaviTreeList ** ParentPointer;
+	struct XaviTreeList * CurrentNode;
 
-	if (!DanglingTrees) {
+	if (!pool->DanglingTrees) {
 		return;
 	}
 
-	CurrentNode = DanglingTrees;
-	ParentPointer = &DanglingTrees;
+	CurrentNode = pool->DanglingTrees;
+	ParentPointer = &(pool->DanglingTrees);
 	
 	while (CurrentNode) {
 		if (CurrentNode->item == in) {
@@ -98,13 +78,13 @@ void XaviCleanupReleaseTree(XaviTree * in)
 	}
 }
 
-void XaviCleanupClearTrees()
+void XaviCleanupClearTrees(XaviMemoryPool * pool)
 {
-	struct TreeList * CurrentNode;
-	struct TreeList * OldNode;
+	struct XaviTreeList * CurrentNode;
+	struct XaviTreeList * OldNode;
 
-	CurrentNode = DanglingTrees;
-	DanglingTrees = NULL;
+	CurrentNode = pool->DanglingTrees;
+	pool->DanglingTrees = NULL;
 	
 	while (CurrentNode) {
 		XaviTreeDelete(CurrentNode->item);
@@ -116,19 +96,19 @@ void XaviCleanupClearTrees()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XaviCleanupCacheArglist(XaviArglist * in)
+void XaviCleanupCacheArglist(XaviArglist * in, XaviMemoryPool * pool)
 {
-	struct ArglistList * NewNode;
-	struct ArglistList * CurrentNode;
-	NewNode = malloc(sizeof(struct ArglistList));
+	struct XaviArglistList * NewNode;
+	struct XaviArglistList * CurrentNode;
+	NewNode = malloc(sizeof(XaviArglistList));
 	NewNode->item = in;
 	NewNode->next = NULL;
 
-	if (!DanglingArglists) {
-		DanglingArglists = NewNode;
+	if (!pool->DanglingArglists) {
+		pool->DanglingArglists = NewNode;
 	}
 	else {
-		CurrentNode = DanglingArglists;
+		CurrentNode = pool->DanglingArglists;
 		while (CurrentNode->next) {
 			CurrentNode = CurrentNode->next;
 		}
@@ -136,17 +116,17 @@ void XaviCleanupCacheArglist(XaviArglist * in)
 	}
 }
 
-void XaviCleanupReleaseArglist(XaviArglist * in)
+void XaviCleanupReleaseArglist(XaviArglist * in, XaviMemoryPool * pool)
 {
-	struct ArglistList ** ParentPointer;
-	struct ArglistList * CurrentNode;
+	struct XaviArglistList ** ParentPointer;
+	struct XaviArglistList * CurrentNode;
 
-	if (!DanglingArglists) {
+	if (!(pool->DanglingArglists)) {
 		return;
 	}
 
-	CurrentNode = DanglingArglists;
-	ParentPointer = &DanglingArglists;
+	CurrentNode = pool->DanglingArglists;
+	ParentPointer = &(pool->DanglingArglists);
 	
 	while (CurrentNode) {
 		if (CurrentNode->item == in) {
@@ -161,13 +141,13 @@ void XaviCleanupReleaseArglist(XaviArglist * in)
 	}
 }
 
-void XaviCleanupClearArglists()
+void XaviCleanupClearArglists(XaviMemoryPool * pool)
 {
-	struct ArglistList * CurrentNode;
-	struct ArglistList * OldNode;
+	struct XaviArglistList * CurrentNode;
+	struct XaviArglistList * OldNode;
 
-	CurrentNode = DanglingArglists;
-	DanglingArglists = NULL;
+	CurrentNode = pool->DanglingArglists;
+	pool->DanglingArglists = NULL;
 	
 	while (CurrentNode) {
 		XaviArglistDelete(CurrentNode->item);
@@ -179,19 +159,19 @@ void XaviCleanupClearArglists()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XaviCleanupCacheFunctionId(char * in)
+void XaviCleanupCacheFunctionId(char * in, XaviMemoryPool * pool)
 {
-	struct IdList * NewNode;
-	struct IdList * CurrentNode;
-	NewNode = malloc(sizeof(struct IdList));
+	struct XaviIdList * NewNode;
+	struct XaviIdList * CurrentNode;
+	NewNode = malloc(sizeof(XaviIdList));
 	NewNode->item = in;
 	NewNode->next = NULL;
 
-	if (!DanglingIds) {
-		DanglingIds = NewNode;
+	if (!(pool->DanglingIds)) {
+		pool->DanglingIds = NewNode;
 	}
 	else {
-		CurrentNode = DanglingIds;
+		CurrentNode = pool->DanglingIds;
 		while (CurrentNode->next) {
 			CurrentNode = CurrentNode->next;
 		}
@@ -199,17 +179,17 @@ void XaviCleanupCacheFunctionId(char * in)
 	}
 }
 
-void XaviCleanupReleaseFunctionId(char * in)
+void XaviCleanupReleaseFunctionId(char * in, XaviMemoryPool * pool)
 {
-	struct IdList ** ParentPointer;
-	struct IdList * CurrentNode;
+	struct XaviIdList ** ParentPointer;
+	struct XaviIdList * CurrentNode;
 
-	if (!DanglingIds) {
+	if (!(pool->DanglingIds)) {
 		return;
 	}
 
-	CurrentNode = DanglingIds;
-	ParentPointer = &DanglingIds;
+	CurrentNode = pool->DanglingIds;
+	ParentPointer = &(pool->DanglingIds);
 	
 	while (CurrentNode) {
 		if (CurrentNode->item == in) {
@@ -224,13 +204,13 @@ void XaviCleanupReleaseFunctionId(char * in)
 	}
 }
 
-void XaviCleanupClearFunctionIds()
+void XaviCleanupClearFunctionIds(XaviMemoryPool * pool)
 {
-	struct IdList * CurrentNode;
-	struct IdList * OldNode;
+	struct XaviIdList * CurrentNode;
+	struct XaviIdList * OldNode;
 
-	CurrentNode = DanglingIds;
-	DanglingIds = NULL;
+	CurrentNode = pool->DanglingIds;
+	pool->DanglingIds = NULL;
 	
 	while (CurrentNode) {
 		XaviFunctionIdDelete(CurrentNode->item);

@@ -61,8 +61,6 @@ Release Stoppers:
 * The following functions have not yet been implemented:
   sin(), cos(), tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(),
   exp(), log(), log10(), ceil(), floor(), and ldexp().
-* The memory management code currently uses non-reentrant code to keep track
-  of unused AST nodes etc.
 
 Optional:
 

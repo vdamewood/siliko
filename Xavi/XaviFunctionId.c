@@ -26,17 +26,16 @@
 #include "XaviStructs.h"
 
 
-char * XaviFunctionIdNew(char * NewId)
+char * XaviFunctionIdNew(char * NewId, XaviMemoryPool * pool)
 {
 	char * rVal;
 	rVal = malloc(strlen(NewId)+1);
-	XaviCleanupCacheFunctionId(rVal);
+	XaviCleanupCacheFunctionId(rVal, pool);
 	strcpy(rVal, NewId);
 	return rVal;
 }
 
 void XaviFunctionIdDelete(char * InId)
 {
-	XaviCleanupReleaseFunctionId(InId);
 	free(InId);
 }

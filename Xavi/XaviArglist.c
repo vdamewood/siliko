@@ -25,17 +25,17 @@
 #include "XaviStructs.h"
 #include "XaviTree.h"
 
-XaviArglist * XaviArglistNew(XaviTree * NewTree, XaviArglist * OldList)
+XaviArglist * XaviArglistNew(XaviTree * NewTree, XaviArglist * OldList, XaviMemoryPool * pool)
 {
 	XaviArglist * rVal;
 	rVal = malloc(sizeof(XaviArglist));
-	XaviCleanupCacheArglist(rVal);
+	XaviCleanupCacheArglist(rVal, pool);
 	if (OldList) rVal->depth = OldList->depth + 1;
 	else rVal->depth = 1;
 	rVal->value = NewTree;
 	rVal->next = OldList;
-	XaviCleanupReleaseTree(NewTree);
-	XaviCleanupReleaseArglist(OldList);
+	XaviCleanupReleaseTree(NewTree, pool);
+	XaviCleanupReleaseArglist(OldList, pool);
 	return rVal;
 }
 

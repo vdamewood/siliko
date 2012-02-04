@@ -24,7 +24,7 @@
 #include "XaviYyParser.h"
 #include "XaviYyLexer.h"
 
-int Xavi_yyparse(XaviNumber *, yyscan_t);
+int Xavi_yyparse(XaviNumber *, XaviMemoryPool *, yyscan_t);
 
 void XaviOpen(void)
 {
@@ -41,14 +41,18 @@ void XaviClose(void)
 XaviNumber XaviParse(const char *inString)
 {
 	XaviNumber rVal;
+	XaviMemoryPool pool;
 	yyscan_t scannerState;
 	YY_BUFFER_STATE buffer;
 
+	pool.DanglingTrees = NULL;
+	pool.DanglingArglists = NULL;
+	pool.DanglingIds = NULL;
+		
+	Xavi_yylex_init(&scannerState);
 	buffer = Xavi_yy_scan_string(inString, scannerState);
 	Xavi_yy_switch_to_buffer(buffer, scannerState);
-
-	Xavi_yylex_init(&scannerState);
-	Xavi_yyparse(&rVal, scannerState);
+	Xavi_yyparse(&rVal, &pool, scannerState);
 	Xavi_yylex_destroy(scannerState);
 
 	return rVal;

@@ -23,10 +23,10 @@
 
 #include "XaviStructs.h"
 
-XaviTree * XaviTreeNewOperator(XaviOperatorSymbol Operator, XaviTree * LeftOperand, XaviTree * RightOperand);
-XaviTree * XaviTreeNewInteger(int Value);
-XaviTree * XaviTreeNewFloat(float Value);
-XaviTree * XaviTreeNewFunction(char * FunctionName, XaviArglist * FunctionArguments);
+XaviTree * XaviTreeNewOperator(XaviOperatorSymbol Operator, XaviTree * LeftOperand, XaviTree * RightOperand, XaviMemoryPool *);
+XaviTree * XaviTreeNewInteger(int Value, XaviMemoryPool *);
+XaviTree * XaviTreeNewFloat(float Value, XaviMemoryPool *);
+XaviTree * XaviTreeNewFunction(char * FunctionName, XaviArglist * FunctionArguments, XaviMemoryPool *);
 void XaviTreeDelete(XaviTree * TreeToDelete);
 
 #endif // Xavi_TREE_H

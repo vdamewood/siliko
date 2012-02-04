@@ -23,15 +23,15 @@
 
 #include "XaviStructs.h"
 
-void XaviCleanupCacheTree(XaviTree * TreeToCache);
-void XaviCleanupReleaseTree(XaviTree * TreeToRelease);
-void XaviCleanupClearTrees();
-void XaviCleanupCacheArglist(XaviArglist * ArglistToCache);
-void XaviCleanupReleaseArglist(XaviArglist * ArglistToRelease);
-void XaviCleanupClearArglists();
-void XaviCleanupCacheFunctionId(char * FunctionIdToCache);
-void XaviCleanupReleaseFunctionId(char * FunctionIdToRelease);
-void XaviCleanupClearFunctionIds();
-void XaviCleanupClearAll();
+void XaviCleanupCacheTree(XaviTree * TreeToCache, XaviMemoryPool *);
+void XaviCleanupReleaseTree(XaviTree * TreeToRelease, XaviMemoryPool *);
+void XaviCleanupClearTrees(XaviMemoryPool *);
+void XaviCleanupCacheArglist(XaviArglist * ArglistToCache, XaviMemoryPool *);
+void XaviCleanupReleaseArglist(XaviArglist * ArglistToRelease, XaviMemoryPool *);
+void XaviCleanupClearArglists(XaviMemoryPool *);
+void XaviCleanupCacheFunctionId(char * FunctionIdToCache, XaviMemoryPool *);
+void XaviCleanupReleaseFunctionId(char * FunctionIdToRelease, XaviMemoryPool *);
+void XaviCleanupClearFunctionIds(XaviMemoryPool *);
+void XaviCleanupClearAll(XaviMemoryPool *);
 
 #endif // Xavi_CLEANUP_H

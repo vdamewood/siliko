@@ -23,7 +23,7 @@
 
 #include "XaviStructs.h"
 
-XaviArglist * XaviArglistNew(XaviTree * NewArgument, XaviArglist * ListToExtend);
+XaviArglist * XaviArglistNew(XaviTree * NewArgument, XaviArglist * ListToExtend, XaviMemoryPool *);
 void XaviArglistDelete(XaviArglist * ArglistToDelete);
 void XaviArglistDissolve(XaviArglist * ArglistToDissolve);
 XaviTree ** XaviArglistGetTrees(XaviArglist * ArglistToExtract);
