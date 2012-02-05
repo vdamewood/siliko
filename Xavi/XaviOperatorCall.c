@@ -133,9 +133,15 @@ static XaviNumber Divide(XaviNumber left, XaviNumber right)
 			rVal.f = (float) left.i / right.f;
 		}
 		else {
-			/* TODO: Make this return a float if it's fractional */
-			rVal.status = S_INTEGER;
-			rVal.i = left.i / right.i;
+			if (left.i % right.i == 0) {
+				rVal.status = S_INTEGER;
+				rVal.i = left.i / right.i;
+			}
+			else {
+				rVal.status = S_FLOAT;
+				rVal.f = (float) left.i / (float) right.i;
+			}
+
 		}
 	}
 	return rVal;

@@ -56,8 +56,6 @@ Known Issue / Goals
 
 Release Stoppers:
 
-* Division does not work as documented when two integers result in a
-  fractional result.
 * The following functions have not yet been implemented:
   sin(), cos(), tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(),
   exp(), log(), log10(), ceil(), floor(), and ldexp().
