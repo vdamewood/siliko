@@ -21,6 +21,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
@@ -73,7 +74,26 @@ static XaviNumber XaviFunction_atan2(int argc, XaviNumber * argv)
 static XaviNumber XaviFunction_ceil(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	float result;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	result = ceil(input);
+	if (result <= INT_MAX && result >= INT_MIN) {
+		rVal.status = S_INTEGER;
+		rVal.i = (int) result;
+	}
+	else {
+		rVal.status = S_FLOAT;
+		rVal.f = result;
+	}
 	return rVal;
 }
 
@@ -112,7 +132,26 @@ static XaviNumber XaviFunction_exp(int argc, XaviNumber * argv)
 static XaviNumber XaviFunction_floor(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	float result;
+
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+
+	result = floor(input);
+	if (result <= INT_MAX && result >= INT_MIN) {
+		rVal.status = S_INTEGER;
+		rVal.i = (int) result;
+	}
+	else {
+		rVal.status = S_FLOAT;
+		rVal.f = result;
+	}
 	return rVal;
 }
 
