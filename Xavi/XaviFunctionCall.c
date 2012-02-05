@@ -80,7 +80,18 @@ static XaviNumber XaviFunction_ceil(int argc, XaviNumber * argv)
 static XaviNumber XaviFunction_cos(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = cos(input);
 	return rVal;
 }
 
@@ -128,9 +139,6 @@ static XaviNumber XaviFunction_log10(int argc, XaviNumber * argv)
 
 static XaviNumber XaviFunction_sin(int argc, XaviNumber * argv)
 {
-	/*XaviNumber rVal;
-	rVal.status = E_FUNCTION;
-	return rVal;*/
 	XaviNumber rVal;
 	float input;
 	
