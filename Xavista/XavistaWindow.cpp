@@ -45,6 +45,30 @@ void XavistaWindow::calculate()
 	case S_FLOAT:
 		output->setNum(value.f);
 		break;
+	case E_INTERNAL:
+		output->setText("Internal error.");
+		break;
+	case E_MEMORY:
+		output->setText("Out of memory.");
+		break;
+	case E_SYNTAX:
+		output->setText("Syntax error.");
+		break;
+	case E_ZERO_DIV:
+		output->setText("Division by zero error.");
+		break;
+	case E_FUNCTION:
+		output->setText("Function not found.");
+		break;
+	case E_ARGUMENTS:
+		output->setText("Bad argument count.");
+		break;
+	case E_DOMAIN:
+		output->setText("Domain error.");
+		break;
+	case E_RANGE:
+		output->setText("Range error.");
+		break;			
 	default:
 		output->setText("An error occured.");
 	}

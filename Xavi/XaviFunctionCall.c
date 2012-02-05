@@ -128,8 +128,22 @@ static XaviNumber XaviFunction_log10(int argc, XaviNumber * argv)
 
 static XaviNumber XaviFunction_sin(int argc, XaviNumber * argv)
 {
-	XaviNumber rVal;
+	/*XaviNumber rVal;
 	rVal.status = E_FUNCTION;
+	return rVal;*/
+	XaviNumber rVal;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = sin(input);
 	return rVal;
 }
 
@@ -255,7 +269,7 @@ static unsigned char XaviCrc8(const unsigned char * input)
 
 typedef XaviNumber (*FunctionPointer)(int, XaviNumber *);
 
-#define FUNCTION_MAX 2
+#define FUNCTION_MAX 18
 static char *functionNames[] = {
 	"abs", "acos", "asin", "atan",
 	"atan2", "ceil", "cos", "cosh",

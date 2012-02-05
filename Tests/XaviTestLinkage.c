@@ -38,14 +38,14 @@ int main(int argc, char *argv[])
 	case S_FLOAT:
 		printf("Value: %f\n", value.f);
 		break;
-	case E_SYNTAX:
-		printf("Syntax error.\n");
-		break;
 	case E_INTERNAL:
 		printf("Internal error.\n");
 		break;
 	case E_MEMORY:
 		printf("Out of memory.\n");
+		break;
+	case E_SYNTAX:
+		printf("Syntax error.\n");
 		break;
 	case E_ZERO_DIV:
 		printf("Division by zero error.\n");
