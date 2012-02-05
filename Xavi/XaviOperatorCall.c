@@ -153,28 +153,14 @@ static XaviNumber Power(XaviNumber left, XaviNumber right)
 	float myLeft;
 	float myRight;
 
-	if (left.status = S_INTEGER) {
+	if (left.status == S_INTEGER) {
 		myLeft = (float) left.i;
 	}
 	else {
 		myLeft = left.f;
-	}
-
-	if (left.status = S_INTEGER) {
-		myLeft = (float) left.i;
-	}
-	else {
-		myLeft = left.f;
-	}
-
-	if (right.status = S_INTEGER) {
-		myRight = (float) right.i;
-	}
-	else {
-		myRight = right.f;
 	}
 	
-	if (right.status = S_INTEGER) {
+	if (right.status == S_INTEGER) {
 		myRight = (float) right.i;
 	}
 	else {
@@ -182,7 +168,8 @@ static XaviNumber Power(XaviNumber left, XaviNumber right)
 	}
 	
 	rVal.status = S_FLOAT;
-	rVal.f = (float) pow(myLeft, myRight);
+	printf("%f^%f\n", myLeft, myRight);
+	rVal.f = pow(myLeft, myRight);
 	return rVal;
 }
 

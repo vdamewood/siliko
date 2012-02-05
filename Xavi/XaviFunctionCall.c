@@ -193,8 +193,22 @@ static XaviNumber XaviFunction_sqrt(int argc, XaviNumber * argv)
 
 static XaviNumber XaviFunction_tan(int argc, XaviNumber * argv)
 {
+	// For some reason the C version of tan() doesn't throw an error for
+	// input of pi/2 or 3*pi/2. Probably due to the imprecision of
+	// floating point numbers.
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = tan(input);
 	return rVal;
 }
 
