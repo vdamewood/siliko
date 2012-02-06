@@ -223,16 +223,37 @@ static XaviNumber XaviFunction_ldexp(int argc, XaviNumber * argv)
 static XaviNumber XaviFunction_log(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = log(input);
 	return rVal;
 }
 
 static XaviNumber XaviFunction_log10(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
-	return rVal;
-}
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = log10(input);
+	return rVal;}
 
 static XaviNumber XaviFunction_sin(int argc, XaviNumber * argv)
 {
