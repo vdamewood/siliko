@@ -213,13 +213,6 @@ static XaviNumber XaviFunction_floor(int argc, XaviNumber * argv)
 	return rVal;
 }
 
-static XaviNumber XaviFunction_ldexp(int argc, XaviNumber * argv)
-{
-	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
-	return rVal;
-}
-
 static XaviNumber XaviFunction_log(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
@@ -359,12 +352,6 @@ static XaviNumber XaviFunction_tanh(int argc, XaviNumber * argv)
 	return rVal;
 }
 
-// This will be removed when more functions are implemented.
-static XaviNumber XaviFunction_dummy(int argc, XaviNumber * argv)
-{
-	return argv[0];
-}
-
 ////////////////////////////////////////////////////////////////////////
 
 static void ShiftBits(unsigned char * input, int len)
@@ -431,19 +418,17 @@ static unsigned char XaviCrc8(const unsigned char * input)
 
 typedef XaviNumber (*FunctionPointer)(int, XaviNumber *);
 
-#define FUNCTION_MAX 17
+#define FUNCTION_MAX 15
 static char *functionNames[] = {
 	"abs", "acos", "asin", "atan",
-	"ceil", "cos", "cosh",
-	"exp", "floor", "ldexp", "log",
-	"log10", "sin", "sinh",	 "sqrt",
-	"tan", "tanh", "dummy"};
+	"ceil", "cos", "cosh", "exp",
+	"floor", "log","log10", "sin",
+	 "sinh", "sqrt", "tan", "tanh"};
 static FunctionPointer functions[] = {
 	XaviFunction_abs, XaviFunction_acos, XaviFunction_asin, XaviFunction_atan,
-	XaviFunction_ceil, XaviFunction_cos, XaviFunction_cosh,
-	XaviFunction_exp, XaviFunction_floor, XaviFunction_ldexp, XaviFunction_log,
-	XaviFunction_log10, XaviFunction_sin, XaviFunction_sinh, XaviFunction_sqrt,
-	XaviFunction_tan, XaviFunction_tanh, XaviFunction_dummy};
+	XaviFunction_ceil, XaviFunction_cos, XaviFunction_cosh, XaviFunction_exp,
+	XaviFunction_floor, XaviFunction_log, XaviFunction_log10, XaviFunction_sin,
+	XaviFunction_sinh, XaviFunction_sqrt, XaviFunction_tan, XaviFunction_tanh};
 
 struct XaviFunctionChain
 {

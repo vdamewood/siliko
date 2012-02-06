@@ -18,7 +18,11 @@ Currently Xavi supports the following features:
 * parenthetic expressions, such as "2 * (3 + 4)".
 * Random number generation using a d operator to simulate dice rolls. such as
   "3d6" or "1d20".
-* Functions, currently Xavi supports  abs() and sqrt() functions.
+* Functions: Xavi supports the following functions from the C standard library:
+  abs(), acos(), asin(), atan(), ceil(), cos(), cosh(), exp(), floor(),
+  log(),log10(), sin(), sinh(), sqrt(), tan(), and tanh().
+
+  Xavi's abs() function will use C's abs() or fabs() as appropriate.
 * Xavi ignores space and tab characters in its input.
 
 When mixing number types, Xavi will give integer results in calculations
@@ -50,21 +54,3 @@ a XaviNumber structure. The Structure has two members, a status code as an
 enum XaviStatus (status), and the value to which the expression evaluates as
 an anonymous union of int (i) and float (f). XaviStatus enumeration is found
 in Xavi.h with comments on what each status means.
-
-
-Known Issue / Goals
-
-Release Stoppers:
-
-* The following functions have not yet been implemented:
-  sin(), cos(), tan(), asin(), acos(), atan(), atan2(), sinh(), cosh(), tanh(),
-  exp(), log(), log10(), ceil(), floor(), and ldexp().
-
-Optional:
-
-* A plug-in interface for additional functions.
-
-Documentation:
-
-* Documentation needs to be moved into Docbook XML files.
-* Xavista needs to be documented.
