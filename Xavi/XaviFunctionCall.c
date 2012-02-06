@@ -296,7 +296,7 @@ static unsigned char XaviCrc8(const unsigned char * input)
 	int i;
 	int j;
 	
-	// The terminating '\0' as part of the CRC.
+	// We use the terminating '\0' as part of the CRC.
 	// We can do this because we won't be printing the
 	// series of characters.
 	len = strlen(input) + 1;
