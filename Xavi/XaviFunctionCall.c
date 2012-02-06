@@ -46,28 +46,64 @@ static XaviNumber XaviFunction_abs(int argc, XaviNumber * argv)
 static XaviNumber XaviFunction_acos(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	if (input < -1 || input > 1) {
+		rVal.status = E_DOMAIN;
+		return rVal;
+	}
+	
+	rVal.status = S_FLOAT;
+	rVal.f = acos(input);
 	return rVal;
 }
 
 static XaviNumber XaviFunction_asin(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	if (input < -1 || input > 1) {
+		rVal.status = E_DOMAIN;
+		return rVal;
+	}
+	
+	rVal.status = S_FLOAT;
+	rVal.f = asin(input);
 	return rVal;
 }
 
 static XaviNumber XaviFunction_atan(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
-	return rVal;
-}
-
-static XaviNumber XaviFunction_atan2(int argc, XaviNumber * argv)
-{
-	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = atan(input);
 	return rVal;
 }
 
@@ -118,14 +154,36 @@ static XaviNumber XaviFunction_cos(int argc, XaviNumber * argv)
 static XaviNumber XaviFunction_cosh(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = cosh(input);
 	return rVal;
 }
 
 static XaviNumber XaviFunction_exp(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = exp(input);
 	return rVal;
 }
 
@@ -197,7 +255,18 @@ static XaviNumber XaviFunction_sin(int argc, XaviNumber * argv)
 static XaviNumber XaviFunction_sinh(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = sinh(input);
 	return rVal;
 }
 
@@ -254,7 +323,18 @@ static XaviNumber XaviFunction_tan(int argc, XaviNumber * argv)
 static XaviNumber XaviFunction_tanh(int argc, XaviNumber * argv)
 {
 	XaviNumber rVal;
-	rVal.status = E_FUNCTION;
+	float input;
+	
+	if (argc != 1) {
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+	
+	if (argv[0].status == S_INTEGER) input = (float) argv[0].i;
+	else input = argv[0].f;
+	
+	rVal.status = S_FLOAT;
+	rVal.f = tanh(input);
 	return rVal;
 }
 
@@ -330,16 +410,16 @@ static unsigned char XaviCrc8(const unsigned char * input)
 
 typedef XaviNumber (*FunctionPointer)(int, XaviNumber *);
 
-#define FUNCTION_MAX 18
+#define FUNCTION_MAX 17
 static char *functionNames[] = {
 	"abs", "acos", "asin", "atan",
-	"atan2", "ceil", "cos", "cosh",
+	"ceil", "cos", "cosh",
 	"exp", "floor", "ldexp", "log",
 	"log10", "sin", "sinh",	 "sqrt",
 	"tan", "tanh", "dummy"};
 static FunctionPointer functions[] = {
 	XaviFunction_abs, XaviFunction_acos, XaviFunction_asin, XaviFunction_atan,
-	XaviFunction_atan2, XaviFunction_ceil, XaviFunction_cos, XaviFunction_cosh,
+	XaviFunction_ceil, XaviFunction_cos, XaviFunction_cosh,
 	XaviFunction_exp, XaviFunction_floor, XaviFunction_ldexp, XaviFunction_log,
 	XaviFunction_log10, XaviFunction_sin, XaviFunction_sinh, XaviFunction_sqrt,
 	XaviFunction_tan, XaviFunction_tanh, XaviFunction_dummy};
