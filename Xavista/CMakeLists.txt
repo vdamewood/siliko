@@ -33,8 +33,8 @@ target_link_libraries(Xavista
   ${Xavista_LIBRARIES})
 
 install(TARGETS Xavista
-  RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH} COMPONENT Runtime
-  BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH}  COMPONENT Runtime
+  RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH}
+  BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH}
 )  
 install(
   CODE
@@ -44,4 +44,4 @@ install(
       \"${Xavista_BUNDLES}\"
       \"${Xavista_PLUGINS}\"
       \"${Xavista_FRAMEWORK_LOCATIONS}\")"
-  COMPONENT Runtime)
+  )
