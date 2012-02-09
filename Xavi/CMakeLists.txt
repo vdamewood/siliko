@@ -65,7 +65,5 @@ set_target_properties(Xavi
     FRAMEWORK     TRUE
     PUBLIC_HEADER ${Xavi_PUBLIC_HEADERS})
 
-if(APPLE)
 install(TARGETS Xavi
   FRAMEWORK DESTINATION . COMPONENT Runtime)
-endif()

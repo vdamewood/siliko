@@ -32,15 +32,16 @@ add_executable(Xavista
 target_link_libraries(Xavista
   ${Xavista_LIBRARIES})
 
-if(APPLE)
 install(TARGETS Xavista
-  BUNDLE DESTINATION . COMPONENT Runtime)
+  BUNDLE DESTINATION . COMPONENT Runtime
+  RUNTIME DESTINATION bin COMPONENT Runtime)
+  
 install(
   CODE
     "include(BundleUtilities)
+	message(\"Bundle: ${Xavista_BUNDLES}\")
     fixup_bundle(
       \"${Xavista_BUNDLES}\"
       \"${Xavista_PLUGINS}\"
       \"${Xavista_FRAMEWORK_LOCATIONS}\")"
   COMPONENT Runtime)
-endif()
