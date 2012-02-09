@@ -33,9 +33,9 @@ target_link_libraries(Xavista
   ${Xavista_LIBRARIES})
 
 install(TARGETS Xavista
-  BUNDLE DESTINATION . COMPONENT Runtime
-  RUNTIME DESTINATION bin COMPONENT Runtime)
-  
+  RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH} COMPONENT Runtime
+  BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH}  COMPONENT Runtime
+)  
 install(
   CODE
     "include(BundleUtilities)
