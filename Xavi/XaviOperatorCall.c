@@ -168,7 +168,6 @@ static XaviNumber Power(XaviNumber left, XaviNumber right)
 	}
 	
 	rVal.status = S_FLOAT;
-	printf("%f^%f\n", myLeft, myRight);
 	rVal.f = pow(myLeft, myRight);
 	return rVal;
 }
