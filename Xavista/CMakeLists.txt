@@ -10,7 +10,7 @@ set(Xavista_MOC_HEADERS XavistaWindow.h)
 set(Xavista_SOURCES Xavista.cpp XavistaWindow.cpp)
 set(Xavista_UIS XavistaWindow.ui)
 set(Xavista_LIBRARIES Xavi ${QT_LIBRARIES})
-set(Xavista_BUNDLES ${CMAKE_INSTALL_PREFIX}/Xavista.app)
+set(Xavista_BUNDLES "\${CMAKE_INSTALL_PREFIX}/Xavista.app")
 set(Xavista_PLUGINS)
 set(Xavista_FRAMEWORK_LOCATIONS ${Library_BINARY_DIR} ${QT_LIBRARY_DIRS})
 
