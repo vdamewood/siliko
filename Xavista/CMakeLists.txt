@@ -12,7 +12,7 @@ set(Xavista_UIS XavistaWindow.ui)
 set(Xavista_LIBRARIES Xavi ${QT_LIBRARIES})
 set(Xavista_BUNDLES "\${CMAKE_INSTALL_PREFIX}/Xavista.app")
 set(Xavista_PLUGINS)
-set(Xavista_FRAMEWORK_LOCATIONS ${Library_BINARY_DIR} ${QT_LIBRARY_DIRS})
+set(Xavista_FRAMEWORK_LOCATIONS ${Library_BINARY_DIR} ${QT_LIBRARY_DIR})
 
 add_definitions(${QT_DEFINITIONS})
 
@@ -36,7 +36,7 @@ install(TARGETS Xavista
   RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH}
   BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH}
 )
-message("Xavista Libs: ${Xavista_LIBRARIES}")
+
 if(APPLE)
   install(
     CODE
