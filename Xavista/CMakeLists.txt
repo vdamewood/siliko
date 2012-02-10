@@ -35,13 +35,16 @@ target_link_libraries(Xavista
 install(TARGETS Xavista
   RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH}
   BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH}
-)  
-install(
-  CODE
-    "include(BundleUtilities)
-	message(\"Bundle: ${Xavista_BUNDLES}\")
-    fixup_bundle(
-      \"${Xavista_BUNDLES}\"
-      \"${Xavista_PLUGINS}\"
-      \"${Xavista_FRAMEWORK_LOCATIONS}\")"
-  )
+)
+message("Xavista Libs: ${Xavista_LIBRARIES}")
+if(APPLE)
+  install(
+    CODE
+      "include(BundleUtilities)
+	  message(\"Bundle: ${Xavista_BUNDLES}\")
+      fixup_bundle(
+        \"${Xavista_BUNDLES}\"
+        \"${Xavista_PLUGINS}\"
+        \"${Xavista_FRAMEWORK_LOCATIONS}\")"
+    )
+endif()
