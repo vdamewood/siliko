@@ -10,9 +10,16 @@ set(Xavista_MOC_HEADERS XavistaWindow.h)
 set(Xavista_SOURCES Xavista.cpp XavistaWindow.cpp)
 set(Xavista_UIS XavistaWindow.ui)
 set(Xavista_LIBRARIES Xavi ${QT_LIBRARIES})
-set(Xavista_BUNDLES "\${CMAKE_INSTALL_PREFIX}/Xavista.app")
 set(Xavista_PLUGINS)
+if (APPLE)
+set(Xavista_BUNDLES "\${CMAKE_INSTALL_PREFIX}/Xavista.app")
 set(Xavista_FRAMEWORK_LOCATIONS ${Library_BINARY_DIR} ${QT_LIBRARY_DIR})
+elseif (WIN32)
+set(Xavista_BUNDLES "\${CMAKE_INSTALL_PREFIX}/Xavista.exe")
+set(Xavista_FRAMEWORK_LOCATIONS ${Library_BINARY_DIR} ${QT_BINARY_DIR})
+else()
+set(Xavista_BUNDLES "")
+endif()
 
 add_definitions(${QT_DEFINITIONS})
 
@@ -37,7 +44,7 @@ install(TARGETS Xavista
   BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH}
 )
 
-if(APPLE)
+if(APPLE OR WIN32)
   install(
     CODE
       "include(BundleUtilities)
