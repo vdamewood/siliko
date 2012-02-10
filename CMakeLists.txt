@@ -51,4 +51,8 @@ if(BUILD_TESTS)
   add_subdirectory(Tests)
 endif(BUILD_TESTS)
 
+if(BUILD_XAVISTA AND WIN32)
+  set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
+  set(CPACK_PACKAGE_EXECUTABLES Xavista Xavista)
+endif()
 include(CPack)
