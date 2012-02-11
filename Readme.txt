@@ -1,12 +1,14 @@
 Xavi Overview
 
-Xavi is a library for handling mathematical expressions.
+Xavi is a library for handling mathematical expressions. Xavi's home on the
+web is <http://damewood.us/projects/xavi>.
 
 Xavi may be copied, modified, and distributed under the terms of the GNU
 LGPL, version 3 or later. See the files LGPL-3.0.txt and GPL-3.0.txt for
 details. The source distribution of Xavi also includes test programs.
 These programs may be copied, modified, and distributed under the terms of
 the GNU GPL, version 3 or later. See the file GPL-3.0.txt for details.
+Xavista uses Qt <http://> under the terms of the GNU GPL 3.0.
 
 Currently Xavi supports the following features:
 

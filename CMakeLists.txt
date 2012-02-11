@@ -7,6 +7,10 @@ set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0-git)
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  set(MACOSX 1)
+endif()
+
 # Dependency searches
 find_package(BISON 2.4.1 REQUIRED)
 find_package(FLEX 2.5.35 REQUIRED)
@@ -28,7 +32,8 @@ if(WIN32)
   set(BUNDLE_INSTALL_PATH Error)
   set(FRAMEWORK_INSTALL_PATH Error)
   set(HEADER_INSTALL_PATH .)
-elseif(APPLE)
+  set(DOC_INSTALL_PATH .)
+elseif(MACOSX)
   set(MATH_LIB)
   set(RUNTIME_INSTALL_PATH Error)
   set(ARCHIVE_INSTALL_PATH Error)
@@ -36,6 +41,7 @@ elseif(APPLE)
   set(BUNDLE_INSTALL_PATH .)
   set(FRAMEWORK_INSTALL_PATH .)
   set(HEADER_INSTALL_PATH Error)
+  set(DOC_INSTALL_PATH .)
 elseif(UNIX)
   set(MATH_LIB m)
   set(RUNTIME_INSTALL_PATH bin)
@@ -44,18 +50,11 @@ elseif(UNIX)
   set(BUNDLE_INSTALL_PATH share/xavi/error)
   set(FRAMEWORK_INSTALL_PATH share/xavi/error)
   set(HEADER_INSTALL_PATH include)
+  set(DOC_INSTALL_PATH share/xavi/docs)
 endif()
 
 # CPack Settings
 
-if(WIN32)
-  set(CPACK_GENERATOR NSIS)
-elseif(APPLE)
-  set(CPACK_GENERATOR DragNDrop)
-endif()
-if(BUILD_XAVISTA)
-  set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${RUNTIME_INSTALL_PATH})
-endif()
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${Xavi_SOURCE_DIR}/Readme.txt")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
   "Xavi is a mathematical expression parser library.")
@@ -65,8 +64,23 @@ set(CPACK_PACKAGE_VERSION_MINOR ${Xavi_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${Xavi_VERSION_PATCH})
 set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
 set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/build/")
-set(CPACK_RESOURCE_FILE_LICENSE "${Xavi_SOURCE_DIR}/GPL-3.0.txt")
 set(CPACK_RESOURCE_FILE_README "${Xavi_SOURCE_DIR}/Readme.txt")
+
+if(BUILD_XAVISTA)
+  set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${RUNTIME_INSTALL_PATH})
+endif()
+
+if(WIN32)
+  set(CPACK_GENERATOR NSIS)
+  if(BUILD_XAVISTA)
+    set(CPACK_RESOURCE_FILE_LICENSE "${Xavi_SOURCE_DIR}/GPL-3.0.txt")
+  else()
+    set(CPACK_RESOURCE_FILE_LICENSE "${Xavi_SOURCE_DIR}/LGPL-3.0.txt")
+  endif()
+elseif(MACOSX)
+  set(CPACK_GENERATOR DragNDrop)
+endif()
+
 
 # Subdirectory inclusions
 add_subdirectory(Xavi)
@@ -76,6 +90,9 @@ endif(BUILD_XAVISTA)
 if(BUILD_TESTS)
   add_subdirectory(Tests)
 endif(BUILD_TESTS)
+install(
+  FILES ReadMe.txt GPL-3.0.txt LGPL-3.0.txt
+  DESTINATION ${DOC_INSTALL_PATH})
 
 # This command gets its own section at the end because it's special.
 include(CPack)
