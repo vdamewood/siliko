@@ -1,21 +1,25 @@
 # Root
-project(Xavi)
-cmake_minimum_required (VERSION 2.8)
 
+# Semi-Required Preamble
+project(Xavi)
+cmake_minimum_required(VERSION 2.8)
 set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
-set(Xavi_VERSION_PATCH 0)
+set(Xavi_VERSION_PATCH 0-git)
 
+# Dependency searches
 find_package(BISON 2.4.1 REQUIRED)
 find_package(FLEX 2.5.35 REQUIRED)
 find_package(Qt4)
 
+# Configuration Options
 option(BUILD_XAVISTA
   "Build Xavista, a Qt-based GUI frontend to Xavi"
   ${QT4_FOUND})
 option(BUILD_SHARED_LIBS "Build Xavi as a shared library." ON)
 option(BUILD_TESTS "Build testing programs." OFF)
 
+# Install locations and system-dependent values.
 if(WIN32)
   set(MATH_LIB)
   set(RUNTIME_INSTALL_PATH .)
@@ -32,7 +36,6 @@ elseif(APPLE)
   set(BUNDLE_INSTALL_PATH .)
   set(FRAMEWORK_INSTALL_PATH .)
   set(HEADER_INSTALL_PATH Error)
-  #set(CPACK_BINARY_DRAGNDROP ON)
 elseif(UNIX)
   set(MATH_LIB m)
   set(RUNTIME_INSTALL_PATH bin)
@@ -43,6 +46,29 @@ elseif(UNIX)
   set(HEADER_INSTALL_PATH include)
 endif()
 
+# CPack Settings
+
+if(WIN32)
+  set(CPACK_GENERATOR NSIS)
+elseif(APPLE)
+  set(CPACK_GENERATOR DragNDrop)
+endif()
+if(BUILD_XAVISTA)
+  set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${RUNTIME_INSTALL_PATH})
+endif()
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${Xavi_SOURCE_DIR}/Readme.txt")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+  "Xavi is a mathematical expression parser library.")
+set(CPACK_PACKAGE_EXECUTABLES Xavista Xavista)
+set(CPACK_PACKAGE_VERSION_MAJOR ${Xavi_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${Xavi_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${Xavi_VERSION_PATCH})
+set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
+set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/build/")
+set(CPACK_RESOURCE_FILE_LICENSE "${Xavi_SOURCE_DIR}/GPL-3.0.txt")
+set(CPACK_RESOURCE_FILE_README "${Xavi_SOURCE_DIR}/Readme.txt")
+
+# Subdirectory inclusions
 add_subdirectory(Xavi)
 if(BUILD_XAVISTA)
   add_subdirectory(Xavista)
@@ -51,8 +77,5 @@ if(BUILD_TESTS)
   add_subdirectory(Tests)
 endif(BUILD_TESTS)
 
-if(BUILD_XAVISTA AND WIN32)
-  set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
-  set(CPACK_PACKAGE_EXECUTABLES Xavista Xavista)
-endif()
+# This command gets its own section at the end because it's special.
 include(CPack)
