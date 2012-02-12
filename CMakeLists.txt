@@ -102,7 +102,7 @@ if(BUILD_TESTS)
   add_subdirectory(Tests)
 endif(BUILD_TESTS)
 install(
-  FILES ReadMe.txt GPL-3.0.txt LGPL-3.0.txt
+  FILES ReadMe.txt GPL-3.0.txt LGPL-3.0.txt ${GIT_FILE}
   DESTINATION ${DOC_INSTALL_PATH})
 
 # This command gets its own section at the end because it's special.
