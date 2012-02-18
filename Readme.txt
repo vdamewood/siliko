@@ -30,7 +30,7 @@ Currently Xavi supports the following features:
 When mixing number types, Xavi will give integer results in calculations
 involving only integers and floating-point results in calculations involving
 either integers and floating-point numbers, or only floating-point numbers.
-If division involves two intergers where the result would not be a whole
+If division involves two integers where the result would not be a whole
 number, a floating-point value is returned.
 
 
