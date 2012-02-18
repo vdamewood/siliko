@@ -1,5 +1,5 @@
 /*
- * XaviYyParser.y: Bison grammer.
+ * XaviYyParser.y: Bison grammar.
  * Copyright 2012 Vincent Damewood
  *
  * This file is part of Xavi.
