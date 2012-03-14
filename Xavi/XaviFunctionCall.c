@@ -375,6 +375,8 @@ static void ShiftBits(unsigned char * input, int len)
 
 static unsigned char XaviCrc8(const unsigned char * input)
 {
+	// FIXME: This function malloc()s a chunk of memory the same size as the
+	// input, when a small arrays on the stack will suffice.
 	int len;
 	unsigned char * divisor;
 	unsigned char * result;
@@ -442,10 +444,15 @@ static XaviFunctionChain ** functionTable;
 
 int XaviFunctionCallOpen()
 {
+	// FIXME: This function makes calls to malloc() without checking the return
+	// value. Rewrite it to either succeed or fail completely, instead.
 	int i;
 	int index;
 	XaviFunctionChain * currentChain;
-	functionTable = malloc(256 * sizeof(XaviFunctionChain));
+	if (!(functionTable = malloc(256 * sizeof(XaviFunctionChain))))
+	{
+		return 0;
+	}
 	for (i = 0; i<=255; i++) {
 		functionTable[i] = NULL;
 	}

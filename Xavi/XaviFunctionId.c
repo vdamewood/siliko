@@ -29,9 +29,10 @@
 char * XaviFunctionIdNew(char * NewId, XaviMemoryPool * pool)
 {
 	char * rVal;
-	rVal = malloc(strlen(NewId)+1);
-	XaviCleanupCacheFunctionId(rVal, pool);
-	strcpy(rVal, NewId);
+	if (rVal = malloc(strlen(NewId)+1)) {
+		XaviCleanupCacheFunctionId(rVal, pool);
+		strcpy(rVal, NewId);
+	}
 	return rVal;
 }
 

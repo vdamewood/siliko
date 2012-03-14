@@ -33,11 +33,14 @@ void XaviCleanupClearAll(XaviMemoryPool * pool)
 	XaviCleanupClearFunctionIds(pool);
 }
 
-void XaviCleanupCacheTree(XaviTree * in, XaviMemoryPool * pool)
+int XaviCleanupCacheTree(XaviTree * in, XaviMemoryPool * pool)
 {
 	struct XaviTreeList * NewNode;
 	struct XaviTreeList * CurrentNode;
-	NewNode = malloc(sizeof(XaviTreeList));
+	if (!(NewNode = malloc(sizeof(XaviTreeList))))
+	{
+		return 0;
+	}
 	NewNode->item = in;
 	NewNode->next = NULL;
 
@@ -51,6 +54,7 @@ void XaviCleanupCacheTree(XaviTree * in, XaviMemoryPool * pool)
 		}
 		CurrentNode->next = NewNode;
 	}
+	return 1;
 }
 
 void XaviCleanupReleaseTree(XaviTree * in, XaviMemoryPool * pool)
@@ -96,11 +100,14 @@ void XaviCleanupClearTrees(XaviMemoryPool * pool)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XaviCleanupCacheArglist(XaviArglist * in, XaviMemoryPool * pool)
+int XaviCleanupCacheArglist(XaviArglist * in, XaviMemoryPool * pool)
 {
 	struct XaviArglistList * NewNode;
 	struct XaviArglistList * CurrentNode;
-	NewNode = malloc(sizeof(XaviArglistList));
+	if (!(NewNode = malloc(sizeof(XaviArglistList))))
+	{
+		return 0;
+	}
 	NewNode->item = in;
 	NewNode->next = NULL;
 
@@ -114,6 +121,7 @@ void XaviCleanupCacheArglist(XaviArglist * in, XaviMemoryPool * pool)
 		}
 		CurrentNode->next = NewNode;
 	}
+	return 1;
 }
 
 void XaviCleanupReleaseArglist(XaviArglist * in, XaviMemoryPool * pool)
@@ -159,11 +167,15 @@ void XaviCleanupClearArglists(XaviMemoryPool * pool)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void XaviCleanupCacheFunctionId(char * in, XaviMemoryPool * pool)
+int XaviCleanupCacheFunctionId(char * in, XaviMemoryPool * pool)
 {
 	struct XaviIdList * NewNode;
 	struct XaviIdList * CurrentNode;
-	NewNode = malloc(sizeof(XaviIdList));
+	if (!(NewNode = malloc(sizeof(XaviIdList))))
+	{
+		return 0;
+	}
+	
 	NewNode->item = in;
 	NewNode->next = NULL;
 
@@ -177,6 +189,7 @@ void XaviCleanupCacheFunctionId(char * in, XaviMemoryPool * pool)
 		}
 		CurrentNode->next = NewNode;
 	}
+	return 1;
 }
 
 void XaviCleanupReleaseFunctionId(char * in, XaviMemoryPool * pool)

@@ -23,13 +23,13 @@
 
 #include "XaviStructs.h"
 
-void XaviCleanupCacheTree(XaviTree * TreeToCache, XaviMemoryPool *);
+int XaviCleanupCacheTree(XaviTree * TreeToCache, XaviMemoryPool *);
 void XaviCleanupReleaseTree(XaviTree * TreeToRelease, XaviMemoryPool *);
 void XaviCleanupClearTrees(XaviMemoryPool *);
-void XaviCleanupCacheArglist(XaviArglist * ArglistToCache, XaviMemoryPool *);
+int XaviCleanupCacheArglist(XaviArglist * ArglistToCache, XaviMemoryPool *);
 void XaviCleanupReleaseArglist(XaviArglist * ArglistToRelease, XaviMemoryPool *);
 void XaviCleanupClearArglists(XaviMemoryPool *);
-void XaviCleanupCacheFunctionId(char * FunctionIdToCache, XaviMemoryPool *);
+int XaviCleanupCacheFunctionId(char * FunctionIdToCache, XaviMemoryPool *);
 void XaviCleanupReleaseFunctionId(char * FunctionIdToRelease, XaviMemoryPool *);
 void XaviCleanupClearFunctionIds(XaviMemoryPool *);
 void XaviCleanupClearAll(XaviMemoryPool *);
