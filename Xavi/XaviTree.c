@@ -28,9 +28,24 @@
 XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
-	rVal = malloc(sizeof(XaviTree));
-	rVal->op = malloc(sizeof(XaviOperator));
-	rVal->op->args = malloc(sizeof(XaviNumber) * 2);
+	XaviOperator * rValOp;
+	XaviNumber * rValArgs;
+
+	rVal = malloc(sizeof(XaviTree)); //if
+	rValOp = malloc(sizeof(XaviOperator)); //if
+	rValArgs = malloc(sizeof(XaviNumber) * 2); //if
+
+	if (!rVal || !rValOp || !rValArgs) {
+		free(rVal);
+		free(rValOp);
+		free(rValArgs);
+		return NULL;
+	}
+	
+	rVal->op = rValOp;
+	rVal->op->args = rValArgs;
+	
+	
 	XaviCleanupCacheTree(rVal, pool);
 
 	rVal->type = 'o';
@@ -47,8 +62,18 @@ XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviT
 XaviTree * XaviTreeNewInteger(int value, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
-	rVal = malloc(sizeof(XaviTree));
-	rVal->num = malloc(sizeof(XaviNumber));
+	XaviNumber * rValNum;
+
+	rVal = malloc(sizeof(XaviTree)); //if
+	rValNum = malloc(sizeof(XaviNumber)); //if
+
+	if (!rVal || !rValNum) {
+		free(rVal);
+		free(rValNum);
+		return NULL;
+	}
+	rVal->num = rValNum;
+
 	XaviCleanupCacheTree(rVal, pool);
 
 	rVal->type = 'n';
@@ -60,8 +85,18 @@ XaviTree * XaviTreeNewInteger(int value, XaviMemoryPool * pool)
 XaviTree * XaviTreeNewFloat(float value, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
-	rVal = malloc(sizeof(XaviTree));
-	rVal->num = malloc(sizeof(XaviNumber));
+	XaviNumber * rValNum;
+	
+	rVal = malloc(sizeof(XaviTree)); //if
+	rValNum = malloc(sizeof(XaviNumber)); //if
+	
+	if (!rVal || !rValNum) {
+		free(rVal);
+		free(rValNum);
+		return NULL;
+	}
+	rVal->num = rValNum;
+
 	XaviCleanupCacheTree(rVal, pool);
 	
 	rVal->type = 'n';
@@ -73,8 +108,18 @@ XaviTree * XaviTreeNewFloat(float value, XaviMemoryPool * pool)
 XaviTree * XaviTreeNewFunction(char * name, XaviArglist * in_arglist, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
-	rVal = malloc(sizeof(XaviTree));
-	rVal->func = malloc(sizeof(XaviFunction));
+	XaviFunction * rValFunc;
+	
+	rVal = malloc(sizeof(XaviTree)); //if
+	rValFunc = malloc(sizeof(XaviFunction)); //if
+	
+	if (!rVal || !rValFunc) {
+		free(rVal);
+		free(rValFunc);
+		return NULL;
+	}
+	rVal->func = rValFunc;
+
 	XaviCleanupCacheTree(rVal, pool);
 	
 	rVal->type = 'f';

@@ -28,14 +28,16 @@
 XaviArglist * XaviArglistNew(XaviTree * NewTree, XaviArglist * OldList, XaviMemoryPool * pool)
 {
 	XaviArglist * rVal;
-	rVal = malloc(sizeof(XaviArglist));
-	XaviCleanupCacheArglist(rVal, pool);
-	if (OldList) rVal->depth = OldList->depth + 1;
-	else rVal->depth = 1;
-	rVal->value = NewTree;
-	rVal->next = OldList;
-	XaviCleanupReleaseTree(NewTree, pool);
-	XaviCleanupReleaseArglist(OldList, pool);
+
+	if ((rVal = malloc(sizeof(XaviArglist)))) {
+		XaviCleanupCacheArglist(rVal, pool);
+		if (OldList) rVal->depth = OldList->depth + 1;
+		else rVal->depth = 1;
+		rVal->value = NewTree;
+		rVal->next = OldList;
+		XaviCleanupReleaseTree(NewTree, pool);
+		XaviCleanupReleaseArglist(OldList, pool);
+	}
 	return rVal;
 }
 
@@ -57,11 +59,11 @@ void XaviArglistDissolve(XaviArglist * OldArglist)
 
 XaviTree ** XaviArglistGetTrees(XaviArglist * InArglist)
 {
-	XaviTree ** rVal = malloc(InArglist->depth * sizeof(XaviTree *));
+	XaviTree ** rVal;
 	XaviArglist * Current = InArglist;
 	int i;
 	
-	if (rVal) {
+	if ((rVal = malloc(InArglist->depth * sizeof(XaviTree *)))) {
 		for (i = 0; i < InArglist->depth; i++) {
 			rVal[i] = Current->value;
 			Current = Current->next;

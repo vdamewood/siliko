@@ -50,7 +50,10 @@ XaviNumber EvaluateFunction(XaviFunction * func)
 	int i;
 
 	if (func->arg_count) {
-		arguments = malloc(sizeof(XaviNumber) * func->arg_count);
+		if (!(arguments = malloc(sizeof(XaviNumber) * func->arg_count))) {
+			rVal.status = E_MEMORY;
+			return rVal;
+		}
 		
 		for(i = 0; i < func->arg_count; i++) {
 			arguments[i] = XaviEvaluate(func->arg_vector[i]);
