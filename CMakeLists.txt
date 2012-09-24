@@ -29,6 +29,8 @@ option(BUILD_XAVISTA
   ${QT4_FOUND})
 option(BUILD_SHARED_LIBS "Build Xavi as a shared library." ON)
 option(BUILD_TESTS "Build testing programs." OFF)
+option(USE_BISON "Build a parser using GNU Bison" ON)
+option(USE_FLEX  "BUild a lexer using FLEX" ON)
 
 # Install locations and system-dependent values.
 if(WIN32)
