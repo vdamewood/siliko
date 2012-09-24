@@ -19,7 +19,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 # Dependency searches
-find_package(BISON 2.4.1 REQUIRED)
+find_package(BISON 2.6 REQUIRED)
 find_package(FLEX 2.5.35 REQUIRED)
 find_package(Qt4)
 
