@@ -29,9 +29,8 @@ enum XaviLexemeId
 
 typedef enum XaviLexemeId XaviLexemeId;
 
-int XaviLexerRead(XaviLexer * inLexer, YYSTYPE * token)
+int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 {
-	XaviLexer * lexer = (XaviLexer *) inLexer;
 	XaviLexemeId terminal = L_EOI;
 
 	/* TODO: Figure out which terminal we have and assign it to terminal
