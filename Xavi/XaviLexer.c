@@ -29,8 +29,7 @@ enum XaviLexemeId
 
 typedef enum XaviLexemeId XaviLexemeId;
 
-int Xavi_yylex(YYSTYPE * token, yyscan_t inLexer)
-//int XaviLexerRead(XaviLexer * inLexer, XaviToken * token)
+int XaviLexerRead(yyscan_t inLexer, YYSTYPE * token)
 {
 	XaviLexer * lexer = (XaviLexer *) inLexer;
 	XaviLexemeId terminal = L_EOI;

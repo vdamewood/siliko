@@ -11,7 +11,6 @@
 typedef void* yyscan_t;
 #endif
 #include "XaviYyParser.h"
-typedef YYSTYPE XaviToken;
 #else
 #error "Building without BISON is currently not supported."
 #endif
@@ -25,9 +24,8 @@ struct XaviLexer
 
 typedef struct XaviLexer XaviLexer;
 
-//int XaviLexerRead(XaviLexer *, XaviToken *);
-int Xavi_yylex(YYSTYPE * returnToken, yyscan_t yyscanner);
+int XaviLexerRead(yyscan_t, YYSTYPE *);
 void XaviLexerDestroy(XaviLexer**);
 XaviLexer * XaviLexerNew(const char * inputString);
-//#define Xavi_yylex(a,b) XaviLexerRead((b), (a))
+#define Xavi_yylex(a,b) XaviLexerRead((b), (a))
 #endif
