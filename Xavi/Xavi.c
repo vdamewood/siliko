@@ -32,22 +32,20 @@
 #define USE_FLEX 0
 #endif
 
+#if USE_FLEX
 #if !defined YY_TYPEDEF_YY_SCANNER_T
 #define YY_TYPEDEF_YY_SCANNER_T
-typedef void* yyscan_t;
-#endif
-
-#if USE_BISON
+typedef void * yyscan_t;
 #include "XaviYyParser.h"
-#else
-#error "Building without GNU Bison is not yet supported."
-#endif /* USE_BISON */
-
-#if USE_FLEX
 #include "XaviYyLexer.h"
+#endif
 #else
 #include "XaviLexer.h"
-#endif /* USE_FLEX */
+#endif
+
+#if !USE_BISON
+#error "Building without GNU Bison is not yet supported."
+#endif /* !USE_BISON */
 
 void XaviOpen(void)
 {

@@ -5,16 +5,6 @@
 #define USE_BISON 0
 #endif /* USE_BISON */
 
-#if USE_BISON
-#if !defined YY_TYPEDEF_YY_SCANNER_T
-#define YY_TYPEDEF_YY_SCANNER_T
-typedef void* yyscan_t;
-#endif
-#include "XaviYyParser.h"
-#else
-#error "Building without BISON is currently not supported."
-#endif
-
 struct XaviLexer
 {
 	const char * input;
@@ -23,8 +13,16 @@ struct XaviLexer
 };
 
 typedef struct XaviLexer XaviLexer;
+typedef XaviLexer * yyscan_t;
 
-int XaviLexerRead(yyscan_t, YYSTYPE *);
+#if USE_BISON
+#include "XaviYyParser.h"
+#else
+#error "Building without BISON is currently not supported."
+#endif
+
+
+int XaviLexerRead(XaviLexer *, YYSTYPE *);
 void XaviLexerDestroy(XaviLexer**);
 XaviLexer * XaviLexerNew(const char * inputString);
 #define Xavi_yylex(a,b) XaviLexerRead((b), (a))
