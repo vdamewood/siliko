@@ -8,6 +8,7 @@ include_directories(
 #endif
 
 if(USE_BISON)
+	add_definitions(-DUSE_BISON=1)
 	set(Xavi_BISON_INPUT  ${CMAKE_CURRENT_SOURCE_DIR}/XaviYyParser.y)
 	set(Xavi_BISON_HEADER ${CMAKE_CURRENT_BINARY_DIR}/XaviYyParser.h)
 	set(Xavi_BISON_SOURCE ${CMAKE_CURRENT_BINARY_DIR}/XaviYyParser.c)
@@ -24,11 +25,13 @@ if(USE_BISON)
 		COMMAND ${BISON_EXECUTABLE} ${Xavi_BISON_ARGS}
 		DEPENDS ${Xavi_BISON_INPUT})
 else()
+	add_definitions(-DUSE_BISON=0)
 	set(Xavi_BISON_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/XaviParser.h)
 	set(Xavi_BISON_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/XaviParser.c)
 endif()
 
 if(USE_FLEX)
+	add_definitions(-DUSE_FLEX=1)
 	set(Xavi_FLEX_INPUT  ${CMAKE_CURRENT_SOURCE_DIR}/XaviYyLexer.l)
 	set(Xavi_FLEX_HEADER ${CMAKE_CURRENT_BINARY_DIR}/XaviYyLexer.h)
 	set(Xavi_FLEX_SOURCE ${CMAKE_CURRENT_BINARY_DIR}/XaviYyLexer.c)
@@ -46,9 +49,12 @@ if(USE_FLEX)
 		COMMAND ${FLEX_EXECUTABLE} ${Xavi_FLEX_ARGS}
 		DEPENDS ${Xavi_FLEX_INPUT})
 else()
+	add_definitions(-DUSE_FLEX=0)
 	set(Xavi_FLEX_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/XaviLexer.h)
 	set(Xavi_FLEX_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/XaviLexer.c)
 endif()
+
+message("-- ++ COMPILE_DEFINITIONS is: ${COMPILE_DEFINITIONS}")
 
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS

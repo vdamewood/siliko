@@ -24,16 +24,31 @@
 %parse-param {yyscan_t scannerState}
 %lex-param {yyscan_t scannerState}
 %{
+#include <stdlib.h>
+
 #include "Xavi.h"
 #include "XaviCleanup.h"
 #include "XaviEvaluate.h"
 #include "XaviTree.h"
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
+
+/*#if !defined USE_FLEX
+#define USE_FLEX 0
+#endif*/
+
+#if !defined YY_TYPEDEF_YY_SCANNER_T
 #define YY_TYPEDEF_YY_SCANNER_T
 typedef void* yyscan_t;
+#endif
+
 #include "XaviYyParser.h"
+
+#if USE_FLEX
 #include "XaviYyLexer.h"
+#else
+#include "XaviLexer.h"
+#endif
 
 static void Xavi_yyerror(XaviNumber *,
 						 XaviMemoryPool *,

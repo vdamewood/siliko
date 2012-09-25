@@ -18,14 +18,36 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
 #include "XaviOperatorCall.h"
 
+#if !defined USE_BISON
+#define USE_BISON 0
+#endif
+
+#if !defined USE_FLEX
+#define USE_FLEX 0
+#endif
+
+#if !defined YY_TYPEDEF_YY_SCANNER_T
 #define YY_TYPEDEF_YY_SCANNER_T
 typedef void* yyscan_t;
+#endif
+
+#if USE_BISON
 #include "XaviYyParser.h"
+#else
+#error "Building without GNU Bison is not yet supported."
+#endif /* USE_BISON */
+
+#if USE_FLEX
 #include "XaviYyLexer.h"
+#else
+#include "XaviLexer.h"
+#endif /* USE_FLEX */
 
 void XaviOpen(void)
 {
@@ -43,18 +65,23 @@ XaviNumber XaviParse(const char *inString)
 {
 	XaviNumber rVal;
 	XaviMemoryPool pool;
-	yyscan_t scannerState;
-	YY_BUFFER_STATE buffer;
 
 	pool.DanglingTrees = NULL;
 	pool.DanglingArglists = NULL;
 	pool.DanglingIds = NULL;
-		
+
+#if USE_FLEX
+	yyscan_t scannerState;
+	YY_BUFFER_STATE buffer;
 	Xavi_yylex_init(&scannerState);
 	buffer = Xavi_yy_scan_string(inString, scannerState);
 	Xavi_yy_switch_to_buffer(buffer, scannerState);
 	Xavi_yyparse(&rVal, &pool, scannerState);
 	Xavi_yylex_destroy(scannerState);
-
+#else
+	XaviLexer *lexer = XaviLexerNew(inString);
+	Xavi_yyparse(&rVal, &pool, (void *)lexer);
+	XaviLexerDestroy(&lexer);
+#endif
 	return rVal;
 }
