@@ -82,13 +82,6 @@ static int isOperator(int character)
 		|| character == ')');
 }
 
-static int isIdLead(int character)
-{
-	return (
-		isalpha(character)
-		&& character != 'd');
-}
-
 static int isIdCharacter(int character)
 {
 	return (isalnum(character) || character == '_');
@@ -102,7 +95,6 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 	free(lexer->lexeme);
 	lexer->lexeme = NULL;
 
-	// FIXME: This code doesn't check for pi or e.
 	while (dfaState != -1) {
 		switch (dfaState) {
 		case DFA_START:
@@ -127,7 +119,7 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 				lexer->current++;
 				dfaState = DFA_INTEGER;
 			}
-			else if (isIdLead(*lexer->current)) {
+			else if (isalpha(*lexer->current)) {
 				lexer->current++;
 				dfaState = DFA_ID;
 			}
