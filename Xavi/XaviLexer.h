@@ -8,6 +8,7 @@
 struct XaviLexer
 {
 	const char * input;
+	const char * begin;
 	const char * current;
 	char * lexeme;
 };

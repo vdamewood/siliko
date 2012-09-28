@@ -2,6 +2,9 @@
    the GNU Lesser General Public License, version 3. */
 
 #include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
 #include "XaviLexer.h"
 
 #if !defined USE_BISON
@@ -24,17 +27,132 @@ enum XaviLexemeId
 	L_FLOAT,			/* [0-9]+\.[0-9]+ */
 	L_ID,				/* [a-ce-z][a-z0-9]*)|(d[a-z][a-z0-9]* */
 	L_E,				/* "e" */
-	L_PI				/* "pi" */
+	L_PI,				/* "pi" */
+	L_ERROR
+};
+
+enum XaviDfaState
+{
+	DFA_END = -1,
+	DFA_START = 0,
+	DFA_DICE,
+	DFA_ID,
+	DFA_INTEGER,
+	DFA_FLOAT,
+	DFA_TERM_CHAR,
+	DFA_TERM_STRING,
+	DFA_TERM_ERROR
 };
 
 typedef enum XaviLexemeId XaviLexemeId;
 
+static int isOperator(int character)
+{
+	return (
+		character == '+'
+		|| character == '-'
+		|| character == '/'
+		|| character == '^'
+		|| character == ','
+		|| character == '('
+		|| character == ')');
+}
+
+static int isIdLead(int character)
+{
+	return (
+		isalpha(character)
+		&& character != 'd');
+}
+
 int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 {
 	XaviLexemeId terminal = L_EOI;
+	int dfaState = DFA_START;
+	size_t length = 0;
+	free(lexer->lexeme);
+	lexer->lexeme = NULL;
 
-	/* TODO: Figure out which terminal we have and assign it to terminal
-			Then assign the lexeme to lexer->lexeme. */
+	// FIXME: This code doesn't check for pi or e.
+	while (dfaState != -1) {
+		switch (dfaState) {
+		case DFA_START:
+			if(isOperator(*lexer->current)) {
+				lexer->current++;
+				terminal = *lexer->begin;
+				dfaState = DFA_TERM_CHAR;
+			}
+			else if (*lexer->current == 'd') {
+				lexer->current++;
+				dfaState = DFA_DICE;
+			}
+			else if (isdigit(*lexer->current)) {
+				lexer->current++;
+				dfaState = DFA_INTEGER;
+			}
+			else if (isIdLead(*lexer->current)) {
+				lexer->current++;
+				dfaState = DFA_ID;
+			}
+			else if (isspace(*lexer->current)) {
+				lexer->begin++;
+				lexer->current++;
+			}
+			else {
+				dfaState = DFA_TERM_ERROR;
+			}
+			break;
+		case DFA_DICE:
+			if (isalpha(*lexer->current++)) {
+				dfaState = DFA_ID;
+			}
+			else {
+				terminal = *lexer->begin;
+				dfaState = DFA_TERM_CHAR;
+			}
+			break;
+		case DFA_ID:
+			if (!isalnum(*lexer->current++)) {
+				terminal = L_ID;
+				dfaState = DFA_TERM_STRING;
+			}
+			break;
+		case DFA_INTEGER:
+			if (*lexer->current == '.') {
+				lexer->current++;
+				dfaState = DFA_FLOAT;
+			}
+			else if (!isdigit(*lexer->current++)) {
+				terminal = L_INTEGER,
+				dfaState = DFA_TERM_STRING;
+			}
+			break;
+		case DFA_FLOAT:
+			if (!isdigit(*lexer->current++)) {
+				terminal = L_FLOAT;
+				dfaState = DFA_TERM_STRING;
+			}
+			break;
+		case DFA_TERM_CHAR:
+			lexer->lexeme = malloc(2);
+			lexer->lexeme[0] = *lexer->current;
+			lexer->lexeme[1] = '\0';
+			lexer->begin = lexer->current;
+			dfaState = -1;
+			break;
+		case DFA_TERM_STRING:
+			length = lexer->current - lexer->begin;
+			lexer->lexeme = malloc(length+1);
+			strncpy(lexer->lexeme, lexer->current, length);
+			lexer->lexeme[length] = '\0';			
+			lexer->begin = lexer->current;
+			dfaState = -1;
+			break;
+		case DFA_TERM_ERROR:
+			terminal = -1;
+			break;
+		}
+	}
 
 	switch (terminal) {
 	case L_EOI:
@@ -73,7 +191,8 @@ XaviLexer * XaviLexerNew(const char * inputString)
 {
 	XaviLexer * rVal = malloc(sizeof(XaviLexer));
 	rVal->input = inputString;
-	rVal->current = rVal->input;
+	rVal->begin = rVal->input; // Current beginning of read.
+	rVal->current = rVal->input; // Current end of read.
 	rVal->lexeme = NULL;
 	return rVal;
 }
