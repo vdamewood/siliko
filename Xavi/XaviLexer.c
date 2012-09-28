@@ -35,12 +35,16 @@ enum XaviDfaState
 {
 	DFA_END = -1,
 	DFA_START = 0,
+	DFA_E,
+	DFA_PI_1,
+	DFA_PI_2,
 	DFA_DICE,
 	DFA_ID,
 	DFA_INTEGER,
 	DFA_FLOAT,
 	DFA_TERM_CHAR,
 	DFA_TERM_STRING,
+	DFA_TERM_EOI,
 	DFA_TERM_ERROR
 };
 
@@ -52,6 +56,7 @@ static int isOperator(int character)
 		character == '+'
 		|| character == '-'
 		|| character == '/'
+		|| character == '*'
 		|| character == '^'
 		|| character == ','
 		|| character == '('
@@ -98,12 +103,16 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 				lexer->begin++;
 				lexer->current++;
 			}
+			else if (*lexer->current == '\0'){
+				dfaState = DFA_TERM_EOI;
+			}
 			else {
 				dfaState = DFA_TERM_ERROR;
 			}
 			break;
 		case DFA_DICE:
-			if (isalpha(*lexer->current++)) {
+			if (isalpha(*lexer->current)) {
+				lexer->current++;
 				dfaState = DFA_ID;
 			}
 			else {
@@ -112,7 +121,10 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 			}
 			break;
 		case DFA_ID:
-			if (!isalnum(*lexer->current++)) {
+			if (isalnum(*lexer->current)) {
+				lexer->current++;
+			}
+			else {
 				terminal = L_ID;
 				dfaState = DFA_TERM_STRING;
 			}
@@ -122,20 +134,26 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 				lexer->current++;
 				dfaState = DFA_FLOAT;
 			}
-			else if (!isdigit(*lexer->current++)) {
+			else if (isdigit(*lexer->current)) {
+				*lexer->current++;
+			}
+			else {
 				terminal = L_INTEGER,
 				dfaState = DFA_TERM_STRING;
 			}
 			break;
 		case DFA_FLOAT:
-			if (!isdigit(*lexer->current++)) {
+			if (isdigit(*lexer->current)) {
+				lexer->current++;
+			}
+			else {
 				terminal = L_FLOAT;
 				dfaState = DFA_TERM_STRING;
 			}
 			break;
 		case DFA_TERM_CHAR:
 			lexer->lexeme = malloc(2);
-			lexer->lexeme[0] = *lexer->current;
+			lexer->lexeme[0] = *lexer->begin;
 			lexer->lexeme[1] = '\0';
 			lexer->begin = lexer->current;
 			dfaState = -1;
@@ -143,9 +161,13 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 		case DFA_TERM_STRING:
 			length = lexer->current - lexer->begin;
 			lexer->lexeme = malloc(length+1);
-			strncpy(lexer->lexeme, lexer->current, length);
+			strncpy(lexer->lexeme, lexer->begin, length);
 			lexer->lexeme[length] = '\0';			
 			lexer->begin = lexer->current;
+			dfaState = -1;
+			break;
+		case DFA_TERM_EOI:
+			terminal = EOL;
 			dfaState = -1;
 			break;
 		case DFA_TERM_ERROR:
@@ -160,6 +182,7 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 	case 'd':
 	case '+':
 	case '-':
+	case '*':
 	case '/':
 	case '^':
 	case ',':
@@ -182,7 +205,7 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 		token->s = lexer->lexeme;
 		return ID;
 	default:
-		token->s = lexer->lexeme;
+		token->i = 0;
 		return ERROR;
 	}
 }
