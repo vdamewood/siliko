@@ -20,7 +20,7 @@ endif()
 
 # Dependency searches
 find_package(BISON 2.6 REQUIRED)
-find_package(FLEX 2.5.35 REQUIRED)
+find_package(FLEX 2.5.35)
 find_package(Qt4)
 
 # Configuration Options
@@ -30,7 +30,7 @@ option(BUILD_XAVISTA
 option(BUILD_SHARED_LIBS "Build Xavi as a shared library." ON)
 option(BUILD_TESTS "Build testing programs." OFF)
 option(USE_BISON "Build a parser using GNU Bison" ON)
-option(USE_FLEX  "BUild a lexer using FLEX" ON)
+option(USE_FLEX  "Build a lexer using FLEX" OFF)
 
 # Install locations and system-dependent values.
 if(WIN32)

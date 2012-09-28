@@ -35,8 +35,9 @@
 #error "Building without BISON is currently not supported."
 #endif
 
-#define EULER 2.18
-#define PI 3.14
+/* Values taken from Google Calculator 2011-07-06 */
+#define EULER 2.71828183
+#define PI    3.14159265
 
 enum XaviLexemeId
 {
@@ -88,6 +89,11 @@ static int isIdLead(int character)
 		&& character != 'd');
 }
 
+static int isIdCharacter(int character)
+{
+	return (isalnum(character) || character == '_');
+}
+
 int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 {
 	XaviLexemeId terminal = L_EOI;
@@ -108,6 +114,14 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 			else if (*lexer->current == 'd') {
 				lexer->current++;
 				dfaState = DFA_DICE;
+			}
+			else if (*lexer->current == 'e') {
+				lexer->current++;
+				dfaState = DFA_E;
+			}
+			else if (*lexer->current == 'p') {
+				lexer->current++;
+				dfaState = DFA_PI_1;
 			}
 			else if (isdigit(*lexer->current)) {
 				lexer->current++;
@@ -136,6 +150,40 @@ int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
 			else {
 				terminal = *lexer->begin;
 				dfaState = DFA_TERM_CHAR;
+			}
+			break;
+		case DFA_E:
+			if (isalnum(*lexer->current)) {
+				lexer->current++;
+				dfaState = DFA_ID;
+			}
+			else {
+				terminal = L_E;
+				dfaState = DFA_TERM_CHAR;
+			}
+			break;
+		case DFA_PI_1:
+			if (*lexer->current == 'i') {
+				lexer->current++;
+				dfaState = DFA_PI_2;
+			}
+			else if (isIdCharacter(*lexer->current)) {
+				lexer->current++;
+				dfaState = DFA_ID;
+			}
+			else {
+				terminal = L_ID;
+				dfaState = DFA_TERM_STRING;
+			}
+			break;
+		case DFA_PI_2:
+			if (isIdCharacter(*lexer->current)) {
+				lexer->current++;
+				dfaState = DFA_ID;
+			}
+			else {
+				terminal = L_PI;
+				dfaState = DFA_TERM_STRING;
 			}
 			break;
 		case DFA_ID:
