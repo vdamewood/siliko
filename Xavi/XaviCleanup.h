@@ -1,5 +1,5 @@
 /*
- * XaviEvaluate.h: Keep track of dangling objects while composing syntax tree.
+ * XaviCleanup.h: Keep track of dangling objects while composing syntax tree.
  * Copyright 2012 Vincent Damewood
  *
  * This file is part of Xavi.

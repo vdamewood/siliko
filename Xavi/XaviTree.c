@@ -1,5 +1,5 @@
 /*
- * Xavitree.c: Functions to manipulate abstract syntax trees.
+ * XaviTree.c: Functions to manipulate abstract syntax trees.
  * Copyright 2012 Vincent Damewood
  *
  * This file is part of Xavi.
