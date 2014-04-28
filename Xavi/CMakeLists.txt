@@ -1,6 +1,6 @@
 # Xavi
 
-#if (USE_BISON OR USE_FLEX)
+#if (USE_BISON)
 set(Xavi_YY_PREFIX Xavi_yy)
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -30,31 +30,8 @@ else()
 	set(Xavi_BISON_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/XaviParser.c)
 endif()
 
-if(USE_FLEX)
-	add_definitions(-DUSE_FLEX=1)
-	set(Xavi_FLEX_INPUT  ${CMAKE_CURRENT_SOURCE_DIR}/XaviYyLexer.l)
-	set(Xavi_FLEX_HEADER ${CMAKE_CURRENT_BINARY_DIR}/XaviYyLexer.h)
-	set(Xavi_FLEX_SOURCE ${CMAKE_CURRENT_BINARY_DIR}/XaviYyLexer.c)
-	set(Xavi_FLEX_OUTPUT ${Xavi_FLEX_HEADER} ${Xavi_FLEX_SOURCE})
-
-	set(Xavi_FLEX_ARGS
-		--nounistd
-		--prefix=${Xavi_YY_PREFIX}
-		--header-file=${Xavi_FLEX_HEADER}
-		--outfile=${Xavi_FLEX_SOURCE}
-		${Xavi_FLEX_INPUT})
-
-	add_custom_command(
-		OUTPUT  ${Xavi_FLEX_OUTPUT}
-		COMMAND ${FLEX_EXECUTABLE} ${Xavi_FLEX_ARGS}
-		DEPENDS ${Xavi_FLEX_INPUT})
-else()
-	add_definitions(-DUSE_FLEX=0)
-	set(Xavi_FLEX_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/XaviLexer.h)
-	set(Xavi_FLEX_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/XaviLexer.c)
-endif()
-
-message("-- ++ COMPILE_DEFINITIONS is: ${COMPILE_DEFINITIONS}")
+set(Xavi_FLEX_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/XaviLexer.h)
+set(Xavi_FLEX_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/XaviLexer.c)
 
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS

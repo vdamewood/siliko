@@ -28,20 +28,7 @@
 #define USE_BISON 0
 #endif
 
-#if !defined USE_FLEX
-#define USE_FLEX 0
-#endif
-
-#if USE_FLEX
-#if !defined YY_TYPEDEF_YY_SCANNER_T
-#define YY_TYPEDEF_YY_SCANNER_T
-typedef void * yyscan_t;
-#include "XaviYyParser.h"
-#include "XaviYyLexer.h"
-#endif
-#else
 #include "XaviLexer.h"
-#endif
 
 #if !USE_BISON
 #error "Building without GNU Bison is not yet supported."
@@ -68,18 +55,9 @@ XaviNumber XaviParse(const char *inString)
 	pool.DanglingArglists = NULL;
 	pool.DanglingIds = NULL;
 
-#if USE_FLEX
-	yyscan_t scannerState;
-	YY_BUFFER_STATE buffer;
-	Xavi_yylex_init(&scannerState);
-	buffer = Xavi_yy_scan_string(inString, scannerState);
-	Xavi_yy_switch_to_buffer(buffer, scannerState);
-	Xavi_yyparse(&rVal, &pool, scannerState);
-	Xavi_yylex_destroy(scannerState);
-#else
 	XaviLexer *lexer = XaviLexerNew(inString);
 	Xavi_yyparse(&rVal, &pool, (void *)lexer);
 	XaviLexerDestroy(&lexer);
-#endif
+
 	return rVal;
 }

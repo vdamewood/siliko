@@ -33,20 +33,8 @@
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
 
-#if !defined USE_FLEX
-#define USE_FLEX 0
-#endif
-
-#if USE_FLEX
-#ifndef YY_TYPEDEF_YY_SCANNER_T
-#define YY_TYPEDEF_YY_SCANNER_T
-typedef void* yyscan_t;
-#endif
-#include "XaviYyParser.h"
-#include "XaviYyLexer.h"
-#else
+//#include "XaviYyParser.h"
 #include "XaviLexer.h"
-#endif
 
 static void Xavi_yyerror(XaviNumber *,
 						 XaviMemoryPool *,
