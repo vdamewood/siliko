@@ -28,11 +28,10 @@
 #define USE_BISON 0
 #endif
 
-#include "XaviLexer.h"
-
 #if !USE_BISON
-#error "Building without GNU Bison is not yet supported."
+#include "XaviParser.h"
 #endif /* !USE_BISON */
+#include "XaviLexer.h"
 
 void XaviOpen(void)
 {
@@ -56,7 +55,11 @@ XaviNumber XaviParse(const char *inString)
 	pool.DanglingIds = NULL;
 
 	XaviLexer *lexer = XaviLexerNew(inString);
+#if USE_BISON
 	Xavi_yyparse(&rVal, &pool, (void *)lexer);
+#else
+	XaviInternalParse(&rVal, &pool, lexer);
+#endif /* USE_BISON */
 	XaviLexerDestroy(&lexer);
 
 	return rVal;

@@ -19,9 +19,9 @@
 #include <stdio.h>
 
 #include "XaviLexer.h"
-#include "XaviYyParser.h"
+#include "XaviParser.h"
 
-void printResult(int terminal, YYSTYPE token)
+void printResult(int terminal, XaviTokenValue token)
 {
 	printf("Token: ");
 	switch (terminal) {
@@ -51,7 +51,7 @@ void printResult(int terminal, YYSTYPE token)
 int main(int argc, char *argv[])
 {
 	int terminal = -1;
-	YYSTYPE token;
+	XaviTokenValue token;
 	if (argc != 2) {
 		printf("Usage: %s <expression>", argv[0]);
 		return 1;

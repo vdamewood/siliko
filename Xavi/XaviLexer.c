@@ -25,16 +25,6 @@
 
 #include "XaviLexer.h"
 
-#if !defined USE_BISON
-#define USE_BISON 0
-#endif /* USE_BISON */
-
-#if USE_BISON
-#include "XaviYyParser.h"
-#else
-#error "Building without BISON is currently not supported."
-#endif
-
 /* Values taken from Google Calculator 2011-07-06 */
 #define EULER 2.71828183
 #define PI    3.14159265
@@ -87,7 +77,7 @@ static int isIdCharacter(int character)
 	return (isalnum(character) || character == '_');
 }
 
-int XaviLexerRead(XaviLexer * lexer, YYSTYPE * token)
+int XaviLexerRead(XaviLexer * lexer, XaviTokenValue * token)
 {
 	XaviLexemeId terminal = L_EOI;
 	int dfaState = DFA_START;
