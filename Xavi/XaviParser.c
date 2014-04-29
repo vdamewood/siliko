@@ -18,16 +18,63 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+
 #include "Xavi.h"
 #include "XaviStructs.h"
 #include "XaviParser.h"
+
+#include "XaviCleanup.h"
+#include "XaviEvaluate.h"
+#include "XaviTree.h"
+#include "XaviArglist.h"
+#include "XaviFunctionId.h"
+
+
+static void XaviParseError(
+	XaviNumber * result,
+	XaviMemoryPool * pool)
+{
+        result->status = E_SYNTAX;
+        XaviCleanupClearAll(pool);
+}
+
+
+static XaviTree * XaviGetInteger(XaviLexer * lexer, XaviMemoryPool * pool)
+{
+	XaviTokenValue value;
+	int token = XaviLexerRead(lexer, &value);
+
+
+	if (token == INTEGER)
+	{
+		XaviTree * rVal = XaviTreeNewInteger(value.i, pool);
+		return rVal;
+	}
+	else
+	{
+		return NULL;
+	}
+}
 
 int XaviInternalParse(
 	XaviNumber * value,
 	XaviMemoryPool * pool,
 	XaviLexer * lexer)
 {
-	value->status = S_INTEGER;
-	value->i = 42;
+	// FIXME: Change GetInteger to GetCalculation
+	XaviTree * tree = XaviGetInteger(lexer, pool);
+
+	if (tree != NULL)
+	{
+		*value = XaviEvaluate(tree);
+        	XaviCleanupClearAll(pool);
+	}
+	else
+	{
+		value->status = E_SYNTAX;
+		value->i = 0;
+	}
+
 	return 0;
 }
