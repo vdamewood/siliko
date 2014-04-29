@@ -28,9 +28,6 @@ void printResult(int terminal, XaviTokenValue token)
 	case EOL:
 		printf("EOL\n");
 		break;
-	case UNEG:
-		printf("UNEG\n");
-		break;
 	case INTEGER:
 		printf("Integer(%i)\n", token.i);
 		break;

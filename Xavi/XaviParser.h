@@ -36,11 +36,10 @@ typedef YYSTYPE XaviTokenValue;
 enum yytokentype
 {
      EOL = 0,
-     UNEG = 258,
-     INTEGER = 259,
-     FLOAT = 260,
-     ID = 261,
-     ERROR = 262
+     INTEGER = 258,
+     FLOAT = 259,
+     ID = 260,
+     ERROR = 261
 };
 
 

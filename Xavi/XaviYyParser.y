@@ -32,14 +32,13 @@
 #include "XaviTree.h"
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
-
-//#include "XaviYyParser.h"
 #include "XaviLexer.h"
 
-static void Xavi_yyerror(XaviNumber *,
-						 XaviMemoryPool *,
-						 yyscan_t,
-						 const char *);
+static void Xavi_yyerror(
+	XaviNumber *,
+	XaviMemoryPool *,
+	yyscan_t,
+	const char *);
 %}
 
 
@@ -54,52 +53,62 @@ static void Xavi_yyerror(XaviNumber *,
 	float f;
 }
 
-%left '+' '-'
-%left '*' '/'
-%right '^'
-%nonassoc 'd' UNEG
-
 %token <i> INTEGER
 %token <f> FLOAT
-%token UNEG
 %token <s> ID
 %token ERROR
 %token EOL 0
 
-%type <t> expression fcall
+%type <t> number fcall atom expr expr_1 expr_2 expr_3
 %type <a> arglist
 %type <s> id
 
 %%
 calculation: EOL { result->status = S_INTEGER; result->i = 0; }
- | expression EOL {
+ | expr EOL {
 	*result = XaviEvaluate($1);
 	XaviCleanupClearAll(pool);
 };
 
-expression: INTEGER            { $$ = XaviTreeNewInteger($1, pool); }
- | '-'      INTEGER %prec UNEG { $$ = XaviTreeNewInteger($2 * -1, pool); }
- |          FLOAT              { $$ = XaviTreeNewFloat($1, pool); }
- | '-'      FLOAT %prec UNEG   { $$ = XaviTreeNewFloat($2 * -1.0, pool); }
- | expression '+' expression { $$ = XaviTreeNewOperator(OP_ADD, $1, $3, pool); }
- | expression '-' expression { $$ = XaviTreeNewOperator(OP_SUB, $1, $3, pool); }
- | expression '*' expression { $$ = XaviTreeNewOperator(OP_MUL, $1, $3, pool); }
- | expression '/' expression { $$ = XaviTreeNewOperator(OP_DIV, $1, $3, pool); }
- | expression '^' expression { $$ = XaviTreeNewOperator(OP_POW, $1, $3, pool); }
- | expression 'd' INTEGER {
-	$$ = XaviTreeNewOperator(OP_DICE, $1, XaviTreeNewInteger($3, pool), pool);
-   }
- | '(' expression ')' { $$ = $2; }
- | fcall
- | ERROR { YYERROR; }
-;
+expr:	expr_1
+ |	expr '+' expr_1 { $$ = XaviTreeNewOperator(OP_ADD, $1, $3, pool); }
+ |	expr '-' expr_1 { $$ = XaviTreeNewOperator(OP_SUB, $1, $3, pool); }
+
+expr_1: expr_2
+ |	expr_1 '*' expr_2 { $$ = XaviTreeNewOperator(OP_MUL, $1, $3, pool); }
+ |	expr_1 '/' expr_2 { $$ = XaviTreeNewOperator(OP_DIV, $1, $3, pool); }
+
+expr_2: expr_3
+ |	expr_3 '^' expr_2 { $$ = XaviTreeNewOperator(OP_POW, $1, $3, pool); }
+
+expr_3: atom
+ |	atom 'd' INTEGER
+	{
+		$$ =
+		XaviTreeNewOperator(
+			OP_DICE,
+			$1,
+			XaviTreeNewInteger($3, pool),
+			pool);
+	}
+
+atom: number
+ |	'(' expr ')' { $$ = $2; }
+ |	fcall
+ |	ERROR { YYERROR; }
+
+number: INTEGER     { $$ = XaviTreeNewInteger($1, pool); }
+ |	'-' INTEGER { $$ = XaviTreeNewInteger($2 * -1, pool); }
+ |      FLOAT       { $$ = XaviTreeNewFloat($1, pool); }
+ |	'-' FLOAT   { $$ = XaviTreeNewFloat($2 * -1.0, pool); }
+
 
 fcall: id '(' arglist ')' { $$ = XaviTreeNewFunction($1, $3, pool); };
 
 id: ID { $$ = XaviFunctionIdNew(Xavi_yylval.s, pool); }
 
-arglist: expression { $$ = XaviArglistNew($1, NULL, pool); }
- | expression ',' arglist { $$ = XaviArglistNew($1, $3, pool); };
+arglist: expr { $$ = XaviArglistNew($1, NULL, pool); }
+ | expr ',' arglist { $$ = XaviArglistNew($1, $3, pool); };
 ;
 %%
 
