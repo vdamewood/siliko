@@ -59,24 +59,114 @@ static void Xavi_yyerror(
 %token ERROR
 %token EOL 0
 
-%type <t> number fcall atom expr expr_1 expr_2 expr_3
+%type <t> number fcall atom expr_0 expr_0r expr_1 expr_1r expr_2 expr_3
 %type <a> arglist
 %type <s> id
 
 %%
 calculation: EOL { result->status = S_INTEGER; result->i = 0; }
- | expr EOL {
+ | expr_0 EOL {
 	*result = XaviEvaluate($1);
 	XaviCleanupClearAll(pool);
 };
 
-expr:	expr_1
+/*expr:	expr_1
  |	expr '+' expr_1 { $$ = XaviTreeNewOperator(OP_ADD, $1, $3, pool); }
- |	expr '-' expr_1 { $$ = XaviTreeNewOperator(OP_SUB, $1, $3, pool); }
+ |	expr '-' expr_1 { $$ = XaviTreeNewOperator(OP_SUB, $1, $3, pool); }*/
 
-expr_1: expr_2
- |	expr_1 '*' expr_2 { $$ = XaviTreeNewOperator(OP_MUL, $1, $3, pool); }
- |	expr_1 '/' expr_2 { $$ = XaviTreeNewOperator(OP_DIV, $1, $3, pool); }
+expr_0: expr_1 expr_0r
+{
+	if ($2 != NULL)
+	{
+		XaviTreeGraftLeft($2, $1, pool);
+		$$ = $2;
+	}
+	else
+	{
+		$$ = $1;
+	}
+}
+ 
+expr_0r: { $$ = NULL; }
+ | '+' expr_1 expr_0r
+{
+	if ($3 != NULL)
+	{
+		
+		XaviTreeGraftLeft(
+			$3,
+			XaviTreeNewOperator(OP_ADD, NULL, $2, pool),
+			pool);
+		$$ = $3;
+	}
+	else
+	{
+		$$ = XaviTreeNewOperator(OP_ADD, NULL, $2, pool);
+	}
+}
+ | '-' expr_1 expr_0r
+{
+	if ($3 != NULL)
+	{
+		
+		XaviTreeGraftLeft(
+			$3,
+			XaviTreeNewOperator(OP_SUB, NULL, $2, pool),
+			pool);
+		$$ = $3;
+	}
+	else
+	{
+		$$ = XaviTreeNewOperator(OP_SUB, NULL, $2, pool);
+	}
+}
+
+expr_1: expr_2 expr_1r
+{
+	if ($2 != NULL)
+	{
+		XaviTreeGraftLeft($2, $1, pool);
+		$$ = $2;
+	}
+	else
+	{
+		$$ = $1;
+	}
+}
+
+expr_1r: { $$ = NULL; }
+ | '*' expr_2 expr_1r
+{
+	if ($3 != NULL)
+	{
+		
+		XaviTreeGraftLeft(
+			$3,
+			XaviTreeNewOperator(OP_MUL, NULL, $2, pool),
+			pool);
+		$$ = $3;
+	}
+	else
+	{
+		$$ = XaviTreeNewOperator(OP_MUL, NULL, $2, pool);
+	}
+}
+ | '/' expr_2 expr_1r
+{
+	if ($3 != NULL)
+	{
+		
+		XaviTreeGraftLeft(
+			$3,
+			XaviTreeNewOperator(OP_DIV, NULL, $2, pool),
+			pool);
+		$$ = $3;
+	}
+	else
+	{
+		$$ = XaviTreeNewOperator(OP_DIV, NULL, $2, pool);
+	}
+}
 
 expr_2: expr_3
  |	expr_3 '^' expr_2 { $$ = XaviTreeNewOperator(OP_POW, $1, $3, pool); }
@@ -93,7 +183,7 @@ expr_3: atom
 	}
 
 atom: number
- |	'(' expr ')' { $$ = $2; }
+ |	'(' expr_0 ')' { $$ = $2; }
  |	fcall
  |	ERROR { YYERROR; }
 
@@ -107,8 +197,8 @@ fcall: id '(' arglist ')' { $$ = XaviTreeNewFunction($1, $3, pool); };
 
 id: ID { $$ = XaviFunctionIdNew(Xavi_yylval.s, pool); }
 
-arglist: expr { $$ = XaviArglistNew($1, NULL, pool); }
- | expr ',' arglist { $$ = XaviArglistNew($1, $3, pool); };
+arglist: expr_0 { $$ = XaviArglistNew($1, NULL, pool); }
+ | expr_0 ',' arglist { $$ = XaviArglistNew($1, $3, pool); };
 ;
 %%
 

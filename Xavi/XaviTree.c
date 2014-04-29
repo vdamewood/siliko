@@ -25,6 +25,28 @@
 #include "XaviCleanup.h"
 #include "XaviFunctionId.h"
 
+int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left, XaviMemoryPool * pool)
+{
+	if (parent->type = 'o')
+	{
+		if (parent->op->left == NULL)
+		{
+			parent->op->left = left;
+			XaviCleanupReleaseTree(left, pool);
+			return -1;
+		}
+		else
+		{
+			return XaviTreeGraftLeft(parent->op->left, left, pool);
+		}
+	}
+	else
+	{
+		return 0;
+	}
+	
+}
+
 XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;

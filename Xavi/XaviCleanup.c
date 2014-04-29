@@ -62,7 +62,7 @@ void XaviCleanupReleaseTree(XaviTree * in, XaviMemoryPool * pool)
 	struct XaviTreeList ** ParentPointer;
 	struct XaviTreeList * CurrentNode;
 
-	if (!pool->DanglingTrees) {
+	if (!pool->DanglingTrees || in == NULL) {
 		return;
 	}
 
