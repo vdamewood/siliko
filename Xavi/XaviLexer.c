@@ -77,7 +77,45 @@ static int isIdCharacter(int character)
 	return (isalnum(character) || character == '_');
 }
 
+
 int XaviLexerRead(XaviLexer * lexer, XaviTokenValue * token)
+{
+	int rVal = XaviLexerPeek(lexer, token);
+	XaviLexerNext(lexer);
+	return rVal;
+}
+
+static void XaviLexerLoad(XaviLexer *);
+
+int XaviLexerPeek(XaviLexer * lexer, XaviTokenValue * token)
+{
+	if (!lexer->token)
+		XaviLexerLoad(lexer);
+
+	switch (lexer->token)
+	{
+	case INTEGER:
+		token->i = lexer->intValue;
+		break;
+	case FLOAT:
+		token->f = lexer->floatValue;
+		break;
+	case ID:
+		token->s = lexer->lexeme;
+		break;
+	}
+	return lexer->token;
+	
+}
+
+void XaviLexerNext(XaviLexer * lexer)
+{
+	lexer->token = 0;
+	lexer->intValue = 0;
+	lexer->lexeme = NULL;
+}
+
+static void XaviLexerLoad(XaviLexer * lexer)
 {
 	XaviLexemeId terminal = L_EOI;
 	int dfaState = DFA_START;
@@ -226,7 +264,8 @@ int XaviLexerRead(XaviLexer * lexer, XaviTokenValue * token)
 
 	switch (terminal) {
 	case L_EOI:
-		return EOL;
+		lexer->token = EOL;
+		break;
 	case 'd':
 	case '+':
 	case '-':
@@ -236,25 +275,29 @@ int XaviLexerRead(XaviLexer * lexer, XaviTokenValue * token)
 	case ',':
 	case '(':
 	case ')':
-		return *lexer->lexeme;
+		lexer->token = *lexer->lexeme;
+		break;
 	case L_INTEGER:
-		token->i = atoi(lexer->lexeme);
-		return INTEGER;
+		lexer->intValue = atoi(lexer->lexeme);
+		lexer->token = INTEGER;
+		break;
 	case L_FLOAT:
-		token->f = atof(lexer->lexeme);
-		return FLOAT;
+		lexer->floatValue = atof(lexer->lexeme);
+		lexer->token = FLOAT;
+		break;
 	case L_E:
-		token->f = EULER;
-		return FLOAT;
+		lexer->floatValue = EULER;
+		lexer->token = FLOAT;
+		break;
 	case L_PI:
-		token->f = PI;
-		return FLOAT;
+		lexer->floatValue = PI;
+		lexer->token = FLOAT;
+		break;
 	case L_ID:
-		token->s = lexer->lexeme;
-		return ID;
+		lexer->token = ID;
+		break;
 	default:
-		token->i = 0;
-		return ERROR;
+		lexer->token = ERROR;
 	}
 }
 
@@ -265,6 +308,8 @@ XaviLexer * XaviLexerNew(const char * inputString)
 	rVal->begin = rVal->input; // Current beginning of read.
 	rVal->current = rVal->input; // Current end of read.
 	rVal->lexeme = NULL;
+	rVal->token = 0;
+	rVal->intValue = 0;
 	return rVal;
 }
 

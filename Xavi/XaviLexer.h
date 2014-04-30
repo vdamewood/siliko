@@ -27,6 +27,13 @@ struct XaviLexer
 	const char * begin;
 	const char * current;
 	char * lexeme;
+	int token;
+
+	union
+	{
+		int intValue;
+		float floatValue;
+	};
 };
 
 typedef struct XaviLexer XaviLexer;
@@ -35,6 +42,9 @@ typedef XaviLexer * yyscan_t;
 #include "XaviParser.h"
 
 int XaviLexerRead(XaviLexer *, XaviTokenValue *);
+int XaviLexerPeek(XaviLexer *, XaviTokenValue *);
+void XaviLexerNext(XaviLexer *);
+
 void XaviLexerDestroy(XaviLexer**);
 XaviLexer * XaviLexerNew(const char * inputString);
 #define Xavi_yylex(a,b) XaviLexerRead((b), (a))
