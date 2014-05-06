@@ -112,7 +112,6 @@ void XaviLexerNext(XaviLexer * lexer)
 {
 	lexer->token = 0;
 	lexer->intValue = 0;
-	lexer->lexeme = NULL;
 }
 
 static void XaviLexerLoad(XaviLexer * lexer)
