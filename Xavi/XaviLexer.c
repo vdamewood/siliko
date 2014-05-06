@@ -92,18 +92,20 @@ int XaviLexerPeek(XaviLexer * lexer, XaviTokenValue * token)
 	if (!lexer->token)
 		XaviLexerLoad(lexer);
 
-	switch (lexer->token)
-	{
-	case INTEGER:
-		token->i = lexer->intValue;
-		break;
-	case FLOAT:
-		token->f = lexer->floatValue;
-		break;
-	case ID:
-		token->s = lexer->lexeme;
-		break;
-	}
+	if (token != NULL)
+		switch (lexer->token)
+		{
+		case INTEGER:
+			token->i = lexer->intValue;
+			break;
+		case FLOAT:
+			token->f = lexer->floatValue;
+			break;
+		case ID:
+			token->s = lexer->lexeme;
+			break;
+		}
+
 	return lexer->token;
 	
 }
