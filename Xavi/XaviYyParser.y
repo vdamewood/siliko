@@ -59,7 +59,7 @@ static void Xavi_yyerror(
 %token ERROR
 %token EOL 0
 
-%type <t> number fcall atom expr_0 expr_0r expr_1 expr_1r expr_2 expr_3
+%type <t> unumber number fcall atom expr_0 expr_0r expr_1 expr_1r expr_2 expr_3
 %type <a> arglist
 %type <s> id
 
@@ -187,11 +187,18 @@ atom: number
  |	fcall
  |	ERROR { YYERROR; }
 
-number: INTEGER     { $$ = XaviTreeNewInteger($1, pool); }
- |	'-' INTEGER { $$ = XaviTreeNewInteger($2 * -1, pool); }
- |      FLOAT       { $$ = XaviTreeNewFloat($1, pool); }
- |	'-' FLOAT   { $$ = XaviTreeNewFloat($2 * -1.0, pool); }
+number:	unumber
+ |	'-' unumber
+{
+	if (!XaviTreeNegate($2))
+	{
+		YYERROR;
+	}
+	$$ = $2;
+}
 
+unumber: INTEGER     { $$ = XaviTreeNewInteger($1, pool); }
+|        FLOAT       { $$ = XaviTreeNewFloat($1, pool); }
 
 fcall: id '(' arglist ')' { $$ = XaviTreeNewFunction($1, $3, pool); };
 

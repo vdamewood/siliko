@@ -24,6 +24,7 @@
 #include "XaviStructs.h"
 
 int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left, XaviMemoryPool *);
+int XaviTreeNegate(XaviTree *);
 XaviTree * XaviTreeNewOperator(XaviOperatorSymbol Operator, XaviTree * LeftOperand, XaviTree * RightOperand, XaviMemoryPool *);
 XaviTree * XaviTreeNewInteger(int Value, XaviMemoryPool *);
 XaviTree * XaviTreeNewFloat(float Value, XaviMemoryPool *);

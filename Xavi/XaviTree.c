@@ -47,6 +47,19 @@ int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left, XaviMemoryPool * pool)
 	
 }
 
+int XaviTreeNegate(XaviTree * tree)
+{
+	if (tree->type != 'n')
+		return 0;
+	else if (tree->num->status == S_INTEGER)
+		tree->num->i *= -1;
+	else if (tree->num->status == S_FLOAT)
+		tree->num->f *= -1.0;
+	else
+		return 0;
+	return 1;
+}
+
 XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
