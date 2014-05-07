@@ -341,13 +341,12 @@ int XaviInternalParse(
 	if (tree != NULL && XaviLexerPeek(lexer, NULL) == EOL)
 	{
 		*value = XaviEvaluate(tree);
-        	XaviCleanupClearAll(pool);
 	}
 	else
 	{
 		value->status = E_SYNTAX;
 		value->i = 0;
 	}
-
+	XaviCleanupClearAll(pool);
 	return 0;
 }

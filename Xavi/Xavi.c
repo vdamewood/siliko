@@ -1,6 +1,6 @@
 /*
  * Xavi.c: Public interface for Xavi.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -23,15 +23,7 @@
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
 #include "XaviOperatorCall.h"
-
-#if !defined USE_BISON
-#define USE_BISON 0
-#endif
-
-#if !USE_BISON
 #include "XaviParser.h"
-#endif /* !USE_BISON */
-#include "XaviLexer.h"
 
 void XaviOpen(void)
 {
@@ -55,11 +47,7 @@ XaviNumber XaviParse(const char *inString)
 	pool.DanglingIds = NULL;
 
 	XaviLexer *lexer = XaviLexerNew(inString);
-#if USE_BISON
-	Xavi_yyparse(&rVal, &pool, (void *)lexer);
-#else
 	XaviInternalParse(&rVal, &pool, lexer);
-#endif /* USE_BISON */
 	XaviLexerDestroy(&lexer);
 
 	return rVal;

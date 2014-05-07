@@ -21,15 +21,7 @@
 #if !defined XAVI_PARSER_H
 #define XAVI_PARSER_H
 
-#if !defined USE_BISON
-#define USE_BISON 0
-#endif /* USE_BISON */
 
-
-#if USE_BISON
-#include "XaviYyParser.h"
-typedef YYSTYPE XaviTokenValue;
-#else
 #include "Xavi.h"
 #include "XaviStructs.h"
 
@@ -41,7 +33,6 @@ enum yytokentype
      ID = 260,
      ERROR = 261
 };
-
 
 union XaviTokenValue
 {
@@ -56,6 +47,5 @@ typedef union XaviTokenValue XaviTokenValue;
 #include "XaviLexer.h"
 
 int XaviInternalParse(XaviNumber *, XaviMemoryPool *, XaviLexer *);
-#endif /* !USE_BISON */
 
 #endif /* XAVI_PARSER_H */
