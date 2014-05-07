@@ -30,6 +30,24 @@
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
 
+// FIXME: This parser uses a NULL return value to indicate both syntax errors and
+// situations where the rule should process the null string (and thus do nothing).
+// This results in a problem where, for example, 2d+6 = 8. This is because the
+// parser calls GetExpr3lf after every numerical value. GetExpr3lf is supposed to
+// return NULL when it doesn't see a d operator to indicat that it doesn't have
+// anything to do. It also returns NULL if it encounters anything other than an
+// integer after the d. This means that GetExpr3lf consumes the d from the lexer,
+// then returns NULL to indicate that it found an error. GetExpr3 then interprets
+// the NULL as nothing-to-do, and proceeds as if ther d wasn't there.
+
+// Ways to fix it:
+// * Add nothing and error values to XaviTree. Return a nothing or error tree instead
+//   of NULL.
+// * Change all functions to return 0 on error and -1 on success. Return the resulting
+//   XaviTree through a pointer-to-pointer parameter passed to the function.
+// * Use setjmp and longjmp.
+// Return a tagged data structure that can represent syntax error, nothing, or xavi tree.
+
 static XaviTree * GetExpr0(XaviLexer * lexer, XaviMemoryPool * pool);
 static XaviTree * GetExpr0r(XaviLexer * lexer, XaviMemoryPool * pool);
 static XaviTree * GetExpr1(XaviLexer * lexer, XaviMemoryPool * pool);
@@ -70,7 +88,7 @@ static XaviTree * GetExpr0r(XaviLexer * lexer, XaviMemoryPool * pool)
 	XaviTree * rest;
 	int operator;
 
-	switch (XaviLexerPeek(lexer, NULL))
+	switch (XaviLexerGetToken(lexer))
 	{
 		case '+':
 			operator = OP_ADD;
@@ -125,7 +143,7 @@ static XaviTree * GetExpr1r(XaviLexer * lexer, XaviMemoryPool * pool)
 	XaviTree * rest;
 	int operator;
 
-	switch (XaviLexerPeek(lexer, NULL))
+	switch (XaviLexerGetToken(lexer))
 	{
 		case '*':
 			operator = OP_MUL;
@@ -173,7 +191,7 @@ static XaviTree * GetExpr2(XaviLexer * lexer, XaviMemoryPool * pool)
 
 static XaviTree * GetExpr2lf(XaviLexer * lexer, XaviMemoryPool * pool)
 {
-	if (XaviLexerPeek(lexer, NULL) == '^')
+	if (XaviLexerGetToken(lexer) == '^')
 	{
 		XaviLexerNext(lexer);
 		return GetExpr2(lexer, pool);
@@ -199,14 +217,15 @@ static XaviTree * GetExpr3(XaviLexer * lexer, XaviMemoryPool * pool)
 
 static XaviTree * GetExpr3lf(XaviLexer * lexer, XaviMemoryPool * pool)
 {
-	int token;
 	XaviTokenValue value;
-	if(XaviLexerPeek(lexer, NULL) == 'd')
+
+	if(XaviLexerGetToken(lexer) == 'd')
 	{
 		XaviLexerNext(lexer);
-		token = XaviLexerPeek(lexer, &value);
-		if (token != INTEGER)
+		if (XaviLexerGetToken(lexer) != INTEGER)
 			return NULL;
+
+		value = XaviLexerGetValue(lexer);
 		XaviLexerNext(lexer);
 		return XaviTreeNewInteger(value.i, pool);
 	}
@@ -220,7 +239,7 @@ static XaviTree * GetAtom(XaviLexer * lexer, XaviMemoryPool * pool)
 {
 	XaviTree * value;
 
-	switch(XaviLexerPeek(lexer, NULL))
+	switch(XaviLexerGetToken(lexer))
 	{
 		case '-':
 		case INTEGER:
@@ -229,7 +248,7 @@ static XaviTree * GetAtom(XaviLexer * lexer, XaviMemoryPool * pool)
 		case '(':
 			XaviLexerNext(lexer);
 			value = GetExpr0(lexer, pool);
-			if (XaviLexerPeek(lexer, NULL) != ')')
+			if (XaviLexerGetToken(lexer) != ')')
 				return NULL;
 			XaviLexerNext(lexer);
 			return value;
@@ -242,7 +261,7 @@ static XaviTree * GetAtom(XaviLexer * lexer, XaviMemoryPool * pool)
 
 static XaviTree * GetNumber(XaviLexer * lexer, XaviMemoryPool * pool)
 {
-	switch (XaviLexerPeek(lexer, NULL))
+	switch (XaviLexerGetToken(lexer))
 	{
 		case INTEGER:
 		case FLOAT:
@@ -263,13 +282,15 @@ static XaviTree * GetUNumber(XaviLexer * lexer, XaviMemoryPool * pool)
 {
 	XaviTokenValue value;
 
-	switch (XaviLexerPeek(lexer, NULL))
+	switch (XaviLexerGetToken(lexer))
 	{
 		case INTEGER:
-			XaviLexerRead(lexer, &value);
+			value = XaviLexerGetValue(lexer);
+			XaviLexerNext(lexer);
 			return XaviTreeNewInteger(value.i, pool);
 		case FLOAT:
-			XaviLexerRead(lexer, &value);
+			value = XaviLexerGetValue(lexer);
+			XaviLexerNext(lexer);
 			return XaviTreeNewFloat(value.f, pool);
 		default:
 			return NULL;
@@ -283,16 +304,23 @@ static XaviTree * GetFCall(XaviLexer * lexer, XaviMemoryPool * pool)
 	char * id;
 	XaviArglist * arglist;
 
-	token = XaviLexerRead(lexer, &value);
+	token = XaviLexerGetToken(lexer);
+	value = XaviLexerGetValue(lexer);
 	id = XaviFunctionIdNew(value.s, pool);
 
-	token = XaviLexerRead(lexer, &value);
+	XaviLexerNext(lexer);
+	token = XaviLexerGetToken(lexer);
+	value = XaviLexerGetValue(lexer);
+	
+	XaviLexerNext(lexer);
 	if (token != '(')
 		return NULL;
 
 	arglist = GetArglist(lexer, pool);
 
-	token = XaviLexerRead(lexer, &value);
+	token = XaviLexerGetToken(lexer);
+	value = XaviLexerGetValue(lexer);
+	XaviLexerNext(lexer);
 	if (token != ')')
 		return NULL;
 
@@ -312,7 +340,7 @@ static XaviArglist * GetArglist(XaviLexer * lexer, XaviMemoryPool * pool)
 
 static XaviArglist * GetArglistLF(XaviLexer * lexer, XaviMemoryPool * pool)
 {
-	if (XaviLexerPeek(lexer, NULL) != ',')
+	if (XaviLexerGetToken(lexer) != ',')
 	{
 		return NULL;
 	}
@@ -328,7 +356,7 @@ int XaviInternalParse(
 	XaviMemoryPool * pool,
 	XaviLexer * lexer)
 {
-	if (XaviLexerPeek(lexer, NULL) == EOL)
+	if (XaviLexerGetToken(lexer) == EOL)
 	{
 		value->status = S_INTEGER;
 		value->i = 0;
@@ -337,7 +365,7 @@ int XaviInternalParse(
 
 	XaviTree * tree = GetExpr0(lexer, pool);
 
-	if (tree != NULL && XaviLexerPeek(lexer, NULL) == EOL)
+	if (tree != NULL && XaviLexerGetToken(lexer) == EOL)
 	{
 		*value = XaviEvaluate(tree);
 	}

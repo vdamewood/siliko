@@ -21,29 +21,8 @@
 #if !defined XAVI_PARSER_H
 #define XAVI_PARSER_H
 
-
 #include "Xavi.h"
 #include "XaviStructs.h"
-
-enum yytokentype
-{
-     EOL = 0,
-     INTEGER = 258,
-     FLOAT = 259,
-     ID = 260,
-     ERROR = 261
-};
-
-union XaviTokenValue
-{
-        XaviTree * t;
-        XaviArglist * a;
-        char * s;
-        int i;
-        float f;
-};
-typedef union XaviTokenValue XaviTokenValue;
-
 #include "XaviLexer.h"
 
 int XaviInternalParse(XaviNumber *, XaviMemoryPool *, XaviLexer *);

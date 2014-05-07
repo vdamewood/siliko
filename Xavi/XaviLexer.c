@@ -33,12 +33,13 @@ enum XaviLexemeId
 {
 	L_EOI = 0,
 	L_INTEGER = 257,	/* [0-9]+ */
-	L_FLOAT,			/* [0-9]+\.[0-9]+ */
-	L_ID,				/* [a-ce-z][a-z0-9]*)|(d[a-z][a-z0-9]* */
-	L_E,				/* "e" */
-	L_PI,				/* "pi" */
+	L_FLOAT,		/* [0-9]+\.[0-9]+ */
+	L_ID,			/* [a-ce-z][a-z0-9]*)|(d[a-z][a-z0-9]* */
+	L_E,			/* "e" */
+	L_PI,			/* "pi" */
 	L_ERROR
 };
+typedef enum XaviLexemeId XaviLexemeId;
 
 enum XaviDfaState
 {
@@ -56,8 +57,7 @@ enum XaviDfaState
 	DFA_TERM_EOI,
 	DFA_TERM_ERROR
 };
-
-typedef enum XaviLexemeId XaviLexemeId;
+typedef enum XaviDfaState XaviDfaState;
 
 static int isOperator(int character)
 {
@@ -77,86 +77,47 @@ static int isIdCharacter(int character)
 	return (isalnum(character) || character == '_');
 }
 
-
-int XaviLexerRead(XaviLexer * lexer, XaviTokenValue * token)
-{
-	int rVal = XaviLexerPeek(lexer, token);
-	XaviLexerNext(lexer);
-	return rVal;
-}
-
-static void XaviLexerLoad(XaviLexer *);
-
-int XaviLexerPeek(XaviLexer * lexer, XaviTokenValue * token)
-{
-	if (!lexer->token)
-		XaviLexerLoad(lexer);
-
-	if (token != NULL)
-		switch (lexer->token)
-		{
-		case INTEGER:
-			token->i = lexer->intValue;
-			break;
-		case FLOAT:
-			token->f = lexer->floatValue;
-			break;
-		case ID:
-			token->s = lexer->lexeme;
-			break;
-		}
-
-	return lexer->token;
-	
-}
-
-void XaviLexerNext(XaviLexer * lexer)
-{
-	lexer->token = 0;
-	lexer->intValue = 0;
-}
-
 static void XaviLexerLoad(XaviLexer * lexer)
 {
 	XaviLexemeId terminal = L_EOI;
-	int dfaState = DFA_START;
+	XaviDfaState dfaState = DFA_START;
 	size_t length = 0;
-	free(lexer->lexeme);
-	lexer->lexeme = NULL;
+	char * lexeme;
+	const char * current = lexer->location;
 
-	while (dfaState != -1) {
+	while (dfaState != DFA_END) {
 		switch (dfaState) {
 		case DFA_START:
-			if(isOperator(*lexer->current)) {
-				lexer->current++;
-				terminal = *lexer->begin;
+			if(isOperator(*current)) {
+				current++;
+				terminal = *lexer->location;
 				dfaState = DFA_TERM_CHAR;
 			}
-			else if (*lexer->current == 'd') {
-				lexer->current++;
+			else if (*current == 'd') {
+				current++;
 				dfaState = DFA_DICE;
 			}
-			else if (*lexer->current == 'e') {
-				lexer->current++;
+			else if (*current == 'e') {
+				current++;
 				dfaState = DFA_E;
 			}
-			else if (*lexer->current == 'p') {
-				lexer->current++;
+			else if (*current == 'p') {
+				current++;
 				dfaState = DFA_PI_1;
 			}
-			else if (isdigit(*lexer->current)) {
-				lexer->current++;
+			else if (isdigit(*current)) {
+				current++;
 				dfaState = DFA_INTEGER;
 			}
-			else if (isalpha(*lexer->current)) {
-				lexer->current++;
+			else if (isalpha(*current)) {
+				current++;
 				dfaState = DFA_ID;
 			}
-			else if (isspace(*lexer->current)) {
-				lexer->begin++;
-				lexer->current++;
+			else if (isspace(*current)) {
+				lexer->location++;
+				current++;
 			}
-			else if (*lexer->current == '\0'){
+			else if (*current == '\0'){
 				dfaState = DFA_TERM_EOI;
 			}
 			else {
@@ -164,18 +125,18 @@ static void XaviLexerLoad(XaviLexer * lexer)
 			}
 			break;
 		case DFA_DICE:
-			if (isalpha(*lexer->current)) {
-				lexer->current++;
+			if (isalpha(*current)) {
+				current++;
 				dfaState = DFA_ID;
 			}
 			else {
-				terminal = *lexer->begin;
+				terminal = *lexer->location;
 				dfaState = DFA_TERM_CHAR;
 			}
 			break;
 		case DFA_E:
-			if (isalnum(*lexer->current)) {
-				lexer->current++;
+			if (isalnum(*current)) {
+				current++;
 				dfaState = DFA_ID;
 			}
 			else {
@@ -184,12 +145,12 @@ static void XaviLexerLoad(XaviLexer * lexer)
 			}
 			break;
 		case DFA_PI_1:
-			if (*lexer->current == 'i') {
-				lexer->current++;
+			if (*current == 'i') {
+				current++;
 				dfaState = DFA_PI_2;
 			}
-			else if (isIdCharacter(*lexer->current)) {
-				lexer->current++;
+			else if (isIdCharacter(*current)) {
+				current++;
 				dfaState = DFA_ID;
 			}
 			else {
@@ -198,8 +159,8 @@ static void XaviLexerLoad(XaviLexer * lexer)
 			}
 			break;
 		case DFA_PI_2:
-			if (isIdCharacter(*lexer->current)) {
-				lexer->current++;
+			if (isIdCharacter(*current)) {
+				current++;
 				dfaState = DFA_ID;
 			}
 			else {
@@ -208,8 +169,8 @@ static void XaviLexerLoad(XaviLexer * lexer)
 			}
 			break;
 		case DFA_ID:
-			if (isalnum(*lexer->current)) {
-				lexer->current++;
+			if (isalnum(*current)) {
+				current++;
 			}
 			else {
 				terminal = L_ID;
@@ -217,12 +178,12 @@ static void XaviLexerLoad(XaviLexer * lexer)
 			}
 			break;
 		case DFA_INTEGER:
-			if (*lexer->current == '.') {
-				lexer->current++;
+			if (*current == '.') {
+				current++;
 				dfaState = DFA_FLOAT;
 			}
-			else if (isdigit(*lexer->current)) {
-				*lexer->current++;
+			else if (isdigit(*current)) {
+				*current++;
 			}
 			else {
 				terminal = L_INTEGER,
@@ -230,8 +191,8 @@ static void XaviLexerLoad(XaviLexer * lexer)
 			}
 			break;
 		case DFA_FLOAT:
-			if (isdigit(*lexer->current)) {
-				lexer->current++;
+			if (isdigit(*current)) {
+				current++;
 			}
 			else {
 				terminal = L_FLOAT;
@@ -239,26 +200,26 @@ static void XaviLexerLoad(XaviLexer * lexer)
 			}
 			break;
 		case DFA_TERM_CHAR:
-			lexer->lexeme = malloc(2);
-			lexer->lexeme[0] = *lexer->begin;
-			lexer->lexeme[1] = '\0';
-			lexer->begin = lexer->current;
-			dfaState = -1;
+			lexeme = malloc(2);
+			lexeme[0] = *lexer->location;
+			lexeme[1] = '\0';
+			lexer->location = current;
+			dfaState = DFA_END;
 			break;
 		case DFA_TERM_STRING:
-			length = lexer->current - lexer->begin;
-			lexer->lexeme = malloc(length+1);
-			strncpy(lexer->lexeme, lexer->begin, length);
-			lexer->lexeme[length] = '\0';			
-			lexer->begin = lexer->current;
-			dfaState = -1;
+			length = current - lexer->location;
+			lexeme = malloc(length+1);
+			strncpy(lexeme, lexer->location, length);
+			lexeme[length] = '\0';			
+			lexer->location = current;
+			dfaState = DFA_END;
 			break;
 		case DFA_TERM_EOI:
 			terminal = EOL;
-			dfaState = -1;
+			dfaState = DFA_END;
 			break;
 		case DFA_TERM_ERROR:
-			terminal = -1;
+			terminal = DFA_END;
 			break;
 		}
 	}
@@ -276,26 +237,32 @@ static void XaviLexerLoad(XaviLexer * lexer)
 	case ',':
 	case '(':
 	case ')':
-		lexer->token = *lexer->lexeme;
+		lexer->token = *lexeme;
+		free(lexeme);
 		break;
 	case L_INTEGER:
-		lexer->intValue = atoi(lexer->lexeme);
+		lexer->value.i = atoi(lexeme);
 		lexer->token = INTEGER;
+		free(lexeme);
 		break;
 	case L_FLOAT:
-		lexer->floatValue = atof(lexer->lexeme);
+		lexer->value.f = atof(lexeme);
 		lexer->token = FLOAT;
+		free(lexeme);
 		break;
 	case L_E:
-		lexer->floatValue = EULER;
+		lexer->value.f = EULER;
 		lexer->token = FLOAT;
+		free(lexeme);
 		break;
 	case L_PI:
-		lexer->floatValue = PI;
+		lexer->value.f = PI;
 		lexer->token = FLOAT;
+		free(lexeme);
 		break;
 	case L_ID:
 		lexer->token = ID;
+		lexer->value.s = lexeme;
 		break;
 	default:
 		lexer->token = ERROR;
@@ -306,18 +273,54 @@ XaviLexer * XaviLexerNew(const char * inputString)
 {
 	XaviLexer * rVal = malloc(sizeof(XaviLexer));
 	rVal->input = inputString;
-	rVal->begin = rVal->input; // Current beginning of read.
-	rVal->current = rVal->input; // Current end of read.
-	rVal->lexeme = NULL;
-	rVal->token = 0;
-	rVal->intValue = 0;
+	rVal->location = rVal->input;
+	rVal->token = UNSET;
+	rVal->value.i = 0;
 	return rVal;
 }
 
 void XaviLexerDestroy(XaviLexer** theLexer)
 {
 	XaviLexer * garbage = *theLexer;
-	free(garbage->lexeme);
+	if (garbage->token == ID)
+		free(garbage->value.s);
 	free(*theLexer);
 	*theLexer = NULL;
+}
+
+XaviToken XaviLexerGetToken(XaviLexer * lexer)
+{
+	if (lexer->token == UNSET)
+		XaviLexerLoad(lexer);
+
+	return lexer->token;
+}
+
+XaviTokenValue XaviLexerGetValue(XaviLexer * lexer)
+{
+	XaviTokenValue rVal;
+	if (lexer->token == UNSET)
+		XaviLexerLoad(lexer);
+	
+	switch (lexer->token)
+	{
+	case INTEGER:
+		rVal.i = lexer->value.i;
+		break;
+	case FLOAT:
+		rVal.f = lexer->value.f;
+		break;
+	case ID:
+		rVal.s = lexer->value.s;
+		break;
+	}
+	return rVal;
+}
+
+void XaviLexerNext(XaviLexer * lexer)
+{
+	if (lexer->token == ID)
+		free(lexer->value.s);
+	lexer->token = UNSET;
+	lexer->value.i = 0;
 }

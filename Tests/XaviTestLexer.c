@@ -58,7 +58,9 @@ int main(int argc, char *argv[])
 
 	while (terminal != EOL)
 	{
-		terminal = XaviLexerRead(lexer, &token);
+		terminal = XaviLexerGetToken(lexer);
+		token = XaviLexerGetValue(lexer);
+		XaviLexerNext(lexer);
 		printResult(terminal, token);
 	}
 	return 0;

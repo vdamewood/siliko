@@ -21,31 +21,46 @@
 #if !defined XAVI_LEXER_H
 #define XAVI_LEXER_H
 
+enum XaviToken
+{
+	UNSET = -1,
+	EOL = 0,
+	LPAREN = '(',
+	RPAREN = ')',
+	MULTIPLY = '*',
+	ADDITION = '+',
+	COMMA = ',',
+	SUBTRACT = '-',
+	DIVISION = '/',
+	EXPONENT = '^',
+	INTEGER = 258,
+	FLOAT = 259,
+	ID = 260,
+	ERROR = 261
+};
+typedef enum XaviToken XaviToken;
+
+union XaviTokenValue
+{
+        char * s;
+        int i;
+        float f;
+};
+typedef union XaviTokenValue XaviTokenValue;
+
 struct XaviLexer
 {
 	const char * input;
-	const char * begin;
-	const char * current;
-	char * lexeme;
-	int token;
-
-	union
-	{
-		int intValue;
-		float floatValue;
-	};
+	const char * location;
+	XaviToken token;
+	XaviTokenValue value;
 };
-
 typedef struct XaviLexer XaviLexer;
-typedef XaviLexer * yyscan_t;
 
-#include "XaviParser.h"
-
-int XaviLexerRead(XaviLexer *, XaviTokenValue *);
-int XaviLexerPeek(XaviLexer *, XaviTokenValue *);
-void XaviLexerNext(XaviLexer *);
-
-void XaviLexerDestroy(XaviLexer**);
 XaviLexer * XaviLexerNew(const char * inputString);
-#define Xavi_yylex(a,b) XaviLexerRead((b), (a))
-#endif
+void XaviLexerDestroy(XaviLexer** lexer);
+
+XaviToken XaviLexerGetToken(XaviLexer * lexer);
+XaviTokenValue XaviLexerGetValue(XaviLexer * lexer);
+void XaviLexerNext(XaviLexer * lexer);
+#endif /* XAVI_LEXER_H */
