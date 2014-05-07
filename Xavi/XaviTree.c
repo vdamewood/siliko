@@ -49,7 +49,7 @@ int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left, XaviMemoryPool * pool)
 
 int XaviTreeNegate(XaviTree * tree)
 {
-	if (tree->type != 'n')
+	if (tree == NULL || tree->type != 'n')
 		return 0;
 	else if (tree->num->status == S_INTEGER)
 		tree->num->i *= -1;

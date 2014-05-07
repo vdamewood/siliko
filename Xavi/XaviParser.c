@@ -250,8 +250,7 @@ static XaviTree * GetNumber(XaviLexer * lexer, XaviMemoryPool * pool)
 		case '-':
 			XaviLexerNext(lexer);
 			XaviTree * Symbol2 = GetUNumber(lexer, pool);
-
-			if (!XaviTreeNegate(Symbol2))
+			if (Symbol2 == NULL || !XaviTreeNegate(Symbol2))
 				return NULL;
 
 			return Symbol2;
