@@ -1,6 +1,6 @@
 /*
- * XaviLexer.h: Hand-written lexical analyzer.
- * Copyright 2012 Vincent Damewood
+ * XaviLexer.h: Lexical analyzer
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -23,8 +23,8 @@
 
 enum XaviToken
 {
-	UNSET = -1,
-	EOL = 0,
+	ERROR = -1,
+	UNSET = 0,
 	LPAREN = '(',
 	RPAREN = ')',
 	MULTIPLY = '*',
@@ -33,10 +33,10 @@ enum XaviToken
 	SUBTRACT = '-',
 	DIVISION = '/',
 	EXPONENT = '^',
-	INTEGER = 258,
-	FLOAT = 259,
-	ID = 260,
-	ERROR = 261
+	INTEGER = 256,
+	FLOAT,
+	ID,
+	EOL
 };
 typedef enum XaviToken XaviToken;
 
