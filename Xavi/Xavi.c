@@ -22,7 +22,6 @@
 
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
-#include "XaviOperatorCall.h"
 #include "XaviParser.h"
 
 void XaviOpen(void)

@@ -24,6 +24,7 @@
 #include "XaviArglist.h"
 #include "XaviCleanup.h"
 #include "XaviFunctionId.h"
+#include "XaviFunctionCall.h"
 
 int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left, XaviMemoryPool * pool)
 {
@@ -204,9 +205,6 @@ void XaviTreeDelete(XaviTree * tree)
 }
 
 // Fomerally XaviTreeEvaluate
-
-#include "XaviFunctionCall.h"
-#include "XaviOperatorCall.h"
 
 static int IsNumber(XaviNumber n) {
 	return n.status == S_INTEGER || n.status == S_FLOAT;

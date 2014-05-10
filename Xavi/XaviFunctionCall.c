@@ -18,13 +18,239 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <limits.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
+#include <time.h>
 
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
+
+/* Operators */
+
+static XaviNumber XaviFunction_add(int argc, XaviNumber * argv)
+{
+	XaviNumber rVal;
+	int i;
+	
+	if (!argc)
+	{
+		rVal.status = S_INTEGER;
+		rVal.i = 0;
+		return rVal;
+	}
+	
+	rVal = argv[0];
+	
+	for(i = 1; i < argc; i++)
+	{	
+		if (rVal.status == S_FLOAT) {
+			if (argv[i].status == S_FLOAT) {
+				rVal.f += argv[i].f;
+			}
+			else {
+				rVal.f += (float)argv[i].i;
+			}
+		}
+		else {
+			if (argv[i].status == S_FLOAT) {
+				rVal.f = (float)rVal.i + argv[i].f;
+				rVal.status = S_FLOAT;
+			}
+			else {
+				rVal.i += argv[i].i;
+			}
+		}
+	}
+	
+	return rVal;
+}
+
+static XaviNumber XaviFunction_subtract(int argc, XaviNumber * argv)
+{
+	XaviNumber rVal;
+	int i;
+	
+	if (!argc)
+	{
+		rVal.status = S_INTEGER;
+		rVal.i = 0;
+		return rVal;
+	}
+	
+	rVal = argv[0];
+	
+	for(i = 1; i < argc; i++)
+	{	
+		if (rVal.status == S_FLOAT) {
+			if (argv[i].status == S_FLOAT) {
+				rVal.f -= argv[i].f;
+			}
+			else {
+				rVal.f -= (float)argv[i].i;
+			}
+		}
+		else {
+			if (argv[i].status == S_FLOAT) {
+				rVal.f = (float)rVal.i - argv[i].f;
+				rVal.status = S_FLOAT;
+			}
+			else {
+				rVal.i -= argv[i].i;
+			}
+		}
+	}
+	
+	return rVal;
+}
+
+static XaviNumber XaviFunction_multiply(int argc, XaviNumber * argv)
+{
+	XaviNumber rVal;
+	int i;
+	
+	if (!argc)
+	{
+		rVal.status = S_INTEGER;
+		rVal.i = 0;
+		return rVal;
+	}
+	
+	rVal = argv[0];
+	
+	for(i = 1; i < argc; i++)
+	{	
+		if (rVal.status == S_FLOAT) {
+			if (argv[i].status == S_FLOAT) {
+				rVal.f *= argv[i].f;
+			}
+			else {
+				rVal.f *= (float)argv[i].i;
+			}
+		}
+		else {
+			if (argv[i].status == S_FLOAT) {
+				rVal.f = (float)rVal.i * argv[i].f;
+				rVal.status = S_FLOAT;
+			}
+			else {
+				rVal.i *= argv[i].i;
+			}
+		}
+	}
+	
+	return rVal;
+}
+
+static XaviNumber XaviFunction_divide(int argc, XaviNumber * argv)
+{
+	XaviNumber rVal;
+	int i;
+
+	if (argc < 2)
+	{
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+
+	rVal = argv[0];
+	
+	for (i = 1; i < argc; i++)
+	{
+		/* Division-by-Zero Error */
+		if ((argv[i].status == S_FLOAT && argv[i].f == 0.0)
+			|| (argv[i].status == S_INTEGER && argv[i].i == 0)) {
+			rVal.status = E_ZERO_DIV;
+			return rVal;
+		}
+		
+		if (rVal.status == S_FLOAT) {
+			if (argv[i].status == S_FLOAT) {
+				rVal.f /= argv[i].f;
+			}
+			else {
+				rVal.f /= (float) argv[i].i;
+			}
+		}
+		else {
+			if (argv[i].status == S_FLOAT) {
+				rVal.f = (float) rVal.i / argv[i].f;
+			}
+			else if (rVal.i % argv[i].i == 0) {
+				rVal.i /= argv[i].i;
+			}
+			else {
+				rVal.status = S_FLOAT;
+				rVal.f = (float) rVal.i / (float) argv[i].i;
+			}
+		}
+	}
+	return rVal;
+}
+
+static XaviNumber XaviFunction_power(int argc, XaviNumber * argv)
+{
+	XaviNumber rVal;
+	float runningValue;
+	float nextValue;
+	int i;
+
+	runningValue = (argv[0].status == S_INTEGER)
+		? (float) argv[0].i
+		: argv[0].f;
+	
+	for (i = 1; i < argc; i++)
+	{
+		nextValue = (argv[i].status == S_INTEGER)
+			? nextValue = (float) argv[i].i
+			: argv[i].f;
+
+		runningValue = pow(runningValue, nextValue);
+	}
+	
+	rVal.status = S_FLOAT;
+	rVal.f = runningValue;
+	return rVal;
+}
+
+
+static XaviNumber XaviFunction_dice(int argc, XaviNumber * argv)
+{
+	/* TODO: Make this function handle fractional dice. */
+	static int hasSeeded = 0;
+	int runningTotal = 0;
+	XaviNumber rVal;
+	int count;
+	int faces;
+	int i;
+	
+	if(argc != 2)
+	{
+		rVal.status = E_ARGUMENTS;
+		return rVal;
+	}
+
+	count = (argv[0].status == S_INTEGER)
+		? argv[0].i
+		: (int) argv[0].f;
+	
+	faces = (argv[1].status == S_INTEGER)
+		? argv[1].i
+		: (int) argv[1].f;
+		
+	if (!hasSeeded) {
+		hasSeeded = 1;
+		srand((unsigned int)time(NULL));
+	}
+	
+	for (i = 1; i <= count; i++) runningTotal += (rand() % faces) + 1;
+	rVal.status = S_INTEGER;
+	rVal.i = runningTotal;
+	return rVal;
+}
+
+/* Functions */
 
 static XaviNumber XaviFunction_abs(int argc, XaviNumber * argv)
 {
@@ -420,13 +646,17 @@ static unsigned char XaviCrc8(const unsigned char * input)
 
 typedef XaviNumber (*FunctionPointer)(int, XaviNumber *);
 
-#define FUNCTION_MAX 15
+#define FUNCTION_MAX 21
 static char *functionNames[] = {
-	"abs", "acos", "asin", "atan",
+	"add", "subtract", "multiply", "divide",
+	"power", "dice",
+	"abs", "agit cos", "asin", "atan",
 	"ceil", "cos", "cosh", "exp",
 	"floor", "log","log10", "sin",
 	 "sinh", "sqrt", "tan", "tanh"};
 static FunctionPointer functions[] = {
+	XaviFunction_add, XaviFunction_subtract, XaviFunction_multiply, XaviFunction_divide,
+	XaviFunction_power, XaviFunction_dice,
 	XaviFunction_abs, XaviFunction_acos, XaviFunction_asin, XaviFunction_atan,
 	XaviFunction_ceil, XaviFunction_cos, XaviFunction_cosh, XaviFunction_exp,
 	XaviFunction_floor, XaviFunction_log, XaviFunction_log10, XaviFunction_sin,
@@ -536,5 +766,49 @@ XaviNumber XaviFunctionCall(const char * name, int argc, XaviNumber * argv)
 	else {
 		rVal = f(argc, argv);
 	}
+	return rVal;
+}
+
+/* Operators */
+
+static FunctionPointer * Operators = NULL;
+
+int XaviOperatorCallOpen()
+{
+	if (!(Operators = malloc(OP_TOTAL_COUNT * sizeof(FunctionPointer)))) {
+		return 0;
+	}
+	Operators[OP_ADD] = XaviFunction_add;
+	Operators[OP_SUB] = XaviFunction_subtract;
+	Operators[OP_MUL] = XaviFunction_multiply;
+	Operators[OP_DIV] = XaviFunction_divide;
+	Operators[OP_POW] = XaviFunction_power;
+	Operators[OP_DICE] = XaviFunction_dice;
+	return 1;
+}
+
+void XaviOperatorCallClose()
+{
+	free(Operators);
+}
+
+XaviNumber XaviOperatorCall(XaviOperatorSymbol op, XaviNumber left, XaviNumber right)
+{
+	FunctionPointer f;
+	XaviNumber rVal;
+	XaviNumber * argv;
+	
+	argv = malloc(2 * sizeof(XaviNumber));
+	argv[0] = left;
+	argv[1] = right;
+	
+	if (op < OP_TOTAL_COUNT) {
+		f = Operators[op];
+		rVal = f(2, argv);
+	}
+	else {
+		rVal.status = E_INTERNAL;
+	}
+	free(argv);
 	return rVal;
 }

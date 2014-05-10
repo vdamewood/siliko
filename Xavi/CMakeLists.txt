@@ -3,13 +3,13 @@
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
   XaviStructs.h
-  XaviFunctionCall.h XaviOperatorCall.h
+  XaviFunctionCall.h
   XaviArglist.h XaviFunctionId.h XaviTree.h
   XaviCleanup.h
   XaviParser.h XaviLexer.h)
 set(Xavi_SOURCES
   Xavi.c
-  XaviFunctionCall.c XaviOperatorCall.c
+  XaviFunctionCall.c
   XaviArglist.c XaviFunctionId.c XaviTree.c
   XaviCleanup.c
   XaviParser.c XaviLexer.c)
