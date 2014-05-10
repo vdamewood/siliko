@@ -22,9 +22,8 @@
 #define XAVI_PARSER_H
 
 #include "Xavi.h"
-#include "XaviStructs.h"
 #include "XaviLexer.h"
 
-int XaviInternalParse(XaviNumber *, XaviMemoryPool *, XaviLexer *);
+XaviNumber XaviInternalParse(XaviLexer * lexer);
 
 #endif /* XAVI_PARSER_H */

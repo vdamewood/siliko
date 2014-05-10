@@ -37,17 +37,13 @@ void XaviClose(void)
 	XaviOperatorCallClose();
 }
 
-XaviNumber XaviParse(const char *inString)
+XaviNumber XaviParse(const char * inString)
 {
 	XaviNumber rVal;
-	XaviMemoryPool pool;
-
-	pool.DanglingTrees = NULL;
-	pool.DanglingArglists = NULL;
-	pool.DanglingIds = NULL;
-
-	XaviLexer *lexer = XaviLexerNew(inString);
-	XaviInternalParse(&rVal, &pool, lexer);
+	XaviLexer *lexer;
+	
+	lexer = XaviLexerNew(inString);
+	rVal = XaviInternalParse(lexer);
 	XaviLexerDestroy(&lexer);
 
 	return rVal;

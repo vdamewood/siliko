@@ -25,7 +25,6 @@
 #include "XaviParser.h"
 
 #include "XaviCleanup.h"
-//#include "XaviEvaluate.h"
 #include "XaviTree.h"
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
@@ -351,29 +350,33 @@ static XaviArglist * GetArglistLF(XaviLexer * lexer, XaviMemoryPool * pool)
 	}
 }
 
-int XaviInternalParse(
-	XaviNumber * value,
-	XaviMemoryPool * pool,
-	XaviLexer * lexer)
+XaviNumber XaviInternalParse(XaviLexer * lexer)
 {
+	XaviNumber value;
+	XaviMemoryPool pool;
+
+	pool.DanglingTrees = NULL;
+	pool.DanglingArglists = NULL;
+	pool.DanglingIds = NULL;
+	
 	if (XaviLexerGetToken(lexer) == EOL)
 	{
-		value->status = S_INTEGER;
-		value->i = 0;
-		return;
+		value.status = S_INTEGER;
+		value.i = 0;
+		return value;
 	}
 
-	XaviTree * tree = GetExpr0(lexer, pool);
+	XaviTree * tree = GetExpr0(lexer, &pool);
 
 	if (tree != NULL && XaviLexerGetToken(lexer) == EOL)
 	{
-		*value = XaviTreeEvaluate(tree);
+		value = XaviTreeEvaluate(tree);
 	}
 	else
 	{
-		value->status = E_SYNTAX;
-		value->i = 0;
+		value.status = E_SYNTAX;
+		value.i = 0;
 	}
-	XaviCleanupClearAll(pool);
-	return 0;
+	XaviCleanupClearAll(&pool);
+	return value;
 }
