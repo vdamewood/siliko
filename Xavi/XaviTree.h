@@ -63,13 +63,13 @@ typedef struct XaviTree XaviTree;
 
 
 XaviNumber XaviTreeEvaluate(XaviTree * TreeToEvaluate);
-int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left, XaviMemoryPool *);
+int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left);
 int XaviTreeNegate(XaviTree *);
-XaviTree * XaviTreeNewOperator(XaviOperatorSymbol Operator, XaviTree * LeftOperand, XaviTree * RightOperand, XaviMemoryPool *);
-XaviTree * XaviTreeNewInteger(int Value, XaviMemoryPool *);
-XaviTree * XaviTreeNewFloat(float Value, XaviMemoryPool *);
-XaviTree * XaviTreeNewFunction(char * FunctionName, int argumentCount, XaviTree ** arguments, XaviMemoryPool *);
-XaviTree * XaviTreeNewSyntaxError(XaviMemoryPool * pool);
+XaviTree * XaviTreeNewOperator(XaviOperatorSymbol Operator, XaviTree * LeftOperand, XaviTree * RightOperand);
+XaviTree * XaviTreeNewInteger(int Value);
+XaviTree * XaviTreeNewFloat(float Value);
+XaviTree * XaviTreeNewFunction(char * FunctionName, int argumentCount, XaviTree ** arguments);
+XaviTree * XaviTreeNewSyntaxError(void);
 void XaviTreeDelete(XaviTree * TreeToDelete);
 
 #endif // Xavi_TREE_H

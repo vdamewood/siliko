@@ -1,6 +1,6 @@
 /*
  * XaviFunctionId.h: Functions to manipulate function identifiers.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -23,7 +23,7 @@
 
 #include "XaviStructs.h"
 
-char * XaviFunctionIdNew(char * NewFunctionId, XaviMemoryPool *);
+char * XaviFunctionIdNew(char * NewFunctionId);
 void XaviFunctionIdDelete(char * OldFunctionId);
 
 #endif // Xavi_FUNCTION_ID_H

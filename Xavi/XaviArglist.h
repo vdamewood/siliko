@@ -30,7 +30,7 @@ struct XaviArglist {
 };
 typedef struct XaviArglist XaviArglist;
 
-XaviArglist * XaviArglistNew(XaviTree * NewArgument, XaviArglist * ListToExtend, XaviMemoryPool *);
+XaviArglist * XaviArglistNew(XaviTree * NewArgument, XaviArglist * ListToExtend);
 void XaviArglistDelete(XaviArglist * ArglistToDelete);
 void XaviArglistDissolve(XaviArglist * ArglistToDissolve);
 XaviTree ** XaviArglistGetTrees(XaviArglist * ArglistToExtract);

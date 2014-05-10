@@ -21,23 +21,21 @@
 #include <stdlib.h>
 
 #include "XaviTree.h"
-#include "XaviCleanup.h"
 #include "XaviFunctionId.h"
 #include "XaviFunctionCall.h"
 
-int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left, XaviMemoryPool * pool)
+int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left)
 {
 	if (parent->type = 'o')
 	{
 		if (parent->op->left == NULL)
 		{
 			parent->op->left = left;
-			XaviCleanupReleaseTree(left, pool);
 			return -1;
 		}
 		else
 		{
-			return XaviTreeGraftLeft(parent->op->left, left, pool);
+			return XaviTreeGraftLeft(parent->op->left, left);
 		}
 	}
 	else
@@ -60,7 +58,7 @@ int XaviTreeNegate(XaviTree * tree)
 	return 1;
 }
 
-XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right, XaviMemoryPool * pool)
+XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right)
 {
 	XaviTree * rVal;
 	XaviOperator * rValOp;
@@ -80,27 +78,22 @@ XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviT
 	rVal->op = rValOp;
 	rVal->op->args = rValArgs;
 	
-	
-	XaviCleanupCacheTree(rVal, pool);
-
 	rVal->type = 'o';
 	rVal->op->symbol = symbol;
 
 	rVal->op->left = left;
-	XaviCleanupReleaseTree(left, pool);
 
 	rVal->op->right = right;
-	XaviCleanupReleaseTree(right, pool);
 	return rVal;
 }
 
-XaviTree * XaviTreeNewInteger(int value, XaviMemoryPool * pool)
+XaviTree * XaviTreeNewInteger(int value)
 {
 	XaviTree * rVal;
 	XaviNumber * rValNum;
 
-	rVal = malloc(sizeof(XaviTree)); //if
-	rValNum = malloc(sizeof(XaviNumber)); //if
+	rVal = malloc(sizeof(XaviTree)); // FIXME: if
+	rValNum = malloc(sizeof(XaviNumber)); // FIXME: if
 
 	if (!rVal || !rValNum) {
 		free(rVal);
@@ -108,8 +101,6 @@ XaviTree * XaviTreeNewInteger(int value, XaviMemoryPool * pool)
 		return NULL;
 	}
 	rVal->num = rValNum;
-
-	XaviCleanupCacheTree(rVal, pool);
 
 	rVal->type = 'n';
 	rVal->num->status = S_INTEGER;
@@ -117,13 +108,13 @@ XaviTree * XaviTreeNewInteger(int value, XaviMemoryPool * pool)
 	return rVal;
 }
 
-XaviTree * XaviTreeNewFloat(float value, XaviMemoryPool * pool)
+XaviTree * XaviTreeNewFloat(float value)
 {
 	XaviTree * rVal;
 	XaviNumber * rValNum;
 
-	rVal = malloc(sizeof(XaviTree)); //if
-	rValNum = malloc(sizeof(XaviNumber)); //if
+	rVal = malloc(sizeof(XaviTree)); // FIXME: if
+	rValNum = malloc(sizeof(XaviNumber)); // FIXME: if
 
 	if (!rVal || !rValNum) {
 		free(rVal);
@@ -132,21 +123,19 @@ XaviTree * XaviTreeNewFloat(float value, XaviMemoryPool * pool)
 	}
 	rVal->num = rValNum;
 
-	XaviCleanupCacheTree(rVal, pool);
-
 	rVal->type = 'n';
 	rVal->num->status = S_FLOAT;
 	rVal->num->f = value;
 	return rVal;
 }
 
-XaviTree * XaviTreeNewFunction(char * name, int argc, XaviTree ** argv, XaviMemoryPool * pool)
+XaviTree * XaviTreeNewFunction(char * name, int argc, XaviTree ** argv)
 {
 	XaviTree * rVal;
 	XaviFunction * rValFunc;
 
-	rVal = malloc(sizeof(XaviTree)); //if
-	rValFunc = malloc(sizeof(XaviFunction)); //if
+	rVal = malloc(sizeof(XaviTree)); // FIXME: if
+	rValFunc = malloc(sizeof(XaviFunction)); // FIXME: if
 
 	if (!rVal || !rValFunc) {
 		free(rVal);
@@ -155,24 +144,20 @@ XaviTree * XaviTreeNewFunction(char * name, int argc, XaviTree ** argv, XaviMemo
 	}
 	rVal->func = rValFunc;
 
-	XaviCleanupCacheTree(rVal, pool);
-
 	rVal->type = 'f';
 	rVal->func->name = name;
 	rVal->func->arg_count = argc;
 	rVal->func->arg_vector = argv;
-	XaviCleanupReleaseFunctionId(name, pool);
 	
 	return rVal;
 }
 
-XaviTree * XaviTreeNewSyntaxError(XaviMemoryPool * pool)
+XaviTree * XaviTreeNewSyntaxError(void)
 {
 	XaviTree * rVal;
 	
 	rVal = malloc(sizeof(XaviTree *));
 	rVal->type = 'e';
-	XaviCleanupCacheTree(rVal, pool);
 	return rVal;
 }
 

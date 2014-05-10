@@ -24,46 +24,45 @@
 #include "XaviStructs.h"
 #include "XaviParser.h"
 
-#include "XaviCleanup.h"
 #include "XaviTree.h"
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
 
-static XaviTree * GetExpr0(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetExpr0r(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetExpr1(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetExpr1r(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetExpr2(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetExpr2lf(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetExpr3(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetExpr3lf(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetAtom(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetNumber(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetUNumber(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviTree * GetFCall(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviArglist * GetArglist(XaviLexer * lexer, XaviMemoryPool * pool);
-static XaviArglist * GetArglistLF(XaviLexer * lexer, XaviMemoryPool * pool);
+static XaviTree * GetExpr0(XaviLexer * lexer);
+static XaviTree * GetExpr0r(XaviLexer * lexer);
+static XaviTree * GetExpr1(XaviLexer * lexer);
+static XaviTree * GetExpr1r(XaviLexer * lexer);
+static XaviTree * GetExpr2(XaviLexer * lexer);
+static XaviTree * GetExpr2lf(XaviLexer * lexer);
+static XaviTree * GetExpr3(XaviLexer * lexe);
+static XaviTree * GetExpr3lf(XaviLexer * lexer);
+static XaviTree * GetAtom(XaviLexer * lexer);
+static XaviTree * GetNumber(XaviLexer * lexer);
+static XaviTree * GetUNumber(XaviLexer * lexer);
+static XaviTree * GetFCall(XaviLexer * lexer);
+static XaviArglist * GetArglist(XaviLexer * lexer);
+static XaviArglist * GetArglistLF(XaviLexer * lexer);
 
-static XaviTree * GetExpr0(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetExpr0(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * rest;
 
-	value = GetExpr1(lexer, pool);
+	value = GetExpr1(lexer);
 	if (value == NULL)
 		return NULL;
-	rest = GetExpr0r(lexer, pool);
+	rest = GetExpr0r(lexer);
 
 	if (rest == NULL)
 		return value;
 	else
 	{
-		XaviTreeGraftLeft(rest, value, pool);
+		XaviTreeGraftLeft(rest, value);
 		return rest;
 	}
 }
 
-static XaviTree * GetExpr0r(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetExpr0r(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * rest;
@@ -82,43 +81,42 @@ static XaviTree * GetExpr0r(XaviLexer * lexer, XaviMemoryPool * pool)
 	}
 
 	XaviLexerNext(lexer);
-	value = GetExpr1(lexer, pool);
-	rest = GetExpr0r(lexer, pool);
+	value = GetExpr1(lexer);
+	rest = GetExpr0r(lexer);
 
 	if (rest != NULL)
 	{
 		XaviTreeGraftLeft(
 			rest,
-			XaviTreeNewOperator(operator, NULL, value, pool),
-			pool);
+			XaviTreeNewOperator(operator, NULL, value));
 		return rest;
 	}
 	else
 	{
-		return XaviTreeNewOperator(operator, NULL, value, pool);
+		return XaviTreeNewOperator(operator, NULL, value);
 	}
 }
 
-static XaviTree * GetExpr1(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetExpr1(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * rest;
 
-	value = GetExpr2(lexer, pool);
+	value = GetExpr2(lexer);
 	if (value == NULL)
 		return NULL;
-	rest = GetExpr1r(lexer, pool);
+	rest = GetExpr1r(lexer);
 
 	if (rest == NULL)
 		return value;
 	else
 	{
-		XaviTreeGraftLeft(rest, value, pool);
+		XaviTreeGraftLeft(rest, value);
 		return rest;
 	}
 }
 
-static XaviTree * GetExpr1r(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetExpr1r(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * rest;
@@ -137,40 +135,39 @@ static XaviTree * GetExpr1r(XaviLexer * lexer, XaviMemoryPool * pool)
 	}
 
 	XaviLexerNext(lexer);
-	value = GetExpr2(lexer, pool);
-	rest = GetExpr1r(lexer, pool);
+	value = GetExpr2(lexer);
+	rest = GetExpr1r(lexer);
 
 	if (rest != NULL)
 	{
 		XaviTreeGraftLeft(
 			rest,
-			XaviTreeNewOperator(operator, NULL, value, pool),
-			pool);
+			XaviTreeNewOperator(operator, NULL, value));
 		return rest;
 	}
 	else
 	{
-		return XaviTreeNewOperator(operator, NULL, value, pool);
+		return XaviTreeNewOperator(operator, NULL, value);
 	}
 }
 
-static XaviTree * GetExpr2(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetExpr2(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * leftFactor;
 
-	value = GetExpr3(lexer, pool);
+	value = GetExpr3(lexer);
 	if (value == NULL)
 		return NULL;
-	leftFactor = GetExpr2lf(lexer, pool);
+	leftFactor = GetExpr2lf(lexer);
 
 	if (leftFactor == NULL)
 		return value;
 	else
-		return XaviTreeNewOperator(OP_POW, value, leftFactor, pool);
+		return XaviTreeNewOperator(OP_POW, value, leftFactor);
 }
 
-static XaviTree * GetExpr2lf(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetExpr2lf(XaviLexer * lexer)
 {
 	if (XaviLexerGetToken(lexer) == '^')
 	{
@@ -183,9 +180,9 @@ static XaviTree * GetExpr2lf(XaviLexer * lexer, XaviMemoryPool * pool)
 		case '-':
 		case ID:
 		case '(':
-			return GetExpr2(lexer, pool);
+			return GetExpr2(lexer);
 		default:
-			return XaviTreeNewSyntaxError(pool);
+			return XaviTreeNewSyntaxError();
 		}
 	}
 	else
@@ -194,20 +191,20 @@ static XaviTree * GetExpr2lf(XaviLexer * lexer, XaviMemoryPool * pool)
 	}
 }
 
-static XaviTree * GetExpr3(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetExpr3(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * dice;
 
-	value = GetAtom(lexer, pool);
-	dice = GetExpr3lf(lexer, pool);
+	value = GetAtom(lexer);
+	dice = GetExpr3lf(lexer);
 
 	return (dice == NULL)
 		? value
-		: XaviTreeNewOperator(OP_DICE, value, dice, pool);
+		: XaviTreeNewOperator(OP_DICE, value, dice);
 }
 
-static XaviTree * GetExpr3lf(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetExpr3lf(XaviLexer * lexer)
 {
 	XaviTokenValue value;
 
@@ -215,11 +212,11 @@ static XaviTree * GetExpr3lf(XaviLexer * lexer, XaviMemoryPool * pool)
 	{
 		XaviLexerNext(lexer);
 		if (XaviLexerGetToken(lexer) != INTEGER)
-			return XaviTreeNewSyntaxError(pool);
+			return XaviTreeNewSyntaxError();
 
 		value = XaviLexerGetValue(lexer);
 		XaviLexerNext(lexer);
-		return XaviTreeNewInteger(value.i, pool);
+		return XaviTreeNewInteger(value.i);
 	}
 	else
 	{
@@ -227,7 +224,7 @@ static XaviTree * GetExpr3lf(XaviLexer * lexer, XaviMemoryPool * pool)
 	}
 }
 
-static XaviTree * GetAtom(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetAtom(XaviLexer * lexer)
 {
 	XaviTree * value;
 
@@ -236,31 +233,31 @@ static XaviTree * GetAtom(XaviLexer * lexer, XaviMemoryPool * pool)
 		case '-':
 		case INTEGER:
 		case FLOAT:
-			return GetNumber(lexer, pool);
+			return GetNumber(lexer);
 		case '(':
 			XaviLexerNext(lexer);
-			value = GetExpr0(lexer, pool);
+			value = GetExpr0(lexer);
 			if (XaviLexerGetToken(lexer) != ')')
 				return NULL;
 			XaviLexerNext(lexer);
 			return value;
 		case ID:
-			return GetFCall(lexer, pool);
+			return GetFCall(lexer);
 		default:
 			return NULL;
 	}
 }
 
-static XaviTree * GetNumber(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetNumber(XaviLexer * lexer)
 {
 	switch (XaviLexerGetToken(lexer))
 	{
 		case INTEGER:
 		case FLOAT:
-			return GetUNumber(lexer, pool);
+			return GetUNumber(lexer);
 		case '-':
 			XaviLexerNext(lexer);
-			XaviTree * Symbol2 = GetUNumber(lexer, pool);
+			XaviTree * Symbol2 = GetUNumber(lexer);
 			if (Symbol2 == NULL || !XaviTreeNegate(Symbol2))
 				return NULL;
 
@@ -270,7 +267,7 @@ static XaviTree * GetNumber(XaviLexer * lexer, XaviMemoryPool * pool)
 	}
 }
 
-static XaviTree * GetUNumber(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetUNumber(XaviLexer * lexer)
 {
 	XaviTokenValue value;
 
@@ -279,17 +276,17 @@ static XaviTree * GetUNumber(XaviLexer * lexer, XaviMemoryPool * pool)
 		case INTEGER:
 			value = XaviLexerGetValue(lexer);
 			XaviLexerNext(lexer);
-			return XaviTreeNewInteger(value.i, pool);
+			return XaviTreeNewInteger(value.i);
 		case FLOAT:
 			value = XaviLexerGetValue(lexer);
 			XaviLexerNext(lexer);
-			return XaviTreeNewFloat(value.f, pool);
+			return XaviTreeNewFloat(value.f);
 		default:
 			return NULL;
 	}
 }
 
-static XaviTree * GetFCall(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviTree * GetFCall(XaviLexer * lexer)
 {
 	int token;
 	XaviTokenValue value;
@@ -300,7 +297,7 @@ static XaviTree * GetFCall(XaviLexer * lexer, XaviMemoryPool * pool)
 
 	token = XaviLexerGetToken(lexer);
 	value = XaviLexerGetValue(lexer);
-	id = XaviFunctionIdNew(value.s, pool);
+	id = XaviFunctionIdNew(value.s);
 
 	XaviLexerNext(lexer);
 	token = XaviLexerGetToken(lexer);
@@ -310,40 +307,43 @@ static XaviTree * GetFCall(XaviLexer * lexer, XaviMemoryPool * pool)
 	if (token != '(')
 		return NULL;
 
-	arglist = GetArglist(lexer, pool);
+	arglist = GetArglist(lexer);
 
 	token = XaviLexerGetToken(lexer);
 	value = XaviLexerGetValue(lexer);
 	XaviLexerNext(lexer);
 	if (token != ')')
+	{
+		XaviFunctionIdDelete(id);
+		XaviArglistDelete(arglist);
 		return NULL;
+	}
 
 	if(arglist) {
 		collapsedArgc = arglist->depth;
 		collapsedArgv = XaviArglistGetTrees(arglist);
-		XaviCleanupReleaseArglist(arglist, pool);
-		XaviArglistDissolve(arglist);		
+		XaviArglistDissolve(arglist);
 	}
 	else {
 		collapsedArgc = 0;
 		collapsedArgv = NULL;
 	}
 	
-	return XaviTreeNewFunction(id, collapsedArgc, collapsedArgv, pool);
+	return XaviTreeNewFunction(id, collapsedArgc, collapsedArgv);
 }
 
-static XaviArglist * GetArglist(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviArglist * GetArglist(XaviLexer * lexer)
 {
 	XaviTree * expression;
 	XaviArglist * subArglist;
 
-	expression = GetExpr0(lexer, pool);
-	subArglist = GetArglistLF(lexer, pool);
+	expression = GetExpr0(lexer);
+	subArglist = GetArglistLF(lexer);
 
-	return XaviArglistNew(expression, subArglist, pool);
+	return XaviArglistNew(expression, subArglist);
 }
 
-static XaviArglist * GetArglistLF(XaviLexer * lexer, XaviMemoryPool * pool)
+static XaviArglist * GetArglistLF(XaviLexer * lexer)
 {
 	if (XaviLexerGetToken(lexer) != ',')
 	{
@@ -352,18 +352,13 @@ static XaviArglist * GetArglistLF(XaviLexer * lexer, XaviMemoryPool * pool)
 	else
 	{
 		XaviLexerNext(lexer);
-		return GetArglist(lexer, pool);
+		return GetArglist(lexer);
 	}
 }
 
 XaviNumber XaviInternalParse(XaviLexer * lexer)
 {
 	XaviNumber value;
-	XaviMemoryPool pool;
-
-	pool.DanglingTrees = NULL;
-	pool.DanglingArglists = NULL;
-	pool.DanglingIds = NULL;
 	
 	if (XaviLexerGetToken(lexer) == EOL)
 	{
@@ -372,9 +367,9 @@ XaviNumber XaviInternalParse(XaviLexer * lexer)
 		return value;
 	}
 
-	XaviTree * tree = GetExpr0(lexer, &pool);
+	XaviTree * tree = GetExpr0(lexer);
 
-	if (tree != NULL && XaviLexerGetToken(lexer) == EOL)
+	if (tree != NULL && tree->type != 'e' && XaviLexerGetToken(lexer) == EOL)
 	{
 		value = XaviTreeEvaluate(tree);
 	}
@@ -383,6 +378,7 @@ XaviNumber XaviInternalParse(XaviLexer * lexer)
 		value.status = E_SYNTAX;
 		value.i = 0;
 	}
-	XaviCleanupClearAll(&pool);
+	XaviTreeDelete(tree);
+	
 	return value;
 }

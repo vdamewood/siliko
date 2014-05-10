@@ -38,15 +38,12 @@ typedef struct XaviArglist   XaviArglist;
 struct XaviTreeList;
 struct XaviFunctionList;
 struct XaviArglistList;
-struct XaviMemoryPool;
 
 typedef struct XaviTreeList      XaviTreeList;
 typedef struct XaviIdList        XaviIdList;
 typedef struct XaviArglistList	 XaviArglistList;
-typedef struct XaviMemoryPool    XaviMemoryPool;
 
 #include "XaviArglist.h"
 #include "XaviTree.h"
-#include "XaviCleanup.h"
 
 #endif // Xavi_STRUCTS_H

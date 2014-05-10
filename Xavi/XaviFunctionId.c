@@ -1,6 +1,6 @@
 /*
  * XaviFunctionId.c: Functions to manipulate function identifiers.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -21,16 +21,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "XaviCleanup.h"
 #include "XaviFunctionId.h"
-#include "XaviStructs.h"
 
-
-char * XaviFunctionIdNew(char * NewId, XaviMemoryPool * pool)
+char * XaviFunctionIdNew(char * NewId)
 {
 	char * rVal;
 	if (rVal = malloc(strlen(NewId)+1)) {
-		XaviCleanupCacheFunctionId(rVal, pool);
 		strcpy(rVal, NewId);
 	}
 	return rVal;
