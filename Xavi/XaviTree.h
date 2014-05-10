@@ -23,6 +23,7 @@
 
 #include "XaviStructs.h"
 
+XaviNumber XaviTreeEvaluate(XaviTree * TreeToEvaluate);
 int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left, XaviMemoryPool *);
 int XaviTreeNegate(XaviTree *);
 XaviTree * XaviTreeNewOperator(XaviOperatorSymbol Operator, XaviTree * LeftOperand, XaviTree * RightOperand, XaviMemoryPool *);

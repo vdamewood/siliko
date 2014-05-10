@@ -5,13 +5,13 @@ set(Xavi_INTERNAL_HEADERS
   XaviStructs.h
   XaviFunctionCall.h XaviOperatorCall.h
   XaviArglist.h XaviFunctionId.h XaviTree.h
-  XaviEvaluate.h XaviCleanup.h
+  XaviCleanup.h
   XaviParser.h XaviLexer.h)
 set(Xavi_SOURCES
   Xavi.c
   XaviFunctionCall.c XaviOperatorCall.c
   XaviArglist.c XaviFunctionId.c XaviTree.c
-  XaviEvaluate.c XaviCleanup.c
+  XaviCleanup.c
   XaviParser.c XaviLexer.c)
 
 add_library(Xavi

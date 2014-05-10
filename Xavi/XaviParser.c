@@ -25,7 +25,7 @@
 #include "XaviParser.h"
 
 #include "XaviCleanup.h"
-#include "XaviEvaluate.h"
+//#include "XaviEvaluate.h"
 #include "XaviTree.h"
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
@@ -367,7 +367,7 @@ int XaviInternalParse(
 
 	if (tree != NULL && XaviLexerGetToken(lexer) == EOL)
 	{
-		*value = XaviEvaluate(tree);
+		*value = XaviTreeEvaluate(tree);
 	}
 	else
 	{
