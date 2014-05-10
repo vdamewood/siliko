@@ -1,6 +1,6 @@
 /*
  * XaviArglist.h: Functions to manipulate arguments lists for functions.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -22,6 +22,13 @@
 #define Xavi_ARGLIST_H
 
 #include "XaviStructs.h"
+
+struct XaviArglist {
+	int depth;
+	XaviTree * value;
+	XaviArglist * next;
+};
+typedef struct XaviArglist XaviArglist;
 
 XaviArglist * XaviArglistNew(XaviTree * NewArgument, XaviArglist * ListToExtend, XaviMemoryPool *);
 void XaviArglistDelete(XaviArglist * ArglistToDelete);

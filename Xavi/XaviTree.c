@@ -1,6 +1,6 @@
 /*
  * XaviTree.c: Functions to manipulate abstract syntax trees.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -21,7 +21,6 @@
 #include <stdlib.h>
 
 #include "XaviTree.h"
-#include "XaviArglist.h"
 #include "XaviCleanup.h"
 #include "XaviFunctionId.h"
 #include "XaviFunctionCall.h"
@@ -122,10 +121,10 @@ XaviTree * XaviTreeNewFloat(float value, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
 	XaviNumber * rValNum;
-	
+
 	rVal = malloc(sizeof(XaviTree)); //if
 	rValNum = malloc(sizeof(XaviNumber)); //if
-	
+
 	if (!rVal || !rValNum) {
 		free(rVal);
 		free(rValNum);
@@ -134,21 +133,21 @@ XaviTree * XaviTreeNewFloat(float value, XaviMemoryPool * pool)
 	rVal->num = rValNum;
 
 	XaviCleanupCacheTree(rVal, pool);
-	
+
 	rVal->type = 'n';
 	rVal->num->status = S_FLOAT;
 	rVal->num->f = value;
 	return rVal;
 }
 
-XaviTree * XaviTreeNewFunction(char * name, XaviArglist * in_arglist, XaviMemoryPool * pool)
+XaviTree * XaviTreeNewFunction(char * name, int argc, XaviTree ** argv, XaviMemoryPool * pool)
 {
 	XaviTree * rVal;
 	XaviFunction * rValFunc;
-	
+
 	rVal = malloc(sizeof(XaviTree)); //if
 	rValFunc = malloc(sizeof(XaviFunction)); //if
-	
+
 	if (!rVal || !rValFunc) {
 		free(rVal);
 		free(rValFunc);
@@ -157,23 +156,23 @@ XaviTree * XaviTreeNewFunction(char * name, XaviArglist * in_arglist, XaviMemory
 	rVal->func = rValFunc;
 
 	XaviCleanupCacheTree(rVal, pool);
-	
+
 	rVal->type = 'f';
 	rVal->func->name = name;
+	rVal->func->arg_count = argc;
+	rVal->func->arg_vector = argv;
 	XaviCleanupReleaseFunctionId(name, pool);
 	
-	if(in_arglist) {
-		rVal->func->arg_count = in_arglist->depth;
+	return rVal;
+}
 
-		rVal->func->arg_vector = XaviArglistGetTrees(in_arglist);
-		XaviCleanupReleaseArglist(in_arglist, pool);
-		XaviArglistDissolve(in_arglist);		
-	}
-	else {
-		rVal->func->arg_count = 0;
-		rVal->func->arg_vector = NULL;
-	}
+XaviTree * XaviTreeNewSyntaxError(XaviMemoryPool * pool)
+{
+	XaviTree * rVal;
 	
+	rVal = malloc(sizeof(XaviTree *));
+	rVal->type = 'e';
+	XaviCleanupCacheTree(rVal, pool);
 	return rVal;
 }
 
@@ -255,7 +254,7 @@ XaviNumber XaviTreeEvaluate(XaviTree * tree)
 {
 	XaviNumber rVal;
 	
-	if (!tree) {
+	if (!tree || tree->type == 'e') {
 		rVal.status = E_SYNTAX;
 		return rVal;
 	}

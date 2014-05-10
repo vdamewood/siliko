@@ -29,24 +29,6 @@
 #include "XaviArglist.h"
 #include "XaviFunctionId.h"
 
-// FIXME: This parser uses a NULL return value to indicate both syntax errors and
-// situations where the rule should process the null string (and thus do nothing).
-// This results in a problem where, for example, 2d+6 = 8. This is because the
-// parser calls GetExpr3lf after every numerical value. GetExpr3lf is supposed to
-// return NULL when it doesn't see a d operator to indicat that it doesn't have
-// anything to do. It also returns NULL if it encounters anything other than an
-// integer after the d. This means that GetExpr3lf consumes the d from the lexer,
-// then returns NULL to indicate that it found an error. GetExpr3 then interprets
-// the NULL as nothing-to-do, and proceeds as if ther d wasn't there.
-
-// Ways to fix it:
-// * Add nothing and error values to XaviTree. Return a nothing or error tree instead
-//   of NULL.
-// * Change all functions to return 0 on error and -1 on success. Return the resulting
-//   XaviTree through a pointer-to-pointer parameter passed to the function.
-// * Use setjmp and longjmp.
-// Return a tagged data structure that can represent syntax error, nothing, or xavi tree.
-
 static XaviTree * GetExpr0(XaviLexer * lexer, XaviMemoryPool * pool);
 static XaviTree * GetExpr0r(XaviLexer * lexer, XaviMemoryPool * pool);
 static XaviTree * GetExpr1(XaviLexer * lexer, XaviMemoryPool * pool);
@@ -193,7 +175,18 @@ static XaviTree * GetExpr2lf(XaviLexer * lexer, XaviMemoryPool * pool)
 	if (XaviLexerGetToken(lexer) == '^')
 	{
 		XaviLexerNext(lexer);
-		return GetExpr2(lexer, pool);
+
+		switch (XaviLexerGetToken(lexer))
+		{
+		case INTEGER:
+		case FLOAT:
+		case '-':
+		case ID:
+		case '(':
+			return GetExpr2(lexer, pool);
+		default:
+			return XaviTreeNewSyntaxError(pool);
+		}
 	}
 	else
 	{
@@ -222,7 +215,7 @@ static XaviTree * GetExpr3lf(XaviLexer * lexer, XaviMemoryPool * pool)
 	{
 		XaviLexerNext(lexer);
 		if (XaviLexerGetToken(lexer) != INTEGER)
-			return NULL;
+			return XaviTreeNewSyntaxError(pool);
 
 		value = XaviLexerGetValue(lexer);
 		XaviLexerNext(lexer);
@@ -301,6 +294,8 @@ static XaviTree * GetFCall(XaviLexer * lexer, XaviMemoryPool * pool)
 	int token;
 	XaviTokenValue value;
 	char * id;
+	int collapsedArgc;
+	XaviTree ** collapsedArgv;
 	XaviArglist * arglist;
 
 	token = XaviLexerGetToken(lexer);
@@ -323,7 +318,18 @@ static XaviTree * GetFCall(XaviLexer * lexer, XaviMemoryPool * pool)
 	if (token != ')')
 		return NULL;
 
-	return XaviTreeNewFunction(id, arglist, pool);
+	if(arglist) {
+		collapsedArgc = arglist->depth;
+		collapsedArgv = XaviArglistGetTrees(arglist);
+		XaviCleanupReleaseArglist(arglist, pool);
+		XaviArglistDissolve(arglist);		
+	}
+	else {
+		collapsedArgc = 0;
+		collapsedArgv = NULL;
+	}
+	
+	return XaviTreeNewFunction(id, collapsedArgc, collapsedArgv, pool);
 }
 
 static XaviArglist * GetArglist(XaviLexer * lexer, XaviMemoryPool * pool)

@@ -1,6 +1,6 @@
 /*
  * XaviStructs.c: Common data structures.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -32,46 +32,7 @@ struct XaviArglist;
 typedef struct XaviTree      XaviTree;
 typedef struct XaviOperator  XaviOperator;
 typedef struct XaviFunction  XaviFunction;
-typedef struct XaviArglist	 XaviArglist;
-
-enum XaviOperatorSymbol {
-	OP_ADD=0,
-	OP_SUB=1,
-	OP_MUL=2,
-	OP_DIV=3,
-	OP_POW=4,
-	OP_DICE=5,
-	OP_TOTAL_COUNT
-};
-typedef enum XaviOperatorSymbol XaviOperatorSymbol;
-
-struct XaviTree {
-	char type;
-	union {
-		XaviNumber * num;
-		XaviOperator * op;
-		XaviFunction * func;
-	};
-};
-
-struct XaviOperator {
-	XaviOperatorSymbol symbol;
-	XaviTree * left;
-	XaviTree * right;
-	XaviNumber * args;
-};
-
-struct XaviFunction {
-	char * name;
-	int arg_count;
-	XaviTree ** arg_vector;
-};
-
-struct XaviArglist {
-	int depth;
-	XaviTree * value;
-	XaviArglist * next;
-};
+typedef struct XaviArglist   XaviArglist;
 
 // Memory management structures.
 struct XaviTreeList;
@@ -84,25 +45,8 @@ typedef struct XaviIdList        XaviIdList;
 typedef struct XaviArglistList	 XaviArglistList;
 typedef struct XaviMemoryPool    XaviMemoryPool;
 
-struct XaviTreeList {
-	XaviTreeList * next;
-	XaviTree * item;
-};
-
-struct XaviArglistList { // Yeah, I know.
-	XaviArglistList * next;
-	XaviArglist * item;
-};
-
-struct XaviIdList {
-	XaviIdList * next;
-	char * item;
-};
-
-struct XaviMemoryPool {
-	XaviTreeList * DanglingTrees;
-	XaviArglistList * DanglingArglists;
-	XaviIdList * DanglingIds;
-};
+#include "XaviArglist.h"
+#include "XaviTree.h"
+#include "XaviCleanup.h"
 
 #endif // Xavi_STRUCTS_H

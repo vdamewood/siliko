@@ -1,6 +1,6 @@
 /*
  * XaviCleanup.h: Keep track of dangling objects while composing syntax tree.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -22,6 +22,27 @@
 #define Xavi_CLEANUP_H
 
 #include "XaviStructs.h"
+
+struct XaviTreeList {
+	XaviTreeList * next;
+	XaviTree * item;
+};
+
+struct XaviArglistList { // Yeah, I know.
+	XaviArglistList * next;
+	XaviArglist * item;
+};
+
+struct XaviIdList {
+	XaviIdList * next;
+	char * item;
+};
+
+struct XaviMemoryPool {
+	XaviTreeList * DanglingTrees;
+	XaviArglistList * DanglingArglists;
+	XaviIdList * DanglingIds;
+};
 
 int XaviCleanupCacheTree(XaviTree * TreeToCache, XaviMemoryPool *);
 void XaviCleanupReleaseTree(XaviTree * TreeToRelease, XaviMemoryPool *);
