@@ -21,7 +21,8 @@
 #if !defined Xavi_FUNCTIONS_H
 #define Xavi_FUNCTIONS_H
 
-#include "XaviStructs.h"
+#include "Xavi.h"
+#include "XaviTree.h"
 
 int XaviFunctionCallOpen();
 void XaviFunctionCallClose();

@@ -21,7 +21,11 @@
 #if !defined Xavi_ARGLIST_H
 #define Xavi_ARGLIST_H
 
-#include "XaviStructs.h"
+#include "Xavi.h"
+#include "XaviTree.h"
+
+struct XaviArglist;
+typedef struct XaviArglist XaviArglist;
 
 struct XaviArglist {
 	int depth;

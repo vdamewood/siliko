@@ -19,14 +19,13 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "Xavi.h"
-#include "XaviStructs.h"
 #include "XaviParser.h"
 
 #include "XaviTree.h"
 #include "XaviArglist.h"
-#include "XaviFunctionId.h"
 
 static XaviTree * GetExpr0(XaviLexer * lexer);
 static XaviTree * GetExpr0r(XaviLexer * lexer);
@@ -297,7 +296,10 @@ static XaviTree * GetFCall(XaviLexer * lexer)
 
 	token = XaviLexerGetToken(lexer);
 	value = XaviLexerGetValue(lexer);
-	id = XaviFunctionIdNew(value.s);
+
+	char * rVal;
+	id = malloc(strlen(value.s)+1);
+	strcpy(id, value.s);
 
 	XaviLexerNext(lexer);
 	token = XaviLexerGetToken(lexer);
@@ -305,7 +307,10 @@ static XaviTree * GetFCall(XaviLexer * lexer)
 	
 	XaviLexerNext(lexer);
 	if (token != '(')
+	{
+		free(id);
 		return NULL;
+	}
 
 	arglist = GetArglist(lexer);
 
@@ -314,7 +319,7 @@ static XaviTree * GetFCall(XaviLexer * lexer)
 	XaviLexerNext(lexer);
 	if (token != ')')
 	{
-		XaviFunctionIdDelete(id);
+		free(id);
 		XaviArglistDelete(arglist);
 		return NULL;
 	}

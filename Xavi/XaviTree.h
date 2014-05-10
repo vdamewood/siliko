@@ -21,7 +21,7 @@
 #if !defined Xavi_TREE_H
 #define Xavi_TREE_H
 
-#include "XaviStructs.h"
+#include "Xavi.h"
 
 enum XaviOperatorSymbol {
 	OP_ADD=0,
@@ -33,6 +33,9 @@ enum XaviOperatorSymbol {
 	OP_TOTAL_COUNT
 };
 typedef enum XaviOperatorSymbol XaviOperatorSymbol;
+
+struct XaviTree;
+typedef struct XaviTree XaviTree;
 
 struct XaviOperator {
 	XaviOperatorSymbol symbol;

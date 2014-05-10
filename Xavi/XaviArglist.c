@@ -20,7 +20,6 @@
 
 #include <stdlib.h>
 
-#include "XaviStructs.h"
 #include "XaviArglist.h"
 #include "XaviTree.h"
 

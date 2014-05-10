@@ -2,14 +2,13 @@
 
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
-  XaviStructs.h
   XaviFunctionCall.h
-  XaviArglist.h XaviFunctionId.h XaviTree.h
+  XaviArglist.h XaviTree.h
   XaviParser.h XaviLexer.h)
 set(Xavi_SOURCES
   Xavi.c
   XaviFunctionCall.c
-  XaviArglist.c XaviFunctionId.c XaviTree.c
+  XaviArglist.c XaviTree.c
   XaviParser.c XaviLexer.c)
 
 add_library(Xavi

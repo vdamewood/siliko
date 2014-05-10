@@ -21,7 +21,6 @@
 #include <stdlib.h>
 
 #include "XaviTree.h"
-#include "XaviFunctionId.h"
 #include "XaviFunctionCall.h"
 
 int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left)
@@ -176,7 +175,7 @@ void XaviTreeDelete(XaviTree * tree)
 				free(tree->op);
 				break;
 			case 'f':
-				XaviFunctionIdDelete(tree->func->name);
+				free(tree->func->name);
 				for (i = 0; i <  tree->func->arg_count; i++) {
 					XaviTreeDelete(tree->func->arg_vector[i]);
 				}
