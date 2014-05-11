@@ -327,7 +327,6 @@ static XaviTree * GetFCall(XaviLexer * lexer)
 	if(arglist) {
 		collapsedArgc = arglist->depth;
 		collapsedArgv = XaviArglistGetTrees(arglist);
-		XaviArglistDissolve(arglist);
 	}
 	else {
 		collapsedArgc = 0;

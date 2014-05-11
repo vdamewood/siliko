@@ -45,24 +45,24 @@ void XaviArglistDelete(XaviArglist * OldArglist)
 	 }
 }
 
-// Destroy the arglist, but leave the trees contained therein intact.
-void XaviArglistDissolve(XaviArglist * OldArglist)
-{
-	if (OldArglist && OldArglist->next) XaviArglistDissolve(OldArglist->next);
-	free(OldArglist);
-}
-
 XaviTree ** XaviArglistGetTrees(XaviArglist * InArglist)
 {
 	XaviTree ** rVal;
 	XaviArglist * Current = InArglist;
+	XaviArglist * next;
 	int i;
+	int depth = InArglist->depth;
 	
-	if ((rVal = malloc(InArglist->depth * sizeof(XaviTree *)))) {
-		for (i = 0; i < InArglist->depth; i++) {
+	if ((rVal = malloc(depth * sizeof(XaviTree *)))) {
+		for (i = 0; i < depth; i++) {
 			rVal[i] = Current->value;
-			Current = Current->next;
+			next = Current->next;
+			free(Current);
+			Current = next;
 		}
+	}
+	else {
+		rVal = NULL;
 	}
 	return rVal;
 }
