@@ -28,7 +28,4 @@ int XaviFunctionCallOpen();
 void XaviFunctionCallClose();
 XaviNumber XaviFunctionCall(const char * FunctionName, int ArgumentCount, XaviNumber * Arguments);
 
-int XaviOperatorCallOpen();
-void XaviOperatorCallClose();
-XaviNumber XaviOperatorCall(XaviOperatorSymbol Operator, XaviNumber LeftOperand, XaviNumber RightOperand);
 #endif // Xavi_FUNCTIONS_H

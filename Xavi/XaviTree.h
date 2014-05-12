@@ -23,7 +23,7 @@
 
 #include "Xavi.h"
 
-enum XaviOperatorSymbol {
+/*enum XaviOperatorSymbol {
 	OP_ADD=0,
 	OP_SUB=1,
 	OP_MUL=2,
@@ -33,17 +33,17 @@ enum XaviOperatorSymbol {
 	OP_TOTAL_COUNT
 };
 typedef enum XaviOperatorSymbol XaviOperatorSymbol;
-
+*/
 struct XaviTree;
 typedef struct XaviTree XaviTree;
 
-struct XaviOperator {
+/*struct XaviOperator {
 	XaviOperatorSymbol symbol;
 	XaviTree * left;
 	XaviTree * right;
 	XaviNumber * args;
 };
-typedef struct XaviOperator XaviOperator;
+typedef struct XaviOperator XaviOperator;*/
 
 struct XaviFunction {
 	char * name;
@@ -57,7 +57,7 @@ struct XaviTree {
 	char type;
 	union {
 		XaviNumber * num;
-		XaviOperator * op;
+		//XaviOperator * op;
 		XaviFunction * func;
 	};
 };
@@ -68,7 +68,6 @@ typedef struct XaviTree XaviTree;
 XaviNumber XaviTreeEvaluate(XaviTree * TreeToEvaluate);
 int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left);
 int XaviTreeNegate(XaviTree *);
-XaviTree * XaviTreeNewOperator(XaviOperatorSymbol Operator, XaviTree * LeftOperand, XaviTree * RightOperand);
 XaviTree * XaviTreeNewInteger(int Value);
 XaviTree * XaviTreeNewFloat(float Value);
 XaviTree * XaviTreeNewFunction(char * FunctionName, int argumentCount, XaviTree ** arguments);

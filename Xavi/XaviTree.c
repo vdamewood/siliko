@@ -25,19 +25,7 @@
 
 int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left)
 {
-	if (parent->type == 'o')
-	{
-		if (parent->op->left == NULL)
-		{
-			parent->op->left = left;
-			return -1;
-		}
-		else
-		{
-			return XaviTreeGraftLeft(parent->op->left, left);
-		}
-	}
-	else if (parent->type == 'f')
+	if (parent->type == 'f')
 	{
 		if (parent->func->arg_count == 0)
 		{
@@ -50,9 +38,6 @@ int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left)
 		}
 		else
 		{
-			printf("It's not null. Must recurse. %p %c\n", parent->func->arg_vector[0], parent->func->arg_vector[0]->type);
-			printf("It's not null. Must recurse. %p\n", parent->func->arg_vector[1]);
-			
 			return XaviTreeGraftLeft(
 				parent->func->arg_vector[0],
 				left);
@@ -60,7 +45,6 @@ int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left)
 	}
 	else
 	{
-		printf("It's null\n");
 		return 0;
 	}
 	
@@ -77,35 +61,6 @@ int XaviTreeNegate(XaviTree * tree)
 	else
 		return 0;
 	return 1;
-}
-
-XaviTree * XaviTreeNewOperator(XaviOperatorSymbol symbol, XaviTree * left, XaviTree * right)
-{
-	XaviTree * rVal;
-	XaviOperator * rValOp;
-	XaviNumber * rValArgs;
-
-	rVal = malloc(sizeof(XaviTree)); //if
-	rValOp = malloc(sizeof(XaviOperator)); //if
-	rValArgs = malloc(sizeof(XaviNumber) * 2); //if
-
-	if (!rVal || !rValOp || !rValArgs) {
-		free(rVal);
-		free(rValOp);
-		free(rValArgs);
-		return NULL;
-	}
-	
-	rVal->op = rValOp;
-	rVal->op->args = rValArgs;
-	
-	rVal->type = 'o';
-	rVal->op->symbol = symbol;
-
-	rVal->op->left = left;
-
-	rVal->op->right = right;
-	return rVal;
 }
 
 XaviTree * XaviTreeNewInteger(int value)
@@ -190,12 +145,6 @@ void XaviTreeDelete(XaviTree * tree)
 			case 'n':
 				free(tree->num);
 				break;
-			case 'o':
-				XaviTreeDelete(tree->op->left);
-				XaviTreeDelete(tree->op->right);
-				free(tree->op->args);
-				free(tree->op);
-				break;
 			case 'f':
 				free(tree->func->name);
 				for (i = 0; i <  tree->func->arg_count; i++) {
@@ -209,27 +158,11 @@ void XaviTreeDelete(XaviTree * tree)
 	}
 }
 
-// Fomerally XaviTreeEvaluate
-
 static int IsNumber(XaviNumber n) {
 	return n.status == S_INTEGER || n.status == S_FLOAT;
 }
 
-static XaviNumber EvaluateOperator(XaviOperator * op)
-{
-	XaviNumber opLeft;
-	XaviNumber opRight;
-	
-	opLeft = XaviTreeEvaluate(op->left);
-	if (!IsNumber(opLeft)) return opLeft;
-	
-	opRight = XaviTreeEvaluate(op->right);
-	if (!IsNumber(opRight)) return opRight;
-	
-	return XaviOperatorCall(op->symbol, opLeft, opRight);
-}
-
-XaviNumber EvaluateFunction(XaviFunction * func)
+static XaviNumber EvaluateFunction(XaviFunction * func)
 {
 	XaviNumber rVal;
 	XaviNumber * arguments = NULL;
@@ -267,7 +200,6 @@ XaviNumber XaviTreeEvaluate(XaviTree * tree)
 	
 	switch (tree->type) {
 		case 'n': return *tree->num;
-		case 'o': return EvaluateOperator(tree->op);
 		case 'f': return EvaluateFunction(tree->func);
 	}
 	rVal.status = E_INTERNAL;

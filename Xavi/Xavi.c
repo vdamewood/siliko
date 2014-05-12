@@ -18,8 +18,6 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
 #include "XaviParser.h"
@@ -27,13 +25,11 @@
 void XaviOpen(void)
 {
 	XaviFunctionCallOpen();
-	XaviOperatorCallOpen();
 }
 
 void XaviClose(void)
 {
 	XaviFunctionCallClose();
-	XaviOperatorCallClose();
 }
 
 XaviNumber XaviParse(const char * inString)
