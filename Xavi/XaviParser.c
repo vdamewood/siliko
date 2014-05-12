@@ -27,38 +27,38 @@
 #include "XaviTree.h"
 #include "XaviArglist.h"
 
-char * x_strdup(const char * string)
+static char *x_strdup(const char *string)
 {
-	char * rVal;
+	char *rVal;
 	
-	if (rVal = malloc(strlen(string)+1))
+	if (rVal = malloc(strlen(string) + 1))
 		strcpy(rVal, string);
 
 	return rVal;
 }
 
-static XaviTree * GetExpr0(XaviLexer * lexer);
-static XaviTree * GetExpr0r(XaviLexer * lexer);
-static XaviTree * GetExpr1(XaviLexer * lexer);
-static XaviTree * GetExpr1r(XaviLexer * lexer);
-static XaviTree * GetExpr2(XaviLexer * lexer);
-static XaviTree * GetExpr2lf(XaviLexer * lexer);
-static XaviTree * GetExpr3(XaviLexer * lexe);
-static XaviTree * GetExpr3lf(XaviLexer * lexer);
-static XaviTree * GetAtom(XaviLexer * lexer);
-static XaviTree * GetNumber(XaviLexer * lexer);
-static XaviTree * GetUNumber(XaviLexer * lexer);
-static XaviTree * GetFCall(XaviLexer * lexer);
-static XaviArglist * GetArglist(XaviLexer * lexer);
-static XaviArglist * GetArglistLF(XaviLexer * lexer);
+static XaviTree *GetExpr0(XaviLexer *lexer);
+static XaviTree *GetExpr0r(XaviLexer *lexer);
+static XaviTree *GetExpr1(XaviLexer *lexer);
+static XaviTree *GetExpr1r(XaviLexer *lexer);
+static XaviTree *GetExpr2(XaviLexer *lexer);
+static XaviTree *GetExpr2lf(XaviLexer *lexer);
+static XaviTree *GetExpr3(XaviLexer *lexe);
+static XaviTree *GetExpr3lf(XaviLexer *lexer);
+static XaviTree *GetAtom(XaviLexer *lexer);
+static XaviTree *GetNumber(XaviLexer *lexer);
+static XaviTree *GetUNumber(XaviLexer *lexer);
+static XaviTree *GetFCall(XaviLexer *lexer);
+static XaviArglist *GetArglist(XaviLexer *lexer);
+static XaviArglist *GetArglistLF(XaviLexer *lexer);
 
-static XaviTree * GetExpr0(XaviLexer * lexer)
+static XaviTree *GetExpr0(XaviLexer *lexer)
 {
-	XaviTree * value;
-	XaviTree * rest;
+	XaviTree *value;
+	XaviTree *rest;
 
 	value = GetExpr1(lexer);
-	
+
 	if (value == NULL)
 		return NULL;
 	rest = GetExpr0r(lexer);
@@ -74,38 +74,38 @@ static XaviTree * GetExpr0(XaviLexer * lexer)
 	}
 }
 
-static XaviTree * GetExpr0r(XaviLexer * lexer)
+static XaviTree *GetExpr0r(XaviLexer *lexer)
 {
-	XaviTree * value;
-	XaviTree * rest;
-	char * function;
-	XaviTree * functionCall;
-	XaviTree ** arguments;
-	
+	XaviTree *value;
+	XaviTree *rest;
+	char *function;
+	XaviTree *functionCall;
+	XaviTree **arguments;
+
 	switch (XaviLexerGetToken(lexer))
 	{
-		case '+':
-			function = x_strdup("add");
-			break;
-		case '-':
-			function = x_strdup("subtract");
-			break;
-		default:
-			return NULL;
+	case '+':
+		function = x_strdup("add");
+		break;
+	case '-':
+		function = x_strdup("subtract");
+		break;
+	default:
+		return NULL;
 	}
 
 	XaviLexerNext(lexer);
 	value = GetExpr1(lexer);
-	
+
 	rest = GetExpr0r(lexer);
 
 	arguments = malloc(2 * sizeof(XaviTree *));
-	
+
 	arguments[0] = NULL;
 	arguments[1] = value;
 
 	functionCall = XaviTreeNewFunction(function, 2, arguments);
-	
+
 	if (rest != NULL)
 	{
 		XaviTreeGraftLeft(rest, functionCall);
@@ -117,10 +117,10 @@ static XaviTree * GetExpr0r(XaviLexer * lexer)
 	}
 }
 
-static XaviTree * GetExpr1(XaviLexer * lexer)
+static XaviTree *GetExpr1(XaviLexer *lexer)
 {
-	XaviTree * value;
-	XaviTree * rest;
+	XaviTree *value;
+	XaviTree *rest;
 
 	value = GetExpr2(lexer);
 	if (value == NULL)
@@ -128,7 +128,9 @@ static XaviTree * GetExpr1(XaviLexer * lexer)
 	rest = GetExpr1r(lexer);
 
 	if (rest == NULL)
+	{
 		return value;
+	}
 	else
 	{
 		XaviTreeGraftLeft(rest, value);
@@ -136,38 +138,38 @@ static XaviTree * GetExpr1(XaviLexer * lexer)
 	}
 }
 
-static XaviTree * GetExpr1r(XaviLexer * lexer)
+static XaviTree *GetExpr1r(XaviLexer *lexer)
 {
-	XaviTree * value;
-	XaviTree * rest;
-	char * function;
-	XaviTree * functionCall;
-	XaviTree ** arguments;
-	
+	XaviTree *value;
+	XaviTree *rest;
+	char *function;
+	XaviTree *functionCall;
+	XaviTree **arguments;
+
 	switch (XaviLexerGetToken(lexer))
 	{
-		case '*':
-			function = x_strdup("multiply");
-			break;
-		case '/':
-			function = x_strdup("divide");
-			break;
-		default:
-			return NULL;
+	case '*':
+		function = x_strdup("multiply");
+		break;
+	case '/':
+		function = x_strdup("divide");
+		break;
+	default:
+		return NULL;
 	}
-	
+
 	XaviLexerNext(lexer);
 	value = GetExpr2(lexer);
-	
+
 	rest = GetExpr1r(lexer);
-	
+
 	arguments = malloc(2 * sizeof(XaviTree *));
-	
+
 	arguments[0] = NULL;
 	arguments[1] = value;
-	
+
 	functionCall = XaviTreeNewFunction(function, 2, arguments);
-	
+
 	if (rest != NULL)
 	{
 		XaviTreeGraftLeft(rest, functionCall);
@@ -179,12 +181,12 @@ static XaviTree * GetExpr1r(XaviLexer * lexer)
 	}
 }
 
-static XaviTree * GetExpr2(XaviLexer * lexer)
+static XaviTree *GetExpr2(XaviLexer *lexer)
 {
-	XaviTree * value;
-	XaviTree * leftFactor;
-	char * functionName;
-	XaviTree ** arguments;
+	XaviTree *value;
+	XaviTree *leftFactor;
+	char *functionName;
+	XaviTree **arguments;
 
 	value = GetExpr3(lexer);
 	if (value == NULL)
@@ -192,19 +194,20 @@ static XaviTree * GetExpr2(XaviLexer * lexer)
 	leftFactor = GetExpr2lf(lexer);
 
 	if (leftFactor == NULL)
+	{
 		return value;
+	}
 	else
 	{
 		functionName = x_strdup("power");
 		arguments = malloc(2 * sizeof(XaviTree *));
 		arguments[0] = value;
 		arguments[1] = leftFactor;
-		
 		return XaviTreeNewFunction(functionName, 2, arguments);
 	}
 }
 
-static XaviTree * GetExpr2lf(XaviLexer * lexer)
+static XaviTree *GetExpr2lf(XaviLexer *lexer)
 {
 	if (XaviLexerGetToken(lexer) == '^')
 	{
@@ -228,12 +231,12 @@ static XaviTree * GetExpr2lf(XaviLexer * lexer)
 	}
 }
 
-static XaviTree * GetExpr3(XaviLexer * lexer)
+static XaviTree * GetExpr3(XaviLexer *lexer)
 {
-	XaviTree * value;
-	XaviTree * dice;
-	char * functionName;
-	XaviTree ** arguments;
+	XaviTree *value;
+	XaviTree *dice;
+	char *functionName;
+	XaviTree **arguments;
 	
 	value = GetAtom(lexer);
 	dice = GetExpr3lf(lexer);
@@ -248,12 +251,11 @@ static XaviTree * GetExpr3(XaviLexer * lexer)
 		arguments = malloc(2 * sizeof(XaviTree *));
 		arguments[0] = value;
 		arguments[1] = dice;
-		
 		return XaviTreeNewFunction(functionName, 2, arguments);
 	}
 }
 
-static XaviTree * GetExpr3lf(XaviLexer * lexer)
+static XaviTree *GetExpr3lf(XaviLexer *lexer)
 {
 	XaviTokenValue value;
 
@@ -273,88 +275,87 @@ static XaviTree * GetExpr3lf(XaviLexer * lexer)
 	}
 }
 
-static XaviTree * GetAtom(XaviLexer * lexer)
+static XaviTree *GetAtom(XaviLexer *lexer)
 {
-	XaviTree * value;
+	XaviTree *value;
 
 	switch(XaviLexerGetToken(lexer))
 	{
-		case '-':
-		case INTEGER:
-		case FLOAT:
-			return GetNumber(lexer);
-		case '(':
-			XaviLexerNext(lexer);
-			value = GetExpr0(lexer);
-			if (XaviLexerGetToken(lexer) != ')')
-				return NULL;
-			XaviLexerNext(lexer);
-			return value;
-		case ID:
-			return GetFCall(lexer);
-		default:
+	case '-':
+	case INTEGER:
+	case FLOAT:
+		return GetNumber(lexer);
+	case '(':
+		XaviLexerNext(lexer);
+		value = GetExpr0(lexer);
+		if (XaviLexerGetToken(lexer) != ')')
 			return NULL;
+		XaviLexerNext(lexer);
+		return value;
+	case ID:
+		return GetFCall(lexer);
+	default:
+		return NULL;
 	}
 }
 
-static XaviTree * GetNumber(XaviLexer * lexer)
+static XaviTree *GetNumber(XaviLexer *lexer)
 {
 	switch (XaviLexerGetToken(lexer))
 	{
-		case INTEGER:
-		case FLOAT:
-			return GetUNumber(lexer);
-		case '-':
-			XaviLexerNext(lexer);
-			XaviTree * Symbol2 = GetUNumber(lexer);
-			if (Symbol2 == NULL || !XaviTreeNegate(Symbol2))
-				return NULL;
-
-			return Symbol2;
-		default:
+	case INTEGER:
+	case FLOAT:
+		return GetUNumber(lexer);
+	case '-':
+		XaviLexerNext(lexer);
+		XaviTree *Symbol2 = GetUNumber(lexer);
+		if (Symbol2 == NULL || !XaviTreeNegate(Symbol2))
 			return NULL;
+		return Symbol2;
+	default:
+		return NULL;
 	}
 }
 
-static XaviTree * GetUNumber(XaviLexer * lexer)
+static XaviTree *GetUNumber(XaviLexer *lexer)
 {
 	XaviTokenValue value;
 
 	switch (XaviLexerGetToken(lexer))
 	{
-		case INTEGER:
-			value = XaviLexerGetValue(lexer);
-			XaviLexerNext(lexer);
-			return XaviTreeNewInteger(value.i);
-		case FLOAT:
-			value = XaviLexerGetValue(lexer);
-			XaviLexerNext(lexer);
-			return XaviTreeNewFloat(value.f);
-		default:
-			return NULL;
+	case INTEGER:
+		value = XaviLexerGetValue(lexer);
+		XaviLexerNext(lexer);
+		return XaviTreeNewInteger(value.i);
+	case FLOAT:
+		value = XaviLexerGetValue(lexer);
+		XaviLexerNext(lexer);
+		return XaviTreeNewFloat(value.f);
+	default:
+		return NULL;
 	}
 }
 
-static XaviTree * GetFCall(XaviLexer * lexer)
+static XaviTree *GetFCall(XaviLexer *lexer)
 {
 	int token;
 	XaviTokenValue value;
-	char * id;
+	char *id;
 	int collapsedArgc;
-	XaviTree ** collapsedArgv;
-	XaviArglist * arglist;
+	XaviTree **collapsedArgv;
+	XaviArglist *arglist;
 
 	token = XaviLexerGetToken(lexer);
 	value = XaviLexerGetValue(lexer);
 
-	char * rVal;
-	id = malloc(strlen(value.s)+1);
+	char *rVal;
+	id = malloc(strlen(value.s) + 1);
 	strcpy(id, value.s);
 
 	XaviLexerNext(lexer);
 	token = XaviLexerGetToken(lexer);
 	value = XaviLexerGetValue(lexer);
-	
+
 	XaviLexerNext(lexer);
 	if (token != '(')
 	{
@@ -367,6 +368,7 @@ static XaviTree * GetFCall(XaviLexer * lexer)
 	token = XaviLexerGetToken(lexer);
 	value = XaviLexerGetValue(lexer);
 	XaviLexerNext(lexer);
+
 	if (token != ')')
 	{
 		free(id);
@@ -374,22 +376,24 @@ static XaviTree * GetFCall(XaviLexer * lexer)
 		return NULL;
 	}
 
-	if(arglist) {
+	if(arglist)
+	{
 		collapsedArgc = arglist->depth;
 		collapsedArgv = XaviArglistGetTrees(arglist);
 	}
-	else {
+	else
+	{
 		collapsedArgc = 0;
 		collapsedArgv = NULL;
 	}
-	
+
 	return XaviTreeNewFunction(id, collapsedArgc, collapsedArgv);
 }
 
-static XaviArglist * GetArglist(XaviLexer * lexer)
+static XaviArglist *GetArglist(XaviLexer *lexer)
 {
-	XaviTree * expression;
-	XaviArglist * subArglist;
+	XaviTree *expression;
+	XaviArglist *subArglist;
 
 	expression = GetExpr0(lexer);
 	subArglist = GetArglistLF(lexer);
@@ -397,7 +401,7 @@ static XaviArglist * GetArglist(XaviLexer * lexer)
 	return XaviArglistNew(expression, subArglist);
 }
 
-static XaviArglist * GetArglistLF(XaviLexer * lexer)
+static XaviArglist *GetArglistLF(XaviLexer *lexer)
 {
 	if (XaviLexerGetToken(lexer) != ',')
 	{
@@ -410,7 +414,7 @@ static XaviArglist * GetArglistLF(XaviLexer * lexer)
 	}
 }
 
-XaviNumber XaviInternalParse(XaviLexer * lexer)
+XaviNumber XaviInternalParse(XaviLexer *lexer)
 {
 	XaviNumber value;
 	
@@ -421,7 +425,7 @@ XaviNumber XaviInternalParse(XaviLexer * lexer)
 		return value;
 	}
 
-	XaviTree * tree = GetExpr0(lexer);
+	XaviTree *tree = GetExpr0(lexer);
 
 	if (tree != NULL && tree->type != 'e' && XaviLexerGetToken(lexer) == EOL)
 	{

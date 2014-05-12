@@ -22,10 +22,9 @@
 #define Xavi_FUNCTIONS_H
 
 #include "Xavi.h"
-#include "XaviTree.h"
 
 int XaviFunctionCallOpen();
 void XaviFunctionCallClose();
-XaviNumber XaviFunctionCall(const char * FunctionName, int ArgumentCount, XaviNumber * Arguments);
+XaviNumber XaviFunctionCall(const char *FunctionName, int ArgumentCount, XaviNumber *Arguments);
 
 #endif // Xavi_FUNCTIONS_H

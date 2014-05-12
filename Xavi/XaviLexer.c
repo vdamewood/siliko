@@ -30,7 +30,8 @@
 
 static int isOperator(int character)
 {
-	return (
+	return
+	(
 		character == '+'
 		|| character == '-'
 		|| character == '/'
@@ -38,7 +39,8 @@ static int isOperator(int character)
 		|| character == '^'
 		|| character == ','
 		|| character == '('
-		|| character == ')');
+		|| character == ')'
+	);
 }
 
 static int isIdCharacter(int character)
@@ -46,11 +48,13 @@ static int isIdCharacter(int character)
 	return (isalnum(character) || character == '_');
 }
 
-static char * extractString(
+static char * extractString
+(
 	const char * startCharacter,
-	const char * onePastEnd)
+	const char * onePastEnd
+)
 {
-	char * rVal;
+	char *rVal;
 	size_t length;
 
 	length = onePastEnd - startCharacter;
@@ -61,12 +65,14 @@ static char * extractString(
 	return rVal;
 }
 
-static int extractInteger(
-	const char * startCharacter,
-	const char * onePastEnd)
+static int extractInteger
+(
+	const char *startCharacter,
+	const char *onePastEnd
+)
 {
 	int rVal;
-	char * lexeme;
+	char *lexeme;
 
 	if (!(lexeme = extractString(startCharacter, onePastEnd)))
 		return 0;
@@ -75,12 +81,14 @@ static int extractInteger(
 	return rVal;
 }
 
-static float extractFloat(
+static float extractFloat
+(
 	const char * startCharacter,
-	const char * onePastEnd)
+	const char * onePastEnd
+)
 {
 	float rVal;
-	char * lexeme;
+	char *lexeme;
 
 	if (!(lexeme = extractString(startCharacter, onePastEnd)))
 		return 0.0;
@@ -111,130 +119,154 @@ enum XaviDfaState
 };
 typedef enum XaviDfaState XaviDfaState;
 
-static void XaviLexerLoad(XaviLexer * lexer)
+static void XaviLexerLoad(XaviLexer *lexer)
 {
 	XaviDfaState dfaState = DFA_START;
-	const char * current = lexer->location;
+	const char *current = lexer->location;
 
 	if (lexer->token == EOL || lexer->token == ERROR)
 		return;
 
 	while (dfaState != DFA_END)
-	switch (dfaState) {
+	switch (dfaState)
+	{
 	case DFA_START:
-		if(isOperator(*current)) {
+		if(isOperator(*current))
+		{
 			current++;
 			dfaState = DFA_TERM_CHAR;
 		}
-		else if (*current == 'd') {
+		else if (*current == 'd')
+		{
 			current++;
 			dfaState = DFA_DICE;
 		}
-		else if (*current == 'e') {
+		else if (*current == 'e')
+		{
 			current++;
 			dfaState = DFA_E;
 		}
-		else if (*current == 'p') {
+		else if (*current == 'p')
+		{
 			current++;
 			dfaState = DFA_PI_1;
 		}
-		else if (isdigit(*current)) {
+		else if (isdigit(*current))
+		{
 			current++;
 			dfaState = DFA_INTEGER;
 		}
-		else if (isalpha(*current)) {
+		else if (isalpha(*current))
+		{
 			current++;
 			dfaState = DFA_ID;
 		}
-		else if (isspace(*current)) {
+		else if (isspace(*current))
+		{
 			lexer->location++;
 			current++;
 		}
-		else if (*current == '\0'){
+		else if (*current == '\0')
+		{
 			dfaState = DFA_TERM_EOI;
 		}
-		else {
+		else
+		{
 			dfaState = DFA_ERROR;
 		}
 		break;
 	case DFA_DICE:
-		if (isalpha(*current)) {
+		if (isalpha(*current))
+		{
 			current++;
 			dfaState = DFA_ID;
 		}
-		else {
+		else
+		{
 			dfaState = DFA_TERM_CHAR;
 		}
 		break;
 	case DFA_E:
-		if (isalnum(*current)) {
+		if (isalnum(*current))
+		{
 			current++;
 			dfaState = DFA_ID;
 		}
-		else {
+		else
+		{
 			dfaState = DFA_TERM_E;
 		}
 		break;
 	case DFA_PI_1:
-		if (*current == 'i') {
+		if (*current == 'i')
+		{
 			current++;
 			dfaState = DFA_PI_2;
 		}
-		else if (isIdCharacter(*current)) {
+		else if (isIdCharacter(*current))
+		{
 			current++;
 			dfaState = DFA_ID;
 		}
-		else {
+		else
+		{
 			dfaState = DFA_TERM_STRING;
 		}
 		break;
 	case DFA_PI_2:
-		if (isIdCharacter(*current)) {
+		if (isIdCharacter(*current))
+		{
 			current++;
 			dfaState = DFA_ID;
 		}
-		else {
+		else
+		{
 			dfaState = DFA_TERM_PI;
 		}
 		break;
 	case DFA_ID:
-		if (isalnum(*current)) {
+		if (isalnum(*current))
+		{
 			current++;
 		}
-		else {
+		else
+		{
 			dfaState = DFA_TERM_STRING;
 		}
 		break;
 	case DFA_INTEGER:
-		if (*current == '.') {
+		if (*current == '.')
+		{
 			current++;
 			dfaState = DFA_FLOAT;
 		}
-		else if (isdigit(*current)) {
+		else if (isdigit(*current))
+		{
 			current++;
 		}
-		else {
+		else
+		{
 			dfaState = DFA_TERM_INTEGER;
 		}
 		break;
 	case DFA_FLOAT:
-		if (isdigit(*current)) {
+		if (isdigit(*current))
+		{
 			current++;
 		}
-		else {
+		else
+		{
 			dfaState = DFA_TERM_FLOAT;
 		}
 		break;
 	case DFA_TERM_INTEGER:
 		lexer->token = INTEGER;
-		lexer->value.i =
-			extractInteger(lexer->location, current);
+		lexer->value.i = extractInteger(lexer->location, current);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_FLOAT:
 		lexer->token = FLOAT;
-		lexer->value.f =
-			extractFloat(lexer->location, current);
+		lexer->value.f = extractFloat(lexer->location, current);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
@@ -254,8 +286,7 @@ static void XaviLexerLoad(XaviLexer * lexer)
 		break;
 	case DFA_TERM_STRING:
 		lexer->token = ID;
-		lexer->value.s =
-			extractString(lexer->location, current);
+		lexer->value.s = extractString(lexer->location, current);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_EOI:
@@ -272,9 +303,9 @@ static void XaviLexerLoad(XaviLexer * lexer)
 	lexer->location = current;
 }
 
-XaviLexer * XaviLexerNew(const char * inputString)
+XaviLexer *XaviLexerNew(const char *inputString)
 {
-	XaviLexer * rVal;
+	XaviLexer *rVal;
 
 	if (rVal = malloc(sizeof(XaviLexer)))
 	{
@@ -286,9 +317,9 @@ XaviLexer * XaviLexerNew(const char * inputString)
 	return rVal;
 }
 
-void XaviLexerDestroy(XaviLexer** theLexer)
+void XaviLexerDestroy(XaviLexer **theLexer)
 {
-	XaviLexer * garbage = *theLexer;
+	XaviLexer *garbage = *theLexer;
 	if (garbage)
 	{
 		if (garbage->token == ID)
@@ -298,7 +329,7 @@ void XaviLexerDestroy(XaviLexer** theLexer)
 	*theLexer = NULL;
 }
 
-XaviToken XaviLexerGetToken(XaviLexer * lexer)
+XaviToken XaviLexerGetToken(XaviLexer *lexer)
 {
 	if (lexer->token == UNSET)
 		XaviLexerLoad(lexer);
@@ -306,12 +337,12 @@ XaviToken XaviLexerGetToken(XaviLexer * lexer)
 	return lexer->token;
 }
 
-XaviTokenValue XaviLexerGetValue(XaviLexer * lexer)
+XaviTokenValue XaviLexerGetValue(XaviLexer *lexer)
 {
 	XaviTokenValue rVal;
 	if (lexer->token == UNSET)
 		XaviLexerLoad(lexer);
-	
+
 	switch (lexer->token)
 	{
 	case INTEGER:
@@ -327,7 +358,7 @@ XaviTokenValue XaviLexerGetValue(XaviLexer * lexer)
 	return rVal;
 }
 
-void XaviLexerNext(XaviLexer * lexer)
+void XaviLexerNext(XaviLexer *lexer)
 {
 	if (lexer->token == ID)
 		free(lexer->value.s);

@@ -23,46 +23,54 @@
 #include "XaviArglist.h"
 #include "XaviTree.h"
 
-XaviArglist * XaviArglistNew(XaviTree * NewTree, XaviArglist * OldList)
+XaviArglist *XaviArglistNew(XaviTree *NewTree, XaviArglist *OldList)
 {
-	XaviArglist * rVal;
+	XaviArglist *rVal;
 
-	if ((rVal = malloc(sizeof(XaviArglist)))) {
-		if (OldList) rVal->depth = OldList->depth + 1;
-		else rVal->depth = 1;
+	if ((rVal = malloc(sizeof(XaviArglist))))
+	{
+		if (OldList)
+			rVal->depth = OldList->depth + 1;
+		else
+			rVal->depth = 1;
 		rVal->value = NewTree;
 		rVal->next = OldList;
 	}
 	return rVal;
 }
 
-void XaviArglistDelete(XaviArglist * OldArglist)
+void XaviArglistDelete(XaviArglist *OldArglist)
 {
-	if (OldArglist) {
+	if (OldArglist)
+	{
 		XaviArglistDelete(OldArglist->next);
 		XaviTreeDelete(OldArglist->value);
 		free(OldArglist);
 	 }
 }
 
-XaviTree ** XaviArglistGetTrees(XaviArglist * InArglist)
+XaviTree **XaviArglistGetTrees(XaviArglist *InArglist)
 {
-	XaviTree ** rVal;
-	XaviArglist * Current = InArglist;
-	XaviArglist * next;
+	XaviTree **rVal;
+	XaviArglist *Current = InArglist;
+	XaviArglist *next;
 	int i;
 	int depth = InArglist->depth;
-	
-	if ((rVal = malloc(depth * sizeof(XaviTree *)))) {
-		for (i = 0; i < depth; i++) {
+
+	if ((rVal = malloc(depth * sizeof(XaviTree *))))
+	{
+		for (i = 0; i < depth; i++)
+		{
 			rVal[i] = Current->value;
 			next = Current->next;
 			free(Current);
 			Current = next;
 		}
 	}
-	else {
+	else
+	{
 		rVal = NULL;
 	}
+
 	return rVal;
 }

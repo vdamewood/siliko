@@ -57,10 +57,10 @@ struct XaviLexer
 };
 typedef struct XaviLexer XaviLexer;
 
-XaviLexer * XaviLexerNew(const char * inputString);
-void XaviLexerDestroy(XaviLexer** lexer);
+XaviLexer *XaviLexerNew(const char *inputString);
+void XaviLexerDestroy(XaviLexer **lexer);
 
-XaviToken XaviLexerGetToken(XaviLexer * lexer);
-XaviTokenValue XaviLexerGetValue(XaviLexer * lexer);
-void XaviLexerNext(XaviLexer * lexer);
+XaviToken XaviLexerGetToken(XaviLexer *lexer);
+XaviTokenValue XaviLexerGetValue(XaviLexer *lexer);
+void XaviLexerNext(XaviLexer *lexer);
 #endif /* XAVI_LEXER_H */

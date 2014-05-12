@@ -36,7 +36,7 @@ XaviNumber XaviParse(const char * inString)
 {
 	XaviNumber rVal;
 	XaviLexer *lexer;
-	
+
 	lexer = XaviLexerNew(inString);
 	rVal = XaviInternalParse(lexer);
 	XaviLexerDestroy(&lexer);

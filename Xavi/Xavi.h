@@ -1,6 +1,6 @@
 /*
  * Xavi.h: Public interface for Xavi.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -31,10 +31,12 @@
 #endif
 
 #if defined __cplusplus
-extern "C" {
+extern "C"
+{
 #endif /* __cplusplus */
 
-enum XaviStatus {
+enum XaviStatus
+{
 	NONE = 0,    /* The XaviParse() function hasn't been called. */
 	S_INTEGER,   /* Success: The integer result may be retrieved with
 	                XaviGetInteger(); */
@@ -46,7 +48,7 @@ enum XaviStatus {
 	                malloc() returned NULL.) */
 	E_SYNTAX,    /* Error: A syntax error was encountered. */
 	E_ZERO_DIV,  /* Error: Division by zero was attempted. */
-	E_FUNCTION,	 /* Error: The expression contains a function call that
+	E_FUNCTION,  /* Error: The expression contains a function call that
 	                could not be resolved to a valid function. */
 	E_ARGUMENTS, /* Error: A function call was made with a number of
 	                arguments that the function can't accept. */
@@ -55,9 +57,11 @@ enum XaviStatus {
 };
 typedef enum XaviStatus XaviStatus;
 
-struct XaviNumber {
+struct XaviNumber
+{
 	XaviStatus status;
-	union {
+	union
+	{
 		int i;
 		float f;
 	};
@@ -66,7 +70,7 @@ typedef struct XaviNumber XaviNumber;
 	
 API void XaviOpen(void);
 API void XaviClose(void);
-API XaviNumber XaviParse(const char * StringToParse);
+API XaviNumber XaviParse(const char *StringToParse);
 
 #if defined __cplusplus
 }

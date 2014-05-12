@@ -27,15 +27,15 @@
 struct XaviArglist;
 typedef struct XaviArglist XaviArglist;
 
-struct XaviArglist {
+struct XaviArglist
+{
 	int depth;
-	XaviTree * value;
-	XaviArglist * next;
+	XaviTree *value;
+	XaviArglist *next;
 };
-typedef struct XaviArglist XaviArglist;
 
-XaviArglist * XaviArglistNew(XaviTree * NewArgument, XaviArglist * ListToExtend);
-void XaviArglistDelete(XaviArglist * ArglistToDelete);
-XaviTree ** XaviArglistGetTrees(XaviArglist * ArglistToExtract);
+XaviArglist *XaviArglistNew(XaviTree *NewArgument, XaviArglist *ListToExtend);
+void XaviArglistDelete(XaviArglist *ArglistToDelete);
+XaviTree **XaviArglistGetTrees(XaviArglist *ArglistToExtract);
 
 #endif // Xavi_ARGLIST_H
