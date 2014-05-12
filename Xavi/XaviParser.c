@@ -74,9 +74,6 @@ static XaviTree * GetExpr0(XaviLexer * lexer)
 	}
 }
 
-const char * add = "add";
-const char * sub = "subtract";
-
 static XaviTree * GetExpr0r(XaviLexer * lexer)
 {
 	XaviTree * value;
@@ -88,10 +85,10 @@ static XaviTree * GetExpr0r(XaviLexer * lexer)
 	switch (XaviLexerGetToken(lexer))
 	{
 		case '+':
-			function = x_strdup(add);
+			function = x_strdup("add");
 			break;
 		case '-':
-			function = x_strdup(sub);
+			function = x_strdup("subtract");
 			break;
 		default:
 			return NULL;
@@ -143,34 +140,42 @@ static XaviTree * GetExpr1r(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * rest;
-	int operator;
-
+	char * function;
+	XaviTree * functionCall;
+	XaviTree ** arguments;
+	
 	switch (XaviLexerGetToken(lexer))
 	{
 		case '*':
-			operator = OP_MUL;
+			function = x_strdup("multiply");
 			break;
 		case '/':
-			operator = OP_DIV;
+			function = x_strdup("divide");
 			break;
 		default:
 			return NULL;
 	}
-
+	
 	XaviLexerNext(lexer);
 	value = GetExpr2(lexer);
+	
 	rest = GetExpr1r(lexer);
-
+	
+	arguments = malloc(2 * sizeof(XaviTree *));
+	
+	arguments[0] = NULL;
+	arguments[1] = value;
+	
+	functionCall = XaviTreeNewFunction(function, 2, arguments);
+	
 	if (rest != NULL)
 	{
-		XaviTreeGraftLeft(
-			rest,
-			XaviTreeNewOperator(operator, NULL, value));
+		XaviTreeGraftLeft(rest, functionCall);
 		return rest;
 	}
 	else
 	{
-		return XaviTreeNewOperator(operator, NULL, value);
+		return functionCall;
 	}
 }
 
