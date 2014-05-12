@@ -27,6 +27,16 @@
 #include "XaviTree.h"
 #include "XaviArglist.h"
 
+char * x_strdup(const char * string)
+{
+	char * rVal;
+	
+	if (rVal = malloc(strlen(string)+1))
+		strcpy(rVal, string);
+
+	return rVal;
+}
+
 static XaviTree * GetExpr0(XaviLexer * lexer);
 static XaviTree * GetExpr0r(XaviLexer * lexer);
 static XaviTree * GetExpr1(XaviLexer * lexer);
@@ -48,12 +58,15 @@ static XaviTree * GetExpr0(XaviLexer * lexer)
 	XaviTree * rest;
 
 	value = GetExpr1(lexer);
+	
 	if (value == NULL)
 		return NULL;
 	rest = GetExpr0r(lexer);
 
 	if (rest == NULL)
+	{
 		return value;
+	}
 	else
 	{
 		XaviTreeGraftLeft(rest, value);
@@ -61,19 +74,24 @@ static XaviTree * GetExpr0(XaviLexer * lexer)
 	}
 }
 
+const char * add = "add";
+const char * sub = "subtract";
+
 static XaviTree * GetExpr0r(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * rest;
-	int operator;
-
+	char * function;
+	XaviTree * functionCall;
+	XaviTree ** arguments;
+	
 	switch (XaviLexerGetToken(lexer))
 	{
 		case '+':
-			operator = OP_ADD;
+			function = x_strdup(add);
 			break;
 		case '-':
-			operator = OP_SUB;
+			function = x_strdup(sub);
 			break;
 		default:
 			return NULL;
@@ -81,18 +99,24 @@ static XaviTree * GetExpr0r(XaviLexer * lexer)
 
 	XaviLexerNext(lexer);
 	value = GetExpr1(lexer);
+	
 	rest = GetExpr0r(lexer);
 
+	arguments = malloc(2 * sizeof(XaviTree *));
+	
+	arguments[0] = NULL;
+	arguments[1] = value;
+
+	functionCall = XaviTreeNewFunction(function, 2, arguments);
+	
 	if (rest != NULL)
 	{
-		XaviTreeGraftLeft(
-			rest,
-			XaviTreeNewOperator(operator, NULL, value));
+		XaviTreeGraftLeft(rest, functionCall);
 		return rest;
 	}
 	else
 	{
-		return XaviTreeNewOperator(operator, NULL, value);
+		return functionCall;
 	}
 }
 

@@ -25,7 +25,7 @@
 
 int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left)
 {
-	if (parent->type = 'o')
+	if (parent->type == 'o')
 	{
 		if (parent->op->left == NULL)
 		{
@@ -37,8 +37,30 @@ int XaviTreeGraftLeft(XaviTree * parent, XaviTree * left)
 			return XaviTreeGraftLeft(parent->op->left, left);
 		}
 	}
+	else if (parent->type == 'f')
+	{
+		if (parent->func->arg_count == 0)
+		{
+			return 0;
+		}
+		else if (parent->func->arg_vector[0] == NULL)
+		{
+			parent->func->arg_vector[0] = left;
+			return -1;
+		}
+		else
+		{
+			printf("It's not null. Must recurse. %p %c\n", parent->func->arg_vector[0], parent->func->arg_vector[0]->type);
+			printf("It's not null. Must recurse. %p\n", parent->func->arg_vector[1]);
+			
+			return XaviTreeGraftLeft(
+				parent->func->arg_vector[0],
+				left);
+		}		
+	}
 	else
 	{
+		printf("It's null\n");
 		return 0;
 	}
 	
