@@ -183,6 +183,8 @@ static XaviTree * GetExpr2(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * leftFactor;
+	char * functionName;
+	XaviTree ** arguments;
 
 	value = GetExpr3(lexer);
 	if (value == NULL)
@@ -192,7 +194,14 @@ static XaviTree * GetExpr2(XaviLexer * lexer)
 	if (leftFactor == NULL)
 		return value;
 	else
-		return XaviTreeNewOperator(OP_POW, value, leftFactor);
+	{
+		functionName = x_strdup("power");
+		arguments = malloc(2 * sizeof(XaviTree *));
+		arguments[0] = value;
+		arguments[1] = leftFactor;
+		
+		return XaviTreeNewFunction(functionName, 2, arguments);
+	}
 }
 
 static XaviTree * GetExpr2lf(XaviLexer * lexer)
@@ -223,13 +232,25 @@ static XaviTree * GetExpr3(XaviLexer * lexer)
 {
 	XaviTree * value;
 	XaviTree * dice;
-
+	char * functionName;
+	XaviTree ** arguments;
+	
 	value = GetAtom(lexer);
 	dice = GetExpr3lf(lexer);
 
-	return (dice == NULL)
-		? value
-		: XaviTreeNewOperator(OP_DICE, value, dice);
+	if (dice == NULL)
+	{
+		return value;
+	}
+	else
+	{
+		functionName = x_strdup("dice");
+		arguments = malloc(2 * sizeof(XaviTree *));
+		arguments[0] = value;
+		arguments[1] = dice;
+		
+		return XaviTreeNewFunction(functionName, 2, arguments);
+	}
 }
 
 static XaviTree * GetExpr3lf(XaviLexer * lexer)
