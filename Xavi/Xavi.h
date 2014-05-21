@@ -35,42 +35,43 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-enum XaviStatus
+enum XaviResultStatus
 {
-	NONE = 0,    /* The XaviParse() function hasn't been called. */
-	S_INTEGER,   /* Success: The integer result may be retrieved with
-	                XaviGetInteger(); */
-	S_FLOAT,     /* Success. The floating-point result may be retrieved
-	                with XaviGetFloat(); */
-	E_INTERNAL,  /* Error: This indicated a bug in Xavi. */
-	E_MEMORY,    /* Error: Xavi attempted to allocate memory to
-	                process the expression and failed. (i.e.
-	                malloc() returned NULL.) */
-	E_SYNTAX,    /* Error: A syntax error was encountered. */
-	E_ZERO_DIV,  /* Error: Division by zero was attempted. */
-	E_FUNCTION,  /* Error: The expression contains a function call that
-	                could not be resolved to a valid function. */
-	E_ARGUMENTS, /* Error: A function call was made with a number of
-	                arguments that the function can't accept. */
-	E_DOMAIN,    /* Error: A function call resulted in a domain error. */
-	E_RANGE      /* Error: A function call resulted in a range error. */
+	XAVI_RS_INTEGER,   /* Success: The integer result is in i. */
+	XAVI_RS_FLOAT,     /* Success. The floating-point result is in f. */
+	XAVI_RE_INTERNAL,  /* Error: This indicates a bug in Xavi. */
+	XAVI_RE_MEMORY,    /* Error: Xavi attempted to allocate memory to
+	                             process the expression and failed. I.e.
+	                             malloc returned NULL. */
+	XAVI_RE_SYNTAX,    /* Error: A syntax error was encountered. */
+	XAVI_RE_ZERO_DIV,  /* Error: Division by zero was attempted. */
+	XAVI_RE_FUNCTION,  /* Error: The expression contains a function call
+	                             that could not be resolved to a valid
+	                             function. */
+	XAVI_RE_ARGUMENTS, /* Error: A function call was made with a number of
+	                             arguments that the function can't
+	                             accept. */
+	XAVI_RE_DOMAIN,    /* Error: A function call resulted in a domain
+	                             error. */
+	XAVI_RE_RANGE      /* Error: A function call resulted in a range
+	                             error. */
 };
-typedef enum XaviStatus XaviStatus;
+typedef enum XaviResultStatus XaviResultStatus;
 
-struct XaviNumber
+struct XaviResult
 {
-	XaviStatus status;
+	XaviResultStatus status;
 	union
 	{
 		int i;
 		float f;
 	};
 };
-typedef struct XaviNumber XaviNumber;	
-	
+typedef struct XaviResult XaviResult;
+
 API void XaviOpen(void);
 API void XaviClose(void);
-API XaviNumber XaviParse(const char *StringToParse);
+API XaviResult XaviEvaluate(const char *StringToParse);
 
 #if defined __cplusplus
 }

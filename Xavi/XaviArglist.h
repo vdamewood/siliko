@@ -21,7 +21,6 @@
 #if !defined Xavi_ARGLIST_H
 #define Xavi_ARGLIST_H
 
-#include "Xavi.h"
 #include "XaviTree.h"
 
 struct XaviArglist;

@@ -21,16 +21,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Xavi.h"
-#include "XaviParser.h"
-
-#include "XaviTree.h"
 #include "XaviArglist.h"
+#include "XaviParser.h"
+#include "XaviTree.h"
 
 static char *x_strdup(const char *string)
 {
 	char *rVal;
-	
+
 	if (rVal = malloc(strlen(string) + 1))
 		strcpy(rVal, string);
 
@@ -237,7 +235,7 @@ static XaviTree * GetExpr3(XaviLexer *lexer)
 	XaviTree *dice;
 	char *functionName;
 	XaviTree **arguments;
-	
+
 	value = GetAtom(lexer);
 	dice = GetExpr3lf(lexer);
 
@@ -414,13 +412,13 @@ static XaviArglist *GetArglistLF(XaviLexer *lexer)
 	}
 }
 
-XaviNumber XaviInternalParse(XaviLexer *lexer)
+XaviValue XaviInternalParse(XaviLexer *lexer)
 {
-	XaviNumber value;
-	
+	XaviValue value;
+
 	if (XaviLexerGetToken(lexer) == EOL)
 	{
-		value.status = S_INTEGER;
+		value.status = XS_INTEGER;
 		value.i = 0;
 		return value;
 	}
@@ -433,10 +431,10 @@ XaviNumber XaviInternalParse(XaviLexer *lexer)
 	}
 	else
 	{
-		value.status = E_SYNTAX;
+		value.status = XE_SYNTAX;
 		value.i = 0;
 	}
 	XaviTreeDelete(tree);
-	
+
 	return value;
 }

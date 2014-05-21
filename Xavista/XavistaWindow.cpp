@@ -1,6 +1,6 @@
 /*
  *  XavistaWindow.cpp: Main window.
- *  Copyright 2012 Vincent Damewood
+ *  Copyright 2012, 2014 Vincent Damewood
  *
  *  This file is part of Xavista.
  *
@@ -36,39 +36,39 @@ XavistaWindow::~XavistaWindow()
 }
 
 void XavistaWindow::calculate()
-{	
-	XaviNumber value = XaviParse(input->text().toUtf8().data());
+{
+	XaviResult value = XaviEvaluate(input->text().toUtf8().data());
 	switch (value.status) {
-	case S_INTEGER:
+	case XAVI_RS_INTEGER:
 		output->setNum(value.i);
 		break;
-	case S_FLOAT:
+	case XAVI_RS_FLOAT:
 		output->setNum(value.f);
 		break;
-	case E_INTERNAL:
+	case XAVI_RE_INTERNAL:
 		output->setText("Internal error.");
 		break;
-	case E_MEMORY:
+	case XAVI_RE_MEMORY:
 		output->setText("Out of memory.");
 		break;
-	case E_SYNTAX:
+	case XAVI_RE_SYNTAX:
 		output->setText("Syntax error.");
 		break;
-	case E_ZERO_DIV:
+	case XAVI_RE_ZERO_DIV:
 		output->setText("Division by zero error.");
 		break;
-	case E_FUNCTION:
+	case XAVI_RE_FUNCTION:
 		output->setText("Function not found.");
 		break;
-	case E_ARGUMENTS:
+	case XAVI_RE_ARGUMENTS:
 		output->setText("Bad argument count.");
 		break;
-	case E_DOMAIN:
+	case XAVI_RE_DOMAIN:
 		output->setText("Domain error.");
 		break;
-	case E_RANGE:
+	case XAVI_RE_RANGE:
 		output->setText("Range error.");
-		break;			
+		break;
 	default:
 		output->setText("An error occured.");
 	}

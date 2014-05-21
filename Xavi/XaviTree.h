@@ -21,7 +21,7 @@
 #if !defined Xavi_TREE_H
 #define Xavi_TREE_H
 
-#include "Xavi.h"
+#include "XaviValue.h"
 
 struct XaviTree;
 typedef struct XaviTree XaviTree;
@@ -40,13 +40,13 @@ struct XaviTree
 	char type;
 	union
 	{
-		XaviNumber *num;
+		XaviValue *num;
 		XaviFunction *func;
 	};
 };
 typedef struct XaviTree XaviTree;
 
-XaviNumber XaviTreeEvaluate(XaviTree *TreeToEvaluate);
+XaviValue XaviTreeEvaluate(XaviTree *TreeToEvaluate);
 int XaviTreeGraftLeft(XaviTree *parent, XaviTree *left);
 int XaviTreeNegate(XaviTree *TreeToNegate);
 XaviTree *XaviTreeNewInteger(int Value);

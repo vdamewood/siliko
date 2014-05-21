@@ -1,6 +1,6 @@
 /*
  * XaviTestLinkage.c: Program to test linking to Xavi.
- * Copyright 2012 Vincent Damewood
+ * Copyright 2012, 2014 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 int main(int argc, char *argv[])
 {
 	char * expression;
-	XaviNumber value;
+	XaviResult value;
 
 	if (argc >= 2)
 		expression = argv[1];
@@ -30,36 +30,37 @@ int main(int argc, char *argv[])
 		expression = "";
 
 	XaviOpen();
-	value = XaviParse(expression);
-	switch (value.status) {
-	case S_INTEGER:
+	value = XaviEvaluate(expression);
+	switch (value.status)
+	{
+	case XAVI_RS_INTEGER:
 		printf("Value: %i\n", value.i);
 		break;
-	case S_FLOAT:
+	case XAVI_RS_FLOAT:
 		printf("Value: %f\n", value.f);
 		break;
-	case E_INTERNAL:
+	case XAVI_RE_INTERNAL:
 		printf("Internal error.\n");
 		break;
-	case E_MEMORY:
+	case XAVI_RE_MEMORY:
 		printf("Out of memory.\n");
 		break;
-	case E_SYNTAX:
+	case XAVI_RE_SYNTAX:
 		printf("Syntax error.\n");
 		break;
-	case E_ZERO_DIV:
+	case XAVI_RE_ZERO_DIV:
 		printf("Division by zero error.\n");
 		break;
-	case E_FUNCTION:
+	case XAVI_RE_FUNCTION:
 		printf("Function not found.\n");
 		break;
-	case E_ARGUMENTS:
+	case XAVI_RE_ARGUMENTS:
 		printf("Bad argument count.\n");
 		break;
-	case E_DOMAIN:
+	case XAVI_RE_DOMAIN:
 		printf("Domain error.\n");
 		break;
-	case E_RANGE:
+	case XAVI_RE_RANGE:
 		printf("Range error.\n");
 		break;
 	}

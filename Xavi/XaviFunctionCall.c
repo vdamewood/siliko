@@ -24,17 +24,17 @@
 #include <string.h>
 #include <time.h>
 
-#include "Xavi.h"
+#include "XaviTree.h"
 #include "XaviFunctionCall.h"
 
-static XaviNumber XaviFunction_add(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_add(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	int i;
 
 	if (!argc)
 	{
-		rVal.status = S_INTEGER;
+		rVal.status = XS_INTEGER;
 		rVal.i = 0;
 		return rVal;
 	}
@@ -42,10 +42,10 @@ static XaviNumber XaviFunction_add(int argc, XaviNumber *argv)
 	rVal = argv[0];
 
 	for(i = 1; i < argc; i++)
-	{	
-		if (rVal.status == S_FLOAT)
+	{
+		if (rVal.status == XS_FLOAT)
 		{
-			if (argv[i].status == S_FLOAT)
+			if (argv[i].status == XS_FLOAT)
 			{
 				rVal.f += argv[i].f;
 			}
@@ -56,10 +56,10 @@ static XaviNumber XaviFunction_add(int argc, XaviNumber *argv)
 		}
 		else
 		{
-			if (argv[i].status == S_FLOAT)
+			if (argv[i].status == XS_FLOAT)
 			{
 				rVal.f = (float)rVal.i + argv[i].f;
-				rVal.status = S_FLOAT;
+				rVal.status = XS_FLOAT;
 			}
 			else
 			{
@@ -71,14 +71,14 @@ static XaviNumber XaviFunction_add(int argc, XaviNumber *argv)
 	return rVal;
 }
 
-static XaviNumber XaviFunction_subtract(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_subtract(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	int i;
 
 	if (!argc)
 	{
-		rVal.status = S_INTEGER;
+		rVal.status = XS_INTEGER;
 		rVal.i = 0;
 		return rVal;
 	}
@@ -86,10 +86,10 @@ static XaviNumber XaviFunction_subtract(int argc, XaviNumber *argv)
 	rVal = argv[0];
 
 	for(i = 1; i < argc; i++)
-	{	
-		if (rVal.status == S_FLOAT)
+	{
+		if (rVal.status == XS_FLOAT)
 		{
-			if (argv[i].status == S_FLOAT)
+			if (argv[i].status == XS_FLOAT)
 			{
 				rVal.f -= argv[i].f;
 			}
@@ -100,10 +100,10 @@ static XaviNumber XaviFunction_subtract(int argc, XaviNumber *argv)
 		}
 		else
 		{
-			if (argv[i].status == S_FLOAT)
+			if (argv[i].status == XS_FLOAT)
 			{
 				rVal.f = (float)rVal.i - argv[i].f;
-				rVal.status = S_FLOAT;
+				rVal.status = XS_FLOAT;
 			}
 			else
 			{
@@ -115,14 +115,14 @@ static XaviNumber XaviFunction_subtract(int argc, XaviNumber *argv)
 	return rVal;
 }
 
-static XaviNumber XaviFunction_multiply(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_multiply(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	int i;
 
 	if (!argc)
 	{
-		rVal.status = S_INTEGER;
+		rVal.status = XS_INTEGER;
 		rVal.i = 0;
 		return rVal;
 	}
@@ -130,10 +130,10 @@ static XaviNumber XaviFunction_multiply(int argc, XaviNumber *argv)
 	rVal = argv[0];
 
 	for(i = 1; i < argc; i++)
-	{	
-		if (rVal.status == S_FLOAT)
+	{
+		if (rVal.status == XS_FLOAT)
 		{
-			if (argv[i].status == S_FLOAT)
+			if (argv[i].status == XS_FLOAT)
 			{
 				rVal.f *= argv[i].f;
 			}
@@ -143,10 +143,10 @@ static XaviNumber XaviFunction_multiply(int argc, XaviNumber *argv)
 			}
 		}
 		else {
-			if (argv[i].status == S_FLOAT)
+			if (argv[i].status == XS_FLOAT)
 			{
 				rVal.f = (float)rVal.i * argv[i].f;
-				rVal.status = S_FLOAT;
+				rVal.status = XS_FLOAT;
 			}
 			else
 			{
@@ -158,14 +158,14 @@ static XaviNumber XaviFunction_multiply(int argc, XaviNumber *argv)
 	return rVal;
 }
 
-static XaviNumber XaviFunction_divide(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_divide(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	int i;
 
 	if (argc < 2)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
@@ -174,16 +174,16 @@ static XaviNumber XaviFunction_divide(int argc, XaviNumber *argv)
 	for (i = 1; i < argc; i++)
 	{
 		/* Division-by-Zero Error */
-		if ((argv[i].status == S_FLOAT && argv[i].f == 0.0)
-			|| (argv[i].status == S_INTEGER && argv[i].i == 0))
+		if ((argv[i].status == XS_FLOAT && argv[i].f == 0.0)
+			|| (argv[i].status == XS_INTEGER && argv[i].i == 0))
 		{
-			rVal.status = E_ZERO_DIV;
+			rVal.status = XE_ZERO_DIV;
 			return rVal;
 		}
-		
-		if (rVal.status == S_FLOAT)
+
+		if (rVal.status == XS_FLOAT)
 		{
-			if (argv[i].status == S_FLOAT)
+			if (argv[i].status == XS_FLOAT)
 			{
 				rVal.f /= argv[i].f;
 			}
@@ -193,7 +193,7 @@ static XaviNumber XaviFunction_divide(int argc, XaviNumber *argv)
 			}
 		}
 		else {
-			if (argv[i].status == S_FLOAT)
+			if (argv[i].status == XS_FLOAT)
 			{
 				rVal.f = (float) rVal.i / argv[i].f;
 			}
@@ -203,7 +203,7 @@ static XaviNumber XaviFunction_divide(int argc, XaviNumber *argv)
 			}
 			else
 			{
-				rVal.status = S_FLOAT;
+				rVal.status = XS_FLOAT;
 				rVal.f = (float) rVal.i / (float) argv[i].i;
 			}
 		}
@@ -211,174 +211,174 @@ static XaviNumber XaviFunction_divide(int argc, XaviNumber *argv)
 	return rVal;
 }
 
-static XaviNumber XaviFunction_power(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_power(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float runningValue;
 	float nextValue;
 	int i;
 
-	runningValue = (argv[0].status == S_INTEGER)
+	runningValue = (argv[0].status == XS_INTEGER)
 		? (float) argv[0].i
 		: argv[0].f;
 
 	for (i = 1; i < argc; i++)
 	{
-		nextValue = (argv[i].status == S_INTEGER)
+		nextValue = (argv[i].status == XS_INTEGER)
 			? nextValue = (float) argv[i].i
 			: argv[i].f;
 
 		runningValue = pow(runningValue, nextValue);
 	}
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = runningValue;
 	return rVal;
 }
 
 
-static XaviNumber XaviFunction_dice(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_dice(int argc, XaviValue *argv)
 {
 	/* TODO: Make this function handle fractional dice. */
 	static int hasSeeded = 0;
 	int runningTotal = 0;
-	XaviNumber rVal;
+	XaviValue rVal;
 	int count;
 	int faces;
 	int i;
-	
+
 	if(argc != 2)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	count = (argv[0].status == S_INTEGER)
+	count = (argv[0].status == XS_INTEGER)
 		? argv[0].i
 		: (int) argv[0].f;
-	
-	faces = (argv[1].status == S_INTEGER)
+
+	faces = (argv[1].status == XS_INTEGER)
 		? argv[1].i
 		: (int) argv[1].f;
-		
+
 	if (!hasSeeded)
 	{
 		hasSeeded = 1;
 		srand((unsigned int)time(NULL));
 	}
-	
+
 	for (i = 1; i <= count; i++) runningTotal += (rand() % faces) + 1;
-	rVal.status = S_INTEGER;
+	rVal.status = XS_INTEGER;
 	rVal.i = runningTotal;
 	return rVal;
 }
 
-static XaviNumber XaviFunction_abs(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_abs(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
 	rVal = argv[0];
-	if (rVal.status == S_FLOAT)
+	if (rVal.status == XS_FLOAT)
 		rVal.f = fabs(rVal.f);
-	else if (rVal.status == S_INTEGER)
+	else if (rVal.status == XS_INTEGER)
 		rVal.i = abs(rVal.i);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_acos(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_acos(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float) argv[0].i;
 	else
 		input = argv[0].f;
 
 	if (input < -1 || input > 1)
 	{
-		rVal.status = E_DOMAIN;
+		rVal.status = XE_DOMAIN;
 		return rVal;
 	}
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = acos(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_asin(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_asin(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float) argv[0].i;
 	else
 		input = argv[0].f;
 
 	if (input < -1 || input > 1)
 	{
-		rVal.status = E_DOMAIN;
+		rVal.status = XE_DOMAIN;
 		return rVal;
 	}
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = asin(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_atan(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_atan(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float) argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = atan(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_ceil(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_ceil(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 	float result;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
@@ -386,93 +386,93 @@ static XaviNumber XaviFunction_ceil(int argc, XaviNumber *argv)
 	result = ceil(input);
 	if (result <= INT_MAX && result >= INT_MIN)
 	{
-		rVal.status = S_INTEGER;
+		rVal.status = XS_INTEGER;
 		rVal.i = (int)result;
 	}
 	else
 	{
-		rVal.status = S_FLOAT;
+		rVal.status = XS_FLOAT;
 		rVal.f = result;
 	}
 	return rVal;
 }
 
-static XaviNumber XaviFunction_cos(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_cos(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = cos(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_cosh(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_cosh(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = cosh(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_exp(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_exp(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = exp(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_floor(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_floor(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 	float result;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
@@ -480,120 +480,120 @@ static XaviNumber XaviFunction_floor(int argc, XaviNumber *argv)
 	result = floor(input);
 	if (result <= INT_MAX && result >= INT_MIN)
 	{
-		rVal.status = S_INTEGER;
+		rVal.status = XS_INTEGER;
 		rVal.i = (int)result;
 	}
 	else
 	{
-		rVal.status = S_FLOAT;
+		rVal.status = XS_FLOAT;
 		rVal.f = result;
 	}
 	return rVal;
 }
 
-static XaviNumber XaviFunction_log(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_log(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = log(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_log10(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_log10(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = log10(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_sin(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_sin(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = sin(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_sinh(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_sinh(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = sinh(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_sqrt(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_sqrt(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float inVal;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if ((argv[0].status == S_INTEGER && argv[0].i < 0)
-		|| (argv[0].status == S_FLOAT && argv[0].f < 0.0))
+	if ((argv[0].status == XS_INTEGER && argv[0].i < 0)
+		|| (argv[0].status == XS_FLOAT && argv[0].f < 0.0))
 	{
-			rVal.status = E_DOMAIN;
+			rVal.status = XE_DOMAIN;
 			return rVal;
 	}
-	
-	if (argv[0].status == S_FLOAT)
+
+	if (argv[0].status == XS_FLOAT)
 	{
 		inVal = argv[0].f;
 	}
@@ -602,51 +602,51 @@ static XaviNumber XaviFunction_sqrt(int argc, XaviNumber *argv)
 		inVal = (float) argv[0].i;
 	}
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = sqrt(inVal);
 
 	return rVal;
 }
 
-static XaviNumber XaviFunction_tan(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_tan(int argc, XaviValue *argv)
 {
 	// For some reason the C version of tan() doesn't throw an error for
 	// input of pi/2 or 3*pi/2. Probably due to the imprecision of
 	// floating point numbers.
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER) input = (float)argv[0].i;
+	if (argv[0].status == XS_INTEGER) input = (float)argv[0].i;
 	else input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = tan(input);
 	return rVal;
 }
 
-static XaviNumber XaviFunction_tanh(int argc, XaviNumber *argv)
+static XaviValue XaviFunction_tanh(int argc, XaviValue *argv)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 	float input;
 
 	if (argc != 1)
 	{
-		rVal.status = E_ARGUMENTS;
+		rVal.status = XE_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == S_INTEGER)
+	if (argv[0].status == XS_INTEGER)
 		input = (float)argv[0].i;
 	else
 		input = argv[0].f;
 
-	rVal.status = S_FLOAT;
+	rVal.status = XS_FLOAT;
 	rVal.f = tanh(input);
 	return rVal;
 }
@@ -721,14 +721,14 @@ static unsigned char XaviCrc8(const unsigned char * input)
 
 ////////////////////////////////////////////////////////////////////////
 
-typedef XaviNumber (*FunctionPointer)(int, XaviNumber *);
+typedef XaviValue (*FunctionPointer)(int, XaviValue *);
 
 #define FUNCTION_MAX 21
 static char *functionNames[] =
 {
 	"add", "subtract", "multiply", "divide",
 	"power", "dice",
-	"abs", "agit cos", "asin", "atan",
+	"abs", "acos", "asin", "atan",
 	"ceil", "cos", "cosh", "exp",
 	"floor", "log","log10", "sin",
 	 "sinh", "sqrt", "tan", "tanh"
@@ -835,15 +835,15 @@ static FunctionPointer GetFunction(const char *name)
 	return NULL;
 }
 
-XaviNumber XaviFunctionCall(const char *name, int argc, XaviNumber *argv)
+XaviValue XaviFunctionCall(const char *name, int argc, XaviValue *argv)
 {
 	FunctionPointer f;
-	XaviNumber rVal;
+	XaviValue rVal;
 
 	f = GetFunction(name);
 
 	if (!f)
-		rVal.status = E_FUNCTION;
+		rVal.status = XE_FUNCTION;
 	else
 		rVal = f(argc, argv);
 

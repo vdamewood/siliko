@@ -21,6 +21,7 @@
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
 #include "XaviParser.h"
+#include "XaviValue.h"
 
 void XaviOpen(void)
 {
@@ -32,13 +33,67 @@ void XaviClose(void)
 	XaviFunctionCallClose();
 }
 
-XaviNumber XaviParse(const char * inString)
+XaviResult XaviValueToResult(const XaviValue value)
 {
-	XaviNumber rVal;
+	XaviResult rVal;
+	switch (value.status)
+	{
+	case XS_INTEGER:
+		rVal.status = XAVI_RS_INTEGER;
+		rVal.i = value.i;
+		break;
+	case XS_FLOAT:
+		rVal.status = XAVI_RS_FLOAT;
+		rVal.f = value.f;
+		break;
+	case XE_INTERNAL:
+		rVal.status = XAVI_RE_INTERNAL;
+		rVal.i = 0;
+		break;
+	case XE_MEMORY:
+		rVal.status = XAVI_RE_INTERNAL;
+		rVal.i = 0;
+		break;
+	case XE_SYNTAX:
+		rVal.status = XAVI_RE_SYNTAX;
+		rVal.i = 0;
+		break;
+	case XE_ZERO_DIV:
+		rVal.status = XAVI_RE_ZERO_DIV;
+		rVal.i = 0;
+		break;
+	case XE_FUNCTION:
+		rVal.status = XAVI_RE_FUNCTION;
+		rVal.i = 0;
+		break;
+	case XE_ARGUMENTS:
+		rVal.status = XAVI_RE_ARGUMENTS;
+		rVal.i = 0;
+		break;
+	case XE_DOMAIN:
+		rVal.status = XAVI_RE_DOMAIN;
+		rVal.i = 0;
+		break;
+	case XE_RANGE:
+		rVal.status = XAVI_RE_RANGE;
+		rVal.i = 0;
+		break;
+	default:
+		rVal.status = XAVI_RE_INTERNAL;
+		rVal.i = 0;
+		break;
+	}
+
+	return rVal;
+}
+
+XaviResult XaviEvaluate(const char * inString)
+{
+	XaviResult rVal;
 	XaviLexer *lexer;
 
 	lexer = XaviLexerNew(inString);
-	rVal = XaviInternalParse(lexer);
+	rVal = XaviValueToResult(XaviInternalParse(lexer));
 	XaviLexerDestroy(&lexer);
 
 	return rVal;

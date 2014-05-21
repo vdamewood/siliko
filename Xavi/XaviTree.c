@@ -43,7 +43,7 @@ int XaviTreeGraftLeft(XaviTree *parent, XaviTree *left)
 				parent->func->arg_vector[0],
 				left
 			);
-		}		
+		}
 	}
 	else
 	{
@@ -55,9 +55,9 @@ int XaviTreeNegate(XaviTree *tree)
 {
 	if (tree == NULL || tree->type != 'n')
 		return 0;
-	else if (tree->num->status == S_INTEGER)
+	else if (tree->num->status == XS_INTEGER)
 		tree->num->i *= -1;
-	else if (tree->num->status == S_FLOAT)
+	else if (tree->num->status == XS_FLOAT)
 		tree->num->f *= -1.0;
 	else
 		return 0;
@@ -67,10 +67,10 @@ int XaviTreeNegate(XaviTree *tree)
 XaviTree *XaviTreeNewInteger(int value)
 {
 	XaviTree *rVal;
-	XaviNumber *rValNum;
+	XaviValue *rValNum;
 
 	rVal = malloc(sizeof(XaviTree)); // FIXME: if
-	rValNum = malloc(sizeof(XaviNumber)); // FIXME: if
+	rValNum = malloc(sizeof(XaviValue)); // FIXME: if
 
 	if (!rVal || !rValNum)
 	{
@@ -81,7 +81,7 @@ XaviTree *XaviTreeNewInteger(int value)
 	rVal->num = rValNum;
 
 	rVal->type = 'n';
-	rVal->num->status = S_INTEGER;
+	rVal->num->status = XS_INTEGER;
 	rVal->num->i = value;
 	return rVal;
 }
@@ -89,10 +89,10 @@ XaviTree *XaviTreeNewInteger(int value)
 XaviTree *XaviTreeNewFloat(float value)
 {
 	XaviTree *rVal;
-	XaviNumber *rValNum;
+	XaviValue *rValNum;
 
 	rVal = malloc(sizeof(XaviTree)); // FIXME: if
-	rValNum = malloc(sizeof(XaviNumber)); // FIXME: if
+	rValNum = malloc(sizeof(XaviValue)); // FIXME: if
 
 	if (!rVal || !rValNum)
 	{
@@ -103,7 +103,7 @@ XaviTree *XaviTreeNewFloat(float value)
 	rVal->num = rValNum;
 
 	rVal->type = 'n';
-	rVal->num->status = S_FLOAT;
+	rVal->num->status = XS_FLOAT;
 	rVal->num->f = value;
 	return rVal;
 }
@@ -162,26 +162,26 @@ void XaviTreeDelete(XaviTree *tree)
 	}
 }
 
-static int IsNumber(XaviNumber n)
+static int IsNumber(XaviValue n)
 {
-	return n.status == S_INTEGER || n.status == S_FLOAT;
+	return n.status == XS_INTEGER || n.status == XS_FLOAT;
 }
 
-static XaviNumber EvaluateFunction(XaviFunction *func)
+static XaviValue EvaluateFunction(XaviFunction *func)
 {
-	XaviNumber rVal;
-	XaviNumber * arguments = NULL;
+	XaviValue rVal;
+	XaviValue * arguments = NULL;
 	int i;
-	
+
 	if (func->arg_count)
 	{
 		if (!(arguments =
-			malloc(sizeof(XaviNumber) * func->arg_count)))
+			malloc(sizeof(XaviValue) * func->arg_count)))
 		{
-			rVal.status = E_MEMORY;
+			rVal.status = XE_MEMORY;
 			return rVal;
 		}
-		
+
 		for(i = 0; i < func->arg_count; i++)
 		{
 			arguments[i] = XaviTreeEvaluate(func->arg_vector[i]);
@@ -199,13 +199,13 @@ static XaviNumber EvaluateFunction(XaviFunction *func)
 	return rVal;
 }
 
-XaviNumber XaviTreeEvaluate(XaviTree *tree)
+XaviValue XaviTreeEvaluate(XaviTree *tree)
 {
-	XaviNumber rVal;
+	XaviValue rVal;
 
 	if (!tree || tree->type == 'e')
 	{
-		rVal.status = E_SYNTAX;
+		rVal.status = XE_SYNTAX;
 		return rVal;
 	}
 
@@ -217,6 +217,6 @@ XaviNumber XaviTreeEvaluate(XaviTree *tree)
 		return EvaluateFunction(tree->func);
 	}
 
-	rVal.status = E_INTERNAL;
+	rVal.status = XE_INTERNAL;
 	return rVal;
 }

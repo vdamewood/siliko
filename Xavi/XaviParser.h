@@ -21,9 +21,9 @@
 #if !defined XAVI_PARSER_H
 #define XAVI_PARSER_H
 
-#include "Xavi.h"
+#include "XaviTree.h"
 #include "XaviLexer.h"
 
-XaviNumber XaviInternalParse(XaviLexer * lexer);
+XaviValue XaviInternalParse(XaviLexer * lexer);
 
 #endif /* XAVI_PARSER_H */
