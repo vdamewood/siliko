@@ -23,36 +23,44 @@
 
 #include "XaviValue.h"
 
-struct XaviTree;
-typedef struct XaviTree XaviTree;
+enum XaviTreeNodeType
+{
+	XAVI_NODE_ERROR = 0,
+	XAVI_NODE_INTEGER,
+	XAVI_NODE_FLOAT,
+	XAVI_NODE_BRANCH
+};
+typedef enum XaviTreeNodeType XaviTreeNodeType;
 
-struct XaviFunction
+struct XaviTreeNode;
+typedef struct XaviTreeNode XaviTreeNode;
+
+struct XaviTreeBranch
 {
 	char *name;
-	int arg_count;
-	XaviTree **arg_vector;
+	int count;
+	XaviTreeNode **children;
 };
-typedef struct XaviFunction XaviFunction;
+typedef struct XaviTreeBranch XaviTreeBranch;
 
-
-struct XaviTree
+struct XaviTreeNode
 {
-	char type;
+	XaviTreeNodeType type;
 	union
 	{
-		XaviValue *num;
-		XaviFunction *func;
+		int i;
+		float f;
+		XaviTreeBranch *branch;
 	};
 };
-typedef struct XaviTree XaviTree;
 
-XaviValue XaviTreeEvaluate(XaviTree *TreeToEvaluate);
-int XaviTreeGraftLeft(XaviTree *parent, XaviTree *left);
-int XaviTreeNegate(XaviTree *TreeToNegate);
-XaviTree *XaviTreeNewInteger(int Value);
-XaviTree *XaviTreeNewFloat(float Value);
-XaviTree *XaviTreeNewFunction(char *FunctionName, int argumentCount, XaviTree **arguments);
-XaviTree *XaviTreeNewSyntaxError(void);
-void XaviTreeDelete(XaviTree *TreeToDelete);
+XaviValue XaviTreeEvaluate(XaviTreeNode *TreeToEvaluate);
+int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left);
+int XaviTreeNegate(XaviTreeNode *TreeToNegate);
+XaviTreeNode *XaviTreeNewError(void);
+XaviTreeNode *XaviTreeNewInteger(int Value);
+XaviTreeNode *XaviTreeNewFloat(float Value);
+XaviTreeNode *XaviTreeNewBranch(char *id, int count, XaviTreeNode **children);
+void XaviTreeDelete(XaviTreeNode *TreeToDelete);
 
 #endif // Xavi_TREE_H

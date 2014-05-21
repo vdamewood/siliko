@@ -23,24 +23,24 @@
 #include "XaviTree.h"
 #include "XaviFunctionCall.h"
 
-int XaviTreeGraftLeft(XaviTree *parent, XaviTree *left)
+int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left)
 {
-	if (parent->type == 'f')
+	if (parent->type == XAVI_NODE_BRANCH)
 	{
-		if (parent->func->arg_count == 0)
+		if (parent->branch->count == 0)
 		{
 			return 0;
 		}
-		else if (parent->func->arg_vector[0] == NULL)
+		else if (parent->branch->children[0] == NULL)
 		{
-			parent->func->arg_vector[0] = left;
+			parent->branch->children[0] = left;
 			return -1;
 		}
 		else
 		{
 			return XaviTreeGraftLeft
 			(
-				parent->func->arg_vector[0],
+				parent->branch->children[0],
 				left
 			);
 		}
@@ -51,115 +51,95 @@ int XaviTreeGraftLeft(XaviTree *parent, XaviTree *left)
 	}
 }
 
-int XaviTreeNegate(XaviTree *tree)
+int XaviTreeNegate(XaviTreeNode *tree)
 {
-	if (tree == NULL || tree->type != 'n')
+	if (tree == NULL)
 		return 0;
-	else if (tree->num->status == XS_INTEGER)
-		tree->num->i *= -1;
-	else if (tree->num->status == XS_FLOAT)
-		tree->num->f *= -1.0;
-	else
+
+	switch (tree->type)
+	{
+	case XAVI_NODE_INTEGER:
+		tree->i *= -1;
+		return -1;
+	case XAVI_NODE_FLOAT:
+		tree->f *= -1.0;
+		return -1;
+	default:
 		return 0;
-	return 1;
+	}
 }
 
-XaviTree *XaviTreeNewInteger(int value)
+XaviTreeNode *XaviTreeNewInteger(int value)
 {
-	XaviTree *rVal;
-	XaviValue *rValNum;
+	XaviTreeNode *rVal;
 
-	rVal = malloc(sizeof(XaviTree)); // FIXME: if
-	rValNum = malloc(sizeof(XaviValue)); // FIXME: if
+	if (!(rVal = malloc(sizeof(XaviTreeNode))))
+		return NULL;
 
-	if (!rVal || !rValNum)
+	rVal->type = XAVI_NODE_INTEGER;
+	rVal->i = value;
+	return rVal;
+}
+
+XaviTreeNode *XaviTreeNewFloat(float value)
+{
+	XaviTreeNode *rVal;
+
+	if (!(rVal = malloc(sizeof(XaviTreeNode))))
+		return NULL;
+
+	rVal->type = XAVI_NODE_FLOAT;
+	rVal->f = value;
+	return rVal;
+}
+
+XaviTreeNode *XaviTreeNewBranch(char *name, int count, XaviTreeNode **children)
+{
+	XaviTreeNode *rVal;
+	XaviTreeBranch *rValBranch;
+
+	rVal = malloc(sizeof(XaviTreeNode));
+	rValBranch = malloc(sizeof(XaviTreeBranch));
+
+	if (!rVal || !rValBranch)
 	{
 		free(rVal);
-		free(rValNum);
+		free(rValBranch);
 		return NULL;
 	}
-	rVal->num = rValNum;
+	rVal->branch = rValBranch;
 
-	rVal->type = 'n';
-	rVal->num->status = XS_INTEGER;
-	rVal->num->i = value;
+	rVal->type = XAVI_NODE_BRANCH;
+	rVal->branch->name = name;
+	rVal->branch->count = count;
+	rVal->branch->children = children;
+
 	return rVal;
 }
 
-XaviTree *XaviTreeNewFloat(float value)
+XaviTreeNode *XaviTreeNewError(void)
 {
-	XaviTree *rVal;
-	XaviValue *rValNum;
-
-	rVal = malloc(sizeof(XaviTree)); // FIXME: if
-	rValNum = malloc(sizeof(XaviValue)); // FIXME: if
-
-	if (!rVal || !rValNum)
+	XaviTreeNode *rVal;
+	if ((rVal = malloc(sizeof(XaviTreeNode))))
 	{
-		free(rVal);
-		free(rValNum);
-		return NULL;
+		rVal->type = XAVI_NODE_ERROR;
+		rVal->i = 0;
 	}
-	rVal->num = rValNum;
-
-	rVal->type = 'n';
-	rVal->num->status = XS_FLOAT;
-	rVal->num->f = value;
 	return rVal;
 }
 
-XaviTree *XaviTreeNewFunction(char *name, int argc, XaviTree **argv)
-{
-	XaviTree *rVal;
-	XaviFunction *rValFunc;
-
-	rVal = malloc(sizeof(XaviTree)); // FIXME: if
-	rValFunc = malloc(sizeof(XaviFunction)); // FIXME: if
-
-	if (!rVal || !rValFunc)
-	{
-		free(rVal);
-		free(rValFunc);
-		return NULL;
-	}
-	rVal->func = rValFunc;
-
-	rVal->type = 'f';
-	rVal->func->name = name;
-	rVal->func->arg_count = argc;
-	rVal->func->arg_vector = argv;
-
-	return rVal;
-}
-
-XaviTree *XaviTreeNewSyntaxError(void)
-{
-	XaviTree *rVal;
-	rVal = malloc(sizeof(XaviTree *));
-	rVal->type = 'e';
-	return rVal;
-}
-
-void XaviTreeDelete(XaviTree *tree)
+void XaviTreeDelete(XaviTreeNode *node)
 {
 	int i;
-	if (tree)
+	if (node && node->type == XAVI_NODE_BRANCH)
 	{
-		switch (tree->type)
-		{
-		case 'n':
-			free(tree->num);
-			break;
-		case 'f':
-			free(tree->func->name);
-			for (i = 0; i <  tree->func->arg_count; i++)
-				XaviTreeDelete(tree->func->arg_vector[i]);
-			free(tree->func->arg_vector);
-			free(tree->func);
-			break;
-		}
-		free(tree);
+		free(node->branch->name);
+		for (i = 0; i <  node->branch->count; i++)
+			XaviTreeDelete(node->branch->children[i]);
+		free(node->branch->children);
+		free(node->branch);
 	}
+	free(node);
 }
 
 static int IsNumber(XaviValue n)
@@ -167,24 +147,24 @@ static int IsNumber(XaviValue n)
 	return n.status == XS_INTEGER || n.status == XS_FLOAT;
 }
 
-static XaviValue EvaluateFunction(XaviFunction *func)
+static XaviValue EvaluateBranch(XaviTreeBranch *branch)
 {
 	XaviValue rVal;
-	XaviValue * arguments = NULL;
+	XaviValue *arguments = NULL;
 	int i;
 
-	if (func->arg_count)
+	if (branch->count)
 	{
 		if (!(arguments =
-			malloc(sizeof(XaviValue) * func->arg_count)))
+			malloc(sizeof(XaviValue) * branch->count)))
 		{
 			rVal.status = XE_MEMORY;
 			return rVal;
 		}
 
-		for(i = 0; i < func->arg_count; i++)
+		for(i = 0; i < branch->count; i++)
 		{
-			arguments[i] = XaviTreeEvaluate(func->arg_vector[i]);
+			arguments[i] = XaviTreeEvaluate(branch->children[i]);
 			if(!IsNumber(arguments[i]))
 			{
 				rVal = arguments[i];
@@ -194,27 +174,33 @@ static XaviValue EvaluateFunction(XaviFunction *func)
 		}
 	}
 
-	rVal = XaviFunctionCall(func->name, func->arg_count, arguments);
+	rVal = XaviFunctionCall(branch->name, branch->count, arguments);
 	free(arguments);
 	return rVal;
 }
 
-XaviValue XaviTreeEvaluate(XaviTree *tree)
+XaviValue XaviTreeEvaluate(XaviTreeNode *node)
 {
 	XaviValue rVal;
 
-	if (!tree || tree->type == 'e')
+	if (!node || node->type == XAVI_NODE_ERROR)
 	{
 		rVal.status = XE_SYNTAX;
 		return rVal;
 	}
 
-	switch (tree->type)
+	switch (node->type)
 	{
-	case 'n':
-		return *tree->num;
-	case 'f':
-		return EvaluateFunction(tree->func);
+	case XAVI_NODE_INTEGER:
+		rVal.status = XS_INTEGER;
+		rVal.i = node->i;
+		return rVal;
+	case XAVI_NODE_FLOAT:
+		rVal.status = XS_FLOAT;
+		rVal.f = node->f;
+		return rVal;
+	case XAVI_NODE_BRANCH:
+		return EvaluateBranch(node->branch);
 	}
 
 	rVal.status = XE_INTERNAL;

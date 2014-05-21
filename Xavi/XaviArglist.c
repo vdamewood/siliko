@@ -23,7 +23,7 @@
 #include "XaviArglist.h"
 #include "XaviTree.h"
 
-XaviArglist *XaviArglistNew(XaviTree *NewTree, XaviArglist *OldList)
+XaviArglist *XaviArglistNew(XaviTreeNode *NewTree, XaviArglist *OldList)
 {
 	XaviArglist *rVal;
 
@@ -49,15 +49,15 @@ void XaviArglistDelete(XaviArglist *OldArglist)
 	 }
 }
 
-XaviTree **XaviArglistGetTrees(XaviArglist *InArglist)
+XaviTreeNode **XaviArglistGetTrees(XaviArglist *InArglist)
 {
-	XaviTree **rVal;
+	XaviTreeNode **rVal;
 	XaviArglist *Current = InArglist;
 	XaviArglist *next;
 	int i;
 	int depth = InArglist->depth;
 
-	if ((rVal = malloc(depth * sizeof(XaviTree *))))
+	if ((rVal = malloc(depth * sizeof(XaviTreeNode *))))
 	{
 		for (i = 0; i < depth; i++)
 		{
