@@ -25,7 +25,8 @@
 
 enum XaviTreeNodeType
 {
-	XAVI_NODE_ERROR = 0,
+	XAVI_NODE_ERROR = -1,
+	XAVI_NODE_NOTHING = 0,
 	XAVI_NODE_INTEGER,
 	XAVI_NODE_FLOAT,
 	XAVI_NODE_BRANCH
@@ -58,6 +59,7 @@ XaviValue XaviTreeEvaluate(XaviTreeNode *TreeToEvaluate);
 int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left);
 int XaviTreeNegate(XaviTreeNode *TreeToNegate);
 XaviTreeNode *XaviTreeNewError(void);
+XaviTreeNode *XaviTreeNewNothing(void);
 XaviTreeNode *XaviTreeNewInteger(int Value);
 XaviTreeNode *XaviTreeNewFloat(float Value);
 XaviTreeNode *XaviTreeNewBranch(char *id, int count, XaviTreeNode **children);

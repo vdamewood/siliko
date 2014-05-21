@@ -51,7 +51,7 @@ XaviResult XaviValueToResult(const XaviValue value)
 		rVal.i = 0;
 		break;
 	case XE_MEMORY:
-		rVal.status = XAVI_RE_INTERNAL;
+		rVal.status = XAVI_RE_MEMORY;
 		rVal.i = 0;
 		break;
 	case XE_SYNTAX:
@@ -93,7 +93,7 @@ XaviResult XaviEvaluate(const char * inString)
 	XaviLexer *lexer;
 
 	lexer = XaviLexerNew(inString);
-	rVal = XaviValueToResult(XaviInternalParse(lexer));
+	rVal = XaviValueToResult(XaviParse(lexer));
 	XaviLexerDestroy(&lexer);
 
 	return rVal;

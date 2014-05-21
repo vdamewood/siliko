@@ -69,6 +69,17 @@ int XaviTreeNegate(XaviTreeNode *tree)
 	}
 }
 
+XaviTreeNode *XaviTreeNewNothing(void)
+{
+	XaviTreeNode *rVal;
+	if ((rVal = malloc(sizeof(XaviTreeNode))))
+	{
+		rVal->type = XAVI_NODE_NOTHING;
+		rVal->i = 0;
+	}
+	return rVal;
+}
+
 XaviTreeNode *XaviTreeNewInteger(int value)
 {
 	XaviTreeNode *rVal;

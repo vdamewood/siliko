@@ -24,6 +24,6 @@
 #include "XaviTree.h"
 #include "XaviLexer.h"
 
-XaviValue XaviInternalParse(XaviLexer * lexer);
+XaviValue XaviParse(XaviLexer * lexer);
 
 #endif /* XAVI_PARSER_H */
