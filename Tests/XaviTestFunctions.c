@@ -32,6 +32,8 @@ int main()
 	int total = 0;    // Total number of tests run.
 	int success = 0;  // Number of successful tests.
 
+	XaviFunctionCallOpen();
+
 	////////////////////////////////////////////////////////////////////
 
 	printf("Test 1: abs(-400) returns 400... ");
@@ -55,6 +57,8 @@ int main()
 	}
 
 	////////////////////////////////////////////////////////////////////
+
+	XaviFunctionCallClose();
 
 	// Summary
 	printf("Tests passed/run: %d/%d\n"
