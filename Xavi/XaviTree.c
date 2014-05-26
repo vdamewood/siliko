@@ -217,3 +217,55 @@ XaviValue XaviTreeEvaluate(XaviTreeNode *node)
 	rVal.status = XE_INTERNAL;
 	return rVal;
 }
+
+XaviArglist *XaviArglistNew(XaviTreeNode *NewTree, XaviArglist *OldList)
+{
+	XaviArglist *rVal;
+
+	if ((rVal = malloc(sizeof(XaviArglist))))
+	{
+		if (OldList)
+			rVal->depth = OldList->depth + 1;
+		else
+			rVal->depth = 1;
+		rVal->value = NewTree;
+		rVal->next = OldList;
+	}
+	return rVal;
+}
+
+void XaviArglistDelete(XaviArglist *OldArglist)
+{
+	if (OldArglist)
+	{
+		XaviArglistDelete(OldArglist->next);
+		XaviTreeDelete(OldArglist->value);
+		free(OldArglist);
+	}
+}
+
+XaviTreeNode **XaviArglistGetTrees(XaviArglist *InArglist)
+{
+	XaviTreeNode **rVal;
+	XaviArglist *Current = InArglist;
+	XaviArglist *next;
+	int i;
+	int depth = InArglist->depth;
+
+	if ((rVal = malloc(depth * sizeof(XaviTreeNode *))))
+	{
+		for (i = 0; i < depth; i++)
+		{
+			rVal[i] = Current->value;
+			next = Current->next;
+			free(Current);
+			Current = next;
+		}
+	}
+	else
+	{
+		rVal = NULL;
+	}
+
+	return rVal;
+}

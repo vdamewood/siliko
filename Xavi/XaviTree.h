@@ -36,6 +36,16 @@ typedef enum XaviTreeNodeType XaviTreeNodeType;
 struct XaviTreeNode;
 typedef struct XaviTreeNode XaviTreeNode;
 
+struct XaviArglist;
+typedef struct XaviArglist XaviArglist;
+
+struct XaviArglist
+{
+	int depth;
+	XaviTreeNode *value;
+	XaviArglist *next;
+};
+
 struct XaviTreeBranch
 {
 	char *name;
@@ -64,5 +74,9 @@ XaviTreeNode *XaviTreeNewInteger(int Value);
 XaviTreeNode *XaviTreeNewFloat(float Value);
 XaviTreeNode *XaviTreeNewBranch(char *id, int count, XaviTreeNode **children);
 void XaviTreeDelete(XaviTreeNode *TreeToDelete);
+
+XaviArglist *XaviArglistNew(XaviTreeNode *NewArgument, XaviArglist *ListToExtend);
+void XaviArglistDelete(XaviArglist *ArglistToDelete);
+XaviTreeNode **XaviArglistGetTrees(XaviArglist *ArglistToExtract);
 
 #endif // Xavi_TREE_H
