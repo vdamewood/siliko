@@ -46,8 +46,8 @@ static XaviTreeNode *GetAtom(XaviLexer *lexer);
 static XaviTreeNode *GetNumber(XaviLexer *lexer);
 static XaviTreeNode *GetUNumber(XaviLexer *lexer);
 static XaviTreeNode *GetFCall(XaviLexer *lexer);
-static XaviArglist *GetArglist(XaviLexer *lexer);
-static XaviArglist *GetArglistLF(XaviLexer *lexer);
+static XaviTreeNode *GetArguments(XaviLexer *lexer);
+static XaviTreeNode *GetNextArgument(XaviLexer *lexer);
 
 static XaviTreeNode *GetExpr0(XaviLexer *lexer)
 {
@@ -127,7 +127,7 @@ static XaviTreeNode *GetExpr0r(XaviLexer *lexer)
 	operands[0] = NULL;
 	operands[1] = leftValue;
 
-	if (!(branchNode = XaviTreeNewBranch(operation, 2, operands)))
+	if (!(branchNode = XaviTreeNewVectorBranch(operation, 2, operands)))
 	{
 		free(operation);
 		XaviTreeDelete(leftValue);
@@ -224,7 +224,7 @@ static XaviTreeNode *GetExpr1r(XaviLexer *lexer)
 	operands[0] = NULL;
 	operands[1] = leftValue;
 
-	if (!(branchNode = XaviTreeNewBranch(operation, 2, operands)))
+	if (!(branchNode = XaviTreeNewVectorBranch(operation, 2, operands)))
 	{
 		free(operation);
 		XaviTreeDelete(leftValue);
@@ -282,7 +282,7 @@ static XaviTreeNode *GetExpr2(XaviLexer *lexer)
 
 	operands[0] = leftValue;
 	operands[1] = rest;
-	return XaviTreeNewBranch(operation, 2, operands);
+	return XaviTreeNewVectorBranch(operation, 2, operands);
 }
 
 static XaviTreeNode *GetExpr2lf(XaviLexer *lexer)
@@ -348,7 +348,7 @@ static XaviTreeNode *GetExpr3(XaviLexer *lexer)
 
 	operands[0] = leftValue;
 	operands[1] = rest;
-	return XaviTreeNewBranch(operation, 2, operands);
+	return XaviTreeNewVectorBranch(operation, 2, operands);
 }
 
 static XaviTreeNode *GetExpr3lf(XaviLexer *lexer)
@@ -447,79 +447,114 @@ static XaviTreeNode *GetUNumber(XaviLexer *lexer)
 
 static XaviTreeNode *GetFCall(XaviLexer *lexer)
 {
-	int token;
-	XaviTokenValue value;
 	char *id;
-	int collapsedArgc;
-	XaviTreeNode **collapsedArgv;
-	XaviArglist *arglist;
+	XaviTreeNode *rVal;
 
-	token = XaviLexerGetToken(lexer);
-	value = XaviLexerGetValue(lexer);
+	if (XaviLexerGetToken(lexer) != ID)
+		return XaviTreeNewError();
 
-	char *rVal;
-	id = malloc(strlen(value.s) + 1);
-	strcpy(id, value.s);
+	if (!(id = x_strdup(XaviLexerGetValue(lexer).s)))
+		return NULL;
 
 	XaviLexerNext(lexer);
-	token = XaviLexerGetToken(lexer);
-	value = XaviLexerGetValue(lexer);
-
-	XaviLexerNext(lexer);
-	if (token != '(')
+	if (XaviLexerGetToken(lexer) != '(')
 	{
 		free(id);
 		return NULL;
 	}
 
-	arglist = GetArglist(lexer);
-
-	token = XaviLexerGetToken(lexer);
-	value = XaviLexerGetValue(lexer);
 	XaviLexerNext(lexer);
-
-	if (token != ')')
+	if (!(rVal = GetArguments(lexer)))
 	{
 		free(id);
-		XaviArglistDelete(arglist);
 		return NULL;
 	}
 
-	if(arglist)
+	switch (rVal->type)
 	{
-		collapsedArgc = arglist->depth;
-		collapsedArgv = XaviArglistGetTrees(arglist);
-	}
-	else
-	{
-		collapsedArgc = 0;
-		collapsedArgv = NULL;
+		case XAVI_NODE_LIST_BRANCH:
+			rVal->branch->id = id;
+			if (!XaviTreeCollapseBranch(rVal))
+			{
+				XaviTreeDelete(rVal);
+				return NULL;
+			}
+			break;
+		case XAVI_NODE_ERROR:
+			free(id);
+			return rVal;
+		default:
+			free(id);
+			XaviTreeDelete(rVal);
+			return XaviTreeNewError();
 	}
 
-	return XaviTreeNewBranch(id, collapsedArgc, collapsedArgv);
+	if (XaviLexerGetToken(lexer) != ')')
+	{
+		XaviTreeDelete(rVal);
+		return XaviTreeNewError();
+	}
+	XaviLexerNext(lexer);
+
+	return rVal;
 }
 
-static XaviArglist *GetArglist(XaviLexer *lexer)
+static XaviTreeNode *GetArguments(XaviLexer *lexer)
 {
 	XaviTreeNode *expression;
-	XaviArglist *subArglist;
+	XaviTreeNode *rest;
 
 	expression = GetExpr0(lexer);
-	subArglist = GetArglistLF(lexer);
 
-	return XaviArglistNew(expression, subArglist);
-}
+	if (expression == NULL)
+		return NULL;
 
-static XaviArglist *GetArglistLF(XaviLexer *lexer)
-{
-	if (XaviLexerGetToken(lexer) != ',')
+	rest = GetNextArgument(lexer);
+
+	if (rest == NULL)
 	{
+		XaviTreeDelete(expression);
 		return NULL;
 	}
-	else
+
+	switch (rest->type)
 	{
+	case XAVI_NODE_LIST_BRANCH:
+		if (!XaviTreePushFront(rest, expression))
+		{
+			XaviTreeDelete(expression);
+			XaviTreeDelete(rest);
+			return NULL;
+		}
+		break;
+	case XAVI_NODE_ERROR:
+			XaviTreeDelete(expression);
+		break;
+	case XAVI_NODE_NOTHING:
+		free(rest);
+		if (!(rest = XaviTreeNewListBranch(expression)))
+			free(expression);
+		break;
+	default:
+		XaviTreeDelete(expression);
+		XaviTreeDelete(rest);
+		rest = XaviTreeNewError();
+	}
+
+	return rest;
+}
+
+static XaviTreeNode *GetNextArgument(XaviLexer *lexer)
+{
+	switch (XaviLexerGetToken(lexer))
+	{
+	case ',':
 		XaviLexerNext(lexer);
-		return GetArglist(lexer);
+		return GetArguments(lexer);
+	case ')':
+		return XaviTreeNewNothing();
+	default:
+		return XaviTreeNewError();
 	}
 }
 

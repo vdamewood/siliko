@@ -29,28 +29,32 @@ enum XaviTreeNodeType
 	XAVI_NODE_NOTHING = 0,
 	XAVI_NODE_INTEGER,
 	XAVI_NODE_FLOAT,
-	XAVI_NODE_BRANCH
+	XAVI_NODE_VECTOR_BRANCH,
+	XAVI_NODE_LIST_BRANCH
 };
 typedef enum XaviTreeNodeType XaviTreeNodeType;
 
 struct XaviTreeNode;
 typedef struct XaviTreeNode XaviTreeNode;
 
-struct XaviArglist;
-typedef struct XaviArglist XaviArglist;
+struct XaviTreeListNode;
+typedef struct XaviTreeListNode XaviTreeListNode;
 
-struct XaviArglist
+struct XaviTreeListNode
 {
-	int depth;
 	XaviTreeNode *value;
-	XaviArglist *next;
+	XaviTreeListNode *next;
 };
 
 struct XaviTreeBranch
 {
-	char *name;
+	char *id;
 	int count;
-	XaviTreeNode **children;
+	union
+	{
+		XaviTreeListNode *list;
+		XaviTreeNode **vector;
+	};
 };
 typedef struct XaviTreeBranch XaviTreeBranch;
 
@@ -65,18 +69,18 @@ struct XaviTreeNode
 	};
 };
 
+XaviTreeNode *XaviTreeNewError(void);
+XaviTreeNode *XaviTreeNewFloat(float Value);
+XaviTreeNode *XaviTreeNewInteger(int Value);
+XaviTreeNode *XaviTreeNewListBranch(XaviTreeNode *NewChild);
+XaviTreeNode *XaviTreeNewNothing(void);
+XaviTreeNode *XaviTreeNewVectorBranch(char *id, int count, XaviTreeNode **Children);
+void XaviTreeDelete(XaviTreeNode *TreeToDelete);
+
 XaviValue XaviTreeEvaluate(XaviTreeNode *TreeToEvaluate);
 int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left);
 int XaviTreeNegate(XaviTreeNode *TreeToNegate);
-XaviTreeNode *XaviTreeNewError(void);
-XaviTreeNode *XaviTreeNewNothing(void);
-XaviTreeNode *XaviTreeNewInteger(int Value);
-XaviTreeNode *XaviTreeNewFloat(float Value);
-XaviTreeNode *XaviTreeNewBranch(char *id, int count, XaviTreeNode **children);
-void XaviTreeDelete(XaviTreeNode *TreeToDelete);
-
-XaviArglist *XaviArglistNew(XaviTreeNode *NewArgument, XaviArglist *ListToExtend);
-void XaviArglistDelete(XaviArglist *ArglistToDelete);
-XaviTreeNode **XaviArglistGetTrees(XaviArglist *ArglistToExtract);
-
+int XaviTreeCollapseBranch(XaviTreeNode *TreeToCollapse);
+int XaviTreePushFront(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
+int XaviTreePush(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
 #endif // Xavi_TREE_H
