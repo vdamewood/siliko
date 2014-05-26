@@ -673,7 +673,7 @@ static void ShiftBits(unsigned char * input, int len)
 #define EXP1 0xEA
 #define EXP2 0x80
 
-static unsigned char XaviCrc8(const unsigned char * input)
+static unsigned char XaviCrc8(const char *rawInput)
 {
 	// FIXME: This function malloc()s a chunk of memory the same size as the
 	// input, when a small arrays on the stack will suffice.
@@ -682,18 +682,21 @@ static unsigned char XaviCrc8(const unsigned char * input)
 	unsigned char * result;
 	unsigned char rVal;
 	unsigned char mask;
+	const unsigned char * input;
 
 	int i;
 	int j;
 
+	input = (const unsigned char *)rawInput;
+
 	// We use the terminating '\0' as part of the CRC.
 	// We can do this because we won't be printing the
 	// series of characters.
-	len = strlen(input) + 1;
+	len = strlen(rawInput) + 1;
 	divisor = malloc(len);
 	memset(divisor, 0, len);
 	result = malloc(len);
-	strcpy(result, input);
+	memcpy(result, input, len);
 	divisor[0] = EXP1;
 	divisor[1] = EXP2;
 

@@ -28,7 +28,7 @@ static char *x_strdup(const char *string)
 {
 	char *rVal;
 
-	if (rVal = malloc(strlen(string) + 1))
+	if ((rVal = malloc(strlen(string) + 1)))
 		strcpy(rVal, string);
 
 	return rVal;

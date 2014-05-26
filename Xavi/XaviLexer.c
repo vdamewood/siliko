@@ -130,6 +130,8 @@ static void XaviLexerLoad(XaviLexer *lexer)
 	while (dfaState != DFA_END)
 	switch (dfaState)
 	{
+	case DFA_END:
+		break;
 	case DFA_START:
 		if(isOperator(*current))
 		{
@@ -307,7 +309,7 @@ XaviLexer *XaviLexerNew(const char *inputString)
 {
 	XaviLexer *rVal;
 
-	if (rVal = malloc(sizeof(XaviLexer)))
+	if ((rVal = malloc(sizeof(XaviLexer))))
 	{
 		rVal->input = inputString;
 		rVal->location = rVal->input;
@@ -354,6 +356,8 @@ XaviTokenValue XaviLexerGetValue(XaviLexer *lexer)
 	case ID:
 		rVal.s = lexer->value.s;
 		break;
+	default:
+		rVal.i = lexer->token;
 	}
 	return rVal;
 }

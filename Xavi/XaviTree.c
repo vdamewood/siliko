@@ -201,6 +201,8 @@ void XaviTreeDelete(XaviTreeNode *node)
 			XaviTreeDeleteListNode(node->branch->list);
 			free(node->branch);
 			break;
+		default:
+			;
 		}
 
 	free(node);
@@ -265,10 +267,10 @@ XaviValue XaviTreeEvaluate(XaviTreeNode *node)
 		return rVal;
 	case XAVI_NODE_VECTOR_BRANCH:
 		return EvaluateVectorBranch(node->branch);
+	default:
+		rVal.status = XE_INTERNAL;
+		return rVal;
 	}
-
-	rVal.status = XE_INTERNAL;
-	return rVal;
 }
 
 int XaviTreeCollapseBranch(XaviTreeNode *collapseNode)
@@ -310,6 +312,8 @@ int XaviTreePushFront(XaviTreeNode *mainBranch, XaviTreeNode *newNode)
 
 	newListNode->next = mainBranch->branch->list;
 	mainBranch->branch->list = newListNode;
+	
+	return 1;
 }
 
 int XaviTreePush(XaviTreeNode *mainNode, XaviTreeNode *newNode)
@@ -329,6 +333,8 @@ int XaviTreePush(XaviTreeNode *mainNode, XaviTreeNode *newNode)
 
 	newListNode->next = NULL;
 	currentListNode->next = newListNode;
+	
+	return 1;
 }
 
 
