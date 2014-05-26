@@ -177,8 +177,6 @@ void XaviTreeDeleteListNode(XaviTreeListNode *node)
 	if (node)
 	{
 		XaviTreeDelete(node->value);
-		// FIXME: Valgrind detects the following as an
-		// invalid read.
 		if (node->next)
 			XaviTreeDeleteListNode(node->next);
 	}

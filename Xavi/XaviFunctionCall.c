@@ -24,7 +24,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "XaviTree.h"
+#include "XaviValue.h"
 #include "XaviFunctionCall.h"
 
 static XaviValue XaviFunction_add(int argc, XaviValue *argv)
