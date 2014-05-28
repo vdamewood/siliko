@@ -653,74 +653,32 @@ static XaviValue XaviFunction_tanh(int argc, XaviValue *argv)
 
 ////////////////////////////////////////////////////////////////////////
 
-static void ShiftBits(unsigned char * input, int len)
+unsigned char XaviHash(const unsigned char *rawInput, size_t length)
 {
-	int i;
-	unsigned char tmp;
-
-	for(i = len-1; i >= 0; i--)
-	{
-		input[i] >>= 1;
-		if (i)
-		{
-			tmp = input[i-1] & 1;
-			tmp <<= 7;
-			input[i] |= tmp;
-		}
-	}
-}
-
-#define EXP1 0xEA
-#define EXP2 0x80
-
-static unsigned char XaviCrc8(const char *rawInput)
-{
-	// FIXME: This function malloc()s a chunk of memory the same size as the
-	// input, when a small arrays on the stack will suffice.
-	int len;
-	unsigned char * divisor;
-	unsigned char * result;
-	unsigned char rVal;
-	unsigned char mask;
-	const unsigned char * input;
-
+	const unsigned char divisor = 0xD5;
+	unsigned char result = 0x00;
 	int i;
 	int j;
+	int hasHighBit;
 
-	input = (const unsigned char *)rawInput;
-
-	// We use the terminating '\0' as part of the CRC.
-	// We can do this because we won't be printing the
-	// series of characters.
-	len = strlen(rawInput) + 1;
-	divisor = malloc(len);
-	memset(divisor, 0, len);
-	result = malloc(len);
-	memcpy(result, input, len);
-	divisor[0] = EXP1;
-	divisor[1] = EXP2;
-
-	for (i = 0; i < len-1; i++)
+	for (i = 0; i <= length; i++)
 	{
-		mask = 0x80;
-		for (j = 0; j <= 7; j++)
+		for (j = 7; j >= 0; j--)
 		{
-			if (mask & result[i])
-			{
-				result[i] ^= divisor[i];
-				result[i+1] ^= divisor[i+1];
-			}
-			ShiftBits(divisor, len);
-			mask >>= 1;
+			hasHighBit = result & 0x80;
+			result <<= 1;
+
+			result |= (i < length)
+				? (rawInput[i] >> j) & 0x01
+				: 0;
+
+			if (hasHighBit)
+				result ^= divisor;
 		}
 	}
 
-	rVal = result[len-1];
-	free(result);
-	free(divisor);
-	return rVal;
+	return result;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -798,7 +756,7 @@ int XaviFunctionCallOpen()
 
 	for (i = 0; i <= FUNCTION_MAX; i++)
 	{
-		index = XaviCrc8(functionNames[i]);
+		index = XaviHash((const unsigned char *)functionNames[i], strlen(functionNames[i]));
 		tempTable[i]->id = functionNames[i];
 		tempTable[i]->function = functions[i];
 		tempTable[i]->next = NULL;
@@ -852,7 +810,7 @@ static FunctionPointer GetFunction(const char *name)
 	int index;
 	XaviFunctionChain *current;
 
-	index = XaviCrc8(name);
+	index = XaviHash((const unsigned char *)name, strlen(name));
 	current = functionTable[index];
 
 	while (current)

@@ -3,11 +3,9 @@ set(LIBRARY_DIR ${Xavi_SOURCE_DIR}/Xavi)
 include_directories(${LIBRARY_DIR}
 	${CMAKE_CURRENT_BINARY_DIR}/../Xavi)
 
-message(${CMAKE_CURRENT_BINARY_DIR}/../Xavi)
-
-if(USE_BISON)
-	add_definitions(-DUSE_BISON=1)
-endif()
+add_executable(XaviTestHash
+    XaviTestHash.c)
+target_link_libraries(XaviTestHash Xavi)
 
 add_executable(XaviTestLinkage
     XaviTestLinkage.c)
