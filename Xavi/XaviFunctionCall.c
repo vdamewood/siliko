@@ -726,7 +726,8 @@ static unsigned char XaviCrc8(const char *rawInput)
 
 typedef XaviValue (*FunctionPointer)(int, XaviValue *);
 
-#define FUNCTION_MAX 21
+#define FUNCTION_COUNT 22
+#define FUNCTION_MAX (FUNCTION_COUNT - 1)
 static char *functionNames[] =
 {
 	"add", "subtract", "multiply", "divide",
@@ -759,13 +760,38 @@ static XaviFunctionChain **functionTable;
 
 int XaviFunctionCallOpen()
 {
-	// FIXME: This function makes calls to malloc() without checking the return
-	// value. Rewrite it to either succeed or fail completely, instead.
 	int i;
+	int memoryError;
 	int index;
 	XaviFunctionChain *currentChain;
+	XaviFunctionChain **tempTable;
+
 	if (!(functionTable = malloc(256 * sizeof(XaviFunctionChain))))
 		return 0;
+
+	if (!(tempTable = malloc(FUNCTION_COUNT * sizeof(XaviFunctionChain))))
+	{
+		free(functionTable);
+		return 0;
+	}
+
+	memoryError = 0;
+	for (i = 0; i<=FUNCTION_MAX; i++)
+	{
+		if (!(tempTable[i] = malloc(sizeof(XaviFunctionChain))))
+		{
+			memoryError = -1;
+			break;
+		}
+	}
+
+	if (memoryError)
+	{
+		for (i--; i >= 0; i--)
+			free(tempTable[i]);
+		free(functionTable);
+		return 0;
+	}
 
 	for (i = 0; i<=255; i++)
 		functionTable[i] = NULL;
@@ -773,25 +799,25 @@ int XaviFunctionCallOpen()
 	for (i = 0; i <= FUNCTION_MAX; i++)
 	{
 		index = XaviCrc8(functionNames[i]);
+		tempTable[i]->id = functionNames[i];
+		tempTable[i]->function = functions[i];
+		tempTable[i]->next = NULL;
+
 		if (functionTable[index])
 		{
 			currentChain = functionTable[index];
 			while (currentChain->next)
 				currentChain = currentChain->next;
-			currentChain->next = malloc(sizeof(XaviFunctionChain));
-			currentChain = currentChain->next;
+			currentChain->next = tempTable[i];
 		}
 		else
 		{
-			functionTable[index] = malloc(sizeof(XaviFunctionChain));
-			currentChain = functionTable[index];
+			functionTable[index] = tempTable[i];
 		}
-
-		currentChain->id = functionNames[i];
-		currentChain->function = functions[i];
-		currentChain->next = NULL;
 	}
-	return 1;
+
+	free(tempTable);
+	return -11;
 }
 
 void XaviFunctionCallClose()
@@ -800,22 +826,25 @@ void XaviFunctionCallClose()
 	XaviFunctionChain * current;
 	XaviFunctionChain * next;
 
-	for (i = 0; i <= 255; i++)
+	if (functionTable)
 	{
-		if (functionTable[i])
+		for (i = 0; i <= 255; i++)
 		{
-			current = functionTable[i];
-			while (current)
+			if (functionTable[i])
 			{
-				next = current->next;
-				free(current);
-				current = next;
+				current = functionTable[i];
+				while (current)
+				{
+					next = current->next;
+					free(current);
+					current = next;
+				}
 			}
 		}
-	}
 
-	free(functionTable);
-	functionTable = NULL;
+		free(functionTable);
+		functionTable = NULL;
+	}
 }
 
 static FunctionPointer GetFunction(const char *name)
@@ -824,8 +853,8 @@ static FunctionPointer GetFunction(const char *name)
 	XaviFunctionChain *current;
 
 	index = XaviCrc8(name);
-
 	current = functionTable[index];
+
 	while (current)
 		if (strcmp(name, current->id) != 0)
 			current = current->next;
@@ -834,8 +863,8 @@ static FunctionPointer GetFunction(const char *name)
 
 	if (current)
 		return current->function;
-
-	return NULL;
+	else
+		return NULL;
 }
 
 XaviValue XaviFunctionCall(const char *name, int argc, XaviValue *argv)
