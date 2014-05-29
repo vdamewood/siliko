@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #if !defined Xavi_H
 #define Xavi_H
 
@@ -37,23 +38,24 @@ extern "C"
 
 enum XaviResultStatus
 {
-	XAVI_RS_INTEGER,   /* Success: The integer result is in i. */
-	XAVI_RS_FLOAT,     /* Success. The floating-point result is in f. */
-	XAVI_RE_INTERNAL,  /* Error: This indicates a bug in Xavi. */
-	XAVI_RE_MEMORY,    /* Error: Xavi attempted to allocate memory to
+	XAVI_RS_INTEGER = 1,   /* Success: Integer result is in i. */
+	XAVI_RS_FLOAT = 2,     /* Success. Floating-point result is in f. */
+	XAVI_RE_INTERNAL = -1,  /* Error: This indicates a bug in Xavi. */
+	XAVI_RE_MEMORY = -2,    /* Error: Xavi attempted to allocate memory to
 	                             process the expression and failed. I.e.
 	                             malloc returned NULL. */
-	XAVI_RE_SYNTAX,    /* Error: A syntax error was encountered. */
-	XAVI_RE_ZERO_DIV,  /* Error: Division by zero was attempted. */
-	XAVI_RE_FUNCTION,  /* Error: The expression contains a function call
+	XAVI_RE_SYNTAX = -3,    /* Error: A syntax error was encountered. */
+	XAVI_RE_ZERO_DIV = -4,  /* Error: Division by zero was attempted. */
+	XAVI_RE_FUNCTION = -5,  /* Error: The expression contains a function
+	                             call
 	                             that could not be resolved to a valid
 	                             function. */
-	XAVI_RE_ARGUMENTS, /* Error: A function call was made with a number of
-	                             arguments that the function can't
-	                             accept. */
-	XAVI_RE_DOMAIN,    /* Error: A function call resulted in a domain
+	XAVI_RE_ARGUMENTS = -6, /* Error: A function call was made with a
+	                             number of arguments that the function
+	                             can't accept. */
+	XAVI_RE_DOMAIN = -7,    /* Error: A function call resulted in a domain
 	                             error. */
-	XAVI_RE_RANGE      /* Error: A function call resulted in a range
+	XAVI_RE_RANGE = -8      /* Error: A function call resulted in a range
 	                             error. */
 };
 typedef enum XaviResultStatus XaviResultStatus;
