@@ -228,7 +228,7 @@ static XaviValue XaviFunction_power(int argc, XaviValue *argv)
 			? nextValue = (float) argv[i].i
 			: argv[i].f;
 
-		runningValue = pow(runningValue, nextValue);
+		runningValue = (float) pow(runningValue, nextValue);
 	}
 
 	rVal.status = XS_FLOAT;
@@ -285,7 +285,7 @@ static XaviValue XaviFunction_abs(int argc, XaviValue *argv)
 
 	rVal = argv[0];
 	if (rVal.status == XS_FLOAT)
-		rVal.f = fabs(rVal.f);
+		rVal.f = (float) fabs(rVal.f);
 	else if (rVal.status == XS_INTEGER)
 		rVal.i = abs(rVal.i);
 	return rVal;
@@ -314,7 +314,7 @@ static XaviValue XaviFunction_acos(int argc, XaviValue *argv)
 	}
 
 	rVal.status = XS_FLOAT;
-	rVal.f = acos(input);
+	rVal.f = (float) acos(input);
 	return rVal;
 }
 
@@ -341,7 +341,7 @@ static XaviValue XaviFunction_asin(int argc, XaviValue *argv)
 	}
 
 	rVal.status = XS_FLOAT;
-	rVal.f = asin(input);
+	rVal.f = (float) asin(input);
 	return rVal;
 }
 
@@ -362,7 +362,7 @@ static XaviValue XaviFunction_atan(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = atan(input);
+	rVal.f = (float) atan(input);
 	return rVal;
 }
 
@@ -383,7 +383,7 @@ static XaviValue XaviFunction_ceil(int argc, XaviValue *argv)
 	else
 		input = argv[0].f;
 
-	result = ceil(input);
+	result = (float) ceil(input);
 	if (result <= INT_MAX && result >= INT_MIN)
 	{
 		rVal.status = XS_INTEGER;
@@ -414,7 +414,7 @@ static XaviValue XaviFunction_cos(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = cos(input);
+	rVal.f = (float) cos(input);
 	return rVal;
 }
 
@@ -435,7 +435,7 @@ static XaviValue XaviFunction_cosh(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = cosh(input);
+	rVal.f = (float) cosh(input);
 	return rVal;
 }
 
@@ -456,7 +456,7 @@ static XaviValue XaviFunction_exp(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = exp(input);
+	rVal.f = (float) exp(input);
 	return rVal;
 }
 
@@ -477,7 +477,7 @@ static XaviValue XaviFunction_floor(int argc, XaviValue *argv)
 	else
 		input = argv[0].f;
 
-	result = floor(input);
+	result = (float) floor(input);
 	if (result <= INT_MAX && result >= INT_MIN)
 	{
 		rVal.status = XS_INTEGER;
@@ -508,7 +508,7 @@ static XaviValue XaviFunction_log(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = log(input);
+	rVal.f = (float) log(input);
 	return rVal;
 }
 
@@ -529,7 +529,7 @@ static XaviValue XaviFunction_log10(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = log10(input);
+	rVal.f = (float) log10(input);
 	return rVal;
 }
 
@@ -550,7 +550,7 @@ static XaviValue XaviFunction_sin(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = sin(input);
+	rVal.f = (float) sin(input);
 	return rVal;
 }
 
@@ -571,7 +571,7 @@ static XaviValue XaviFunction_sinh(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = sinh(input);
+	rVal.f = (float) sinh(input);
 	return rVal;
 }
 
@@ -603,7 +603,7 @@ static XaviValue XaviFunction_sqrt(int argc, XaviValue *argv)
 	}
 
 	rVal.status = XS_FLOAT;
-	rVal.f = sqrt(inVal);
+	rVal.f = (float) sqrt(inVal);
 
 	return rVal;
 }
@@ -626,7 +626,7 @@ static XaviValue XaviFunction_tan(int argc, XaviValue *argv)
 	else input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = tan(input);
+	rVal.f = (float) tan(input);
 	return rVal;
 }
 
@@ -647,7 +647,7 @@ static XaviValue XaviFunction_tanh(int argc, XaviValue *argv)
 		input = argv[0].f;
 
 	rVal.status = XS_FLOAT;
-	rVal.f = tanh(input);
+	rVal.f = (float) tanh(input);
 	return rVal;
 }
 
@@ -657,7 +657,7 @@ unsigned char XaviHash(const unsigned char *rawInput, size_t length)
 {
 	const unsigned char divisor = 0xD5;
 	unsigned char result = 0x00;
-	int i;
+	unsigned int i;
 	int j;
 	int hasHighBit;
 
