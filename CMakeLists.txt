@@ -2,7 +2,7 @@
 
 # Semi-Required Preamble
 project(Xavi)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.11)
 set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
@@ -12,12 +12,12 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 # Dependency searches
-find_package(Qt4)
+find_package(Qt5Widgets)
 
 # Configuration Options
 option(BUILD_XAVISTA
   "Build Xavista, a Qt-based GUI frontend to Xavi"
-  ${QT4_FOUND})
+  ${Qt5Widgets_FOUND})
 option(BUILD_SHARED_LIBS "Build Xavi as a shared library." ON)
 option(BUILD_TESTS "Build testing programs." OFF)
 
