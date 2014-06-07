@@ -1,25 +1,17 @@
 # Root
 
 # Semi-Required Preamble
-project(Xavi)
 cmake_minimum_required(VERSION 2.8.11)
+
+project(Xavi)
 set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  set(MACOSX 1)
-endif()
-
-# Dependency searches
-find_package(Qt5Widgets)
-
 # Configuration Options
-option(BUILD_XAVISTA
-  "Build Xavista, a Qt-based GUI frontend to Xavi"
-  ${Qt5Widgets_FOUND})
-option(BUILD_SHARED_LIBS "Build Xavi as a shared library." ON)
-option(BUILD_TESTS "Build testing programs." OFF)
+option(BUILD_XAVISTA     "Build Xavista, a Qt-based GUI frontend to Xavi." ON)
+option(BUILD_SHARED_LIBS "Build Xavi as a shared library."                 ON)
+option(BUILD_TESTS       "Build testing programs."                         OFF)
 
 # Install locations and system-dependent values.
 if(WIN32)
@@ -31,7 +23,7 @@ if(WIN32)
   set(FRAMEWORK_INSTALL_PATH Error)
   set(HEADER_INSTALL_PATH .)
   set(DOC_INSTALL_PATH .)
-elseif(MACOSX)
+elseif(APPLE)
   set(MATH_LIB)
   set(RUNTIME_INSTALL_PATH Error)
   set(ARCHIVE_INSTALL_PATH Error)
@@ -60,9 +52,10 @@ set(CPACK_PACKAGE_EXECUTABLES Xavista Xavista)
 set(CPACK_PACKAGE_VERSION_MAJOR ${Xavi_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${Xavi_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${Xavi_VERSION_PATCH})
+set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/build/")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
+set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/Build/")
 set(CPACK_RESOURCE_FILE_README "${Xavi_SOURCE_DIR}/Readme.txt")
 
 if(BUILD_XAVISTA)
@@ -76,7 +69,7 @@ if(WIN32)
   else()
     set(CPACK_RESOURCE_FILE_LICENSE "${Xavi_SOURCE_DIR}/LGPL-3.0.txt")
   endif()
-elseif(MACOSX)
+elseif(APPLE)
   set(CPACK_GENERATOR DragNDrop)
 endif()
 
@@ -90,7 +83,7 @@ if(BUILD_TESTS)
   add_subdirectory(Tests)
 endif(BUILD_TESTS)
 install(
-  FILES Readme.txt GPL-3.0.txt LGPL-3.0.txt ${GIT_FILE}
+  FILES Readme.txt GPL-3.0.txt LGPL-3.0.txt
   DESTINATION ${DOC_INSTALL_PATH})
 
 # This command gets its own section at the end because it's special.
