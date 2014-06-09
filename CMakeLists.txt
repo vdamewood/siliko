@@ -2,7 +2,6 @@
 
 # Semi-Required Preamble
 cmake_minimum_required(VERSION 2.8.11)
-
 project(Xavi)
 set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
@@ -12,6 +11,11 @@ set(Xavi_VERSION_PATCH 0)
 option(BUILD_XAVISTA     "Build Xavista, a Qt-based GUI frontend to Xavi." ON)
 option(BUILD_SHARED_LIBS "Build Xavi as a shared library."                 ON)
 option(BUILD_TESTS       "Build testing programs."                         OFF)
+
+# Dependency searches
+if(BUILD_XAVISTA)
+ find_package(Qt5Widgets)
+endif()
 
 # Install locations and system-dependent values.
 if(WIN32)

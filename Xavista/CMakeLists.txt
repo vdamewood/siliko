@@ -1,8 +1,5 @@
 # Xavista
 
-# Dependency searches
-find_package(Qt5Widgets)
-
 set(Library_SOURCE_DIR  ${Xavi_SOURCE_DIR}/Xavi)
 set(Library_BINARY_DIR  ${Xavi_BINARY_DIR}/Xavi)
 set(Xavista_HEADERS     ${Library_SOURCE_DIR}/Xavi.h)
