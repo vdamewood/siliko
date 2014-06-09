@@ -34,15 +34,24 @@ install(TARGETS Xavista
 )
 
 if(APPLE)
-    set(Xavista_BUNDLES "\${CMAKE_INSTALL_PREFIX}/Xavista.app")
+    set(PREPARE_BUNDLE ON)
+    set(Xavista_EXECUTABLE "\${CMAKE_INSTALL_PREFIX}/Xavista.app")
+    set(Xavista_QT_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}/Xavista.app/Contents/PlugIns/")
+    install(CODE
+      "FILE(
+        INSTALL \"${Xavi_SOURCE_DIR}/Xavista/qt.conf\"
+        DESTINATION \"\${CMAKE_INSTALL_PREFIX}/Xavista.app/Contents/Resources\"
+       )"
+    )
 elseif(WIN32)
-    set(Xavista_BUNDLES "\${CMAKE_INSTALL_PREFIX}/Xavista.exe")
+    set(PREPARE_BUNDLE ON)
+    set(Xavista_EXECUTABLE "\${CMAKE_INSTALL_PREFIX}/Xavista.exe")
+    set(Xavista_QT_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}")
 else()
-    set(Xavista_BUNDLES "")
+    set(PREPARE_BUNDLE OFF)
 endif()
 
-# This is actually only for APPLE right now
-if(APPLE OR WIN32)
+if(PREPARE_BUNDLE)
   foreach(plugin_target ${Qt5Gui_PLUGINS})
     get_target_property(plugin ${plugin_target} LOCATION)
     string(FIND "${plugin}" "plugins/" idx REVERSE)
@@ -50,11 +59,10 @@ if(APPLE OR WIN32)
     string(SUBSTRING "${plugin}" "${idx}" -1 short)
     string(FIND ${short} "/" idxs REVERSE)
     string(SUBSTRING ${short} 0 ${idxs} directory)
-    install(CODE "FILE(INSTALL ${plugin} DESTINATION \"${Xavista_BUNDLES}/Contents/PlugIns/${directory}\")")
-    list(APPEND Xavista_PLUGINS "${Xavista_BUNDLES}/Contents/PlugIns/${short}")
+    install(CODE "FILE(INSTALL ${plugin} DESTINATION \"${Xavista_QT_PLUGIN_DIR}/${directory}\")")
+    list(APPEND Xavista_PLUGINS "${Xavista_QT_PLUGIN_DIR}/${short}")
   endforeach()
 
-  install(CODE "FILE(INSTALL \"${Xavi_SOURCE_DIR}/Xavista/qt.conf\" DESTINATION \"${Xavista_BUNDLES}/Contents/Resources\")")
   install(CODE "include(BundleUtilities)")
-  install(CODE "fixup_bundle(\"${Xavista_BUNDLES}\" \"${Xavista_PLUGINS}\" \"${Library_BINARY_DIR}\")")
+  install(CODE "fixup_bundle(\"${Xavista_EXECUTABLE}\" \"${Xavista_PLUGINS}\" \"${Library_BINARY_DIR}\")")
 endif()
