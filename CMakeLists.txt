@@ -7,15 +7,22 @@ set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
-# Configuration Options
-option(BUILD_XAVISTA     "Build Xavista, a Qt-based GUI frontend to Xavi." ON)
-option(BUILD_SHARED_LIBS "Build Xavi as a shared library."                 ON)
-option(BUILD_TESTS       "Build testing programs."                         OFF)
+# Configuration Options: CMake Standard
+option(CMAKE_BUILD_TYPE  "Build as Debug or Release."                      Debug)
+option(BUILD_SHARED_LIBS "Build Xavi as a shared library."                 On)
+
+# Configuration Options: Xavi Specific
+option(BUILD_XAVISTA     "Build Xavista, a Qt-based GUI frontend to Xavi." On)
+option(BUILD_TESTS       "Build testing programs."                         Off)
 
 # Dependency searches
 if(BUILD_XAVISTA)
  find_package(Qt5Widgets)
 endif()
+
+# System-independent values
+set(Library_SOURCE_DIR  ${Xavi_SOURCE_DIR}/Xavi)
+set(Library_BINARY_DIR  ${Xavi_BINARY_DIR}/Xavi)
 
 # Install locations and system-dependent values.
 if(WIN32)
@@ -29,7 +36,7 @@ if(WIN32)
   set(DOC_INSTALL_PATH .)
 elseif(APPLE)
   set(MATH_LIB)
-  set(RUNTIME_INSTALL_PATH Error)
+  set(RUNTIME_INSTALL_PATH bin)
   set(ARCHIVE_INSTALL_PATH Error)
   set(LIBRARY_INSTALL_PATH Error)
   set(BUNDLE_INSTALL_PATH .)
@@ -80,6 +87,7 @@ endif()
 
 # Subdirectory inclusions
 add_subdirectory(Xavi)
+add_subdirectory(Xavita)
 if(BUILD_XAVISTA)
   add_subdirectory(Xavista)
 endif(BUILD_XAVISTA)

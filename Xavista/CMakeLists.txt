@@ -1,7 +1,5 @@
 # Xavista
 
-set(Library_SOURCE_DIR  ${Xavi_SOURCE_DIR}/Xavi)
-set(Library_BINARY_DIR  ${Xavi_BINARY_DIR}/Xavi)
 set(Xavista_HEADERS     ${Library_SOURCE_DIR}/Xavi.h)
 set(Xavista_MOC_HEADERS XavistaWindow.h)
 set(Xavista_SOURCES     Xavista.cpp XavistaWindow.cpp)
@@ -11,7 +9,7 @@ set(Xavista_PLUGINS)
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
-  ${Xavi_SOURCE_DIR}/Xavi
+  ${Library_SOURCE_DIR}
   ${Qt5Widgets_INCLUDE_DIRS})
 
 qt5_wrap_ui(Xavista_UI_SOURCES ${Xavista_UIS})

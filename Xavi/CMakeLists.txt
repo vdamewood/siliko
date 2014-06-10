@@ -1,5 +1,11 @@
 # Xavi
 
+if (UNIX)
+	add_definitions(-DXAVI_USE_UNIX=1)
+else()
+	add_definitions(-DXAVI_USE_UNIX=0)
+endif()
+
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
   XaviFunctionCall.h
