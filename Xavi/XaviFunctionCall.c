@@ -195,6 +195,7 @@ static XaviValue XaviFunction_divide(int argc, XaviValue *argv)
 		else {
 			if (argv[i].status == XS_FLOAT)
 			{
+				rVal.status = XS_FLOAT;
 				rVal.f = (float) rVal.i / argv[i].f;
 			}
 			else if (rVal.i % argv[i].i == 0)
