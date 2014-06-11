@@ -460,7 +460,7 @@ static XaviTreeNode *GetFCall(XaviLexer *lexer)
 	if (XaviLexerGetToken(lexer) != '(')
 	{
 		free(id);
-		return NULL;
+		return XaviTreeNewError();
 	}
 
 	XaviLexerNext(lexer);
