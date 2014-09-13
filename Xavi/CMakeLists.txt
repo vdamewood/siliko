@@ -10,12 +10,14 @@ set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
   FunctionCall.hpp
   SyntaxTree.hpp XaviValue.hpp
-  Parser.hpp Lexer.hpp)
+  Parser.hpp Lexer.hpp
+  DataSource.hpp CStringSource.cpp)
 set(Xavi_SOURCES
   Xavi.cpp
   FunctionCall.cpp
   SyntaxTree.cpp
-  Parser.cpp Lexer.cpp)
+  Parser.cpp Lexer.cpp
+  CStringSource.cpp)
 
 add_library(Xavi
   ${Xavi_PUBLIC_HEADERS}

@@ -27,7 +27,7 @@ enum XaviValueStatus
 	XS_FLOAT,     /* Success: The valis is a floating-point */
 	XE_INTERNAL,  /* Error: Something unexpected happened. This usually
 	                        indicates a bug in Xavi. */
-	XE_MEMORY,    /* Error: A call to malloc failed. */
+	XE_MEMORY,    /* Error: An attempt to allocate memory failed. */
 	XE_SYNTAX,    /* Error: A syntax error was encountered. */
 	XE_ZERO_DIV,  /* Error: Division by zero was attempted. */
 	XE_FUNCTION,  /* Error: A function call could not be resolved to a

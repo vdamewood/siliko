@@ -453,7 +453,7 @@ static XaviTreeNode *GetFCall(Xavi::Lexer *lexer)
 	if (lexer->GetToken() != Xavi::ID)
 		return XaviTreeNewError();
 
-	if (!(id = x_strdup(lexer->GetValue().s)))
+	if (!(id = x_strdup(lexer->GetValue().s->c_str())))
 		return NULL;
 
 	lexer->Next();

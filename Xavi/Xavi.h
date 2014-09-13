@@ -38,18 +38,16 @@ extern "C"
 
 enum XaviResultStatus
 {
-	XAVI_RS_INTEGER = 1,   /* Success: Integer result is in i. */
-	XAVI_RS_FLOAT = 2,     /* Success. Floating-point result is in f. */
+	XAVI_RS_INTEGER = 1,    /* Success: Integer result is in i. */
+	XAVI_RS_FLOAT = 2,      /* Success. Floating-point result is in f. */
 	XAVI_RE_INTERNAL = -1,  /* Error: This indicates a bug in Xavi. */
-	XAVI_RE_MEMORY = -2,    /* Error: Xavi attempted to allocate memory to
-	                             process the expression and failed. I.e.
-	                             malloc returned NULL. */
+	XAVI_RE_MEMORY = -2,    /* Error: Xavi attempted to allocate memory
+	                             and failed. */
 	XAVI_RE_SYNTAX = -3,    /* Error: A syntax error was encountered. */
 	XAVI_RE_ZERO_DIV = -4,  /* Error: Division by zero was attempted. */
 	XAVI_RE_FUNCTION = -5,  /* Error: The expression contains a function
-	                             call
-	                             that could not be resolved to a valid
-	                             function. */
+	                             call that could not be resolved to a
+	                             valid function. */
 	XAVI_RE_ARGUMENTS = -6, /* Error: A function call was made with a
 	                             number of arguments that the function
 	                             can't accept. */

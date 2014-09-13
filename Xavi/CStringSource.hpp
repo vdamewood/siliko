@@ -1,6 +1,6 @@
 /*
- * XaviLexer.h: Lexical analyzer
- * Copyright 2012, 2014 Vincent Damewood
+ * XaviCStringSource.hpp: Class for input data from a C-style string
+ * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.
  *
@@ -18,57 +18,25 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_LEXER_H
-#define XAVI_LEXER_H
-
-#include <string>
+#if !defined CSTRINGSOURCE_HPP
+#define CSTRINGSOURCE_HPP
 
 #include "DataSource.hpp"
 
 namespace Xavi
 {
-	// FIXME: Separate Token into its own type.
-	enum TokenType
-	{
-		ERROR = -1,
-		UNSET = 0,
-		LPAREN = '(',
-		RPAREN = ')',
-		MULTIPLY = '*',
-		ADDITION = '+',
-		COMMA = ',',
-		SUBTRACT = '-',
-		DIVISION = '/',
-		EXPONENT = '^',
-		INTEGER = 256,
-		FLOAT,
-		ID,
-		EOL
-	};
-
-	union TokenValue
-	{
-		std::string *s;
-		int i;
-		float f;
-	};
-
-	class Lexer
+	class CStringSource : public DataSource
 	{
 	public:
-		Lexer(DataSource *InputSource);
-		~Lexer();
-
-		TokenType GetToken(void);
-		TokenValue GetValue(void);
-		void Next(void);
+		CStringSource(const char *);
+		virtual bool Advance();
+		virtual char GetCurrent();
+		virtual ~CStringSource();
 
 	private:
-		void Load(void);
-		DataSource *Source;
-		TokenType token;
-		TokenValue value;
+		const char *Source;
+		int Index;
 	};
 };
 
-#endif /* XAVI_LEXER_H */
+#endif /* !defined CSTRINGSOURCE_HPP */
