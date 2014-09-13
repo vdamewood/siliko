@@ -63,7 +63,6 @@ namespace Xavi
 
 	private:
 		void Load(void);
-		const char *input;
 		const char *location;
 		TokenType token;
 		TokenValue value;

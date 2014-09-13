@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <string>
+
 #include "Lexer.hpp"
 
 /* Values taken from Google Calculator 2011-07-06 */
@@ -48,52 +50,13 @@ static int isIdCharacter(int character)
 	return (isalnum(character) || character == '_');
 }
 
-static char * extractString
-(
-	const char * startCharacter,
-	const char * onePastEnd
-)
+static char *lex_strdup(const char *string)
 {
 	char *rVal;
-	size_t length;
 
-	length = onePastEnd - startCharacter;
-	if (!(rVal = (char*) malloc(length+1)))
-		return NULL;
-	strncpy(rVal, startCharacter, length);
-	rVal[length] = '\0';
-	return rVal;
-}
+	if ((rVal = (char*) malloc(strlen(string) + 1)))
+		strcpy(rVal, string);
 
-static int extractInteger
-(
-	const char *startCharacter,
-	const char *onePastEnd
-)
-{
-	int rVal;
-	char *lexeme;
-
-	if (!(lexeme = extractString(startCharacter, onePastEnd)))
-		return 0;
-	rVal = atoi(lexeme);
-	free(lexeme);
-	return rVal;
-}
-
-static float extractFloat
-(
-	const char * startCharacter,
-	const char * onePastEnd
-)
-{
-	float rVal;
-	char *lexeme;
-
-	if (!(lexeme = extractString(startCharacter, onePastEnd)))
-		return 0.0;
-	rVal = atof(lexeme);
-	free(lexeme);
 	return rVal;
 }
 
@@ -123,6 +86,7 @@ void Xavi::Lexer::Load(void)
 {
 	XaviDfaState dfaState = DFA_START;
 	const char *current = location;
+	std::string lexeme = std::string();
 
 	if (token == EOL || token == ERROR)
 		return;
@@ -140,26 +104,31 @@ void Xavi::Lexer::Load(void)
 		}
 		else if (*current == 'd')
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_DICE;
 		}
 		else if (*current == 'e')
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_E;
 		}
 		else if (*current == 'p')
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_PI_1;
 		}
 		else if (isdigit(*current))
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_INTEGER;
 		}
 		else if (isalpha(*current))
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_ID;
 		}
@@ -180,6 +149,7 @@ void Xavi::Lexer::Load(void)
 	case DFA_DICE:
 		if (isalpha(*current))
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_ID;
 		}
@@ -191,6 +161,7 @@ void Xavi::Lexer::Load(void)
 	case DFA_E:
 		if (isalnum(*current))
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_ID;
 		}
@@ -202,11 +173,13 @@ void Xavi::Lexer::Load(void)
 	case DFA_PI_1:
 		if (*current == 'i')
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_PI_2;
 		}
 		else if (isIdCharacter(*current))
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_ID;
 		}
@@ -218,6 +191,7 @@ void Xavi::Lexer::Load(void)
 	case DFA_PI_2:
 		if (isIdCharacter(*current))
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_ID;
 		}
@@ -229,6 +203,7 @@ void Xavi::Lexer::Load(void)
 	case DFA_ID:
 		if (isalnum(*current))
 		{
+			lexeme += *current;
 			current++;
 		}
 		else
@@ -239,11 +214,13 @@ void Xavi::Lexer::Load(void)
 	case DFA_INTEGER:
 		if (*current == '.')
 		{
+			lexeme += *current;
 			current++;
 			dfaState = DFA_FLOAT;
 		}
 		else if (isdigit(*current))
 		{
+			lexeme += *current;
 			current++;
 		}
 		else
@@ -254,6 +231,7 @@ void Xavi::Lexer::Load(void)
 	case DFA_FLOAT:
 		if (isdigit(*current))
 		{
+			lexeme += *current;
 			current++;
 		}
 		else
@@ -263,12 +241,12 @@ void Xavi::Lexer::Load(void)
 		break;
 	case DFA_TERM_INTEGER:
 		token = INTEGER;
-		value.i = extractInteger(location, current);
+		value.i = atoi(lexeme.c_str());
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_FLOAT:
 		token = FLOAT;
-		value.f = extractFloat(location, current);
+		value.f = atof(lexeme.c_str());
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
@@ -288,7 +266,7 @@ void Xavi::Lexer::Load(void)
 		break;
 	case DFA_TERM_STRING:
 		token = ID;
-		value.s = extractString(location, current);
+		value.s =  lex_strdup(lexeme.c_str());
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_EOI:
@@ -307,8 +285,7 @@ void Xavi::Lexer::Load(void)
 
 Xavi::Lexer::Lexer(const char * InputString)
 {
-	input = InputString;
-	location = input;
+	location = InputString;
 	token = UNSET;
 	value.i = 0;
 }
