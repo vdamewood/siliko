@@ -20,8 +20,8 @@
 
 #include <stdlib.h>
 
-#include "XaviTree.h"
-#include "XaviFunctionCall.h"
+#include "SyntaxTree.hpp"
+#include "FunctionCall.hpp"
 
 int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left)
 {
@@ -72,7 +72,7 @@ int XaviTreeNegate(XaviTreeNode *tree)
 XaviTreeNode *XaviTreeNewNothing(void)
 {
 	XaviTreeNode *rVal;
-	if ((rVal = malloc(sizeof(XaviTreeNode))))
+	if ((rVal = (XaviTreeNode *) malloc(sizeof(XaviTreeNode))))
 	{
 		rVal->type = XAVI_NODE_NOTHING;
 		rVal->i = 0;
@@ -84,7 +84,7 @@ XaviTreeNode *XaviTreeNewInteger(int value)
 {
 	XaviTreeNode *rVal;
 
-	if (!(rVal = malloc(sizeof(XaviTreeNode))))
+	if (!(rVal = (XaviTreeNode *) malloc(sizeof(XaviTreeNode))))
 		return NULL;
 
 	rVal->type = XAVI_NODE_INTEGER;
@@ -96,7 +96,7 @@ XaviTreeNode *XaviTreeNewFloat(float value)
 {
 	XaviTreeNode *rVal;
 
-	if (!(rVal = malloc(sizeof(XaviTreeNode))))
+	if (!(rVal = (XaviTreeNode*) malloc(sizeof(XaviTreeNode))))
 		return NULL;
 
 	rVal->type = XAVI_NODE_FLOAT;
@@ -110,16 +110,16 @@ XaviTreeNode *XaviTreeNewListBranch(XaviTreeNode * newChild)
 	XaviTreeBranch *rValBranch;
 	XaviTreeListNode *rValListNode;
 
-	if (!(rVal = malloc(sizeof(XaviTreeNode))))
+	if (!(rVal = (XaviTreeNode*) malloc(sizeof(XaviTreeNode))))
 		return NULL;
 
-	if (!(rValBranch = malloc(sizeof(XaviTreeBranch))))
+	if (!(rValBranch = (XaviTreeBranch*) malloc(sizeof(XaviTreeBranch))))
 	{
 		free(rVal);
 		return NULL;
 	}
 
-	if (!(rValListNode = malloc(sizeof(XaviTreeListNode))))
+	if (!(rValListNode = (XaviTreeListNode*) malloc(sizeof(XaviTreeListNode))))
 	{
 		free(rVal->branch);
 		free(rVal);
@@ -142,8 +142,8 @@ XaviTreeNode *XaviTreeNewVectorBranch(char *id, int count, XaviTreeNode **childr
 	XaviTreeNode *rVal;
 	XaviTreeBranch *rValBranch;
 
-	rVal = malloc(sizeof(XaviTreeNode));
-	rValBranch = malloc(sizeof(XaviTreeBranch));
+	rVal = (XaviTreeNode*) malloc(sizeof(XaviTreeNode));
+	rValBranch = (XaviTreeBranch*) malloc(sizeof(XaviTreeBranch));
 
 	if (!rVal || !rValBranch)
 	{
@@ -164,7 +164,7 @@ XaviTreeNode *XaviTreeNewVectorBranch(char *id, int count, XaviTreeNode **childr
 XaviTreeNode *XaviTreeNewError(void)
 {
 	XaviTreeNode *rVal;
-	if ((rVal = malloc(sizeof(XaviTreeNode))))
+	if ((rVal = (XaviTreeNode*) malloc(sizeof(XaviTreeNode))))
 	{
 		rVal->type = XAVI_NODE_ERROR;
 		rVal->i = 0;
@@ -222,7 +222,7 @@ static XaviValue EvaluateVectorBranch(XaviTreeBranch *branch)
 	if (branch->count)
 	{
 		if (!(arguments =
-			malloc(sizeof(XaviValue) * branch->count)))
+			(XaviValue*) malloc(sizeof(XaviValue) * branch->count)))
 		{
 			rVal.status = XE_MEMORY;
 			return rVal;
@@ -280,7 +280,7 @@ int XaviTreeCollapseBranch(XaviTreeNode *collapseNode)
 	XaviTreeListNode *next;
 	int i;
 
-	if ((newVector = malloc(collapseNode->branch->count * sizeof(XaviTreeNode *))))
+	if ((newVector = (XaviTreeNode**) malloc(collapseNode->branch->count * sizeof(XaviTreeNode *))))
 	{
 		current = collapseNode->branch->list;
 		for (i = 0; i < collapseNode->branch->count; i++)
@@ -304,7 +304,7 @@ int XaviTreePushFront(XaviTreeNode *mainBranch, XaviTreeNode *newNode)
 {
 	XaviTreeListNode *newListNode;
 
-	if (!(newListNode = malloc(sizeof(XaviTreeListNode))))
+	if (!(newListNode = (XaviTreeListNode*) malloc(sizeof(XaviTreeListNode))))
 		return 0;
 
 	newListNode->value = newNode;
@@ -321,7 +321,7 @@ int XaviTreePush(XaviTreeNode *mainNode, XaviTreeNode *newNode)
 	XaviTreeListNode *newListNode;
 	XaviTreeListNode *currentListNode;
 
-	if (!(newListNode = malloc(sizeof(XaviTreeListNode))))
+	if (!(newListNode = (XaviTreeListNode*) malloc(sizeof(XaviTreeListNode))))
 		return 0;
 
 	newListNode->value = newNode;

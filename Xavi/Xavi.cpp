@@ -19,9 +19,9 @@
  */
 
 #include "Xavi.h"
-#include "XaviFunctionCall.h"
-#include "XaviParser.h"
-#include "XaviValue.h"
+#include "FunctionCall.hpp"
+#include "Parser.hpp"
+#include "XaviValue.hpp"
 
 void XaviOpen(void)
 {

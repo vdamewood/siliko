@@ -8,14 +8,14 @@ endif()
 
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
-  XaviFunctionCall.h
-  XaviTree.h XaviValue.h
-  XaviParser.h XaviLexer.h)
+  FunctionCall.hpp
+  SyntaxTree.hpp XaviValue.hpp
+  Parser.hpp Lexer.hpp)
 set(Xavi_SOURCES
-  Xavi.c
-  XaviFunctionCall.c
-  XaviTree.c
-  XaviParser.c XaviLexer.c)
+  Xavi.cpp
+  FunctionCall.cpp
+  SyntaxTree.cpp
+  Parser.cpp Lexer.cpp)
 
 add_library(Xavi
   ${Xavi_PUBLIC_HEADERS}

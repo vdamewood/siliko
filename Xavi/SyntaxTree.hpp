@@ -21,7 +21,7 @@
 #if !defined Xavi_TREE_H
 #define Xavi_TREE_H
 
-#include "XaviValue.h"
+#include "XaviValue.hpp"
 
 enum XaviTreeNodeType
 {

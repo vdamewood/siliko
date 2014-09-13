@@ -21,7 +21,7 @@
 #if !defined Xavi_FUNCTIONS_H
 #define Xavi_FUNCTIONS_H
 
-#include "XaviValue.h"
+#include "XaviValue.hpp"
 
 int XaviFunctionCallOpen();
 void XaviFunctionCallClose();

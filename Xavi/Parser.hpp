@@ -21,8 +21,8 @@
 #if !defined XAVI_PARSER_H
 #define XAVI_PARSER_H
 
-#include "XaviTree.h"
-#include "XaviLexer.h"
+#include "SyntaxTree.hpp"
+#include "Lexer.hpp"
 
 XaviValue XaviParse(XaviLexer * lexer);
 

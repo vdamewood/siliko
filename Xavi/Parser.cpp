@@ -21,14 +21,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "XaviParser.h"
-#include "XaviTree.h"
+#include "Parser.hpp"
+#include "SyntaxTree.hpp"
 
 static char *x_strdup(const char *string)
 {
 	char *rVal;
 
-	if ((rVal = malloc(strlen(string) + 1)))
+	if ((rVal = (char*) malloc(strlen(string) + 1)))
 		strcpy(rVal, string);
 
 	return rVal;
@@ -116,7 +116,7 @@ static XaviTreeNode *GetExpr0r(XaviLexer *lexer)
 		return NULL;
 	}
 
-	if (!(operands = malloc(2 * sizeof(XaviTreeNode *))))
+	if (!(operands = (XaviTreeNode**) malloc(2 * sizeof(XaviTreeNode *))))
 	{
 		free(operation);
 		XaviTreeDelete(leftValue);
@@ -213,7 +213,7 @@ static XaviTreeNode *GetExpr1r(XaviLexer *lexer)
 		return NULL;
 	}
 
-	if (!(operands = malloc(2 * sizeof(XaviTreeNode *))))
+	if (!(operands = (XaviTreeNode**) malloc(2 * sizeof(XaviTreeNode *))))
 	{
 		free(operation);
 		XaviTreeDelete(leftValue);
@@ -272,7 +272,7 @@ static XaviTreeNode *GetExpr2(XaviLexer *lexer)
 		return NULL;
 	}
 
-	if (!(operands = malloc(2 * sizeof(XaviTreeNode *))))
+	if (!(operands = (XaviTreeNode**) malloc(2 * sizeof(XaviTreeNode *))))
 	{
 		XaviTreeDelete(leftValue);
 		XaviTreeDelete(rest);
@@ -338,7 +338,7 @@ static XaviTreeNode *GetExpr3(XaviLexer *lexer)
 		return NULL;
 	}
 
-	if (!(operands = malloc(2 * sizeof(XaviTreeNode *))))
+	if (!(operands = (XaviTreeNode**) malloc(2 * sizeof(XaviTreeNode *))))
 	{
 		XaviTreeDelete(leftValue);
 		XaviTreeDelete(rest);

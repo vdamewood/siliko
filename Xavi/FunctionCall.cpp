@@ -24,8 +24,8 @@
 #include <string.h>
 #include <time.h>
 
-#include "XaviValue.h"
-#include "XaviFunctionCall.h"
+#include "XaviValue.hpp"
+#include "FunctionCall.hpp"
 
 static XaviValue XaviFunction_add(int argc, XaviValue *argv)
 {
@@ -687,7 +687,7 @@ typedef XaviValue (*FunctionPointer)(int, XaviValue *);
 
 #define FUNCTION_COUNT 22
 #define FUNCTION_MAX (FUNCTION_COUNT - 1)
-static char *functionNames[] =
+static const char *functionNames[] =
 {
 	"add", "subtract", "multiply", "divide",
 	"power", "dice",
@@ -709,7 +709,7 @@ static FunctionPointer functions[] =
 
 struct XaviFunctionChain
 {
-	char *id;
+	const char *id;
 	FunctionPointer function;
 	struct XaviFunctionChain *next;
 };
@@ -725,10 +725,10 @@ int XaviFunctionCallOpen()
 	XaviFunctionChain *currentChain;
 	XaviFunctionChain **tempTable;
 
-	if (!(functionTable = malloc(256 * sizeof(XaviFunctionChain))))
+	if (!(functionTable = (XaviFunctionChain**) malloc(256 * sizeof(XaviFunctionChain))))
 		return 0;
 
-	if (!(tempTable = malloc(FUNCTION_COUNT * sizeof(XaviFunctionChain))))
+	if (!(tempTable = (XaviFunctionChain**) malloc(FUNCTION_COUNT * sizeof(XaviFunctionChain))))
 	{
 		free(functionTable);
 		return 0;
@@ -737,7 +737,7 @@ int XaviFunctionCallOpen()
 	memoryError = 0;
 	for (i = 0; i<=FUNCTION_MAX; i++)
 	{
-		if (!(tempTable[i] = malloc(sizeof(XaviFunctionChain))))
+		if (!(tempTable[i] = (XaviFunctionChain*) malloc(sizeof(XaviFunctionChain))))
 		{
 			memoryError = -1;
 			break;

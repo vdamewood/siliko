@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "XaviLexer.h"
+#include "Lexer.hpp"
 
 /* Values taken from Google Calculator 2011-07-06 */
 #define EULER 2.71828183
@@ -58,7 +58,7 @@ static char * extractString
 	size_t length;
 
 	length = onePastEnd - startCharacter;
-	if (!(rVal = malloc(length+1)))
+	if (!(rVal = (char*) malloc(length+1)))
 		return NULL;
 	strncpy(rVal, startCharacter, length);
 	rVal[length] = '\0';
@@ -282,7 +282,7 @@ static void XaviLexerLoad(XaviLexer *lexer)
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_CHAR:
-		lexer->token = *lexer->location;
+		lexer->token = (XaviToken) *lexer->location;
 		lexer->value.i = 0;
 		dfaState = DFA_END;
 		break;
@@ -309,7 +309,7 @@ XaviLexer *XaviLexerNew(const char *inputString)
 {
 	XaviLexer *rVal;
 
-	if ((rVal = malloc(sizeof(XaviLexer))))
+	if ((rVal = (XaviLexer*) malloc(sizeof(XaviLexer))))
 	{
 		rVal->input = inputString;
 		rVal->location = rVal->input;
