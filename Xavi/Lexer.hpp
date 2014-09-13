@@ -21,46 +21,53 @@
 #if !defined XAVI_LEXER_H
 #define XAVI_LEXER_H
 
-enum XaviToken
+#include <string>
+
+namespace Xavi
 {
-	ERROR = -1,
-	UNSET = 0,
-	LPAREN = '(',
-	RPAREN = ')',
-	MULTIPLY = '*',
-	ADDITION = '+',
-	COMMA = ',',
-	SUBTRACT = '-',
-	DIVISION = '/',
-	EXPONENT = '^',
-	INTEGER = 256,
-	FLOAT,
-	ID,
-	EOL
+	// FIXME: Separate Token into its own type.
+	enum TokenType
+	{
+		ERROR = -1,
+		UNSET = 0,
+		LPAREN = '(',
+		RPAREN = ')',
+		MULTIPLY = '*',
+		ADDITION = '+',
+		COMMA = ',',
+		SUBTRACT = '-',
+		DIVISION = '/',
+		EXPONENT = '^',
+		INTEGER = 256,
+		FLOAT,
+		ID,
+		EOL
+	};
+
+	union TokenValue
+	{
+		char * s;
+		int i;
+		float f;
+	};
+
+	class Lexer
+	{
+	public:
+		Lexer(const char *InputString);
+		~Lexer();
+
+		TokenType GetToken(void);
+		TokenValue GetValue(void);
+		void Next(void);
+
+	private:
+		void Load(void);
+		const char *input;
+		const char *location;
+		TokenType token;
+		TokenValue value;
+	};
 };
-typedef enum XaviToken XaviToken;
 
-union XaviTokenValue
-{
-        char * s;
-        int i;
-        float f;
-};
-typedef union XaviTokenValue XaviTokenValue;
-
-struct XaviLexer
-{
-	const char * input;
-	const char * location;
-	XaviToken token;
-	XaviTokenValue value;
-};
-typedef struct XaviLexer XaviLexer;
-
-XaviLexer *XaviLexerNew(const char *inputString);
-void XaviLexerDestroy(XaviLexer **lexer);
-
-XaviToken XaviLexerGetToken(XaviLexer *lexer);
-XaviTokenValue XaviLexerGetValue(XaviLexer *lexer);
-void XaviLexerNext(XaviLexer *lexer);
 #endif /* XAVI_LEXER_H */

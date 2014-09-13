@@ -90,11 +90,13 @@ XaviResult XaviValueToResult(const XaviValue value)
 XaviResult XaviEvaluate(const char * inString)
 {
 	XaviResult rVal;
-	XaviLexer *lexer;
+	Xavi::Lexer *lexer;
 
-	lexer = XaviLexerNew(inString);
-	rVal = XaviValueToResult(XaviParse(lexer));
-	XaviLexerDestroy(&lexer);
+	lexer = new Xavi::Lexer(inString);
+
+	rVal = XaviValueToResult(Xavi::Parse(lexer));
+
+	delete lexer;
 
 	return rVal;
 }

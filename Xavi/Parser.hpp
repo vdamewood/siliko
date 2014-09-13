@@ -24,6 +24,8 @@
 #include "SyntaxTree.hpp"
 #include "Lexer.hpp"
 
-XaviValue XaviParse(XaviLexer * lexer);
-
+namespace Xavi
+{
+	XaviValue Parse(Lexer *lexer);
+};
 #endif /* XAVI_PARSER_H */
