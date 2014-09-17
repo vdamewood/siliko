@@ -29,7 +29,14 @@ Xavi::CStringSource::CStringSource(const char * NewSource)
 bool Xavi::CStringSource::Advance()
 {
 	if (Source[Index] != '\0')
+	{
 		Index++;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 char Xavi::CStringSource::GetCurrent()

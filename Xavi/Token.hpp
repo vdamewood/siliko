@@ -28,37 +28,42 @@ namespace Xavi
 	class Token
 	{
 	public:
-		enum TokenType
+		enum Type
 		{
 			ERROR = -1,
-			INTEGER = 0,
+			UNSET = 0,
+			LPAREN = '(',
+			RPAREN = ')',
+			MULTIPLY = '*',
+			ADDITION = '+',
+			COMMA = ',',
+			SUBTRACT = '-',
+			DIVISION = '/',
+			EXPONENT = '^',
+			INTEGER = 256,
 			FLOAT,
-			OPERATOR,
 			ID,
 			EOL
 		};
 
-		Token(TokenType);
+		Token(Type ValuelessType);
 		Token(int IntegerValue);
 		Token(float FloatValue);
-		Token(char OperatorValue);
 		Token(const std::string &IdValue);
 		Token(const char *IdValue);
 		~Token(void);
 
-		TokenType   GetType(void);
-		int         GetIntegerValue(void);
-		float       GetFloatValue(void);
-		char        GetOperatorValue(void);
-		std::string GetIdValue(void);
+		Type              GetType(void);
+		int               GetIntegerValue(void);
+		float             GetFloatValue(void);
+		const std::string &GetIdValue(void);
 
 	private:
-		TokenType Type;
+		Type MyType;
 		union
 		{
 			int IntegerValue;
 			float FloatValue;
-			char OperatorValue;
 			std::string *IdValue;
 		};
 	};

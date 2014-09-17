@@ -21,53 +21,26 @@
 #if !defined XAVI_LEXER_H
 #define XAVI_LEXER_H
 
-#include <string>
+#include <memory>
 
 #include "DataSource.hpp"
+#include "Token.hpp"
 
 namespace Xavi
 {
-	// FIXME: Separate Token into its own type.
-	enum TokenType
-	{
-		ERROR = -1,
-		UNSET = 0,
-		LPAREN = '(',
-		RPAREN = ')',
-		MULTIPLY = '*',
-		ADDITION = '+',
-		COMMA = ',',
-		SUBTRACT = '-',
-		DIVISION = '/',
-		EXPONENT = '^',
-		INTEGER = 256,
-		FLOAT,
-		ID,
-		EOL
-	};
-
-	union TokenValue
-	{
-		std::string *s;
-		int i;
-		float f;
-	};
-
 	class Lexer
 	{
 	public:
 		Lexer(DataSource *InputSource);
 		~Lexer();
 
-		TokenType GetToken(void);
-		TokenValue GetValue(void);
+		Token &GetToken(void);
 		void Next(void);
 
 	private:
 		void Load(void);
 		DataSource *Source;
-		TokenType token;
-		TokenValue value;
+		Token* token;
 	};
 };
 

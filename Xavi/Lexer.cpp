@@ -1,5 +1,5 @@
 /*
- * XaviLexer.c: Lexical analyzer
+ * XaviLexer.cpp: Lexical analyzer
  * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,10 +18,7 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include <cstdlib>
 #include <string>
 
 #include "Lexer.hpp"
@@ -47,7 +44,7 @@ static int isOperator(int character)
 
 static int isIdCharacter(int character)
 {
-	return (isalnum(character) || character == '_');
+	return (std::isalnum(character) || character == '_');
 }
 
 enum XaviDfaState
@@ -70,15 +67,16 @@ enum XaviDfaState
 	DFA_TERM_EOI,
 	DFA_END
 };
-typedef enum XaviDfaState XaviDfaState;
 
 void Xavi::Lexer::Load(void)
 {
 	XaviDfaState dfaState = DFA_START;
 	std::string lexeme = std::string();
 
-	if (token == EOL || token == ERROR)
+	if (token->GetType() == Token::EOL || token->GetType() == Token::ERROR)
 		return;
+
+	delete token;
 
 	while (dfaState != DFA_END)
 	switch (dfaState)
@@ -110,19 +108,19 @@ void Xavi::Lexer::Load(void)
 			Source->Advance();
 			dfaState = DFA_PI_1;
 		}
-		else if (isdigit(Source->GetCurrent()))
+		else if (std::isdigit(Source->GetCurrent()))
 		{
 			lexeme += Source->GetCurrent();
 			Source->Advance();
 			dfaState = DFA_INTEGER;
 		}
-		else if (isalpha(Source->GetCurrent()))
+		else if (std::isalpha(Source->GetCurrent()))
 		{
 			lexeme += Source->GetCurrent();
 			Source->Advance();
 			dfaState = DFA_ID;
 		}
-		else if (isspace(Source->GetCurrent()))
+		else if (std::isspace(Source->GetCurrent()))
 		{
 			Source->Advance();
 		}
@@ -136,7 +134,7 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_DICE:
-		if (isalpha(Source->GetCurrent()))
+		if (std::isalpha(Source->GetCurrent()))
 		{
 			lexeme += Source->GetCurrent();
 			Source->Advance();
@@ -148,7 +146,7 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_E:
-		if (isalnum(Source->GetCurrent()))
+		if (std::isalnum(Source->GetCurrent()))
 		{
 			lexeme += Source->GetCurrent();
 			Source->Advance();
@@ -207,7 +205,7 @@ void Xavi::Lexer::Load(void)
 			Source->Advance();
 			dfaState = DFA_FLOAT;
 		}
-		else if (isdigit(Source->GetCurrent()))
+		else if (std::isdigit(Source->GetCurrent()))
 		{
 			lexeme += Source->GetCurrent();
 			Source->Advance();
@@ -218,7 +216,7 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_FLOAT:
-		if (isdigit(Source->GetCurrent()))
+		if (std::isdigit(Source->GetCurrent()))
 		{
 			lexeme += Source->GetCurrent();
 			Source->Advance();
@@ -229,43 +227,35 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_TERM_INTEGER:
-		token = INTEGER;
-		value.i = atoi(lexeme.c_str());
+		token = new Token(atoi(lexeme.c_str()));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_FLOAT:
-		token = FLOAT;
-		value.f = atof(lexeme.c_str());
+		token = new Token(static_cast<float>(atof(lexeme.c_str())));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
-		token = FLOAT;
-		value.f = EULER;
+		token = new Token(static_cast<float>(EULER));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_PI:
-		token = FLOAT;
-		value.f = PI;
+		token = new Token(static_cast<float>(PI));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_CHAR:
-		token = (TokenType) lexeme[0];
-		value.i = 0;
+		token = new Token(static_cast<Token::Type>(lexeme[0]));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_STRING:
-		token = ID;
-		value.s =  new std::string(lexeme);
+		token = new Token(lexeme);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_EOI:
-		token = EOL;
-		value.i = 0;
+		token = new Token(Token::EOL);
 		dfaState = DFA_END;
 		break;
 	case DFA_ERROR:
-		token = ERROR;
-		value.i = 0;
+		token = new Token(Token::ERROR);
 		dfaState = DFA_END;
 		break;
 	}
@@ -274,55 +264,21 @@ void Xavi::Lexer::Load(void)
 Xavi::Lexer::Lexer(DataSource * InputSource)
 {
 	Source = InputSource;
-	token = UNSET;
-	value.i = 0;
+	token = new Token(Token::UNSET);
+	Next();
 }
 
 Xavi::Lexer::~Lexer(void)
 {
-	if (token == ID)
-		delete value.s;
+	delete token;
 }
 
-Xavi::TokenType Xavi::Lexer::GetToken(void)
+Xavi::Token &Xavi::Lexer::GetToken(void)
 {
-	if (token == UNSET)
-		Load();
-
-	return token;
-}
-
-Xavi::TokenValue Xavi::Lexer::GetValue(void)
-{
-	TokenValue rVal;
-	if (token == UNSET)
-		Load();
-
-	switch (token)
-	{
-	case INTEGER:
-		rVal.i = value.i;
-		break;
-	case FLOAT:
-		rVal.f = value.f;
-		break;
-	case ID:
-		rVal.s = value.s;
-		break;
-	default:
-		rVal.i = token;
-	}
-	return rVal;
+	return *token;
 }
 
 void Xavi::Lexer::Next(void)
 {
-	if (token == ID)
-		delete value.s;
-
-	if (token != EOL && token != ERROR)
-	{
-		token = UNSET;
-		value.i = 0;
-	}
+	Load();
 }
