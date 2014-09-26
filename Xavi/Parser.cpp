@@ -18,22 +18,10 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-#include <string.h>
 #include <typeinfo>
 
 #include "Parser.hpp"
 #include "SyntaxTree.hpp"
-
-static char *x_strdup(const char *string)
-{
-	char *rVal;
-
-	if ((rVal = (char*) malloc(strlen(string) + 1)))
-		strcpy(rVal, string);
-
-	return rVal;
-}
 
 static Xavi::SyntaxTreeNode *GetExpr0(Xavi::Lexer *lexer);
 static Xavi::BranchNode     *GetExpr0r(Xavi::Lexer *lexer);
@@ -48,7 +36,6 @@ static Xavi::SyntaxTreeNode *GetNumber(Xavi::Lexer *lexer);
 static Xavi::SyntaxTreeNode *GetUNumber(Xavi::Lexer *lexer);
 static Xavi::SyntaxTreeNode *GetFCall(Xavi::Lexer *lexer);
 static Xavi::BranchNode *GetArguments(Xavi::Lexer *lexer);
-//static Xavi::SyntaxTreeNode *GetNextArgument(Xavi::Lexer *lexer);
 
 static Xavi::SyntaxTreeNode *GetExpr0(Xavi::Lexer *lexer)
 {
@@ -337,52 +324,7 @@ static Xavi::BranchNode *GetArguments(Xavi::Lexer *lexer)
 	}
 
 	return rVal;
-/*
-	switch (lexer->GetToken().GetType())
-	{
-		case ',':
-			lexer->Next();
-			rest = GetArguments(lexer);
-		case ')':
-			rest = 0;
-		default:
-			rest = new Xavi::SyntaxErrorNode();
-	}
-
-	if (rest == 0)
-	{
-	}
-	if (typeid(rest) == typeid(Xavi::BranchNode))
-	{
-		rest.PushLeft(expression);
-	}
-	else if (typeid(rest) == typeid(Xavi::SyntaxErrorNode))
-	{
-		delete expression;
-	}
-	else
-	{
-		delete expression;
-		delete rest;
-		rest = XaviTreeNewError();
-	}
-
-	return rest;*/
 }
-
-/*static Xavi::SyntaxTreeNode *GetNextArgument(Xavi::Lexer *lexer)
-{
-	switch (lexer->GetToken().GetType())
-	{
-	case ',':
-		lexer->Next();
-		return GetArguments(lexer);
-	case ')':
-		return 0;
-	default:
-		return new Xavi::SyntaxErrorNode();
-	}
-}*/
 
 XaviValue Xavi::Parse(Xavi::Lexer *lexer)
 {
