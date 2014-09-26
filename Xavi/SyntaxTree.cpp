@@ -23,34 +23,179 @@
 #include "SyntaxTree.hpp"
 #include "FunctionCall.hpp"
 
-int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left)
+Xavi::SyntaxTreeNode::~SyntaxTreeNode()
 {
-	if (parent->type == XAVI_NODE_VECTOR_BRANCH)
+}
+
+Xavi::IntegerNode::IntegerNode(int NewValue)
+{
+	Value = NewValue;
+}
+
+XaviValue Xavi::IntegerNode::GetValue()
+{
+	XaviValue rVal;
+	rVal.status = XS_INTEGER;
+	rVal.i = Value;
+	return rVal;
+}
+
+void Xavi::IntegerNode::Negate()
+{
+	Value *= -1;
+}
+
+Xavi::FloatNode::FloatNode(float NewValue)
+{
+	Value = NewValue;
+}
+
+XaviValue Xavi::FloatNode::GetValue()
+{
+	XaviValue rVal;
+	rVal.status = XS_FLOAT;
+	rVal.f = Value;
+	return rVal;
+}
+
+void Xavi::FloatNode::Negate()
+{
+	Value *= -1.0;
+}
+
+Xavi::BranchNode::BranchNode(void)
+{
+	Children = std::list<Xavi::SyntaxTreeNode *>();
+	IsNegated = false;
+}
+
+Xavi::BranchNode::BranchNode(std::string NewId)
+{
+	Children = std::list<Xavi::SyntaxTreeNode *>();
+	IsNegated = false;
+	FunctionId = NewId;
+}
+
+void Xavi::BranchNode::SetId(std::string NewId)
+{
+	FunctionId = NewId;
+}
+
+XaviValue Xavi::BranchNode::GetValue()
+{
+	XaviValue rVal;
+	XaviValue *arguments = NULL;
+
+	if (Children.size())
 	{
-		if (parent->branch->count == 0)
+		if (!(arguments =
+			(XaviValue*) malloc(sizeof(XaviValue) * Children.size())))
 		{
-			return 0;
+			rVal.status = XE_MEMORY;
+			return rVal;
 		}
-		else if (parent->branch->vector[0] == NULL)
+
+		std::list<Xavi::SyntaxTreeNode *>::iterator i;
+		int j;
+		for
+		(
+			i = Children.begin(), j = 0;
+			i != Children.end();
+			i++, j++
+		)
 		{
-			parent->branch->vector[0] = left;
-			return -1;
+			XaviValue Current = (*i)->GetValue();
+			if (Current.status != XS_INTEGER && Current.status != XS_FLOAT)
+			{
+				free(arguments);
+				return Current;
+			}
+			else
+			{
+				arguments[j] = Current;
+			}
 		}
-		else
-		{
-			return XaviTreeGraftLeft
-			(
-				parent->branch->vector[0],
-				left
-			);
-		}
+	}
+
+	rVal = XaviFunctionCall(FunctionId.c_str(), Children.size(), arguments);
+	free(arguments);
+	return rVal;
+}
+
+void Xavi::BranchNode::Negate()
+{
+	IsNegated = !IsNegated;
+}
+
+void Xavi::BranchNode::PushLeft(Xavi::SyntaxTreeNode *NewChild)
+{
+	Children.push_front(NewChild);
+}
+
+void Xavi::BranchNode::PushRight(Xavi::SyntaxTreeNode *NewChild)
+{
+	Children.push_back(NewChild);
+}
+
+
+bool Xavi::BranchNode::GraftLeft(Xavi::SyntaxTreeNode *NewChild)
+{
+	if (Children.size() == 0)
+	{
+		return false;
+	}
+	else if (Children.front() == 0)
+	{
+		Children.front() = NewChild;
+		return true;
 	}
 	else
 	{
-		return 0;
+		if (BranchNode *ChildBranch = dynamic_cast<BranchNode*>(Children.front()))
+			return ChildBranch->GraftLeft(NewChild);
+		else
+			return false;
 	}
 }
 
+bool Xavi::BranchNode::GraftRight(Xavi::SyntaxTreeNode *NewChild)
+{
+	if (Children.size() == 0)
+	{
+		return false;
+	}
+	else if (Children.back() == 0)
+	{
+		Children.back() = NewChild;
+		return true;
+	}
+	else
+	{
+		if (BranchNode *ChildBranch = dynamic_cast<BranchNode*>(Children.back()))
+			return ChildBranch->GraftRight(NewChild);
+		else
+			return false;
+	}
+}
+
+Xavi::SyntaxErrorNode::~SyntaxErrorNode(void)
+{
+}
+
+XaviValue Xavi::SyntaxErrorNode::GetValue(void)
+{
+	XaviValue rVal;
+	rVal.status = XE_SYNTAX;
+	rVal.i = 0;
+	return rVal;
+}
+
+void Xavi::SyntaxErrorNode::Negate(void)
+{
+}
+
+
+/*
 int XaviTreeNegate(XaviTreeNode *tree)
 {
 	if (tree == NULL)
@@ -67,8 +212,9 @@ int XaviTreeNegate(XaviTreeNode *tree)
 	default:
 		return 0;
 	}
-}
+}*/
 
+/*
 XaviTreeNode *XaviTreeNewNothing(void)
 {
 	XaviTreeNode *rVal;
@@ -79,8 +225,9 @@ XaviTreeNode *XaviTreeNewNothing(void)
 	}
 	return rVal;
 }
+*/
 
-XaviTreeNode *XaviTreeNewInteger(int value)
+/*XaviTreeNode *XaviTreeNewInteger(int value)
 {
 	XaviTreeNode *rVal;
 
@@ -336,3 +483,4 @@ int XaviTreePush(XaviTreeNode *mainNode, XaviTreeNode *newNode)
 
 	return 1;
 }
+*/

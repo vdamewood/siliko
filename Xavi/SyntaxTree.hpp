@@ -21,66 +21,67 @@
 #if !defined Xavi_TREE_H
 #define Xavi_TREE_H
 
+#include <string>
+#include <list>
+
 #include "XaviValue.hpp"
 
-enum XaviTreeNodeType
+namespace Xavi
 {
-	XAVI_NODE_ERROR = -1,
-	XAVI_NODE_NOTHING = 0,
-	XAVI_NODE_INTEGER,
-	XAVI_NODE_FLOAT,
-	XAVI_NODE_VECTOR_BRANCH,
-	XAVI_NODE_LIST_BRANCH
-};
-typedef enum XaviTreeNodeType XaviTreeNodeType;
-
-struct XaviTreeNode;
-typedef struct XaviTreeNode XaviTreeNode;
-
-struct XaviTreeListNode;
-typedef struct XaviTreeListNode XaviTreeListNode;
-
-struct XaviTreeListNode
-{
-	XaviTreeNode *value;
-	XaviTreeListNode *next;
-};
-
-struct XaviTreeBranch
-{
-	char *id;
-	int count;
-	union
+	class SyntaxTreeNode
 	{
-		XaviTreeListNode *list;
-		XaviTreeNode **vector;
+	public:
+		virtual ~SyntaxTreeNode(void);
+		virtual XaviValue GetValue(void) = 0;
+		virtual void Negate(void) = 0;
 	};
-};
-typedef struct XaviTreeBranch XaviTreeBranch;
 
-struct XaviTreeNode
-{
-	XaviTreeNodeType type;
-	union
+	class IntegerNode : public SyntaxTreeNode
 	{
-		int i;
-		float f;
-		XaviTreeBranch *branch;
+	public:
+		IntegerNode(int NewValue);
+		virtual XaviValue GetValue(void);
+		virtual void Negate(void);
+	private:
+		int Value;
 	};
-};
 
-XaviTreeNode *XaviTreeNewError(void);
-XaviTreeNode *XaviTreeNewFloat(float Value);
-XaviTreeNode *XaviTreeNewInteger(int Value);
-XaviTreeNode *XaviTreeNewListBranch(XaviTreeNode *NewChild);
-XaviTreeNode *XaviTreeNewNothing(void);
-XaviTreeNode *XaviTreeNewVectorBranch(char *id, int count, XaviTreeNode **Children);
-void XaviTreeDelete(XaviTreeNode *TreeToDelete);
+	class FloatNode : public SyntaxTreeNode
+	{
+	public:
+		FloatNode(float NewValue);
+		virtual XaviValue GetValue(void);
+		virtual void Negate(void);
+	private:
+		float Value;
+	};
 
-XaviValue XaviTreeEvaluate(XaviTreeNode *TreeToEvaluate);
-int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left);
-int XaviTreeNegate(XaviTreeNode *TreeToNegate);
-int XaviTreeCollapseBranch(XaviTreeNode *TreeToCollapse);
-int XaviTreePushFront(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
-int XaviTreePush(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
+	class BranchNode : public SyntaxTreeNode
+	{
+	public:
+		BranchNode(void);
+		BranchNode(std::string NewFunctionId);
+		virtual XaviValue GetValue(void);
+		virtual void Negate(void);
+
+		void SetId(std::string NewId);
+		void PushLeft(SyntaxTreeNode *);
+		void PushRight(SyntaxTreeNode *);
+		bool GraftLeft(SyntaxTreeNode *);
+		bool GraftRight(SyntaxTreeNode *);
+	private:
+		bool IsNegated;
+		std::string FunctionId;
+		std::list<SyntaxTreeNode *> Children;
+	};
+
+	class SyntaxErrorNode : public SyntaxTreeNode
+	{
+	public:
+		virtual ~SyntaxErrorNode(void);
+		virtual XaviValue GetValue(void);
+		virtual void Negate(void);
+	};
+}
+
 #endif // Xavi_TREE_H

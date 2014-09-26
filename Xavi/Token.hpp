@@ -53,9 +53,9 @@ namespace Xavi
 		Token(const char *IdValue);
 		~Token(void);
 
-		Type              GetType(void);
-		int               GetIntegerValue(void);
-		float             GetFloatValue(void);
+		Type               GetType(void);
+		int                GetIntegerValue(void);
+		float              GetFloatValue(void);
 		const std::string &GetIdValue(void);
 
 	private:
