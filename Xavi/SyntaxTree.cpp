@@ -18,7 +18,7 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
+#include <vector>
 
 #include "SyntaxTree.hpp"
 #include "FunctionCall.hpp"
@@ -83,43 +83,22 @@ void Xavi::BranchNode::SetId(std::string NewId)
 
 XaviValue Xavi::BranchNode::GetValue()
 {
-	XaviValue rVal;
-	XaviValue *arguments = NULL;
+	std::vector<XaviValue> Arguments;
 
 	if (Children.size())
 	{
-		if (!(arguments =
-			(XaviValue*) malloc(sizeof(XaviValue) * Children.size())))
-		{
-			rVal.status = XE_MEMORY;
-			return rVal;
-		}
-
 		std::list<Xavi::SyntaxTreeNode *>::iterator i;
-		int j;
-		for
-		(
-			i = Children.begin(), j = 0;
-			i != Children.end();
-			i++, j++
-		)
+		for (i = Children.begin(); i != Children.end(); i++)
 		{
 			XaviValue Current = (*i)->GetValue();
 			if (Current.status != XS_INTEGER && Current.status != XS_FLOAT)
-			{
-				free(arguments);
 				return Current;
-			}
-			else
-			{
-				arguments[j] = Current;
-			}
+
+			Arguments.push_back(Current);
 		}
 	}
 
-	rVal = XaviFunctionCall(FunctionId.c_str(), Children.size(), arguments);
-	free(arguments);
-	return rVal;
+	return Xavi::Functions::Call(FunctionId, Arguments);
 }
 
 void Xavi::BranchNode::Negate()

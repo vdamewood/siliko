@@ -24,6 +24,9 @@
 #include <string.h>
 #include <time.h>
 
+#include <string>
+#include <vector>
+
 #include "XaviValue.hpp"
 #include "FunctionCall.hpp"
 
@@ -654,7 +657,7 @@ static XaviValue XaviFunction_tanh(int argc, XaviValue *argv)
 
 ////////////////////////////////////////////////////////////////////////
 
-unsigned char XaviHash(const unsigned char *rawInput, size_t length)
+static unsigned char Hash(const unsigned char *rawInput, size_t length)
 {
 	const unsigned char divisor = 0xD5;
 	unsigned char result = 0x00;
@@ -717,7 +720,7 @@ typedef struct XaviFunctionChain XaviFunctionChain;
 
 static XaviFunctionChain **functionTable;
 
-int XaviFunctionCallOpen()
+int Xavi::Functions::Open()
 {
 	int i;
 	int memoryError;
@@ -757,7 +760,7 @@ int XaviFunctionCallOpen()
 
 	for (i = 0; i <= FUNCTION_MAX; i++)
 	{
-		index = XaviHash((const unsigned char *)functionNames[i], strlen(functionNames[i]));
+		index = Hash((const unsigned char *)functionNames[i], strlen(functionNames[i]));
 		tempTable[i]->id = functionNames[i];
 		tempTable[i]->function = functions[i];
 		tempTable[i]->next = NULL;
@@ -779,7 +782,7 @@ int XaviFunctionCallOpen()
 	return -11;
 }
 
-void XaviFunctionCallClose()
+void Xavi::Functions::Close()
 {
 	int i;
 	XaviFunctionChain * current;
@@ -806,16 +809,16 @@ void XaviFunctionCallClose()
 	}
 }
 
-static FunctionPointer GetFunction(const char *name)
+static FunctionPointer GetFunction(std::string Name)
 {
 	int index;
 	XaviFunctionChain *current;
 
-	index = XaviHash((const unsigned char *)name, strlen(name));
+	index = Hash((const unsigned char *)Name.c_str(), Name.size());
 	current = functionTable[index];
 
 	while (current)
-		if (strcmp(name, current->id) != 0)
+		if (strcmp(Name.c_str(), current->id) != 0)
 			current = current->next;
 		else
 			break;
@@ -826,17 +829,17 @@ static FunctionPointer GetFunction(const char *name)
 		return NULL;
 }
 
-XaviValue XaviFunctionCall(const char *name, int argc, XaviValue *argv)
+XaviValue Xavi::Functions::Call(std::string Name, std::vector<XaviValue> Args)
 {
-	FunctionPointer f;
+	FunctionPointer Function;
 	XaviValue rVal;
 
-	f = GetFunction(name);
+	Function = GetFunction(Name);
 
-	if (!f)
+	if (!Function)
 		rVal.status = XE_FUNCTION;
 	else
-		rVal = f(argc, argv);
+		rVal = Function(Args.size(), Args.data());
 
 	return rVal;
 }

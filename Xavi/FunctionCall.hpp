@@ -21,10 +21,18 @@
 #if !defined Xavi_FUNCTIONS_H
 #define Xavi_FUNCTIONS_H
 
+#include <string>
+#include <vector>
+
 #include "XaviValue.hpp"
 
-int XaviFunctionCallOpen();
-void XaviFunctionCallClose();
-XaviValue XaviFunctionCall(const char *FunctionName, int ArgumentCount, XaviValue *Arguments);
-
+namespace Xavi
+{
+	namespace Functions
+	{
+		int Open();
+		void Close();
+		XaviValue Call(std::string FunctionName, std::vector<XaviValue> Arguments);
+	};
+};
 #endif // Xavi_FUNCTIONS_H
