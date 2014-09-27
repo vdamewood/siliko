@@ -271,6 +271,7 @@ Xavi::Lexer::Lexer(DataSource * InputSource)
 Xavi::Lexer::~Lexer(void)
 {
 	delete token;
+	delete Source;
 }
 
 Xavi::Token &Xavi::Lexer::GetToken(void)
