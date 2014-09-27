@@ -31,7 +31,8 @@ namespace Xavi
 	public:
 		InfixParser(Xavi::Lexer *NewLexer);
 		~InfixParser(void);
-		XaviValue Parse(void);
+		void *Parse(void);
+		SyntaxTreeNode &SyntaxTree(void);
 	private:
 		Xavi::SyntaxTreeNode *GetExpr0(void);
 		Xavi::BranchNode     *GetExpr0r(void);
@@ -48,6 +49,7 @@ namespace Xavi
 		Xavi::BranchNode     *GetArguments(void);
 
 		Lexer *MyLexer;
+		SyntaxTreeNode *MySyntaxTree;
 	};
 };
 #endif /* XAVI_PARSER_H */

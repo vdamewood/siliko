@@ -26,6 +26,7 @@
 Xavi::InfixParser::InfixParser(Xavi::Lexer *NewLexer)
 {
 	MyLexer = NewLexer;
+	MySyntaxTree = 0;
 }
 
 Xavi::InfixParser::~InfixParser(void)
@@ -33,29 +34,33 @@ Xavi::InfixParser::~InfixParser(void)
 	delete MyLexer;
 }
 
-XaviValue Xavi::InfixParser::Parse(void)
+void *Xavi::InfixParser::Parse(void)
 {
-	XaviValue rVal;
-	if (MyLexer->GetToken().GetType() == Token::EOL)
+	if (!MySyntaxTree)
 	{
-		rVal.status = XS_INTEGER;
-		rVal.i = 0;
-		return rVal;
+		if (MyLexer->GetToken().GetType() == Token::EOL)
+		{
+			MySyntaxTree = new Xavi::IntegerNode(0);
+		}
+		else
+		{
+			MySyntaxTree = GetExpr0();
+			if (MyLexer->GetToken().GetType() != Token::EOL
+				&& typeid(MySyntaxTree) != typeid(Xavi::SyntaxErrorNode))
+			{
+				delete MySyntaxTree;
+				MySyntaxTree = new SyntaxErrorNode();
+			}
+		}
 	}
+}
 
-	Xavi::SyntaxTreeNode *syntaxTree = GetExpr0();
-	if (typeid(syntaxTree) == typeid(Xavi::SyntaxErrorNode)
-		|| MyLexer->GetToken().GetType() != Token::EOL)
-	{
-		rVal.status = XE_SYNTAX;
-		rVal.i = 0;
-	}
-	else
-	{
-		rVal = syntaxTree->GetValue();
-	}
-	delete syntaxTree;
-	return rVal;
+Xavi::SyntaxTreeNode &Xavi::InfixParser::SyntaxTree(void)
+{
+	if (!MySyntaxTree)
+		Parse();
+
+	return *MySyntaxTree;
 }
 
 Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr0(void)
