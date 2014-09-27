@@ -26,6 +26,28 @@
 
 namespace Xavi
 {
-	XaviValue Parse(Lexer *lexer);
+	class InfixParser
+	{
+	public:
+		InfixParser(Xavi::Lexer *NewLexer);
+		~InfixParser(void);
+		XaviValue Parse(void);
+	private:
+		Xavi::SyntaxTreeNode *GetExpr0(void);
+		Xavi::BranchNode     *GetExpr0r(void);
+		Xavi::SyntaxTreeNode *GetExpr1(void);
+		Xavi::BranchNode     *GetExpr1r(void);
+		Xavi::SyntaxTreeNode *GetExpr2(void);
+		Xavi::SyntaxTreeNode *GetExpr2lf(void);
+		Xavi::SyntaxTreeNode *GetExpr3(void);
+		Xavi::SyntaxTreeNode *GetExpr3lf(void);
+		Xavi::SyntaxTreeNode *GetAtom(void);
+		Xavi::SyntaxTreeNode *GetNumber(void);
+		Xavi::SyntaxTreeNode *GetUNumber(void);
+		Xavi::SyntaxTreeNode *GetFCall(void);
+		Xavi::BranchNode     *GetArguments(void);
+
+		Lexer *MyLexer;
+	};
 };
 #endif /* XAVI_PARSER_H */

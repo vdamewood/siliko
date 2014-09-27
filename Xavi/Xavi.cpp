@@ -90,9 +90,7 @@ XaviResult XaviValueToResult(const XaviValue value)
 
 XaviResult XaviEvaluate(const char * InputString)
 {
-	Xavi::Lexer *Lexer = new Xavi::Lexer(new Xavi::StringSource(InputString));
-	XaviResult rVal = XaviValueToResult(Xavi::Parse(Lexer));
-
-	delete Lexer;
+	Xavi::InfixParser parser(new Xavi::Lexer(new Xavi::StringSource(InputString)));
+	XaviResult rVal = XaviValueToResult(parser.Parse());
 	return rVal;
 }
