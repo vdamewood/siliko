@@ -18,19 +18,25 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CStringSource.hpp"
+#include "StringSource.hpp"
 
-Xavi::CStringSource::CStringSource(const char * NewSource)
+Xavi::StringSource::StringSource(const std::string NewSource)
 {
 	Source = NewSource;
-	Index = 0;
+	Iterator = Source.begin();
 }
 
-bool Xavi::CStringSource::Advance()
+Xavi::StringSource::StringSource(const char * NewSource)
 {
-	if (Source[Index] != '\0')
+	Source = std::string(NewSource);
+	Iterator = Source.begin();
+}
+
+bool Xavi::StringSource::Advance()
+{
+	if (Iterator != Source.end())
 	{
-		Index++;
+		Iterator++;
 		return true;
 	}
 	else
@@ -39,12 +45,12 @@ bool Xavi::CStringSource::Advance()
 	}
 }
 
-char Xavi::CStringSource::GetCurrent()
+char Xavi::StringSource::GetCurrent()
 {
-	return Source[Index];
+	return *Iterator;
 }
 
-Xavi::CStringSource::~CStringSource()
+Xavi::StringSource::~StringSource()
 {
 	// Do Nothing
 }

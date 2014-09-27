@@ -12,7 +12,7 @@ set(Xavi_INTERNAL_HEADERS
   FunctionCall.hpp
   SyntaxTree.hpp
   DataSource.hpp
-  CStringSource.cpp
+  StringSource.cpp
   Token.hpp
   Lexer.hpp
   Parser.hpp
@@ -20,7 +20,7 @@ set(Xavi_INTERNAL_HEADERS
 set(Xavi_SOURCES
   FunctionCall.cpp
   SyntaxTree.cpp
-  CStringSource.cpp
+  StringSource.cpp
   Token.cpp
   Lexer.cpp
   Parser.cpp

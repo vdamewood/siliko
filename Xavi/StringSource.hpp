@@ -18,24 +18,27 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined CSTRINGSOURCE_HPP
-#define CSTRINGSOURCE_HPP
+#if !defined STRINGSOURCE_HPP
+#define STRINGSOURCE_HPP
+
+#include <string>
 
 #include "DataSource.hpp"
 
 namespace Xavi
 {
-	class CStringSource : public DataSource
+	class StringSource : public DataSource
 	{
 	public:
-		CStringSource(const char *);
+		StringSource(std::string);
+		StringSource(const char *);
 		virtual bool Advance();
 		virtual char GetCurrent();
-		virtual ~CStringSource();
+		virtual ~StringSource();
 
 	private:
-		const char *Source;
-		int Index;
+		std::string Source;
+		std::string::iterator Iterator;
 	};
 };
 

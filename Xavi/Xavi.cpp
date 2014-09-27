@@ -22,7 +22,7 @@
 #include "FunctionCall.hpp"
 #include "Parser.hpp"
 #include "XaviValue.hpp"
-#include "CStringSource.hpp"
+#include "StringSource.hpp"
 
 void XaviOpen(void)
 {
@@ -90,7 +90,7 @@ XaviResult XaviValueToResult(const XaviValue value)
 
 XaviResult XaviEvaluate(const char * InputString)
 {
-	Xavi::DataSource *InputSource = new Xavi::CStringSource(InputString);
+	Xavi::DataSource *InputSource = new Xavi::StringSource(InputString);
 	Xavi::Lexer *Lexer = new Xavi::Lexer(InputSource);
 	XaviResult rVal = XaviValueToResult(Xavi::Parse(Lexer));
 
