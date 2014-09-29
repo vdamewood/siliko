@@ -21,12 +21,9 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
-#include <string>
 #include <limits>
-#include <vector>
 
 #include "Functions.hpp"
-#include "Value.hpp"
 
 Xavi::Value Xavi::Functions::add(std::vector<Xavi::Value> Args)
 {

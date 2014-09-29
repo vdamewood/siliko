@@ -21,8 +21,6 @@
 #if !defined XAVI_LEXER_H
 #define XAVI_LEXER_H
 
-#include <memory>
-
 #include "DataSource.hpp"
 #include "Token.hpp"
 

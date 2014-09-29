@@ -21,7 +21,6 @@
 #include <typeinfo>
 
 #include "Parser.hpp"
-#include "SyntaxTree.hpp"
 
 Xavi::InfixParser::InfixParser(Xavi::Lexer *NewLexer)
 {

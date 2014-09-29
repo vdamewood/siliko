@@ -18,8 +18,6 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <vector>
-
 #include "SyntaxTree.hpp"
 #include "FunctionCall.hpp"
 
