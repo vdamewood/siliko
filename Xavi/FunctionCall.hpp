@@ -18,8 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Xavi_FUNCTIONS_H
-#define Xavi_FUNCTIONS_H
+#if !defined Xavi_FUNCTION_CALL_H
+#define Xavi_FUNCTION_CALL_H
 
 #include <string>
 #include <vector>
@@ -28,11 +28,12 @@
 
 namespace Xavi
 {
-	namespace Functions
+	namespace FunctionCaller
 	{
 		bool Open();
 		void Close();
+		unsigned char Hash(const unsigned char *rawInput, size_t length);
 		Xavi::Value Call(std::string FunctionName, std::vector<Xavi::Value> Arguments);
 	};
 };
-#endif // Xavi_FUNCTIONS_H
+#endif // Xavi_FUNCTION_CALL_H

@@ -9,6 +9,7 @@ endif()
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
   Value.hpp
+  Functions.hpp
   FunctionCall.hpp
   SyntaxTree.hpp
   DataSource.hpp
@@ -19,6 +20,7 @@ set(Xavi_INTERNAL_HEADERS
 )
 set(Xavi_SOURCES
   Value.cpp
+  Functions.cpp
   FunctionCall.cpp
   SyntaxTree.cpp
   StringSource.cpp
