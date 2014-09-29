@@ -17,13 +17,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Xavista. If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include "Xavi/FunctionCall.hpp"
+#include "Xavi/Parser.hpp"
+#include "Xavi/StringSource.hpp"
+
 #include "XavistaWindow.h"
-#include "Xavi.h"
+
+
+
 
 XavistaWindow::XavistaWindow(QWidget * parent)
 	: QMainWindow(parent)
 {
-	XaviOpen();
+	//XaviOpen();
 	setupUi(this);
 	output->setNum(0);
 	connect(calculateButton, SIGNAL(clicked(bool)),
@@ -32,12 +39,48 @@ XavistaWindow::XavistaWindow(QWidget * parent)
 
 XavistaWindow::~XavistaWindow()
 {
-	XaviClose();
+	Xavi::FunctionCaller::DeleteDefault();
 }
 
 void XavistaWindow::calculate()
 {
-	XaviResult value = XaviEvaluate(input->text().toUtf8().data());
+	Xavi::InfixParser MyParser(new Xavi::Lexer(new Xavi::StringSource(input->text().toUtf8().data())));
+
+	MyParser.Parse();
+	Xavi::Value result = MyParser.SyntaxTree().GetValue();
+	switch (result.Status())
+	{
+		case Xavi::Value::INTEGER:
+			output->setNum(result.IntegerValue());
+			break;
+		case Xavi::Value::FLOAT:
+			output->setNum(result.FloatValue());
+			break;
+		case Xavi::Value::MEMORY_ERR:
+			output->setText("Out of memory.\n");
+			break;
+		case Xavi::Value::SYNTAX_ERR:
+			output->setText("Syntax error.\n");
+			break;
+		case Xavi::Value::ZERO_DIV_ERR:
+			output->setText("Division by zero error.\n");
+			break;
+		case Xavi::Value::BAD_FUNCTION:
+			output->setText("Function not found.\n");
+			break;
+		case Xavi::Value::BAD_ARGUMENTS:
+			output->setText("Bad argument count.\n");
+			break;
+		case Xavi::Value::DOMAIN_ERR:
+			output->setText("Domain error.\n");
+			break;
+		case Xavi::Value::RANGE_ERR:
+			output->setText("Range error.\n");
+			break;
+	}
+
+
+	/*XaviResult value = XaviEvaluate(input->text().toUtf8().data());
 	switch (value.status) {
 	case XAVI_RS_INTEGER:
 		output->setNum(value.i);
@@ -71,5 +114,5 @@ void XavistaWindow::calculate()
 		break;
 	default:
 		output->setText("An error occured.");
-	}
+	}*/
 }

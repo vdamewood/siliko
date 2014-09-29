@@ -1,5 +1,5 @@
 /*
- * Xavita.c: Command-line interface for Xavi.
+ * Xavita.cpp: Command-line interface for Xavi.
  * Copyright 2012, 2014 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,9 @@
 #	define ISATTY() (-1)
 #endif
 
-#include "Xavi.h"
+#include "Xavi/FunctionCall.hpp"
+#include "Xavi/Parser.hpp"
+#include "Xavi/StringSource.hpp"
 
 char *readline(const char *prompt)
 {
@@ -39,7 +41,7 @@ char *readline(const char *prompt)
 	fputs(prompt, stdout);
 	fflush(stdout);
 
-	if (!(rVal = malloc(bufSize)))
+	if (!(rVal = (char*)malloc(bufSize)))
 	{
 		return NULL;
 	}
@@ -65,7 +67,7 @@ char *readline(const char *prompt)
 		if(currentPosition == bufSize)
 		{
 			bufSize += 10;
-			newVal = realloc(rVal, bufSize);
+			newVal = (char *) realloc(rVal, bufSize);
 			if (newVal)
 			{
 				rVal = newVal;
@@ -85,8 +87,6 @@ char *readline(const char *prompt)
 
 int main(int argc, char *argv[])
 {
-	char *expression;
-	XaviResult value;
 	const char *prompt;
 	const char *response;
 
@@ -101,54 +101,51 @@ int main(int argc, char *argv[])
 		response = "";
 	}
 
-	XaviOpen();
-
 	while(-1)
 	{
-		expression = readline(prompt);
+		char *expression = readline(prompt);
 
 		if(!expression)
 			break;
 
-		value = XaviEvaluate(expression);
+		Xavi::InfixParser MyParser(new Xavi::Lexer(new Xavi::StringSource(expression)));
 		free(expression);
 
-		switch (value.status)
+		MyParser.Parse();
+		Xavi::Value result = MyParser.SyntaxTree().GetValue();
+		switch (result.Status())
 		{
-		case XAVI_RS_INTEGER:
-			printf("%s%i\n", response, value.i);
+		case Xavi::Value::INTEGER:
+			printf("%s%i\n", response, result.IntegerValue());
 			break;
-		case XAVI_RS_FLOAT:
-			printf("%s%f\n", response, value.f);
+		case Xavi::Value::FLOAT:
+			printf("%s%f\n", response, result.FloatValue());
 			break;
-		case XAVI_RE_INTERNAL:
-			printf("Internal error.\n");
-			break;
-		case XAVI_RE_MEMORY:
+		case Xavi::Value::MEMORY_ERR:
 			printf("Out of memory.\n");
 			break;
-		case XAVI_RE_SYNTAX:
+		case Xavi::Value::SYNTAX_ERR:
 			printf("Syntax error.\n");
 			break;
-		case XAVI_RE_ZERO_DIV:
+		case Xavi::Value::ZERO_DIV_ERR:
 			printf("Division by zero error.\n");
 			break;
-		case XAVI_RE_FUNCTION:
+		case Xavi::Value::BAD_FUNCTION:
 			printf("Function not found.\n");
 			break;
-		case XAVI_RE_ARGUMENTS:
+		case Xavi::Value::BAD_ARGUMENTS:
 			printf("Bad argument count.\n");
 			break;
-		case XAVI_RE_DOMAIN:
+		case Xavi::Value::DOMAIN_ERR:
 			printf("Domain error.\n");
 			break;
-		case XAVI_RE_RANGE:
+		case Xavi::Value::RANGE_ERR:
 			printf("Range error.\n");
 			break;
 		}
 	}
 
-	XaviClose();
+	Xavi::FunctionCaller::DeleteDefault();
 
 	if (ISATTY())
 	{

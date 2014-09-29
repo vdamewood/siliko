@@ -9,7 +9,7 @@ set(Xavista_PLUGINS)
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
-  ${Library_SOURCE_DIR}
+  ${Xavi_SOURCE_DIR}
   ${Qt5Widgets_INCLUDE_DIRS})
 
 qt5_wrap_ui(Xavista_UI_SOURCES ${Xavista_UIS})
