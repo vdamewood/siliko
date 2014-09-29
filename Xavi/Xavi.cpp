@@ -26,12 +26,11 @@
 
 void XaviOpen(void)
 {
-	Xavi::FunctionCaller::Open();
 }
 
 void XaviClose(void)
 {
-	Xavi::FunctionCaller::Close();
+	Xavi::FunctionCaller::DeleteDefault();
 }
 
 static XaviResult XaviValueToResult(const Xavi::Value value)

@@ -18,42 +18,27 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <string>
-#include <limits>
-#include <vector>
-
-#include "Functions.hpp"
 #include "FunctionCall.hpp"
-#include "Value.hpp"
+#include "Functions.hpp"
 
-namespace Xavi
+Xavi::FunctionCaller &Xavi::FunctionCaller::Default(void)
 {
-	class FunctionChain
+	if (!DefaultInstance)
 	{
-	public:
-		FunctionChain(std::string NewId, Xavi::FunctionCaller::Pointer NewFunction);
-		~FunctionChain(void);
-		std::string id;
-		Xavi::FunctionCaller::Pointer function;
-		FunctionChain *next;
-	};
-};
-static Xavi::FunctionChain **functionTable = 0;
+		DefaultInstance = new FunctionCaller();
+		DefaultInstance->InstallBuiltins();
+	}
 
-Xavi::FunctionChain::FunctionChain(std::string NewId, Xavi::FunctionCaller::Pointer NewFunction)
-{
-	id = NewId;
-	function = NewFunction;
-	next = NULL;
+	return *DefaultInstance;
 }
 
-Xavi::FunctionChain::~FunctionChain(void)
+void Xavi::FunctionCaller::DeleteDefault(void)
 {
-	if (next)
-		delete next;
+	if (DefaultInstance)
+	{
+		delete DefaultInstance;
+		DefaultInstance = 0;
+	}
 }
 
 unsigned char Xavi::FunctionCaller::Hash(const unsigned char *rawInput, size_t length)
@@ -72,8 +57,8 @@ unsigned char Xavi::FunctionCaller::Hash(const unsigned char *rawInput, size_t l
 			result <<= 1;
 
 			result |= (i < length)
-				? (rawInput[i] >> j) & 0x01
-				: 0;
+			? (rawInput[i] >> j) & 0x01
+			: 0;
 
 			if (hasHighBit)
 				result ^= divisor;
@@ -83,39 +68,22 @@ unsigned char Xavi::FunctionCaller::Hash(const unsigned char *rawInput, size_t l
 	return result;
 }
 
-bool Xavi::FunctionCaller::Install(std::string Name, Xavi::FunctionCaller::Pointer Function)
+Xavi::FunctionCaller::FunctionCaller(void)
 {
-	int index = Xavi::FunctionCaller::Hash((const unsigned char *)Name.c_str(), Name.size());
-	Xavi::FunctionChain *NewEntry = new Xavi::FunctionChain(Name, Function);
-
-	if (functionTable)
-	{
-		if (functionTable[index])
-		{
-			Xavi::FunctionChain *currentChain = functionTable[index];
-			while (currentChain->next)
-				currentChain = currentChain->next;
-			currentChain->next = NewEntry;
-		}
-		else
-		{
-			functionTable[index] = NewEntry;
-		}
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	lookup = std::vector<std::list<Xavi::FunctionCaller::LookupNode> >(256);
 }
 
-bool Xavi::FunctionCaller::Open()
+Xavi::FunctionCaller::~FunctionCaller(void)
 {
-	functionTable = new Xavi::FunctionChain*[256];
+}
 
-	for (int i = 0; i<=255; i++)
-		functionTable[i] = NULL;
+void Xavi::FunctionCaller::Install(std::string Name, FunctionPointer Function)
+{
+	lookup[Hash((const unsigned char *)Name.c_str(), Name.size())].push_back(LookupNode(Name, Function));
+}
 
+void Xavi::FunctionCaller::InstallBuiltins(void)
+{
 	Install("add", Xavi::Functions::add);
 	Install("subtract", Xavi::Functions::subtract);
 	Install("multiply", Xavi::Functions::multiply);
@@ -139,32 +107,34 @@ bool Xavi::FunctionCaller::Open()
 	Install("sqrt", Xavi::Functions::sqrt);
 	Install("tan", Xavi::Functions::tan);
 	Install("tanh", Xavi::Functions::tanh);
-
-	return true;
-}
-
-void Xavi::FunctionCaller::Close()
-{
-	if (functionTable)
-	{
-		for (int i = 0; i <= 255; i++)
-			if (functionTable[i])
-				delete functionTable[i];
-
-		delete[] functionTable;
-	}
 }
 
 Xavi::Value Xavi::FunctionCaller::Call(std::string Name, std::vector<Xavi::Value> Args)
 {
-	int index = Xavi::FunctionCaller::Hash((const unsigned char *)Name.c_str(), Name.size());
-	Xavi::FunctionChain *current = functionTable[index];
+	int index = Hash((const unsigned char *)Name.c_str(), Name.size());
 
-	while (current && Name != current->id)
-		current = current->next;
+	for
+		(
+			std::list<Xavi::FunctionCaller::LookupNode>::iterator i = lookup[index].begin();
+			i != lookup[index].end();
+			i++
+		)
+		{
+			if (Name == i->id)
+				return i->function(Args);
+		}
 
-	if (current)
-		return current->function(Args);
-	else
 		return Xavi::Value::BAD_FUNCTION;
 }
+
+Xavi::FunctionCaller::LookupNode::LookupNode(std::string NewId, FunctionPointer NewFunction)
+{
+	id = NewId;
+	function = NewFunction;
+}
+
+Xavi::FunctionCaller::LookupNode::~LookupNode(void)
+{
+}
+
+Xavi::FunctionCaller *Xavi::FunctionCaller::DefaultInstance = 0;

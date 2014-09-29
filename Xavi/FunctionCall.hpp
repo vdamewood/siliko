@@ -21,6 +21,7 @@
 #if !defined Xavi_FUNCTION_CALL_H
 #define Xavi_FUNCTION_CALL_H
 
+#include <list>
 #include <string>
 #include <vector>
 
@@ -28,15 +29,33 @@
 
 namespace Xavi
 {
-	namespace FunctionCaller
+	class FunctionCaller
 	{
-		bool Open(void);
-		void Close(void);
+	public:
+		typedef Value (*FunctionPointer)(std::vector<Value>);
 
-		typedef Value (*Pointer)(std::vector<Value>);
+		static FunctionCaller &Default(void);
+		static void DeleteDefault(void);
 		static unsigned char Hash(const unsigned char *rawInput, size_t length);
-		bool Install(std::string Name, Pointer Function);
+
+		FunctionCaller(void);
+		~FunctionCaller(void);
+
 		Value Call(std::string Name, std::vector<Value> Args);
+		void Install(std::string Name, FunctionPointer Function);
+		void InstallBuiltins(void);
+	private:
+		static FunctionCaller *DefaultInstance;
+
+		class LookupNode
+		{
+		public:
+			LookupNode(std::string NewId, FunctionPointer NewFunction);
+			~LookupNode(void);
+			std::string id;
+			FunctionPointer function;
+		};
+		std::vector<std::list<LookupNode> > lookup;
 	};
 };
 #endif // Xavi_FUNCTION_CALL_H
