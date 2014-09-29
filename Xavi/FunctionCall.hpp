@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "XaviValue.hpp"
+#include "Value.hpp"
 
 namespace Xavi
 {
@@ -32,7 +32,7 @@ namespace Xavi
 	{
 		int Open();
 		void Close();
-		XaviValue Call(std::string FunctionName, std::vector<XaviValue> Arguments);
+		Xavi::Value Call(std::string FunctionName, std::vector<Xavi::Value> Arguments);
 	};
 };
 #endif // Xavi_FUNCTIONS_H

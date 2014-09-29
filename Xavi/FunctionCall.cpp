@@ -27,243 +27,109 @@
 #include <string>
 #include <vector>
 
-#include "XaviValue.hpp"
+#include "Value.hpp"
 #include "FunctionCall.hpp"
 
-static XaviValue XaviFunction_add(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_add(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	int i;
+	if (!Args.size())
+		return 0;
 
-	if (!argc)
-	{
-		rVal.status = XS_INTEGER;
-		rVal.i = 0;
-		return rVal;
-	}
-
-	rVal = argv[0];
-
-	for(i = 1; i < argc; i++)
-	{
-		if (rVal.status == XS_FLOAT)
-		{
-			if (argv[i].status == XS_FLOAT)
-			{
-				rVal.f += argv[i].f;
-			}
-			else
-			{
-				rVal.f += (float)argv[i].i;
-			}
-		}
+	Xavi::Value rVal = Args[0];
+	for(int i = 1; i < Args.size(); i++)
+		if (rVal.Status() == Xavi::Value::INTEGER)
+			rVal = rVal.IntegerValue() + Args[i].IntegerValue();
 		else
-		{
-			if (argv[i].status == XS_FLOAT)
-			{
-				rVal.f = (float)rVal.i + argv[i].f;
-				rVal.status = XS_FLOAT;
-			}
-			else
-			{
-				rVal.i += argv[i].i;
-			}
-		}
-	}
+			rVal = rVal.FloatValue() + Args[i].FloatValue();
 
 	return rVal;
 }
 
-static XaviValue XaviFunction_subtract(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_subtract(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	int i;
+	if (!Args.size())
+		return 0;
 
-	if (!argc)
-	{
-		rVal.status = XS_INTEGER;
-		rVal.i = 0;
-		return rVal;
-	}
-
-	rVal = argv[0];
-
-	for(i = 1; i < argc; i++)
-	{
-		if (rVal.status == XS_FLOAT)
-		{
-			if (argv[i].status == XS_FLOAT)
-			{
-				rVal.f -= argv[i].f;
-			}
-			else
-			{
-				rVal.f -= (float)argv[i].i;
-			}
-		}
+	Xavi::Value rVal = Args[0];
+	for(int i = 1; i < Args.size(); i++)
+		if (rVal.Status() == Xavi::Value::INTEGER)
+			rVal = rVal.IntegerValue() - Args[i].IntegerValue();
 		else
-		{
-			if (argv[i].status == XS_FLOAT)
-			{
-				rVal.f = (float)rVal.i - argv[i].f;
-				rVal.status = XS_FLOAT;
-			}
-			else
-			{
-				rVal.i -= argv[i].i;
-			}
-		}
-	}
+			rVal = rVal.FloatValue() - Args[i].FloatValue();
 
-	return rVal;
+		return rVal;
 }
 
-static XaviValue XaviFunction_multiply(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_multiply(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	int i;
+	if (!Args.size())
+		return 0;
 
-	if (!argc)
-	{
-		rVal.status = XS_INTEGER;
-		rVal.i = 0;
+	Xavi::Value rVal = Args[0];
+	for(int i = 1; i < Args.size(); i++)
+		if (rVal.Status() == Xavi::Value::INTEGER)
+			rVal = rVal.IntegerValue() * Args[i].IntegerValue();
+		else
+			rVal = rVal.FloatValue() * Args[i].FloatValue();
+
 		return rVal;
-	}
-
-	rVal = argv[0];
-
-	for(i = 1; i < argc; i++)
-	{
-		if (rVal.status == XS_FLOAT)
-		{
-			if (argv[i].status == XS_FLOAT)
-			{
-				rVal.f *= argv[i].f;
-			}
-			else
-			{
-				rVal.f *= (float)argv[i].i;
-			}
-		}
-		else {
-			if (argv[i].status == XS_FLOAT)
-			{
-				rVal.f = (float)rVal.i * argv[i].f;
-				rVal.status = XS_FLOAT;
-			}
-			else
-			{
-				rVal.i *= argv[i].i;
-			}
-		}
-	}
-
-	return rVal;
 }
 
-static XaviValue XaviFunction_divide(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_divide(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	int i;
+	if (Args.size() < 2)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc < 2)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
+	Xavi::Value rVal = Args[0];
 
-	rVal = argv[0];
-
-	for (i = 1; i < argc; i++)
+	for (int i = 1; i < Args.size(); i++)
 	{
 		/* Division-by-Zero Error */
-		if ((argv[i].status == XS_FLOAT && argv[i].f == 0.0)
-			|| (argv[i].status == XS_INTEGER && argv[i].i == 0))
+		if ((Args[i].Status() == Xavi::Value::FLOAT && Args[i].FloatValue() == 0.0)
+			|| (Args[i].Status() == Xavi::Value::INTEGER && Args[i].IntegerValue() == 0))
 		{
-			rVal.status = XE_ZERO_DIV;
-			return rVal;
+			return Xavi::Value::ZERO_DIV_ERR;
 		}
 
-		if (rVal.status == XS_FLOAT)
+		if (rVal.Status() == Xavi::Value::FLOAT)
 		{
-			if (argv[i].status == XS_FLOAT)
-			{
-				rVal.f /= argv[i].f;
-			}
-			else
-			{
-				rVal.f /= (float) argv[i].i;
-			}
+			rVal = rVal.FloatValue() / Args[i].FloatValue();
 		}
-		else {
-			if (argv[i].status == XS_FLOAT)
+		else
+		{
+			if (Args[i].Status() == Xavi::Value::FLOAT
+				|| rVal.IntegerValue() % Args[i].IntegerValue() != 0)
 			{
-				rVal.status = XS_FLOAT;
-				rVal.f = (float) rVal.i / argv[i].f;
-			}
-			else if (rVal.i % argv[i].i == 0)
-			{
-				rVal.i /= argv[i].i;
+				rVal = rVal.FloatValue() / Args[i].FloatValue();
 			}
 			else
 			{
-				rVal.status = XS_FLOAT;
-				rVal.f = (float) rVal.i / (float) argv[i].i;
+				rVal = rVal.IntegerValue() / Args[i].IntegerValue();
 			}
 		}
 	}
 	return rVal;
 }
 
-static XaviValue XaviFunction_power(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_power(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
 	float runningValue;
-	float nextValue;
-	int i;
 
-	runningValue = (argv[0].status == XS_INTEGER)
-		? (float) argv[0].i
-		: argv[0].f;
+	runningValue = Args[0].FloatValue();
 
-	for (i = 1; i < argc; i++)
-	{
-		nextValue = (argv[i].status == XS_INTEGER)
-			? nextValue = (float) argv[i].i
-			: argv[i].f;
-
-		runningValue = (float) pow(runningValue, nextValue);
-	}
-
-	rVal.status = XS_FLOAT;
-	rVal.f = runningValue;
-	return rVal;
+	for (std::vector<Xavi::Value>::iterator i = Args.begin(); i != Args.end(); i++)
+		runningValue = (float) pow(runningValue, i->FloatValue());
+	return runningValue;
 }
 
 
-static XaviValue XaviFunction_dice(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_dice(std::vector<Xavi::Value> Args)
 {
 	/* TODO: Make this function handle fractional dice. */
 	static int hasSeeded = 0;
-	int runningTotal = 0;
-	XaviValue rVal;
-	int count;
-	int faces;
-	int i;
 
-	if(argc != 2)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	count = (argv[0].status == XS_INTEGER)
-		? argv[0].i
-		: (int) argv[0].f;
-
-	faces = (argv[1].status == XS_INTEGER)
-		? argv[1].i
-		: (int) argv[1].f;
+	if(Args.size() != 2)
+		return Xavi::Value::BAD_ARGUMENTS;
 
 	if (!hasSeeded)
 	{
@@ -271,388 +137,173 @@ static XaviValue XaviFunction_dice(int argc, XaviValue *argv)
 		srand((unsigned int)time(NULL));
 	}
 
-	for (i = 1; i <= count; i++) runningTotal += (rand() % faces) + 1;
-	rVal.status = XS_INTEGER;
-	rVal.i = runningTotal;
-	return rVal;
+	int runningTotal = 0;
+	for (int i = 1; i <= Args[0].IntegerValue(); i++)
+		runningTotal += (rand() % Args[1].IntegerValue()) + 1;
+
+	return runningTotal;
 }
 
-static XaviValue XaviFunction_abs(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_abs(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
+	switch (Args[0].Status())
 	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
+	case Xavi::Value::FLOAT:
+		return (float) fabs(Args[0].FloatValue());
+	case Xavi::Value::INTEGER:
+		return abs(Args[0].IntegerValue());
+	default:
+		return Args[0];
 	}
-
-	rVal = argv[0];
-	if (rVal.status == XS_FLOAT)
-		rVal.f = (float) fabs(rVal.f);
-	else if (rVal.status == XS_INTEGER)
-		rVal.i = abs(rVal.i);
-	return rVal;
 }
 
-static XaviValue XaviFunction_acos(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_acos(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
+	if (Args[0].FloatValue() < -1 || Args[0].FloatValue() > 1)
+		return Xavi::Value::DOMAIN_ERR;
 
-	if (argv[0].status == XS_INTEGER)
-		input = (float) argv[0].i;
-	else
-		input = argv[0].f;
-
-	if (input < -1 || input > 1)
-	{
-		rVal.status = XE_DOMAIN;
-		return rVal;
-	}
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) acos(input);
-	return rVal;
+	return (float) acos(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_asin(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_asin(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
+	if (Args[0].FloatValue() < -1 || Args[0].FloatValue() > 1)
+		return Xavi::Value::DOMAIN_ERR;
 
-	if (argv[0].status == XS_INTEGER)
-		input = (float) argv[0].i;
-	else
-		input = argv[0].f;
-
-	if (input < -1 || input > 1)
-	{
-		rVal.status = XE_DOMAIN;
-		return rVal;
-	}
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) asin(input);
-	return rVal;
+	return (float) asin(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_atan(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_atan(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float) argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) atan(input);
-	return rVal;
+	return (float) atan(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_ceil(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_ceil(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
 	float result;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
+	result = (float) ceil(Args[0].FloatValue());
 
-	result = (float) ceil(input);
 	if (result <= INT_MAX && result >= INT_MIN)
-	{
-		rVal.status = XS_INTEGER;
-		rVal.i = (int)result;
-	}
+		return (int)result;
 	else
-	{
-		rVal.status = XS_FLOAT;
-		rVal.f = result;
-	}
-	return rVal;
+		return result;
 }
 
-static XaviValue XaviFunction_cos(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_cos(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) cos(input);
-	return rVal;
+	return (float) cos(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_cosh(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_cosh(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) cosh(input);
-	return rVal;
+	return (float) cosh(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_exp(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_exp(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) exp(input);
-	return rVal;
+	return (float) exp(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_floor(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_floor(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
 	float result;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
+	result = (float) floor(Args[0].FloatValue());
 
-	result = (float) floor(input);
 	if (result <= INT_MAX && result >= INT_MIN)
-	{
-		rVal.status = XS_INTEGER;
-		rVal.i = (int)result;
-	}
+		return (int)result;
 	else
-	{
-		rVal.status = XS_FLOAT;
-		rVal.f = result;
-	}
-	return rVal;
+		return result;
 }
 
-static XaviValue XaviFunction_log(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_log(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) log(input);
-	return rVal;
+	return (float) log(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_log10(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_log10(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) log10(input);
-	return rVal;
+	return (float) log10(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_sin(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_sin(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) sin(input);
-	return rVal;
+	return (float) sin(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_sinh(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_sinh(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) sinh(input);
-	return rVal;
+	return (float) sinh(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_sqrt(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_sqrt(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float inVal;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
+	if (Args[0].FloatValue() < 0.0)
+		return Xavi::Value::DOMAIN_ERR;
 
-	if ((argv[0].status == XS_INTEGER && argv[0].i < 0)
-		|| (argv[0].status == XS_FLOAT && argv[0].f < 0.0))
-	{
-			rVal.status = XE_DOMAIN;
-			return rVal;
-	}
-
-	if (argv[0].status == XS_FLOAT)
-	{
-		inVal = argv[0].f;
-	}
-	else
-	{
-		inVal = (float) argv[0].i;
-	}
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) sqrt(inVal);
-
-	return rVal;
+	return (float) sqrt(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_tan(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_tan(std::vector<Xavi::Value> Args)
 {
 	// For some reason the C version of tan() doesn't throw an error for
 	// input of pi/2 or 3*pi/2. Probably due to the imprecision of
 	// floating point numbers.
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER) input = (float)argv[0].i;
-	else input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) tan(input);
-	return rVal;
+	return (float) tan(Args[0].FloatValue());
 }
 
-static XaviValue XaviFunction_tanh(int argc, XaviValue *argv)
+static Xavi::Value XaviFunction_tanh(std::vector<Xavi::Value> Args)
 {
-	XaviValue rVal;
-	float input;
+	if (Args.size() != 1)
+		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (argc != 1)
-	{
-		rVal.status = XE_ARGUMENTS;
-		return rVal;
-	}
-
-	if (argv[0].status == XS_INTEGER)
-		input = (float)argv[0].i;
-	else
-		input = argv[0].f;
-
-	rVal.status = XS_FLOAT;
-	rVal.f = (float) tanh(input);
-	return rVal;
+	return (float) tanh(Args[0].FloatValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -686,7 +337,7 @@ static unsigned char Hash(const unsigned char *rawInput, size_t length)
 
 ////////////////////////////////////////////////////////////////////////
 
-typedef XaviValue (*FunctionPointer)(int, XaviValue *);
+typedef Xavi::Value (*FunctionPointer)(std::vector<Xavi::Value>);
 
 #define FUNCTION_COUNT 22
 #define FUNCTION_MAX (FUNCTION_COUNT - 1)
@@ -829,17 +480,14 @@ static FunctionPointer GetFunction(std::string Name)
 		return NULL;
 }
 
-XaviValue Xavi::Functions::Call(std::string Name, std::vector<XaviValue> Args)
+Xavi::Value Xavi::Functions::Call(std::string Name, std::vector<Xavi::Value> Args)
 {
 	FunctionPointer Function;
-	XaviValue rVal;
 
 	Function = GetFunction(Name);
 
 	if (!Function)
-		rVal.status = XE_FUNCTION;
+		return Xavi::Value::BAD_FUNCTION;
 	else
-		rVal = Function(Args.size(), Args.data());
-
-	return rVal;
+		return Function(Args);
 }

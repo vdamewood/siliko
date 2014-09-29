@@ -26,10 +26,15 @@ Xavi::StringSource::StringSource(const std::string NewSource)
 	Iterator = Source.begin();
 }
 
-Xavi::StringSource::StringSource(const char * NewSource)
+Xavi::StringSource::StringSource(const char *NewSource)
 {
 	Source = std::string(NewSource);
 	Iterator = Source.begin();
+}
+
+Xavi::StringSource::~StringSource()
+{
+	// Do Nothing
 }
 
 bool Xavi::StringSource::Advance()
@@ -48,9 +53,4 @@ bool Xavi::StringSource::Advance()
 char Xavi::StringSource::GetCurrent()
 {
 	return *Iterator;
-}
-
-Xavi::StringSource::~StringSource()
-{
-	// Do Nothing
 }

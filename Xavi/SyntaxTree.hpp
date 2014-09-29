@@ -24,7 +24,7 @@
 #include <string>
 #include <list>
 
-#include "XaviValue.hpp"
+#include "Value.hpp"
 
 namespace Xavi
 {
@@ -32,7 +32,7 @@ namespace Xavi
 	{
 	public:
 		virtual ~SyntaxTreeNode(void);
-		virtual XaviValue GetValue(void) = 0;
+		virtual Value GetValue(void) = 0;
 		virtual void Negate(void) = 0;
 	};
 
@@ -40,7 +40,7 @@ namespace Xavi
 	{
 	public:
 		IntegerNode(int NewValue);
-		virtual XaviValue GetValue(void);
+		virtual Value GetValue(void);
 		virtual void Negate(void);
 	private:
 		int Value;
@@ -50,7 +50,7 @@ namespace Xavi
 	{
 	public:
 		FloatNode(float NewValue);
-		virtual XaviValue GetValue(void);
+		virtual Value GetValue(void);
 		virtual void Negate(void);
 	private:
 		float Value;
@@ -61,7 +61,7 @@ namespace Xavi
 	public:
 		BranchNode(void);
 		BranchNode(std::string NewFunctionId);
-		virtual XaviValue GetValue(void);
+		virtual Value GetValue(void);
 		virtual void Negate(void);
 
 		void SetId(std::string NewId);
@@ -79,7 +79,7 @@ namespace Xavi
 	{
 	public:
 		virtual ~SyntaxErrorNode(void);
-		virtual XaviValue GetValue(void);
+		virtual Value GetValue(void);
 		virtual void Negate(void);
 	};
 }

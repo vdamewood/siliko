@@ -34,7 +34,7 @@ Xavi::InfixParser::~InfixParser(void)
 	delete MyLexer;
 }
 
-void *Xavi::InfixParser::Parse(void)
+void Xavi::InfixParser::Parse(void)
 {
 	if (!MySyntaxTree)
 	{

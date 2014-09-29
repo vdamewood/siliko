@@ -21,7 +21,7 @@
 #include "Xavi.h"
 #include "FunctionCall.hpp"
 #include "Parser.hpp"
-#include "XaviValue.hpp"
+#include "Value.hpp"
 #include "StringSource.hpp"
 
 void XaviOpen(void)
@@ -34,48 +34,44 @@ void XaviClose(void)
 	Xavi::Functions::Close();
 }
 
-XaviResult XaviValueToResult(const XaviValue value)
+static XaviResult XaviValueToResult(const Xavi::Value value)
 {
 	XaviResult rVal;
-	switch (value.status)
+	switch (value.Status())
 	{
-	case XS_INTEGER:
+	case Xavi::Value::INTEGER:
 		rVal.status = XAVI_RS_INTEGER;
-		rVal.i = value.i;
+		rVal.i = value.IntegerValue();
 		break;
-	case XS_FLOAT:
+	case Xavi::Value::FLOAT:
 		rVal.status = XAVI_RS_FLOAT;
-		rVal.f = value.f;
+		rVal.f = value.FloatValue();
 		break;
-	case XE_INTERNAL:
-		rVal.status = XAVI_RE_INTERNAL;
-		rVal.i = 0;
-		break;
-	case XE_MEMORY:
+	case Xavi::Value::MEMORY_ERR:
 		rVal.status = XAVI_RE_MEMORY;
 		rVal.i = 0;
 		break;
-	case XE_SYNTAX:
+	case Xavi::Value::SYNTAX_ERR:
 		rVal.status = XAVI_RE_SYNTAX;
 		rVal.i = 0;
 		break;
-	case XE_ZERO_DIV:
+	case Xavi::Value::ZERO_DIV_ERR:
 		rVal.status = XAVI_RE_ZERO_DIV;
 		rVal.i = 0;
 		break;
-	case XE_FUNCTION:
+	case Xavi::Value::BAD_FUNCTION:
 		rVal.status = XAVI_RE_FUNCTION;
 		rVal.i = 0;
 		break;
-	case XE_ARGUMENTS:
+	case Xavi::Value::BAD_ARGUMENTS:
 		rVal.status = XAVI_RE_ARGUMENTS;
 		rVal.i = 0;
 		break;
-	case XE_DOMAIN:
+	case Xavi::Value::DOMAIN_ERR:
 		rVal.status = XAVI_RE_DOMAIN;
 		rVal.i = 0;
 		break;
-	case XE_RANGE:
+	case Xavi::Value::RANGE_ERR:
 		rVal.status = XAVI_RE_RANGE;
 		rVal.i = 0;
 		break;
@@ -88,7 +84,7 @@ XaviResult XaviValueToResult(const XaviValue value)
 	return rVal;
 }
 
-XaviResult XaviEvaluate(const char * InputString)
+XaviResult XaviEvaluate(const char *InputString)
 {
 	Xavi::InfixParser MyParser(new Xavi::Lexer(new Xavi::StringSource(InputString)));
 	MyParser.Parse();
