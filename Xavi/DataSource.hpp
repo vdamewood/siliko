@@ -26,15 +26,10 @@ namespace Xavi
 	class DataSource
 	{
 	public:
+		virtual ~DataSource() { };
 		virtual bool Advance() = 0;
 		virtual char GetCurrent() = 0;
-		virtual ~DataSource() = 0;
 	};
 };
-
-inline Xavi::DataSource::~DataSource()
-{
-	// Do nothing.
-}
 
 #endif /* DATASOURCE_HPP */

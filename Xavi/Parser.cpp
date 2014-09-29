@@ -32,6 +32,7 @@ Xavi::InfixParser::InfixParser(Xavi::Lexer *NewLexer)
 Xavi::InfixParser::~InfixParser(void)
 {
 	delete MyLexer;
+	delete MySyntaxTree;
 }
 
 void Xavi::InfixParser::Parse(void)

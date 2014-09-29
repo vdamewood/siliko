@@ -31,7 +31,7 @@ namespace Xavi
 	class SyntaxTreeNode
 	{
 	public:
-		virtual ~SyntaxTreeNode(void);
+		virtual ~SyntaxTreeNode(void) { };
 		virtual Value GetValue(void) = 0;
 		virtual void Negate(void) = 0;
 	};

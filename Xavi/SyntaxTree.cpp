@@ -23,10 +23,6 @@
 #include "SyntaxTree.hpp"
 #include "FunctionCall.hpp"
 
-Xavi::SyntaxTreeNode::~SyntaxTreeNode()
-{
-}
-
 Xavi::IntegerNode::IntegerNode(int NewValue)
 {
 	Value = NewValue;
