@@ -66,6 +66,12 @@ Xavi::BranchNode::BranchNode(std::string NewId)
 	FunctionId = NewId;
 }
 
+Xavi::BranchNode::~BranchNode()
+{
+	for (std::list<SyntaxTreeNode*>::iterator i = Children.begin(); i != Children.end(); i++)
+		delete *i;
+}
+
 void Xavi::BranchNode::SetId(std::string NewId)
 {
 	FunctionId = NewId;

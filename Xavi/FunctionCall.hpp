@@ -30,10 +30,13 @@ namespace Xavi
 {
 	namespace FunctionCaller
 	{
-		bool Open();
-		void Close();
-		unsigned char Hash(const unsigned char *rawInput, size_t length);
-		Xavi::Value Call(std::string FunctionName, std::vector<Xavi::Value> Arguments);
+		bool Open(void);
+		void Close(void);
+
+		typedef Value (*Pointer)(std::vector<Value>);
+		static unsigned char Hash(const unsigned char *rawInput, size_t length);
+		bool Install(std::string Name, Pointer Function);
+		Value Call(std::string Name, std::vector<Value> Args);
 	};
 };
 #endif // Xavi_FUNCTION_CALL_H

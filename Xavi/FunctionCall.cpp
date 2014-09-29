@@ -29,6 +29,33 @@
 #include "FunctionCall.hpp"
 #include "Value.hpp"
 
+namespace Xavi
+{
+	class FunctionChain
+	{
+	public:
+		FunctionChain(std::string NewId, Xavi::FunctionCaller::Pointer NewFunction);
+		~FunctionChain(void);
+		std::string id;
+		Xavi::FunctionCaller::Pointer function;
+		FunctionChain *next;
+	};
+};
+static Xavi::FunctionChain **functionTable = 0;
+
+Xavi::FunctionChain::FunctionChain(std::string NewId, Xavi::FunctionCaller::Pointer NewFunction)
+{
+	id = NewId;
+	function = NewFunction;
+	next = NULL;
+}
+
+Xavi::FunctionChain::~FunctionChain(void)
+{
+	if (next)
+		delete next;
+}
+
 unsigned char Xavi::FunctionCaller::Hash(const unsigned char *rawInput, size_t length)
 {
 	const unsigned char divisor = 0xD5;
@@ -56,79 +83,65 @@ unsigned char Xavi::FunctionCaller::Hash(const unsigned char *rawInput, size_t l
 	return result;
 }
 
-typedef Xavi::Value (*FunctionPointer)(std::vector<Xavi::Value>);
-
-class XaviFunctionChain
+bool Xavi::FunctionCaller::Install(std::string Name, Xavi::FunctionCaller::Pointer Function)
 {
-public:
-	std::string id;
-	FunctionPointer function;
-	XaviFunctionChain *next;
-};
+	int index = Xavi::FunctionCaller::Hash((const unsigned char *)Name.c_str(), Name.size());
+	Xavi::FunctionChain *NewEntry = new Xavi::FunctionChain(Name, Function);
 
-static XaviFunctionChain **functionTable;
+	if (functionTable)
+	{
+		if (functionTable[index])
+		{
+			Xavi::FunctionChain *currentChain = functionTable[index];
+			while (currentChain->next)
+				currentChain = currentChain->next;
+			currentChain->next = NewEntry;
+		}
+		else
+		{
+			functionTable[index] = NewEntry;
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 bool Xavi::FunctionCaller::Open()
 {
-	const std::string functionNames[] =
-	{
-		"add", "subtract", "multiply", "divide",
-		"power", "dice",
-		"abs", "acos", "asin", "atan",
-		"ceil", "cos", "cosh", "exp",
-		"floor", "log","log10", "sin",
-		"sinh", "sqrt", "tan", "tanh"
-	};
-
-	const FunctionPointer functions[] =
-	{
-		Xavi::Functions::add, Xavi::Functions::subtract, Xavi::Functions::multiply, Xavi::Functions::divide,
-		Xavi::Functions::power, Xavi::Functions::dice,
-		Xavi::Functions::abs, Xavi::Functions::acos, Xavi::Functions::asin, Xavi::Functions::atan,
-		Xavi::Functions::ceil, Xavi::Functions::cos, Xavi::Functions::cosh, Xavi::Functions::exp,
-		Xavi::Functions::floor, Xavi::Functions::log, Xavi::Functions::log10, Xavi::Functions::sin,
-		Xavi::Functions::sinh, Xavi::Functions::sqrt, Xavi::Functions::tan, Xavi::Functions::tanh	};
-
-	const int FUNCTION_COUNT = 22;
-	const int FUNCTION_MAX = FUNCTION_COUNT - 1;
-
-	functionTable = new XaviFunctionChain*[256];
-	XaviFunctionChain **tempTable = new XaviFunctionChain*[FUNCTION_COUNT];
-
-	for (int i = 0; i<=FUNCTION_MAX; i++)
-	{
-		tempTable[i] = new XaviFunctionChain();
-	}
+	functionTable = new Xavi::FunctionChain*[256];
 
 	for (int i = 0; i<=255; i++)
 		functionTable[i] = NULL;
 
-	for (int i = 0; i <= FUNCTION_MAX; i++)
-	{
-		int index = Hash((const unsigned char *)functionNames[i].c_str(), functionNames[i].size());
+	Install("add", Xavi::Functions::add);
+	Install("subtract", Xavi::Functions::subtract);
+	Install("multiply", Xavi::Functions::multiply);
+	Install("divide", Xavi::Functions::divide);
+	Install("power", Xavi::Functions::power);
+	Install("dice", Xavi::Functions::dice);
 
-		tempTable[i]->id = functionNames[i];
-		tempTable[i]->function = functions[i];
-		tempTable[i]->next = NULL;
+	Install("abs", Xavi::Functions::abs);
+	Install("acos", Xavi::Functions::acos);
+	Install("asin", Xavi::Functions::asin);
+	Install("atan", Xavi::Functions::atan);
+	Install("ceil", Xavi::Functions::ceil);
+	Install("cos", Xavi::Functions::cos);
+	Install("cosh", Xavi::Functions::cosh);
+	Install("exp", Xavi::Functions::exp);
+	Install("floor", Xavi::Functions::floor);
+	Install("log", Xavi::Functions::log);
+	Install("log10", Xavi::Functions::log10);
+	Install("sin", Xavi::Functions::sin);
+	Install("sinh", Xavi::Functions::sinh);
+	Install("sqrt", Xavi::Functions::sqrt);
+	Install("tan", Xavi::Functions::tan);
+	Install("tanh", Xavi::Functions::tanh);
 
-		if (functionTable[index])
-		{
-			XaviFunctionChain *currentChain = functionTable[index];
-			while (currentChain->next)
-				currentChain = currentChain->next;
-			currentChain->next = tempTable[i];
-		}
-		else
-		{
-			functionTable[index] = tempTable[i];
-		}
-	}
-
-	delete[] tempTable;
 	return true;
 }
-
-#include <iostream>
 
 void Xavi::FunctionCaller::Close()
 {
@@ -136,49 +149,22 @@ void Xavi::FunctionCaller::Close()
 	{
 		for (int i = 0; i <= 255; i++)
 			if (functionTable[i])
-			{
-				XaviFunctionChain *current = functionTable[i];
-				while (current)
-				{
-					XaviFunctionChain *next = current->next;
-					delete current;
-					current = next;
-				}
-			}
+				delete functionTable[i];
 
 		delete[] functionTable;
-		functionTable = NULL;
 	}
-}
-
-static FunctionPointer GetFunction(std::string Name)
-{
-	int index;
-	XaviFunctionChain *current;
-
-	index = Xavi::FunctionCaller::Hash((const unsigned char *)Name.c_str(), Name.size());
-	current = functionTable[index];
-
-	while (current)
-		if (Name != current->id)
-			current = current->next;
-		else
-			break;
-
-	if (current)
-		return current->function;
-	else
-		return NULL;
 }
 
 Xavi::Value Xavi::FunctionCaller::Call(std::string Name, std::vector<Xavi::Value> Args)
 {
-	FunctionPointer Function;
+	int index = Xavi::FunctionCaller::Hash((const unsigned char *)Name.c_str(), Name.size());
+	Xavi::FunctionChain *current = functionTable[index];
 
-	Function = GetFunction(Name);
+	while (current && Name != current->id)
+		current = current->next;
 
-	if (!Function)
-		return Xavi::Value::BAD_FUNCTION;
+	if (current)
+		return current->function(Args);
 	else
-		return Function(Args);
+		return Xavi::Value::BAD_FUNCTION;
 }

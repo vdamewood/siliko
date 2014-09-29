@@ -61,6 +61,7 @@ namespace Xavi
 	public:
 		BranchNode(void);
 		BranchNode(std::string NewFunctionId);
+		virtual ~BranchNode();
 		virtual Value GetValue(void);
 		virtual void Negate(void);
 
