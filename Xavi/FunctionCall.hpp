@@ -30,7 +30,7 @@ namespace Xavi
 {
 	namespace Functions
 	{
-		int Open();
+		bool Open();
 		void Close();
 		Xavi::Value Call(std::string FunctionName, std::vector<Xavi::Value> Arguments);
 	};

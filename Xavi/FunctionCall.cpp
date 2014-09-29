@@ -18,17 +18,15 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string.h>
-
-#include <climits>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <limits>
 #include <vector>
 
-#include "Value.hpp"
 #include "FunctionCall.hpp"
+#include "Value.hpp"
 
 static Xavi::Value XaviFunction_add(std::vector<Xavi::Value> Args)
 {
@@ -199,8 +197,8 @@ static Xavi::Value XaviFunction_ceil(std::vector<Xavi::Value> Args)
 
 	result = std::ceil(Args[0].FloatValue());
 
-	if (result <= INT_MAX && result >= INT_MIN)
-		return (int)result;
+	if (result <= std::numeric_limits<int>::max() && result >= std::numeric_limits<int>::min())
+		return static_cast<int>(result);
 	else
 		return result;
 }
@@ -238,8 +236,8 @@ static Xavi::Value XaviFunction_floor(std::vector<Xavi::Value> Args)
 
 	result = std::floor(Args[0].FloatValue());
 
-	if (result <= INT_MAX && result >= INT_MIN)
-		return (int)result;
+	if (result <= std::numeric_limits<int>::max() && result >= std::numeric_limits<int>::min())
+		return static_cast<int>(result);
 	else
 		return result;
 }
@@ -339,86 +337,63 @@ static unsigned char Hash(const unsigned char *rawInput, size_t length)
 
 typedef Xavi::Value (*FunctionPointer)(std::vector<Xavi::Value>);
 
-#define FUNCTION_COUNT 22
-#define FUNCTION_MAX (FUNCTION_COUNT - 1)
-static const char *functionNames[] =
+class XaviFunctionChain
 {
-	"add", "subtract", "multiply", "divide",
-	"power", "dice",
-	"abs", "acos", "asin", "atan",
-	"ceil", "cos", "cosh", "exp",
-	"floor", "log","log10", "sin",
-	 "sinh", "sqrt", "tan", "tanh"
-};
-
-static FunctionPointer functions[] =
-{
-	XaviFunction_add, XaviFunction_subtract, XaviFunction_multiply, XaviFunction_divide,
-	XaviFunction_power, XaviFunction_dice,
-	XaviFunction_abs, XaviFunction_acos, XaviFunction_asin, XaviFunction_atan,
-	XaviFunction_ceil, XaviFunction_cos, XaviFunction_cosh, XaviFunction_exp,
-	XaviFunction_floor, XaviFunction_log, XaviFunction_log10, XaviFunction_sin,
-	XaviFunction_sinh, XaviFunction_sqrt, XaviFunction_tan, XaviFunction_tanh
-};
-
-struct XaviFunctionChain
-{
-	const char *id;
+public:
+	std::string id;
 	FunctionPointer function;
-	struct XaviFunctionChain *next;
+	XaviFunctionChain *next;
 };
-typedef struct XaviFunctionChain XaviFunctionChain;
 
 static XaviFunctionChain **functionTable;
 
-int Xavi::Functions::Open()
+bool Xavi::Functions::Open()
 {
-	int i;
-	int memoryError;
-	int index;
-	XaviFunctionChain *currentChain;
-	XaviFunctionChain **tempTable;
-
-	if (!(functionTable = (XaviFunctionChain**) malloc(256 * sizeof(XaviFunctionChain))))
-		return 0;
-
-	if (!(tempTable = (XaviFunctionChain**) malloc(FUNCTION_COUNT * sizeof(XaviFunctionChain))))
+	const std::string functionNames[] =
 	{
-		free(functionTable);
-		return 0;
+		"add", "subtract", "multiply", "divide",
+		"power", "dice",
+		"abs", "acos", "asin", "atan",
+		"ceil", "cos", "cosh", "exp",
+		"floor", "log","log10", "sin",
+		"sinh", "sqrt", "tan", "tanh"
+	};
+
+	const FunctionPointer functions[] =
+	{
+		XaviFunction_add, XaviFunction_subtract, XaviFunction_multiply, XaviFunction_divide,
+		XaviFunction_power, XaviFunction_dice,
+		XaviFunction_abs, XaviFunction_acos, XaviFunction_asin, XaviFunction_atan,
+		XaviFunction_ceil, XaviFunction_cos, XaviFunction_cosh, XaviFunction_exp,
+		XaviFunction_floor, XaviFunction_log, XaviFunction_log10, XaviFunction_sin,
+		XaviFunction_sinh, XaviFunction_sqrt, XaviFunction_tan, XaviFunction_tanh
+	};
+
+	const int FUNCTION_COUNT = 22;
+	const int FUNCTION_MAX = FUNCTION_COUNT - 1;
+
+	functionTable = new XaviFunctionChain*[256];
+	XaviFunctionChain **tempTable = new XaviFunctionChain*[FUNCTION_COUNT];
+
+	for (int i = 0; i<=FUNCTION_MAX; i++)
+	{
+		tempTable[i] = new XaviFunctionChain();
 	}
 
-	memoryError = 0;
-	for (i = 0; i<=FUNCTION_MAX; i++)
-	{
-		if (!(tempTable[i] = (XaviFunctionChain*) malloc(sizeof(XaviFunctionChain))))
-		{
-			memoryError = -1;
-			break;
-		}
-	}
-
-	if (memoryError)
-	{
-		for (i--; i >= 0; i--)
-			free(tempTable[i]);
-		free(functionTable);
-		return 0;
-	}
-
-	for (i = 0; i<=255; i++)
+	for (int i = 0; i<=255; i++)
 		functionTable[i] = NULL;
 
-	for (i = 0; i <= FUNCTION_MAX; i++)
+	for (int i = 0; i <= FUNCTION_MAX; i++)
 	{
-		index = Hash((const unsigned char *)functionNames[i], strlen(functionNames[i]));
+		int index = Hash((const unsigned char *)functionNames[i].c_str(), functionNames[i].size());
+
 		tempTable[i]->id = functionNames[i];
 		tempTable[i]->function = functions[i];
 		tempTable[i]->next = NULL;
 
 		if (functionTable[index])
 		{
-			currentChain = functionTable[index];
+			XaviFunctionChain *currentChain = functionTable[index];
 			while (currentChain->next)
 				currentChain = currentChain->next;
 			currentChain->next = tempTable[i];
@@ -429,33 +404,29 @@ int Xavi::Functions::Open()
 		}
 	}
 
-	free(tempTable);
-	return -11;
+	delete[] tempTable;
+	return true;
 }
+
+#include <iostream>
 
 void Xavi::Functions::Close()
 {
-	int i;
-	XaviFunctionChain * current;
-	XaviFunctionChain * next;
-
 	if (functionTable)
 	{
-		for (i = 0; i <= 255; i++)
-		{
+		for (int i = 0; i <= 255; i++)
 			if (functionTable[i])
 			{
-				current = functionTable[i];
+				XaviFunctionChain *current = functionTable[i];
 				while (current)
 				{
-					next = current->next;
-					free(current);
+					XaviFunctionChain *next = current->next;
+					delete current;
 					current = next;
 				}
 			}
-		}
 
-		free(functionTable);
+		delete[] functionTable;
 		functionTable = NULL;
 	}
 }
@@ -469,7 +440,7 @@ static FunctionPointer GetFunction(std::string Name)
 	current = functionTable[index];
 
 	while (current)
-		if (strcmp(Name.c_str(), current->id) != 0)
+		if (Name != current->id)
 			current = current->next;
 		else
 			break;
