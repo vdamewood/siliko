@@ -6,8 +6,7 @@ else()
 	add_definitions(-DXAVI_USE_UNIX=0)
 endif()
 
-set(Xavi_PUBLIC_HEADERS Xavi.h)
-set(Xavi_INTERNAL_HEADERS
+set(Xavi_HEADERS
   Value.hpp
   Functions.hpp
   FunctionCall.hpp
@@ -27,19 +26,17 @@ set(Xavi_SOURCES
   Token.cpp
   Lexer.cpp
   Parser.cpp
-  Xavi.cpp
 )
 
 add_library(Xavi
-  ${Xavi_PUBLIC_HEADERS}
-  ${Xavi_INTERNAL_HEADERS}
+  ${Xavi_HEADERS}
   ${Xavi_SOURCES})
 target_link_libraries(Xavi
   ${MATH_LIB})
 set_target_properties(Xavi
   PROPERTIES
     FRAMEWORK     TRUE
-    PUBLIC_HEADER ${Xavi_PUBLIC_HEADERS})
+    PUBLIC_HEADER ${Xavi_HEADERS})
 
 install(TARGETS Xavi
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH}
