@@ -1,5 +1,5 @@
 /*
- * XaviDataSource.hpp: Abstract interface for input data
+ * DataSource.hpp: Abstract interface for input data.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,8 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined DATASOURCE_HPP
-#define DATASOURCE_HPP
+#if !defined XAVI_DATASOURCE_HPP
+#define XAVI_DATASOURCE_HPP
 
 #if !defined API
 #  if defined _WIN32 && defined _MSC_VER
@@ -44,4 +44,4 @@ namespace Xavi
 	};
 };
 
-#endif /* DATASOURCE_HPP */
+#endif // XAVI_DATASOURCE_HPP

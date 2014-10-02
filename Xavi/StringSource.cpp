@@ -1,5 +1,5 @@
 /*
- * XaviCStringSource.cpp: Class for input data from a C-style string
+ * StringSource.cpp: Class to input data from a string.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.

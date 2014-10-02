@@ -1,5 +1,5 @@
 /*
- * XaviParser.h: Parser for Xavi.
+ * InfixParser.hpp: Recursive-descent infix parser.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,8 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_PARSER_H
-#define XAVI_PARSER_H
+#if !defined XAVI_INFIX_PARSER_H
+#define XAVI_INFIX_PARSER_H
 
 #include "SyntaxTree.hpp"
 #include "Lexer.hpp"
@@ -64,4 +64,4 @@ namespace Xavi
 		SyntaxTreeNode *MySyntaxTree;
 	};
 };
-#endif /* XAVI_PARSER_H */
+#endif // XAVI_INFIX_PARSER_H

@@ -1,5 +1,5 @@
 /*
- * XaviTree.c: Functions to manipulate abstract syntax trees.
+ * SyntaxTree.cpp: Abstract syntax tree classes.
  * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.

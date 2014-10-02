@@ -1,5 +1,5 @@
 /*
- * XaviLexer.cpp: Lexical analyzer
+ * Lexer.cpp: Lexical analyzer.
  * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.

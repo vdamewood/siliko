@@ -1,5 +1,5 @@
 /*
- * XaviValue.hpp: Data structure to represent a single value.
+ * Value.hpp: Data structure to represent a single value.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,8 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Xavi_VALUE_H
-#define Xavi_VALUE_H
+#if !defined XAVI_VALUE_H
+#define XAVI_VALUE_H
 
 #if !defined API
 #  if defined _WIN32 && defined _MSC_VER
@@ -79,4 +79,4 @@ namespace Xavi
 	};
 }
 
-#endif /* Xavi_VALUE_H */
+#endif // XAVI_VALUE_H

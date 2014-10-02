@@ -19,7 +19,7 @@
  */
 
 #include "Xavi/FunctionCaller.hpp"
-#include "Xavi/Parser.hpp"
+#include "Xavi/InfixParser.hpp"
 #include "Xavi/StringSource.hpp"
 
 #include "XavistaWindow.h"

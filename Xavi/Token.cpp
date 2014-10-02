@@ -1,5 +1,5 @@
 /*
- * XaviToken.cpp: Token passed from lexer to parser
+ * Token.cpp: Token passed from tokenizer to parser.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.

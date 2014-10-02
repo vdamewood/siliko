@@ -1,5 +1,5 @@
 /*
- * XaviParser.c: Parser for Xavi.
+ * InfixParser.cpp: Recursive-descent infix parser.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -20,7 +20,7 @@
 
 #include <typeinfo>
 
-#include "Parser.hpp"
+#include "InfixParser.hpp"
 
 Xavi::InfixParser::InfixParser(Xavi::Lexer *NewLexer)
 {

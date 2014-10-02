@@ -1,5 +1,5 @@
 /*
- * XaviToken.hpp: Token passed from lexer to parser
+ * Token.hpp: Token passed from tokenizer to parser.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -81,4 +81,4 @@ namespace Xavi
 	};
 };
 
-#endif /* XAVI_TOKEN_H */
+#endif // XAVI_TOKEN_H

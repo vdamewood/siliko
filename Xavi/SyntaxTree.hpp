@@ -1,5 +1,5 @@
 /*
- * XaviTree.h: Functions to manipulate abstract syntax trees.
+ * SyntaxTree.hpp: Abstract syntax tree classes.
  * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,8 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Xavi_TREE_H
-#define Xavi_TREE_H
+#if !defined XAVI_SYNTAX_TREE_H
+#define XAVI_SYNTAX_TREE_H
 
 #include <string>
 #include <list>
@@ -97,4 +97,4 @@ namespace Xavi
 	};
 }
 
-#endif // Xavi_TREE_H
+#endif // XAVI_SYNTAX_TREE_H

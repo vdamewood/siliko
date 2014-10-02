@@ -1,5 +1,5 @@
 /*
- * XaviCStringSource.hpp: Class for input data from a C-style string
+ * StringSource.hpp: Class to input data from a string.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,8 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined STRINGSOURCE_HPP
-#define STRINGSOURCE_HPP
+#if !defined XAVI_STRING_SOURCE_HPP
+#define XAVI_STRING_SOURCE_HPP
 
 #include <string>
 
@@ -54,4 +54,4 @@ namespace Xavi
 	};
 };
 
-#endif /* !defined CSTRINGSOURCE_HPP */
+#endif // XAVI_STRIN_GSOURCE_HPP

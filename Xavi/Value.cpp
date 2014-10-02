@@ -1,5 +1,5 @@
 /*
- * XaviValue.cpp: Data structure to represent a single value.
+ * Value.cpp: Data structure to represent a single value.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.

@@ -1,5 +1,5 @@
 /*
- * XaviLexer.h: Lexical analyzer
+ * Lexer.hpp: Lexical analyzer.
  * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,8 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_LEXER_H
-#define XAVI_LEXER_H
+#if !defined XAVI_TOKENIZER_H
+#define XAVI_TOKENIZER_H
 
 #include "DataSource.hpp"
 #include "Token.hpp"
@@ -54,4 +54,4 @@ namespace Xavi
 	};
 };
 
-#endif /* XAVI_LEXER_H */
+#endif // XAVI_TOKENIZER_H

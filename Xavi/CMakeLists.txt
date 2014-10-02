@@ -15,7 +15,7 @@ set(Xavi_HEADERS
   StringSource.cpp
   Token.hpp
   Lexer.hpp
-  Parser.hpp
+  InfixParser.hpp
 )
 set(Xavi_SOURCES
   Value.cpp
@@ -25,7 +25,7 @@ set(Xavi_SOURCES
   StringSource.cpp
   Token.cpp
   Lexer.cpp
-  Parser.cpp
+  InfixParser.cpp
 )
 
 add_library(Xavi

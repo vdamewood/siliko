@@ -1,5 +1,5 @@
 /*
- * Functions.hpp: Built-in functions
+ * Functions.hpp: Built-in functions.
  * Copyright 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,8 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Xavi_FUNCTIONS_H
-#define Xavi_FUNCTIONS_H
+#if !defined XAVI_FUNCTIONS_H
+#define XAVI_FUNCTIONS_H
 
 #include <vector>
 
@@ -65,4 +65,4 @@ namespace Xavi
 		Xavi::Value tanh(std::vector<Xavi::Value> Args);
 	};
 };
-#endif // Xavi_FUNCTIONS_H
+#endif // XAVI_FUNCTIONS_H
