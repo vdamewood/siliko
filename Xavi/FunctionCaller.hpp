@@ -1,5 +1,5 @@
 /*
- * XaviFunctionCall.h: Function handling.
+ * XaviFunctionCaller.h: Function handling.
  * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.

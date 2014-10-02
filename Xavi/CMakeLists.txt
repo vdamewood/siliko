@@ -9,7 +9,7 @@ endif()
 set(Xavi_HEADERS
   Value.hpp
   Functions.hpp
-  FunctionCall.hpp
+  FunctionCaller.hpp
   SyntaxTree.hpp
   DataSource.hpp
   StringSource.cpp
@@ -20,7 +20,7 @@ set(Xavi_HEADERS
 set(Xavi_SOURCES
   Value.cpp
   Functions.cpp
-  FunctionCall.cpp
+  FunctionCaller.cpp
   SyntaxTree.cpp
   StringSource.cpp
   Token.cpp

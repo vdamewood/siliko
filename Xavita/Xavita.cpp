@@ -26,7 +26,7 @@
 #	define ISATTY() (-1)
 #endif
 
-#include "Xavi/FunctionCall.hpp"
+#include "Xavi/FunctionCaller.hpp"
 #include "Xavi/Parser.hpp"
 #include "Xavi/StringSource.hpp"
 

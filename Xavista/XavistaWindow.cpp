@@ -18,7 +18,7 @@
  *  along with Xavista. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Xavi/FunctionCall.hpp"
+#include "Xavi/FunctionCaller.hpp"
 #include "Xavi/Parser.hpp"
 #include "Xavi/StringSource.hpp"
 

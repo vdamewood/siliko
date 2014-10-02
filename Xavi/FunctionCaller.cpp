@@ -1,5 +1,5 @@
 /*
- * XaviFunctionCall.c: Function handling.
+ * XaviFunctionCaller.c: Function handling.
  * Copyright 2012, 2014 Vincent Damewood
  *
  * This file is part of Xavi.
@@ -18,7 +18,7 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "FunctionCall.hpp"
+#include "FunctionCaller.hpp"
 #include "Functions.hpp"
 
 namespace Xavi
