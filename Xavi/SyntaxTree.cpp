@@ -92,7 +92,7 @@ Xavi::Value Xavi::BranchNode::GetValue()
 		}
 	}
 
-	return Xavi::FunctionCaller::Default().Call(FunctionId, Arguments);
+	return Xavi::FunctionCaller::Call(FunctionId, Arguments);
 }
 
 void Xavi::BranchNode::Negate()

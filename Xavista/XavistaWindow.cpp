@@ -30,7 +30,7 @@
 XavistaWindow::XavistaWindow(QWidget * parent)
 	: QMainWindow(parent)
 {
-	//XaviOpen();
+	Xavi::FunctionCaller::Initialize();
 	setupUi(this);
 	output->setNum(0);
 	connect(calculateButton, SIGNAL(clicked(bool)),
@@ -39,7 +39,7 @@ XavistaWindow::XavistaWindow(QWidget * parent)
 
 XavistaWindow::~XavistaWindow()
 {
-	Xavi::FunctionCaller::DeleteDefault();
+	Xavi::FunctionCaller::Destroy();
 }
 
 void XavistaWindow::calculate()

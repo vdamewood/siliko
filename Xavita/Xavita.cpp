@@ -101,6 +101,8 @@ int main(int argc, char *argv[])
 		response = "";
 	}
 
+	Xavi::FunctionCaller::Initialize();
+
 	while(-1)
 	{
 		char *expression = readline(prompt);
@@ -145,7 +147,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	Xavi::FunctionCaller::DeleteDefault();
+	Xavi::FunctionCaller::Destroy();
 
 	if (ISATTY())
 	{
