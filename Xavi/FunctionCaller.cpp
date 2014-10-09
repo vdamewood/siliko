@@ -18,6 +18,9 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cstring>
+#include <string>
+
 #include "FunctionCaller.hpp"
 #include "Functions.hpp"
 
@@ -28,7 +31,7 @@ namespace Xavi
 		class LookupNode
 		{
 		public:
-			LookupNode(std::string NewId, FunctionPointer NewFunction);
+			LookupNode(const char *NewId, FunctionPointer NewFunction);
 			~LookupNode(void);
 			std::string id;
 			FunctionPointer function;
@@ -110,14 +113,14 @@ void Xavi::FunctionCaller::Destroy(void)
 	lookup = 0;
 }
 
-void Xavi::FunctionCaller::Install(std::string Name, FunctionPointer Function)
+void Xavi::FunctionCaller::Install(const char *Name, FunctionPointer Function)
 {
-	(*lookup)[Hash((const unsigned char *)Name.c_str(), Name.size())].push_back(LookupNode(Name, Function));
+	(*lookup)[Hash((const unsigned char *)Name, std::strlen(Name))].push_back(LookupNode(Name, Function));
 }
 
-Xavi::Value Xavi::FunctionCaller::Call(std::string Name, std::vector<Xavi::Value> Args)
+Xavi::Value Xavi::FunctionCaller::Call(const char *Name, std::vector<Xavi::Value> Args)
 {
-	int index = Hash((const unsigned char *)Name.c_str(), Name.size());
+	int index = Hash((const unsigned char *)Name, strlen(Name));
 
 	for
 		(
@@ -126,14 +129,14 @@ Xavi::Value Xavi::FunctionCaller::Call(std::string Name, std::vector<Xavi::Value
 			i++
 		)
 		{
-			if (Name == i->id)
+			if (std::strcmp(Name, i->id.c_str()) == 0)
 				return i->function(Args);
 		}
 
-		return Xavi::Value::BAD_FUNCTION;
+	return Xavi::Value::BAD_FUNCTION;
 }
 
-Xavi::FunctionCaller::LookupNode::LookupNode(std::string NewId, FunctionPointer NewFunction)
+Xavi::FunctionCaller::LookupNode::LookupNode(const char *NewId, FunctionPointer NewFunction)
 {
 	id = NewId;
 	function = NewFunction;

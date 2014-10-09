@@ -23,21 +23,11 @@
 
 #include <string>
 
-#if !defined API
-#  if defined _WIN32 && defined _MSC_VER
-#    if defined Xavi_EXPORTS
-#      define API
-#    else Xavi_EXPORTS
-#      define API __declspec(dllimport)
-#    endif // Xavi_EXPORTS
-#  else // _WIN32 && __MSC_VER
-#    define API
-#  endif // _WIN32 && __MSC_VER
-#endif // API
+#include "W32Dll.hpp"
 
 namespace Xavi
 {
-	class Token
+	class API Token
 	{
 	public:
 		enum Type
@@ -61,14 +51,13 @@ namespace Xavi
 		Token(Type ValuelessType);
 		Token(int IntegerValue);
 		Token(float FloatValue);
-		Token(const std::string &IdValue);
 		Token(const char *IdValue);
 		~Token(void);
 
-		Type               GetType(void);
-		int                GetIntegerValue(void);
-		float              GetFloatValue(void);
-		const std::string &GetIdValue(void);
+		Type        GetType(void);
+		int         GetIntegerValue(void);
+		float       GetFloatValue(void);
+		const char *GetIdValue(void);
 
 	private:
 		Type MyType;
@@ -76,7 +65,7 @@ namespace Xavi
 		{
 			int IntegerValue;
 			float FloatValue;
-			std::string *IdValue;
+			char *IdValue;
 		};
 	};
 };

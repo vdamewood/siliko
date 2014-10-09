@@ -68,7 +68,7 @@ float Xavi::Value::FloatValue(void) const
 	else if (MyStatus == FLOAT)
 		return MyFloatValue;
 	else
-		return std::numeric_limits<double>::quiet_NaN();
+		return std::numeric_limits<float>::quiet_NaN();
 }
 
 bool Xavi::Value::IsNumber(void) const

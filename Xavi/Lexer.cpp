@@ -19,6 +19,7 @@
  */
 
 #include <cstdlib>
+#include <cstring>
 
 #include "Lexer.hpp"
 
@@ -66,6 +67,10 @@ enum XaviDfaState
 	DFA_TERM_EOI,
 	DFA_END
 };
+
+#include <iostream>
+using std::cout;
+using std::endl;
 
 void Xavi::Lexer::Load(void)
 {
@@ -246,7 +251,7 @@ void Xavi::Lexer::Load(void)
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_STRING:
-		token = new Token(lexeme);
+		token = new Token(lexeme.c_str());
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_EOI:

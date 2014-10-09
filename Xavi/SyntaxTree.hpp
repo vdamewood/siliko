@@ -21,26 +21,14 @@
 #if !defined XAVI_SYNTAX_TREE_H
 #define XAVI_SYNTAX_TREE_H
 
-#include <string>
 #include <list>
 
+#include "W32Dll.hpp"
 #include "Value.hpp"
-
-#if !defined API
-#  if defined _WIN32 && defined _MSC_VER
-#    if defined Xavi_EXPORTS
-#      define API
-#    else Xavi_EXPORTS
-#      define API __declspec(dllimport)
-#    endif // Xavi_EXPORTS
-#  else // _WIN32 && __MSC_VER
-#    define API
-#  endif // _WIN32 && __MSC_VER
-#endif // API
 
 namespace Xavi
 {
-	class SyntaxTreeNode
+	class API SyntaxTreeNode
 	{
 	public:
 		virtual ~SyntaxTreeNode(void) { };
@@ -58,7 +46,7 @@ namespace Xavi
 		int Value;
 	};
 
-	class FloatNode : public SyntaxTreeNode
+	class API FloatNode : public SyntaxTreeNode
 	{
 	public:
 		FloatNode(float NewValue);
@@ -68,27 +56,27 @@ namespace Xavi
 		float Value;
 	};
 
-	class BranchNode : public SyntaxTreeNode
+	class API BranchNode : public SyntaxTreeNode
 	{
 	public:
 		BranchNode(void);
-		BranchNode(std::string NewFunctionId);
+		BranchNode(const char *NewFunctionId);
 		virtual ~BranchNode();
 		virtual Value GetValue(void);
 		virtual void Negate(void);
 
-		void SetId(std::string NewId);
+		void SetId(const char *NewId);
 		void PushLeft(SyntaxTreeNode *);
 		void PushRight(SyntaxTreeNode *);
 		bool GraftLeft(SyntaxTreeNode *);
 		bool GraftRight(SyntaxTreeNode *);
 	private:
 		bool IsNegated;
-		std::string FunctionId;
+		char *FunctionId;
 		std::list<SyntaxTreeNode *> Children;
 	};
 
-	class SyntaxErrorNode : public SyntaxTreeNode
+	class API SyntaxErrorNode : public SyntaxTreeNode
 	{
 	public:
 		virtual ~SyntaxErrorNode(void);

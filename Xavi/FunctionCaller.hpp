@@ -22,22 +22,11 @@
 #define XAVI_FUNCTION_CALL_H
 
 #include <list>
-#include <string>
 #include <vector>
 
+#include "W32Dll.hpp"
 #include "Value.hpp"
 
-#if !defined API
-#  if defined _WIN32 && defined _MSC_VER
-#    if defined Xavi_EXPORTS
-#      define API
-#    else Xavi_EXPORTS
-#      define API __declspec(dllimport)
-#    endif // Xavi_EXPORTS
-#  else // _WIN32 && __MSC_VER
-#    define API
-#  endif // _WIN32 && __MSC_VER
-#endif // API
 
 namespace Xavi
 {
@@ -45,10 +34,10 @@ namespace Xavi
 	{
 		typedef Value (*FunctionPointer)(std::vector<Value>);
 
-		bool Initialize(void);
-		void Destroy(void);
-		Value Call(std::string Name, std::vector<Value> Args);
-		void Install(std::string Name, FunctionPointer Function);
+		API bool Initialize(void);
+		API void Destroy(void);
+		API Value Call(const char *Name, std::vector<Value> Args);
+		API void Install(const char *Name, FunctionPointer Function);
 	};
 };
 #endif // XAVI_FUNCTION_CALL_H

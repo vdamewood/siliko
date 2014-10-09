@@ -35,7 +35,7 @@
 
 namespace Xavi
 {
-	class Value
+	class API Value
 	{
 	public:
 		enum ValueStatus

@@ -81,7 +81,7 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr0(void)
 
 Xavi::BranchNode *Xavi::InfixParser::GetExpr0r(void)
 {
-	std::string FunctionId;
+	const char *FunctionId;
 	switch (MyLexer->GetToken().GetType())
 	{
 	case '+':
@@ -130,7 +130,7 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr1(void)
 
 Xavi::BranchNode *Xavi::InfixParser::GetExpr1r(void)
 {
-	std::string FunctionId;
+	const char *FunctionId;
 	switch (MyLexer->GetToken().GetType())
 	{
 		case '*':
@@ -300,41 +300,34 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetFCall(void)
 	if (MyLexer->GetToken().GetType() != Xavi::Token::ID)
 		return new Xavi::SyntaxErrorNode();
 
-	std::string id = MyLexer->GetToken().GetIdValue();
+	Xavi::BranchNode *rVal = new Xavi::BranchNode(MyLexer->GetToken().GetIdValue());
 	MyLexer->Next();
 
 	if (MyLexer->GetToken().GetType() != '(')
-		return new Xavi::SyntaxErrorNode();
-
+	{
+		rVal->PushRight(new Xavi::SyntaxErrorNode());
+		return rVal;
+	}
 	MyLexer->Next();
 
-	Xavi::SyntaxTreeNode *rVal = GetArguments();
-	if (!rVal)
-		return new Xavi::SyntaxErrorNode();
+	GetArguments(*rVal);
 
-	if (typeid(*rVal) == typeid(Xavi::SyntaxErrorNode))
-		return rVal;
-
-	if (MyLexer->GetToken().GetType() != ')' || typeid(*rVal) != typeid(Xavi::BranchNode))
+	if (MyLexer->GetToken().GetType() != ')')
 	{
-		delete rVal;
-		return new Xavi::SyntaxErrorNode();
+		rVal->PushRight(new Xavi::SyntaxErrorNode());
+		return rVal;
 	}
-
-	static_cast<Xavi::BranchNode *>(rVal)->SetId(id);
 	MyLexer->Next();
 
 	return rVal;
 }
 
-Xavi::BranchNode *Xavi::InfixParser::GetArguments(void)
+void Xavi::InfixParser::GetArguments(Xavi::BranchNode &rVal)
 {
-	Xavi::BranchNode *rVal = new Xavi::BranchNode();
-
 	while(true)
 	{
 		Xavi::SyntaxTreeNode *Expression = GetExpr0();
-		rVal->PushRight(Expression);
+		rVal.PushRight(Expression);
 
 		if (typeid(*Expression) == typeid(Xavi::SyntaxErrorNode)
 			|| MyLexer->GetToken().GetType() == ')')
@@ -343,11 +336,9 @@ Xavi::BranchNode *Xavi::InfixParser::GetArguments(void)
 		}
 		else if (MyLexer->GetToken().GetType() != ',')
 		{
-			rVal->PushRight(new Xavi::SyntaxErrorNode());
+			rVal.PushRight(new Xavi::SyntaxErrorNode());
 			break;
 		}
 		MyLexer->Next();
 	}
-
-	return rVal;
 }

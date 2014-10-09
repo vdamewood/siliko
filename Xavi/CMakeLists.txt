@@ -7,12 +7,13 @@ else()
 endif()
 
 set(Xavi_HEADERS
+  W32Dll.hpp
   Value.hpp
   Functions.hpp
   FunctionCaller.hpp
   SyntaxTree.hpp
   DataSource.hpp
-  StringSource.cpp
+  CStringSource.cpp
   Token.hpp
   Lexer.hpp
   InfixParser.hpp
@@ -22,7 +23,7 @@ set(Xavi_SOURCES
   Functions.cpp
   FunctionCaller.cpp
   SyntaxTree.cpp
-  StringSource.cpp
+  CStringSource.cpp
   Token.cpp
   Lexer.cpp
   InfixParser.cpp
@@ -36,7 +37,7 @@ target_link_libraries(Xavi
 set_target_properties(Xavi
   PROPERTIES
     FRAMEWORK     TRUE
-    PUBLIC_HEADER ${Xavi_HEADERS})
+    PUBLIC_HEADER "${Xavi_HEADERS}")
 
 install(TARGETS Xavi
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH}

@@ -18,6 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cstring>
+
 #include "SyntaxTree.hpp"
 #include "FunctionCaller.hpp"
 
@@ -53,26 +55,29 @@ void Xavi::FloatNode::Negate()
 
 Xavi::BranchNode::BranchNode(void)
 {
+	FunctionId = 0;
 	Children = std::list<Xavi::SyntaxTreeNode *>();
 	IsNegated = false;
 }
 
-Xavi::BranchNode::BranchNode(std::string NewId)
+Xavi::BranchNode::BranchNode(const char *NewId)
 {
 	Children = std::list<Xavi::SyntaxTreeNode *>();
 	IsNegated = false;
-	FunctionId = NewId;
+	SetId(NewId);
 }
 
 Xavi::BranchNode::~BranchNode()
 {
+	delete[] FunctionId;
 	for (std::list<SyntaxTreeNode*>::iterator i = Children.begin(); i != Children.end(); i++)
 		delete *i;
 }
 
-void Xavi::BranchNode::SetId(std::string NewId)
+void Xavi::BranchNode::SetId(const char *NewId)
 {
-	FunctionId = NewId;
+	FunctionId = new char[strlen(NewId) + 1];
+	std::strcpy(FunctionId, NewId);
 }
 
 Xavi::Value Xavi::BranchNode::GetValue()

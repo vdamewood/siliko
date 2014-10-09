@@ -18,6 +18,8 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cstring>
+
 #include "Token.hpp"
 
 Xavi::Token::Token(Type NewType)
@@ -38,23 +40,18 @@ Xavi::Token::Token(float NewFloatValue)
 	FloatValue = NewFloatValue;
 }
 
-Xavi::Token::Token(const std::string &NewIdValue)
-{
-	MyType = ID;
-	IdValue = new std::string(NewIdValue);
-}
-
 Xavi::Token::Token(const char *NewIdValue)
 {
 	MyType = ID;
-	IdValue = new std::string(NewIdValue);
+	IdValue = new char[std::strlen(NewIdValue) + 1];
+	std::strcpy(IdValue, NewIdValue);
 }
 
 
 Xavi::Token::~Token()
 {
 	if (MyType == ID)
-		delete IdValue;
+		delete[] IdValue;
 }
 
 Xavi::Token::Type Xavi::Token::GetType(void)
@@ -72,7 +69,7 @@ float Xavi::Token::GetFloatValue(void)
 	return FloatValue;
 }
 
-const std::string &Xavi::Token::GetIdValue(void)
+const char *Xavi::Token::GetIdValue(void)
 {
-	return *IdValue;
+	return IdValue;
 }

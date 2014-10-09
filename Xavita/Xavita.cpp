@@ -28,7 +28,7 @@
 
 #include "Xavi/FunctionCaller.hpp"
 #include "Xavi/InfixParser.hpp"
-#include "Xavi/StringSource.hpp"
+#include "Xavi/CStringSource.hpp"
 
 char *readline(const char *prompt)
 {
