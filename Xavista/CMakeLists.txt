@@ -1,8 +1,8 @@
 # Xavista
 
-set(Xavista_HEADERS     ${Library_SOURCE_DIR}/Xavi.h)
+set(Xavista_HEADERS     ${Library_SOURCE_DIR}/Xavi.h QStringSource.hpp)
 set(Xavista_MOC_HEADERS XavistaWindow.h)
-set(Xavista_SOURCES     Xavista.cpp XavistaWindow.cpp)
+set(Xavista_SOURCES     Xavista.cpp XavistaWindow.cpp QStringSource.cpp)
 set(Xavista_UIS         XavistaWindow.ui)
 set(Xavista_LIBRARIES   Xavi ${Qt5Widgets_LIBRARIES})
 set(Xavista_PLUGINS)

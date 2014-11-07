@@ -18,14 +18,12 @@
  *  along with Xavista. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Xavi/FunctionCaller.hpp"
-#include "Xavi/InfixParser.hpp"
-#include "Xavi/CStringSource.hpp"
+#include <Xavi/FunctionCaller.hpp>
+#include <Xavi/InfixParser.hpp>
+#include <Xavi/CStringSource.hpp>
 
+#include "QStringSource.hpp"
 #include "XavistaWindow.h"
-
-
-
 
 XavistaWindow::XavistaWindow(QWidget * parent)
 	: QMainWindow(parent)
@@ -44,7 +42,7 @@ XavistaWindow::~XavistaWindow()
 
 void XavistaWindow::calculate()
 {
-	Xavi::InfixParser MyParser(new Xavi::Lexer(new Xavi::StringSource(input->text().toUtf8().data())));
+	Xavi::InfixParser MyParser(new Xavi::Lexer(new QStringSource(input->text())));
 
 	MyParser.Parse();
 	Xavi::Value result = MyParser.SyntaxTree().GetValue();
@@ -78,41 +76,4 @@ void XavistaWindow::calculate()
 			output->setText("Range error.\n");
 			break;
 	}
-
-
-	/*XaviResult value = XaviEvaluate(input->text().toUtf8().data());
-	switch (value.status) {
-	case XAVI_RS_INTEGER:
-		output->setNum(value.i);
-		break;
-	case XAVI_RS_FLOAT:
-		output->setNum(value.f);
-		break;
-	case XAVI_RE_INTERNAL:
-		output->setText("Internal error.");
-		break;
-	case XAVI_RE_MEMORY:
-		output->setText("Out of memory.");
-		break;
-	case XAVI_RE_SYNTAX:
-		output->setText("Syntax error.");
-		break;
-	case XAVI_RE_ZERO_DIV:
-		output->setText("Division by zero error.");
-		break;
-	case XAVI_RE_FUNCTION:
-		output->setText("Function not found.");
-		break;
-	case XAVI_RE_ARGUMENTS:
-		output->setText("Bad argument count.");
-		break;
-	case XAVI_RE_DOMAIN:
-		output->setText("Domain error.");
-		break;
-	case XAVI_RE_RANGE:
-		output->setText("Range error.");
-		break;
-	default:
-		output->setText("An error occured.");
-	}*/
 }
