@@ -19,6 +19,7 @@
  */
 
 #include <cstdlib>
+#include <cctype>
 #include <cstring>
 
 #include "Lexer.hpp"
