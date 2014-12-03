@@ -25,32 +25,32 @@
 
 Xavi::IntegerNode::IntegerNode(int NewValue)
 {
-	Value = NewValue;
+	IntValue = NewValue;
 }
 
 Xavi::Value Xavi::IntegerNode::GetValue()
 {
-	return Value;
+	return IntValue;
 }
 
 void Xavi::IntegerNode::Negate()
 {
-	Value *= -1;
+	IntValue *= -1;
 }
 
 Xavi::FloatNode::FloatNode(float NewValue)
 {
-	Value = NewValue;
+	FloatValue = NewValue;
 }
 
 Xavi::Value Xavi::FloatNode::GetValue()
 {
-	return Value;
+	return FloatValue;
 }
 
 void Xavi::FloatNode::Negate()
 {
-	Value *= -1.0;
+	FloatValue *= -1.0;
 }
 
 Xavi::BranchNode::BranchNode(void)

@@ -43,7 +43,7 @@ namespace Xavi
 		virtual Value GetValue(void);
 		virtual void Negate(void);
 	private:
-		int Value;
+		int IntValue;
 	};
 
 	class XAVI_API FloatNode : public SyntaxTreeNode
@@ -53,7 +53,7 @@ namespace Xavi
 		virtual Value GetValue(void);
 		virtual void Negate(void);
 	private:
-		float Value;
+		float FloatValue;
 	};
 
 	class XAVI_API BranchNode : public SyntaxTreeNode
