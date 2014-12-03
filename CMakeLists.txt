@@ -7,17 +7,28 @@ set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
-# Configuration Options: CMake Standard
-option(CMAKE_BUILD_TYPE  "Build as Debug or Release."                      Debug)
-option(BUILD_SHARED_LIBS "Build Xavi as a shared library."                 On)
-
-# Configuration Options: Xavi Specific
-option(BUILD_XAVISTA     "Build Xavista, a Qt-based GUI frontend to Xavi." On)
-option(BUILD_TESTS       "Build testing programs."                         Off)
 
 # Dependency searches
-if(BUILD_XAVISTA)
- find_package(Qt5Widgets)
+message("-- Finding Qt5Widgets")
+find_package(Qt5Widgets QUIET)
+
+if(Qt5Widgets_FOUND)
+  message("-- Finding Qt5Widgets - found")
+else()
+  message("-- Finding Qt5Widgets - not found")
+endif()
+
+# Configuration Options: CMake Standard
+option(CMAKE_BUILD_TYPE  "Build as Debug or Release."              Debug)
+option(BUILD_SHARED_LIBS "Build Xavi as a shared library."         On)
+
+# Configuration Options: Xavi Specific
+option(BUILD_XAVISTA     "Build Xavista, a Qt-based GUI frontend." Qt5Widgets_FOUND)
+option(BUILD_TESTS       "Build testing programs."                 On)
+
+# Make sure we don't try to build Xavista without Qt5Widgets.
+if(BUILD_XAVISTA AND NOT Qt5Widgets_FOUND)
+  message(FATAL_ERROR "Build Xavista requested but Qt5Widgets (required by Xavista) not found.")
 endif()
 
 # System-independent values
