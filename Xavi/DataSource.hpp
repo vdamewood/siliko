@@ -25,7 +25,7 @@
 
 namespace Xavi
 {
-	class API DataSource
+	class XAVI_API DataSource
 	{
 	public:
 		virtual ~DataSource() { };

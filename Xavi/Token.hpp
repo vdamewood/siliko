@@ -27,7 +27,7 @@
 
 namespace Xavi
 {
-	class API Token
+	class XAVI_API Token
 	{
 	public:
 		enum Type

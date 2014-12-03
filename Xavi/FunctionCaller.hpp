@@ -34,10 +34,10 @@ namespace Xavi
 	{
 		typedef Value (*FunctionPointer)(std::vector<Value>);
 
-		API bool Initialize(void);
-		API void Destroy(void);
-		API Value Call(const char *Name, std::vector<Value> Args);
-		API void Install(const char *Name, FunctionPointer Function);
+		XAVI_API bool Initialize(void);
+		XAVI_API void Destroy(void);
+		XAVI_API Value Call(const char *Name, std::vector<Value> Args);
+		XAVI_API void Install(const char *Name, FunctionPointer Function);
 	};
 };
 #endif // XAVI_FUNCTION_CALL_H

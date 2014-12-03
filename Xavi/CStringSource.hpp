@@ -28,7 +28,7 @@
 
 namespace Xavi
 {
-	class API StringSource : public DataSource
+	class XAVI_API StringSource : public DataSource
 	{
 	public:
 		StringSource(const char *);

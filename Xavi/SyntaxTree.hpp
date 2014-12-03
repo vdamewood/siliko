@@ -28,7 +28,7 @@
 
 namespace Xavi
 {
-	class API SyntaxTreeNode
+	class XAVI_API SyntaxTreeNode
 	{
 	public:
 		virtual ~SyntaxTreeNode(void) { };
@@ -46,7 +46,7 @@ namespace Xavi
 		int Value;
 	};
 
-	class API FloatNode : public SyntaxTreeNode
+	class XAVI_API FloatNode : public SyntaxTreeNode
 	{
 	public:
 		FloatNode(float NewValue);
@@ -56,7 +56,7 @@ namespace Xavi
 		float Value;
 	};
 
-	class API BranchNode : public SyntaxTreeNode
+	class XAVI_API BranchNode : public SyntaxTreeNode
 	{
 	public:
 		BranchNode(void);
@@ -76,7 +76,7 @@ namespace Xavi
 		std::list<SyntaxTreeNode *> Children;
 	};
 
-	class API SyntaxErrorNode : public SyntaxTreeNode
+	class XAVI_API SyntaxErrorNode : public SyntaxTreeNode
 	{
 	public:
 		virtual ~SyntaxErrorNode(void);

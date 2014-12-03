@@ -27,7 +27,7 @@
 
 namespace Xavi
 {
-	class API InfixParser
+	class XAVI_API InfixParser
 	{
 	public:
 		InfixParser(Xavi::Lexer *NewLexer);
