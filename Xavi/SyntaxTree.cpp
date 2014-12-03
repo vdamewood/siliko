@@ -18,6 +18,11 @@
  * License along with Xavi. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Visual Studio complains about strcpy without this.
+#if defined _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif /* _MSC_VER */
+
 #include <cstring>
 
 #include "SyntaxTree.hpp"

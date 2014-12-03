@@ -28,7 +28,7 @@ namespace Xavi
 	class XAVI_API Value
 	{
 	public:
-		enum ValueStatus
+		enum XAVI_API ValueStatus
 		{
 			INTEGER,       /* Success: The value is an integer. */
 			FLOAT,         /* Success: The valis is a float. */

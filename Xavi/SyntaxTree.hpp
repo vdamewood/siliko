@@ -26,6 +26,10 @@
 #include "W32Dll.hpp"
 #include "Value.hpp"
 
+// Windows requires this trickery.
+namespace Xavi { class SyntaxTreeNode; };
+XAVI_EXTERN template class XAVI_API std::list<Xavi::SyntaxTreeNode *>;
+
 namespace Xavi
 {
 	class XAVI_API SyntaxTreeNode
