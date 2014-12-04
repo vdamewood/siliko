@@ -52,29 +52,28 @@ Xavi::Token::Token(const char *NewIdValue)
 	std::strcpy(IdValue, NewIdValue);
 }
 
-
 Xavi::Token::~Token()
 {
 	if (MyType == ID)
 		delete[] IdValue;
 }
 
-Xavi::Token::Type Xavi::Token::GetType(void)
+Xavi::Token::Type Xavi::Token::GetType(void) const
 {
 	return MyType;
 }
 
-int Xavi::Token::GetIntegerValue(void)
+int Xavi::Token::GetIntegerValue(void) const
 {
 	return IntegerValue;
 }
 
-float Xavi::Token::GetFloatValue(void)
+float Xavi::Token::GetFloatValue(void) const
 {
 	return FloatValue;
 }
 
-const char *Xavi::Token::GetIdValue(void)
+const char *Xavi::Token::GetIdValue(void) const
 {
 	return IdValue;
 }

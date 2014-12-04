@@ -42,6 +42,7 @@ namespace Xavi
 			SUBTRACT = '-',
 			DIVISION = '/',
 			EXPONENT = '^',
+			DICE = 'd',
 			INTEGER = 256,
 			FLOAT,
 			ID,
@@ -54,10 +55,10 @@ namespace Xavi
 		Token(const char *IdValue);
 		~Token(void);
 
-		Type        GetType(void);
-		int         GetIntegerValue(void);
-		float       GetFloatValue(void);
-		const char *GetIdValue(void);
+		Type        GetType(void) const;
+		int         GetIntegerValue(void) const;
+		float       GetFloatValue(void) const;
+		const char *GetIdValue(void) const;
 
 	private:
 		Type MyType;

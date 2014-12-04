@@ -1,5 +1,5 @@
 /*
- * XaviTestHash.c: Program to test Xavi's hash function.
+ * XaviTestHash.cpp: Program to test Xavi's hash function.
  * Copyright 2014 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 unsigned char XaviHash(const unsigned char *rawInput, size_t length)
 ;

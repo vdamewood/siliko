@@ -69,10 +69,6 @@ enum XaviDfaState
 	DFA_END
 };
 
-#include <iostream>
-using std::cout;
-using std::endl;
-
 void Xavi::Lexer::Load(void)
 {
 	XaviDfaState dfaState = DFA_START;
