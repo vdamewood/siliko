@@ -16,22 +16,56 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstdio>
 #include <cstring>
+#include <iostream>
+#include <string>
+#include <vector>
 
-unsigned char XaviHash(const unsigned char *rawInput, size_t length)
-;
+#include <Xavi/Hash.hpp>
+
 int main(int argc, char * argv[])
 {
-	if (argc == 2)
+	std::vector<std::string> Tests;
+	std::vector<unsigned char> Expected;
+	Tests.push_back("abs");
+	Expected.push_back(0x08);
+
+	Tests.push_back("addition");
+	Expected.push_back(0xAF);
+
+	Tests.push_back(" ");
+	Expected.push_back(0xA4);
+
+	Tests.push_back("qwert");
+	Expected.push_back(0x11);
+
+	Tests.push_back("dice");
+	Expected.push_back(0xB9);
+
+	Tests.push_back("sin");
+	Expected.push_back(0xD7);
+
+	int Success = 0;
+	unsigned char Result = 0x0;
+
+	for (int i = 0; i < Tests.size(); i++)
 	{
-		int len = strlen(argv[1]);
-		int i = 0;
-		for (; i <= len-1; i++)
-			printf("%02X", argv[1][i]);
-		printf("\n");
-		printf("%d\n", (int) XaviHash(argv[1], len));
+		std::cout << "Attempting " << Tests[i] << ": ";
+		Result = Xavi::Crc8((unsigned char *)Tests[i].c_str(), strlen(Tests[i].c_str()));
+		if (Result == Expected[i])
+		{
+			std::cout << "Success" << std::endl;
+			Success++;
+		}
+		else
+		{
+			std::cout << "failed. Expected: " << Expected[i]
+				<< "; Got: " << Result << ";" << std::endl;
+		}
 	}
 
-	return 0;
+	if (Success == Tests.size())
+		std::cout << "Total success." << std::endl;
+
+	return Tests.size() - Success;
 }

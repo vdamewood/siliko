@@ -23,6 +23,7 @@
 
 #include "FunctionCaller.hpp"
 #include "Functions.hpp"
+#include "Hash.hpp"
 
 namespace Xavi
 {
@@ -41,7 +42,7 @@ namespace Xavi
 
 static std::vector< std::list<Xavi::FunctionCaller::LookupNode> > *lookup = 0;
 
-static unsigned char Hash(const unsigned char *rawInput, size_t length)
+/*static unsigned char Hash(const unsigned char *rawInput, size_t length)
 {
 	const unsigned char divisor = 0xD5;
 	unsigned char result = 0x00;
@@ -66,7 +67,7 @@ static unsigned char Hash(const unsigned char *rawInput, size_t length)
 	}
 
 	return result;
-}
+}*/
 
 bool Xavi::FunctionCaller::Initialize(void)
 {
@@ -115,12 +116,12 @@ void Xavi::FunctionCaller::Destroy(void)
 
 void Xavi::FunctionCaller::Install(const char *Name, FunctionPointer Function)
 {
-	(*lookup)[Hash((const unsigned char *)Name, std::strlen(Name))].push_back(LookupNode(Name, Function));
+	(*lookup)[Xavi::Crc8((const unsigned char *)Name, std::strlen(Name))].push_back(LookupNode(Name, Function));
 }
 
 Xavi::Value Xavi::FunctionCaller::Call(const char *Name, std::vector<Xavi::Value> Args)
 {
-	int index = Hash((const unsigned char *)Name, strlen(Name));
+	int index = Xavi::Crc8((const unsigned char *)Name, strlen(Name));
 
 	for
 		(

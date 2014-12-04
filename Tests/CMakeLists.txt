@@ -6,11 +6,10 @@ add_executable(XaviTestFunctions
     XaviTestFunctions.cpp)
 target_link_libraries(XaviTestFunctions Xavi ${MATH_LIB})
 
-#add_executable(XaviTestHash
-#    XaviTestHash.cpp)
-#target_link_libraries(XaviTestHash Xavi)
+add_executable(XaviTestHash
+    XaviTestHash.cpp ${Library_SOURCE_DIR}/Hash.cpp)
+target_link_libraries(XaviTestHash Xavi)
 
 add_executable(XaviTestLexer
     XaviTestLexer.cpp)
 target_link_libraries(XaviTestLexer Xavi)
-

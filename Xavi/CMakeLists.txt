@@ -6,7 +6,7 @@ else()
 	add_definitions(-DXAVI_USE_UNIX=0)
 endif()
 
-set(Xavi_HEADERS
+set(Xavi_PUBLIC_HEADERS
   W32Dll.hpp
   Value.hpp
   Functions.hpp
@@ -18,7 +18,13 @@ set(Xavi_HEADERS
   Lexer.hpp
   InfixParser.hpp
 )
+
+set(Xavi_HEADERS
+  ${XAVI_PUBLIC_HEADERS}
+  Hash.cpp)
+
 set(Xavi_SOURCES
+  Hash.cpp
   Value.cpp
   Functions.cpp
   FunctionCaller.cpp
@@ -37,7 +43,7 @@ target_link_libraries(Xavi
 set_target_properties(Xavi
   PROPERTIES
     FRAMEWORK     TRUE
-    PUBLIC_HEADER "${Xavi_HEADERS}")
+    PUBLIC_HEADER "${Xavi_PUBLIC_HEADERS}")
 
 install(TARGETS Xavi
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH}
