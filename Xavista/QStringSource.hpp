@@ -22,7 +22,7 @@
 #define Q_STRING_SOURCE_H
 
 #include <QString>
-#include <Xavi/DataSource.hpp>
+#include <Xavi++/DataSource.hpp>
 
 class QStringSource : public Xavi::DataSource
 {

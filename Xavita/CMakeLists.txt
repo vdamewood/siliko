@@ -9,7 +9,7 @@ else()
 endif()
 
 add_executable(Xavita Xavita.cpp)
-target_link_libraries(Xavita Xavi)
+target_link_libraries(Xavita Xavi++)
 
 install(TARGETS Xavita
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH}

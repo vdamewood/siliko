@@ -98,6 +98,7 @@ endif()
 
 # Subdirectory inclusions
 add_subdirectory(Xavi)
+add_subdirectory(Xavi++)
 add_subdirectory(Xavita)
 if(BUILD_XAVISTA)
   add_subdirectory(Xavista)

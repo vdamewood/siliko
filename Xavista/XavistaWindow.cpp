@@ -18,12 +18,12 @@
  *  along with Xavista. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Xavi/FunctionCaller.hpp>
-#include <Xavi/InfixParser.hpp>
-#include <Xavi/CStringSource.hpp>
+#include <Xavi++/FunctionCaller.hpp>
+#include <Xavi++/InfixParser.hpp>
+#include <Xavi++/CStringSource.hpp>
 
 #include "QStringSource.hpp"
-#include "XavistaWindow.h"
+#include "XavistaWindow.hpp"
 
 XavistaWindow::XavistaWindow(QWidget * parent)
 	: QMainWindow(parent)

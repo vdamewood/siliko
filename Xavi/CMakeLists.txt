@@ -6,44 +6,27 @@ else()
 	add_definitions(-DXAVI_USE_UNIX=0)
 endif()
 
-set(Xavi_PUBLIC_HEADERS
-  W32Dll.hpp
-  Value.hpp
-  Functions.hpp
-  FunctionCaller.hpp
-  SyntaxTree.hpp
-  DataSource.hpp
-  CStringSource.cpp
-  Token.hpp
-  Lexer.hpp
-  InfixParser.hpp
-)
-
-set(Xavi_HEADERS
-  ${XAVI_PUBLIC_HEADERS}
-  Hash.cpp)
-
+set(Xavi_PUBLIC_HEADERS Xavi.h)
+set(Xavi_INTERNAL_HEADERS
+  XaviFunctionCall.h
+  XaviTree.h XaviValue.h
+  XaviParser.h XaviLexer.h)
 set(Xavi_SOURCES
-  Hash.cpp
-  Value.cpp
-  Functions.cpp
-  FunctionCaller.cpp
-  SyntaxTree.cpp
-  CStringSource.cpp
-  Token.cpp
-  Lexer.cpp
-  InfixParser.cpp
-)
+  Xavi.c
+  XaviFunctionCall.c
+  XaviTree.c
+  XaviParser.c XaviLexer.c)
 
 add_library(Xavi
-  ${Xavi_HEADERS}
+  ${Xavi_PUBLIC_HEADERS}
+  ${Xavi_INTERNAL_HEADERS}
   ${Xavi_SOURCES})
 target_link_libraries(Xavi
   ${MATH_LIB})
 set_target_properties(Xavi
   PROPERTIES
     FRAMEWORK     TRUE
-    PUBLIC_HEADER "${Xavi_PUBLIC_HEADERS}")
+    PUBLIC_HEADER ${Xavi_PUBLIC_HEADERS})
 
 install(TARGETS Xavi
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH}

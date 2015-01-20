@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 
-#include <Xavi/Hash.hpp>
+#include <Xavi++/Hash.hpp>
 
 int main(int argc, char * argv[])
 {

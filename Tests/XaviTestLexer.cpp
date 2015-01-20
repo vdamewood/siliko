@@ -19,8 +19,8 @@
 #include <iostream>
 #include <cstring>
 
-#include <Xavi/DataSource.hpp>
-#include <Xavi/Lexer.hpp>
+#include <Xavi++/DataSource.hpp>
+#include <Xavi++/Lexer.hpp>
 
 void PrintToken(const Xavi::Token &MyToken)
 {
@@ -49,14 +49,21 @@ void PrintToken(const Xavi::Token &MyToken)
 class DataSourceStub : public Xavi::DataSource
 {
 public:
+	DataSourceStub();
 	virtual ~DataSourceStub();
 	virtual bool Advance();
 	virtual char GetCurrent();
 
 private:
-	const char *input = "abs(2) + 300 / 3d6 + 5.25 * sin(200) - 5";
-	int position = 0;
+	const char *input;
+	int position;
 };
+
+DataSourceStub::DataSourceStub()
+	: input("abs(2) + 300 / 3d6 + 5.25 * sin(200) - 5"),
+	position(0)
+{
+}
 
 bool DataSourceStub::Advance()
 {

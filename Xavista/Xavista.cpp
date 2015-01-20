@@ -20,7 +20,7 @@
 
 #include <QApplication>
 
-#include "XavistaWindow.h"
+#include "XavistaWindow.hpp"
 
 int main(int argc, char *argv[])
 {
