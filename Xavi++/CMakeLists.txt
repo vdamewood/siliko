@@ -20,8 +20,8 @@ set(Xavi++_PUBLIC_HEADERS
 )
 
 set(Xavi++_HEADERS
-  ${XAVI_PUBLIC_HEADERS}
-  Hash.cpp)
+  ${XAVI++_PUBLIC_HEADERS}
+  Hash.hpp)
 
 set(Xavi++_SOURCES
   Hash.cpp
@@ -43,7 +43,8 @@ target_link_libraries(Xavi++
 set_target_properties(Xavi++
   PROPERTIES
     FRAMEWORK     TRUE
-    PUBLIC_HEADER "${Xavi_PUBLIC_HEADERS}")
+    DEFINE_SYMBOL "Xavipp_EXPORTS"
+    PUBLIC_HEADER "${Xavi++_PUBLIC_HEADERS}")
 
 install(TARGETS Xavi++
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH}
