@@ -1,18 +1,21 @@
-Xavi Overview
+Xavi Project Overview
 
-Xavi is a C++ library for processing and evaluating mathematical expressions
-using mixed integer and floating-point arithmetic. Xavi's home on the web is
-<http://damewood.us/projects/xavi>.
+Xavi and Xavi++ are libraries for processing and evaluating mathematical
+expressions using mixed integer and floating-point arithmetic. Xavi is
+written in C, and Xavi++ is written in C++. They are both part of the overall
+Xavi project. the Xavi Project's home on the web is
+<http://damewood.us/projects/xavi>. For instructions on how to build them, see
+the file Build.txt, included in the source distribution.
 
-Xavi may be copied, modified, and distributed under the terms of the GNU
-LGPL, version 3 or later. See the files LGPL-3.0.txt and GPL-3.0.txt for
-details. The source distribution of Xavi also includes test programs.
-These programs may be copied, modified, and distributed under the terms of
-the GNU GPL, version 3 or later. See the file GPL-3.0.txt for details.
-Xavista uses Qt <http://qt-project.org/> under the terms of the GNU GPL 3.0.
+Xavi and Xavi++ may be copied, modified, and distributed under the terms of the
+GNU Lesser General Public License version 3 or later. The Xavi Project source
+distribution includes tests and example programs that work with Xavi and Xavi++.
+These programs may be copied, modified, and distributed under the terms of the
+GNU General Public License version 3 or later. See the file GPL-3.0.txt for
+details.
 
-Using its default components Xavi supports infix-notation arithmatic expressions
-with the following features:
+Using their default components Xavi and Xavi++ support infix-notation arithmatic
+expressions with the following features:
 
 * Four-function calculations, such as "2 + 2", "3 * 4.0", "9.0 - 3.0" and
   "8 / 2".
@@ -20,19 +23,15 @@ with the following features:
 * Negative numbers, such as "-4", "-4.0 + 20".
 * constants, e and pi may be used as numbers.
 * parenthetic expressions, such as "2 * (3 + 4)".
-* Random number generation using a d operator to simulate dice rolls. such as
+* Random number generation using a d operator to simulate die rolls. such as
   "3d6" or "1d20".
-* Functions: Xavi supports the following functions from the C++ standard
-  library: abs(), acos(), asin(), atan(), ceil(), cos(), cosh(), exp(),
+* Functions: abs(), acos(), asin(), atan(), ceil(), cos(), cosh(), exp(),
   floor(), log(),log10(), sin(), sinh(), sqrt(), tan(), and tanh().
-* Xavi ignores space and tab characters in its input.
+* Xavi and Xavi++ ignore space and tab characters in their input, except to
+  separate tokens.
 
-When mixing numeric types, Xavi will give integer results in calculations
-involving only integers and floating-point results in calculations involving
-either integers and floating-point numbers, or only floating-point numbers.
-If division involves two integers where the result would not be a whole
+When mixing numeric types, Xavi and Xavi++ will give integer results in
+calculations involving only integers and floating-point results in calculations
+involving either integers and floating-point numbers, or only floating-point
+numbers. If division involves two integers where the result would not be a whole
 number, a floating-point value is returned.
-
-The programs Xavita and Xavista are included as example programs to interface
-with Xavi. Xavita runs on the command line while Xavista is a GUI program using
-the Qt framework.

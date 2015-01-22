@@ -1,0 +1,69 @@
+The Xavi project uses CMake <http://www.cmake.org> to automate its build setup.
+
+CMake allows for creating build systems based on makefiles and various IDEs. The
+Xavi Project's build system is tested and designed to work with the following
+operating systems and generators:
+
+* Linux: Unix Makefiles
+* FreeBSD: Unix Makefiles
+* OS X: Unix Makefiles
+* Microsoft Windows: NMake Makefiles
+
+Xavi is also tested with the following compilers:
+
+* Linux: GCC and Clang
+* FreeBSD: Clang
+* OS X: Clang
+* Windows: Visual C++ (cl.exe)
+
+To build the Xavi project, using the default values, create directory called Build,
+then cd into the directory:
+
+mkdir Build
+cd Build
+
+Once in the Build directory, you will need to run the cmake command. On Mac OS X,
+FreeBSD, and Linux, the default generator is the Unix Makefiles generator. It
+suffices to run cmake with the location of the Xavi's Project's source files:
+
+cmake ..
+
+On Windows, you will need to specify -G "NMake Makefiles" to use NMake for the build
+process.
+
+cmake -G "NMake Makefiles" ..
+
+There are additional options that you can specify
+* BUILD_TESTS,           whether or not to build test programs
+* BUILD_XAVISTA          whether or not to build the Qt-based GUI frontend for
+                         Xavi++ (required Qt 5)
+
+Use the -D paramter to CMake to specify these options. For example to disable
+building tests:
+
+cmake  .. -DBUILD_TESTS=Off
+
+
+Building the Installer
+
+On Windows, you will need the Nullsoft Install System to build an installer.
+Once you have it installed, building an installer is as easy as building the
+package target with nmake:
+
+nmake package
+
+On Mac OS X, you can build a drag-and-drop-style disk image with the package
+target:
+
+make package
+
+On Linux and FreeBSD, building a package with CMake is not supported. Instead
+you can build the 'install' target to install Xavi directly:
+
+make install
+
+If you are using external tools to build a package file, such as an RPM or DEB
+package, you can use the DESTDIR variable in make to specify a staging location
+to install the packages:
+
+make DESTDIR=~/build/stage install
