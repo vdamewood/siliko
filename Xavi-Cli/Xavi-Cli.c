@@ -1,6 +1,6 @@
 /*
- * Xavita.c: Command-line interface for Xavi.
- * Copyright 2012, 2014 Vincent Damewood
+ * Xavi-Cli.c: Command-line interface for Xavi
+ * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
