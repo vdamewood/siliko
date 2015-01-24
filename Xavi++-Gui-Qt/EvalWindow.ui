@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>XavistaWindow</class>
- <widget class="QMainWindow" name="XaviWindow">
+ <class>EvalWindow</class>
+ <widget class="QMainWindow" name="EvalWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Xavista</string>
+   <string>Xavi++ GUI Using Qt</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">

@@ -1,5 +1,5 @@
 /*
- * XavistaWindow.cpp: Main window.
+ * EvalWindow.cpp: Expression evaluation window
  * Copyright 2012, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,21 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Xavista_WINDOW_H
-#define Xavista_WINDOW_H
+#if !defined EVAL_WINDOW_H
+#define EVAL_WINDOW_H
 
 #include <QMainWindow>
 
-#include "ui_XavistaWindow.h"
+#include "ui_EvalWindow.h"
 
-class XavistaWindow : public QMainWindow, public Ui::XavistaWindow
+class EvalWindow : public QMainWindow, public Ui::EvalWindow
 {
 	Q_OBJECT
 public:
-	XavistaWindow(QWidget * parent=0);
-	~XavistaWindow();
+	EvalWindow(QWidget * parent=0);
+	~EvalWindow();
 public slots:
 	void calculate();
 };
 
-#endif // Xavista_WINDOW_H
+#endif // EVAL_WINDOW_H

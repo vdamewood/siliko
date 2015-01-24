@@ -1,5 +1,5 @@
 /*
- * Xavista.cpp: Implementation of main() function.
+ * Xavi++-Gui-Qt.cpp: Xavi++ GUI frontend using Qt
  * Copyright 2012, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,12 +18,12 @@
 
 #include <QApplication>
 
-#include "XavistaWindow.hpp"
+#include "EvalWindow.hpp"
 
 int main(int argc, char *argv[])
 {
-	QApplication Xavista(argc, argv);
-	XavistaWindow * MainWindow = new XavistaWindow;
+	QApplication XavippGuiQt(argc, argv);
+	EvalWindow * MainWindow = new EvalWindow;
 	MainWindow->show();
-	return Xavista.exec();
+	return XavippGuiQt.exec();
 }

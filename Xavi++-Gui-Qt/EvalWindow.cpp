@@ -1,5 +1,5 @@
 /*
- * XavistaWindow.cpp: Main window.
+ * EvalWindow.cpp: Expression evaluation window
  * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,9 +21,9 @@
 #include <Xavi++/CStringSource.hpp>
 
 #include "QStringSource.hpp"
-#include "XavistaWindow.hpp"
+#include "EvalWindow.hpp"
 
-XavistaWindow::XavistaWindow(QWidget * parent)
+EvalWindow::EvalWindow(QWidget * parent)
 	: QMainWindow(parent)
 {
 	Xavi::FunctionCaller::Initialize();
@@ -33,12 +33,12 @@ XavistaWindow::XavistaWindow(QWidget * parent)
 		this, SLOT(calculate()));
 }
 
-XavistaWindow::~XavistaWindow()
+EvalWindow::~EvalWindow()
 {
 	Xavi::FunctionCaller::Destroy();
 }
 
-void XavistaWindow::calculate()
+void EvalWindow::calculate()
 {
 	Xavi::InfixParser MyParser(new Xavi::Lexer(new QStringSource(input->text())));
 
