@@ -1,6 +1,6 @@
 # Xavita
 
-include_directories(${Library_SOURCE_DIR})
+include_directories(${Xavi_SOURCE_DIR})
 
 if (UNIX)
   add_definitions(-DXAVITA_USE_UNIX=1)

@@ -26,9 +26,9 @@
 #	define ISATTY() (-1)
 #endif
 
-#include "Xavi++/FunctionCaller.hpp"
-#include "Xavi++/InfixParser.hpp"
-#include "Xavi++/CStringSource.hpp"
+#include <Xavi++/FunctionCaller.hpp>
+#include <Xavi++/InfixParser.hpp>
+#include <Xavi++/CStringSource.hpp>
 
 char *readline(const char *prompt)
 {

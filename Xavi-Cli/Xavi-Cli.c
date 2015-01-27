@@ -26,7 +26,7 @@
 #	define ISATTY() (-1)
 #endif
 
-#include "Xavi.h"
+#include <Xavi/Xavi.h>
 
 char *readline(const char *prompt)
 {
