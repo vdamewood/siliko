@@ -1,0 +1,4 @@
+#define XAVI_MENU 0xA0
+
+#define CALCULATOR_EXIT 0xA1
+#define HELP_ABOUT 0xA2

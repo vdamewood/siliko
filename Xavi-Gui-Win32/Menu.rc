@@ -1,0 +1,14 @@
+#include "Menu.h"
+
+XAVI_MENU MENU
+BEGIN
+    POPUP "&Calculator"
+    BEGIN
+        MENUITEM "E&xit", CALCULATOR_EXIT
+    END
+
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About", HELP_ABOUT
+    END
+END

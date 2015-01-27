@@ -1,0 +1,1 @@
+#define ABOUT_DIALOG 0xB0

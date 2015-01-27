@@ -24,11 +24,16 @@ option(BUILD_SHARED_LIBS "Build Xavi as a shared library."         On)
 
 # Configuration Options: Xavi Specific
 option(BUILD_XAVISTA     "Build Xavista, a Qt-based GUI frontend." ${Qt5Widgets_FOUND})
+option(BUILD_XAVI_GUI_WIN32 "Build GUI based on Win32 API (Windows Only)." On)
 option(BUILD_TESTS       "Build testing programs."                 On)
 
 # Make sure we don't try to build Xavista without Qt5Widgets.
 if(${BUILD_XAVISTA} AND NOT ${Qt5Widgets_FOUND})
   message(FATAL_ERROR "Build Xavista requested but Qt5Widgets (required by Xavista) not found.")
+endif()
+
+if(${BUILD_XAVI_GUI_WIN32} AND NOT WIN32)
+  message(FATAL_ERROR "Build GUI based on Win32 API requested, but not building on Windows.")
 endif()
 
 # System-independent values
@@ -104,6 +109,10 @@ add_subdirectory(Xavi++-Cli)
 if(BUILD_XAVISTA)
   add_subdirectory(Xavi++-Gui-Qt)
 endif(BUILD_XAVISTA)
+if(${BUILD_XAVI_GUI_WIN32})
+  message("Building GUI for Win32")
+  add_subdirectory(Xavi-Gui-Win32)
+endif()
 if(BUILD_TESTS)
   add_subdirectory(Tests)
 endif(BUILD_TESTS)
