@@ -8,14 +8,16 @@ endif()
 
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
+  DataSource.h
   XaviFunctionCall.h
   XaviTree.h XaviValue.h
-  XaviParser.h XaviLexer.h)
+  XaviParser.h Lexer.h)
 set(Xavi_SOURCES
+  DataSource.c
   Xavi.c
   XaviFunctionCall.c
   XaviTree.c
-  XaviParser.c XaviLexer.c)
+  XaviParser.c Lexer.c)
 
 add_library(Xavi
   ${Xavi_PUBLIC_HEADERS}

@@ -1,6 +1,6 @@
 /*
- * XaviParser.h: Parser for Xavi
- * Copyright 2014, 2015 Vincent Damewood
+ * DataSource.h: Abstract interface for input data
+ * Copyright 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,12 +16,28 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_PARSER_H
-#define XAVI_PARSER_H
+#if !defined XAVI_DATA_SOURCE
+#define XAVI_DATA_SOURCE
 
-#include "XaviTree.h"
-#include "Lexer.h"
+#if defined __cplusplus
+extern "C" {
+#endif
 
-XaviValue XaviParse(XaviLexer * lexer);
+struct XaviDataSource
+{
+	void *State;
+	int (*AdvanceFunction)(void*);
+	char (*GetFunction)(void*);
+	void (*DestroyFunction)(void*);
+};
+typedef struct XaviDataSource XaviDataSource;
 
-#endif /* XAVI_PARSER_H */
+int XaviDataSourceAdvance(XaviDataSource *);
+char XaviDataSourceGet(XaviDataSource *);
+void XaviDataSourceDestroy(XaviDataSource *);
+
+#if defined __cplusplus
+}
+#endif
+
+#endif /* XAVI_DATA_SOURCE */

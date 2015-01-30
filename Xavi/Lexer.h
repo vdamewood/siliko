@@ -1,5 +1,5 @@
 /*
- * XaviLexer.h: Lexical analyzer
+ * Lexer.h: Lexical analyzer
  * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -18,6 +18,8 @@
 
 #if !defined XAVI_LEXER_H
 #define XAVI_LEXER_H
+
+#include "DataSource.h"
 
 enum XaviToken
 {
@@ -48,8 +50,7 @@ typedef union XaviTokenValue XaviTokenValue;
 
 struct XaviLexer
 {
-	const char * input;
-	const char * location;
+	XaviDataSource *source;
 	XaviToken token;
 	XaviTokenValue value;
 };
