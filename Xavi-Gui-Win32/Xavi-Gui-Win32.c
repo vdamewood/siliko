@@ -72,12 +72,35 @@ BOOL BuildWindow(HWND hwnd)
 	return (BOOL) (Input && Output && Button);
 }
 
-void ConstrainSize(PRECT Area)
+void ConstrainSize(WPARAM Edge, PRECT Area)
 {
-	Area->bottom = Area->top + 134;
-	if (Area->right - Area->left < 420)
-		Area->right = Area->left + 420;
+	switch (Edge)
+	{
+	case WMSZ_TOP:
+	case WMSZ_TOPLEFT:
+	case WMSZ_TOPRIGHT:
+		Area->top = Area->bottom - 134;
+		break;
+	case WMSZ_BOTTOM:
+	case WMSZ_BOTTOMLEFT:
+	case WMSZ_BOTTOMRIGHT:
+		Area->bottom = Area->top + 134;
+		break;
+	}
 
+	switch (Edge)
+	{
+	case WMSZ_LEFT:
+	case WMSZ_TOPLEFT:
+	case WMSZ_BOTTOMLEFT:
+		if (Area->right - Area->left < 420)
+			Area->left = Area->right - 420;
+	case WMSZ_RIGHT:
+	case WMSZ_TOPRIGHT:
+	case WMSZ_BOTTOMRIGHT:
+		if (Area->right - Area->left < 420)
+			Area->right = Area->left + 420;
+	}
 }
 
 void ResizeControls(HWND hwnd)
@@ -147,7 +170,7 @@ LRESULT CALLBACK CalculatorWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 			MessageBox(hwnd, "Error creating controls.", "Startup Error", MB_OK | MB_ICONERROR);
 		return 0;
 	case WM_SIZING:
-		ConstrainSize((PRECT)lParam);
+		ConstrainSize(wParam, (PRECT)lParam);
 		return 0;
 	case WM_SIZE:
 		ResizeControls(hwnd);
