@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 		if(!expression)
 			break;
 
-		Xavi::InfixParser MyParser(new Xavi::Lexer(new StringSource(expression)));
+		Xavi::InfixParser MyParser(new StringSource(expression));
 		free(expression);
 
 		MyParser.Parse();

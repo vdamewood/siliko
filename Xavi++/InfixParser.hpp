@@ -20,6 +20,7 @@
 #define XAVI_INFIX_PARSER_H
 
 #include "W32Dll.hpp"
+#include "DataSource.hpp"
 #include "SyntaxTree.hpp"
 #include "Lexer.hpp"
 
@@ -28,7 +29,7 @@ namespace Xavi
 	class XAVI_API InfixParser
 	{
 	public:
-		InfixParser(Xavi::Lexer *NewLexer);
+		InfixParser(Xavi::DataSource *);
 		~InfixParser(void);
 		void Parse(void);
 		SyntaxTreeNode &SyntaxTree(void);
@@ -47,7 +48,7 @@ namespace Xavi
 		Xavi::SyntaxTreeNode        *GetFCall(void);
 		void                         GetArguments(Xavi::BranchNode &);
 
-		Lexer *MyLexer;
+		Lexer MyLexer;
 		SyntaxTreeNode *MySyntaxTree;
 	};
 };

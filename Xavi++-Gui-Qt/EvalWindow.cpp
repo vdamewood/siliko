@@ -39,7 +39,7 @@ EvalWindow::~EvalWindow()
 
 void EvalWindow::calculate()
 {
-	Xavi::InfixParser MyParser(new Xavi::Lexer(new QStringSource(input->text())));
+	Xavi::InfixParser MyParser(new QStringSource(input->text()));
 
 	MyParser.Parse();
 	Xavi::Value result = MyParser.SyntaxTree().GetValue();
