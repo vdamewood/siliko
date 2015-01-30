@@ -16,62 +16,21 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstring>
-#include <string>
+#include <unordered_map>
 
 #include "FunctionCaller.hpp"
 #include "Functions.hpp"
-#include "Hash.hpp"
 
-namespace Xavi
-{
-	namespace FunctionCaller
-	{
-		class LookupNode
-		{
-		public:
-			LookupNode(const char *NewId, FunctionPointer NewFunction);
-			~LookupNode(void);
-			std::string id;
-			FunctionPointer function;
-		};
-	};
-};
-
-static std::vector< std::list<Xavi::FunctionCaller::LookupNode> > *lookup = 0;
-
-/*static unsigned char Hash(const unsigned char *rawInput, size_t length)
-{
-	const unsigned char divisor = 0xD5;
-	unsigned char result = 0x00;
-	unsigned int i;
-	int j;
-	int hasHighBit;
-
-	for (i = 0; i <= length; i++)
-	{
-		for (j = 7; j >= 0; j--)
-		{
-			hasHighBit = result & 0x80;
-			result <<= 1;
-
-			result |= (i < length)
-			? (rawInput[i] >> j) & 0x01
-			: 0;
-
-			if (hasHighBit)
-				result ^= divisor;
-		}
-	}
-
-	return result;
-}*/
+// This is initialized as a null pointer rather than a static object so that
+// bindings can be created for language interpreters written in C.
+std::unordered_map<std::string, Xavi::FunctionCaller::FunctionPointer> *lookup = 0;
 
 bool Xavi::FunctionCaller::Initialize(void)
 {
 	try
 	{
-		lookup = new std::vector<std::list<Xavi::FunctionCaller::LookupNode> >(256);
+		lookup = new std::unordered_map<std::string,
+			Xavi::FunctionCaller::FunctionPointer>();
 	}
 	catch (...)
 	{
@@ -79,6 +38,7 @@ bool Xavi::FunctionCaller::Initialize(void)
 		return false;
 	}
 
+	// Built-in operators
 	Install("add", Xavi::Functions::add);
 	Install("subtract", Xavi::Functions::subtract);
 	Install("multiply", Xavi::Functions::multiply);
@@ -86,6 +46,7 @@ bool Xavi::FunctionCaller::Initialize(void)
 	Install("power", Xavi::Functions::power);
 	Install("dice", Xavi::Functions::dice);
 
+	// Math library functions
 	Install("abs", Xavi::Functions::abs);
 	Install("acos", Xavi::Functions::acos);
 	Install("asin", Xavi::Functions::asin);
@@ -112,35 +73,17 @@ void Xavi::FunctionCaller::Destroy(void)
 	lookup = 0;
 }
 
-void Xavi::FunctionCaller::Install(const char *Name, FunctionPointer Function)
+void Xavi::FunctionCaller::Install(const std::string &Name, FunctionPointer Function)
 {
-	(*lookup)[Xavi::Crc8((const unsigned char *)Name, std::strlen(Name))].push_back(LookupNode(Name, Function));
+	(*lookup)[Name] = Function;
 }
 
-Xavi::Value Xavi::FunctionCaller::Call(const char *Name, std::vector<Xavi::Value> Args)
+Xavi::Value Xavi::FunctionCaller::Call(const std::string &Name, std::vector<Xavi::Value> Args)
+try
 {
-	int index = Xavi::Crc8((const unsigned char *)Name, strlen(Name));
-
-	for
-		(
-			std::list<Xavi::FunctionCaller::LookupNode>::iterator i = (*lookup)[index].begin();
-			i != (*lookup)[index].end();
-			i++
-		)
-		{
-			if (std::strcmp(Name, i->id.c_str()) == 0)
-				return i->function(Args);
-		}
-
+	return lookup->at(Name)(Args);
+}
+catch (const std::out_of_range &)
+{
 	return Xavi::Value::BAD_FUNCTION;
-}
-
-Xavi::FunctionCaller::LookupNode::LookupNode(const char *NewId, FunctionPointer NewFunction)
-{
-	id = NewId;
-	function = NewFunction;
-}
-
-Xavi::FunctionCaller::LookupNode::~LookupNode(void)
-{
 }

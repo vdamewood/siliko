@@ -1,10 +1,4 @@
-# Xavi
-
-if (UNIX)
-	add_definitions(-DXAVI_USE_UNIX=1)
-else()
-	add_definitions(-DXAVI_USE_UNIX=0)
-endif()
+# Xavi++
 
 set(Xavi++_PUBLIC_HEADERS
   W32Dll.hpp
@@ -21,10 +15,9 @@ set(Xavi++_PUBLIC_HEADERS
 
 set(Xavi++_HEADERS
   ${XAVI++_PUBLIC_HEADERS}
-  Hash.hpp)
+)
 
 set(Xavi++_SOURCES
-  Hash.cpp
   Value.cpp
   Functions.cpp
   FunctionCaller.cpp
@@ -38,8 +31,6 @@ set(Xavi++_SOURCES
 add_library(Xavi++
   ${Xavi++_HEADERS}
   ${Xavi++_SOURCES})
-target_link_libraries(Xavi++
-  ${MATH_LIB})
 set_target_properties(Xavi++
   PROPERTIES
     FRAMEWORK     TRUE

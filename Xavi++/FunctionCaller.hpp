@@ -19,7 +19,7 @@
 #if !defined XAVI_FUNCTION_CALL_H
 #define XAVI_FUNCTION_CALL_H
 
-#include <list>
+#include <string>
 #include <vector>
 
 #include "W32Dll.hpp"
@@ -34,8 +34,8 @@ namespace Xavi
 
 		XAVI_API bool Initialize(void);
 		XAVI_API void Destroy(void);
-		XAVI_API Value Call(const char *Name, std::vector<Value> Args);
-		XAVI_API void Install(const char *Name, FunctionPointer Function);
+		XAVI_API Value Call(const std::string &Name, std::vector<Value> Args);
+		XAVI_API void Install(const std::string &Name, FunctionPointer Function);
 	};
 };
 #endif // XAVI_FUNCTION_CALL_H

@@ -2,13 +2,9 @@
 include_directories(${Xavi_SOURCE_DIR})
 
 add_executable(XaviTestFunctions
-    XaviTestFunctions.cpp)
-target_link_libraries(XaviTestFunctions Xavi++ ${MATH_LIB})
-
-add_executable(XaviTestHash
-    XaviTestHash.cpp ${Xavi_SOURCE_DIR}/Xavi++/Hash.cpp)
-#target_link_libraries(XaviTestHash)
+  XaviTestFunctions.cpp)
+target_link_libraries(XaviTestFunctions Xavi++)
 
 add_executable(XaviTestLexer
-    XaviTestLexer.cpp)
+  XaviTestLexer.cpp)
 target_link_libraries(XaviTestLexer Xavi++)

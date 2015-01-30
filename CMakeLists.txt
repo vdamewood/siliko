@@ -7,7 +7,6 @@ set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
-
 # Dependency searches
 message("-- Finding Qt5Widgets")
 find_package(Qt5Widgets QUIET)
@@ -63,6 +62,14 @@ elseif(UNIX)
   set(FRAMEWORK_INSTALL_PATH share/Xavi/error)
   set(HEADER_INSTALL_PATH    include)
   set(DOC_INSTALL_PATH       share/Xavi/docs)
+endif()
+
+# Compiler-dependent values
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
+  OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang"
+  OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+
+  list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
 endif()
 
 # CPack Settings
