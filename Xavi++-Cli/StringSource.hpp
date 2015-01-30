@@ -31,7 +31,7 @@ public:
 	virtual ~StringSource();
 
 private:
-	const std::string &Source;
+	const std::string Source;
 	std::string::const_iterator Iterator;;
 };
 

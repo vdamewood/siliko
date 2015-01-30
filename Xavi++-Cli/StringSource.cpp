@@ -31,7 +31,7 @@ bool StringSource::Advance()
 {
 	if (Iterator != Source.end())
 	{
-		Iterator++;
+		++Iterator;
 		return true;
 	}
 	else
@@ -42,5 +42,12 @@ bool StringSource::Advance()
 
 char StringSource::GetCurrent()
 {
-	return *Iterator;
+	if (Iterator != Source.end())
+	{
+		return *Iterator;
+	}
+	else
+	{
+		return '\0';
+	}
 }
