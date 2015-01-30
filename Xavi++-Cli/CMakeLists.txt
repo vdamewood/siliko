@@ -8,7 +8,10 @@ else()
   add_definitions(-DXAVITA_USE_UNIX=0)
 endif()
 
-add_executable(Xavi++-Cli Xavi++-Cli.cpp)
+set(SOURCES Xavi++-Cli.cpp StringSource.cpp)
+set(HEADERS StringSource.cpp)
+
+add_executable(Xavi++-Cli ${HEADERS} ${SOURCES})
 target_link_libraries(Xavi++-Cli Xavi++)
 
 install(TARGETS Xavi++-Cli

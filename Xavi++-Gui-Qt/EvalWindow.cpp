@@ -18,7 +18,6 @@
 
 #include <Xavi++/FunctionCaller.hpp>
 #include <Xavi++/InfixParser.hpp>
-#include <Xavi++/CStringSource.hpp>
 
 #include "QStringSource.hpp"
 #include "EvalWindow.hpp"

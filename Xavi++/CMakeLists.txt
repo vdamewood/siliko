@@ -7,7 +7,6 @@ set(Xavi++_PUBLIC_HEADERS
   FunctionCaller.hpp
   SyntaxTree.hpp
   DataSource.hpp
-  CStringSource.cpp
   Token.hpp
   Lexer.hpp
   InfixParser.hpp
@@ -22,7 +21,6 @@ set(Xavi++_SOURCES
   Functions.cpp
   FunctionCaller.cpp
   SyntaxTree.cpp
-  CStringSource.cpp
   Token.cpp
   Lexer.cpp
   InfixParser.cpp

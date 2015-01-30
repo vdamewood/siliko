@@ -28,7 +28,8 @@
 
 #include <Xavi++/FunctionCaller.hpp>
 #include <Xavi++/InfixParser.hpp>
-#include <Xavi++/CStringSource.hpp>
+
+#include "StringSource.hpp"
 
 char *readline(const char *prompt)
 {
@@ -110,7 +111,7 @@ int main(int argc, char *argv[])
 		if(!expression)
 			break;
 
-		Xavi::InfixParser MyParser(new Xavi::Lexer(new Xavi::StringSource(expression)));
+		Xavi::InfixParser MyParser(new Xavi::Lexer(new StringSource(expression)));
 		free(expression);
 
 		MyParser.Parse();
