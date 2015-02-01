@@ -49,10 +49,6 @@ XaviResult XaviValueToResult(const XaviValue value)
 		rVal.status = XAVI_RS_FLOAT;
 		rVal.f = value.f;
 		break;
-	case XE_INTERNAL:
-		rVal.status = XAVI_RE_INTERNAL;
-		rVal.i = 0;
-		break;
 	case XE_MEMORY:
 		rVal.status = XAVI_RE_MEMORY;
 		rVal.i = 0;
@@ -79,10 +75,6 @@ XaviResult XaviValueToResult(const XaviValue value)
 		break;
 	case XE_RANGE:
 		rVal.status = XAVI_RE_RANGE;
-		rVal.i = 0;
-		break;
-	default:
-		rVal.status = XAVI_RE_INTERNAL;
 		rVal.i = 0;
 		break;
 	}

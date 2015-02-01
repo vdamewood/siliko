@@ -23,8 +23,6 @@ enum XaviValueStatus
 {
 	XS_INTEGER,   /* Success: The value is an integer. */
 	XS_FLOAT,     /* Success: The valis is a floating-point */
-	XE_INTERNAL,  /* Error: Something unexpected happened. This usually
-	                        indicates a bug in Xavi. */
 	XE_MEMORY,    /* Error: A call to malloc failed. */
 	XE_SYNTAX,    /* Error: A syntax error was encountered. */
 	XE_ZERO_DIV,  /* Error: Division by zero was attempted. */

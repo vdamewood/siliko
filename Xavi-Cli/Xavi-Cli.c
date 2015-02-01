@@ -121,9 +121,6 @@ int main(int argc, char *argv[])
 		case XAVI_RS_FLOAT:
 			printf("%s%f\n", response, value.f);
 			break;
-		case XAVI_RE_INTERNAL:
-			printf("Internal error.\n");
-			break;
 		case XAVI_RE_MEMORY:
 			printf("Out of memory.\n");
 			break;

@@ -247,7 +247,7 @@ XaviValue XaviTreeEvaluate(XaviTreeNode *node)
 {
 	XaviValue rVal;
 
-	if (!node || node->type == XAVI_NODE_ERROR)
+	if (!node)
 	{
 		rVal.status = XE_SYNTAX;
 		return rVal;
@@ -263,10 +263,13 @@ XaviValue XaviTreeEvaluate(XaviTreeNode *node)
 		rVal.status = XS_FLOAT;
 		rVal.f = node->f;
 		return rVal;
+	case XAVI_NODE_LIST_BRANCH:
+		XaviTreeCollapseBranch(node);
+		/* Fallthrough */
 	case XAVI_NODE_VECTOR_BRANCH:
 		return EvaluateVectorBranch(node->branch);
 	default:
-		rVal.status = XE_INTERNAL;
+		rVal.status = XE_SYNTAX;
 		return rVal;
 	}
 }
