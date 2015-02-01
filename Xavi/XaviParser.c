@@ -22,15 +22,9 @@
 #include "XaviParser.h"
 #include "XaviTree.h"
 
-static char *x_strdup(const char *string)
-{
-	char *rVal;
-
-	if ((rVal = malloc(strlen(string) + 1)))
-		strcpy(rVal, string);
-
-	return rVal;
-}
+#if defined WIN32
+#define strdup _strdup
+#endif
 
 static XaviTreeNode *GetExpr0(XaviLexer *lexer);
 static XaviTreeNode *GetExpr0r(XaviLexer *lexer);
@@ -88,10 +82,10 @@ static XaviTreeNode *GetExpr0r(XaviLexer *lexer)
 	switch (XaviLexerGetToken(lexer))
 	{
 	case '+':
-		operation = x_strdup("add");
+		operation = strdup("add");
 		break;
 	case '-':
-		operation = x_strdup("subtract");
+		operation = strdup("subtract");
 		break;
 	default:
 		return XaviTreeNewNothing();
@@ -185,10 +179,10 @@ static XaviTreeNode *GetExpr1r(XaviLexer *lexer)
 	switch (XaviLexerGetToken(lexer))
 	{
 		case '*':
-			operation = x_strdup("multiply");
+			operation = strdup("multiply");
 			break;
 		case '/':
-			operation = x_strdup("divide");
+			operation = strdup("divide");
 			break;
 		default:
 			return XaviTreeNewNothing();
@@ -263,7 +257,7 @@ static XaviTreeNode *GetExpr2(XaviLexer *lexer)
 		return leftValue;
 	}
 
-	if (!(operation = x_strdup("power")))
+	if (!(operation = strdup("power")))
 	{
 		XaviTreeDelete(leftValue);
 		XaviTreeDelete(rest);
@@ -329,7 +323,7 @@ static XaviTreeNode *GetExpr3(XaviLexer *lexer)
 		return leftValue;
 	}
 
-	if (!(operation = x_strdup("dice")))
+	if (!(operation = strdup("dice")))
 	{
 		XaviTreeDelete(leftValue);
 		XaviTreeDelete(rest);
@@ -451,7 +445,7 @@ static XaviTreeNode *GetFCall(XaviLexer *lexer)
 	if (XaviLexerGetToken(lexer) != ID)
 		return XaviTreeNewError();
 
-	if (!(id = x_strdup(XaviLexerGetValue(lexer).s)))
+	if (!(id = strdup(XaviLexerGetValue(lexer).s)))
 		return NULL;
 
 	XaviLexerNext(lexer);
