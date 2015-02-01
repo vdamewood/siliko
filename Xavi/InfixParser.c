@@ -19,8 +19,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "XaviParser.h"
-#include "XaviTree.h"
+#include "InfixParser.h"
+#include "SyntaxTree.h"
+#include "Lexer.h"
 
 #if defined WIN32
 #define strdup _strdup

@@ -19,8 +19,8 @@
 #if !defined XAVI_PARSER_H
 #define XAVI_PARSER_H
 
-#include "XaviTree.h"
-#include "Lexer.h"
+#include "Value.h"
+#include "DataSource.h"
 
 XaviValue XaviParse(XaviDataSource *input);
 

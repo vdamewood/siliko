@@ -19,9 +19,9 @@
 #include <stdlib.h>
 
 #include "Xavi.h"
-#include "XaviFunctionCall.h"
-#include "XaviParser.h"
-#include "XaviValue.h"
+#include "FunctionCaller.h"
+#include "InfixParser.h"
+#include "Value.h"
 #include "StringSource.h"
 
 

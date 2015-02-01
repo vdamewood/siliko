@@ -18,8 +18,8 @@
 
 #include <stdlib.h>
 
-#include "XaviTree.h"
-#include "XaviFunctionCall.h"
+#include "SyntaxTree.h"
+#include "FunctionCaller.h"
 
 int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left)
 {

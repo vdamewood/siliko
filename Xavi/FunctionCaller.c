@@ -22,8 +22,8 @@
 #include <string.h>
 #include <time.h>
 
-#include "XaviValue.h"
-#include "XaviFunctionCall.h"
+#include "Value.h"
+#include "FunctionCaller.h"
 
 static XaviValue XaviFunction_add(int argc, XaviValue *argv)
 {

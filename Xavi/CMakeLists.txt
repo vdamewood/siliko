@@ -10,16 +10,19 @@ set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
   DataSource.h
   StringSource.h
-  XaviFunctionCall.h
-  XaviTree.h XaviValue.h
-  XaviParser.h Lexer.h)
+  FunctionCaller.h
+  SyntaxTree.h
+  Value.h
+  InfixParser.h
+  Lexer.h)
 set(Xavi_SOURCES
   DataSource.c
   StringSource.c
   Xavi.c
-  XaviFunctionCall.c
-  XaviTree.c
-  XaviParser.c Lexer.c)
+  FunctionCaller.c
+  SyntaxTree.c
+  InfixParser.c
+  Lexer.c)
 
 add_library(Xavi
   ${Xavi_PUBLIC_HEADERS}
