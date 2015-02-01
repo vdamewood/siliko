@@ -9,11 +9,13 @@ endif()
 set(Xavi_PUBLIC_HEADERS Xavi.h)
 set(Xavi_INTERNAL_HEADERS
   DataSource.h
+  StringSource.h
   XaviFunctionCall.h
   XaviTree.h XaviValue.h
   XaviParser.h Lexer.h)
 set(Xavi_SOURCES
   DataSource.c
+  StringSource.c
   Xavi.c
   XaviFunctionCall.c
   XaviTree.c

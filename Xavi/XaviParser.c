@@ -556,10 +556,15 @@ static XaviTreeNode *GetNextArgument(XaviLexer *lexer)
 	}
 }
 
-XaviValue XaviParse(XaviLexer *lexer)
+XaviValue XaviParse(XaviDataSource *Input)
 {
 	XaviValue rVal;
 	XaviTreeNode *syntaxTree = NULL;
+	XaviLexer *lexer = NULL;
+
+	if (!(lexer = XaviLexerNew(Input)))
+		goto memerr;
+
 
 	if (XaviLexerGetToken(lexer) == EOL)
 	{
@@ -568,8 +573,7 @@ XaviValue XaviParse(XaviLexer *lexer)
 	}
 	else if (!(syntaxTree = GetExpr0(lexer)))
 	{
-		rVal.status = XE_MEMORY;
-		rVal.i = 0;
+		goto memerr;
 	}
 	else
 	{
@@ -585,5 +589,12 @@ XaviValue XaviParse(XaviLexer *lexer)
 		}
 		XaviTreeDelete(syntaxTree);
 	}
+	return rVal;
+memerr:
+	XaviTreeDelete(syntaxTree);
+	XaviLexerDestroy(lexer);
+
+	rVal.status = XE_MEMORY;
+	rVal.i = 0;
 	return rVal;
 }

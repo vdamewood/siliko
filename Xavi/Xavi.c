@@ -16,10 +16,15 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+
 #include "Xavi.h"
 #include "XaviFunctionCall.h"
 #include "XaviParser.h"
 #include "XaviValue.h"
+#include "StringSource.h"
+
+
 
 void XaviOpen(void)
 {
@@ -88,11 +93,19 @@ XaviResult XaviValueToResult(const XaviValue value)
 XaviResult XaviEvaluate(const char * inString)
 {
 	XaviResult rVal;
-	XaviLexer *lexer;
+	XaviDataSource *source = NULL;
 
-	lexer = XaviLexerNew(inString);
-	rVal = XaviValueToResult(XaviParse(lexer));
-	XaviLexerDestroy(&lexer);
+	if ((source = XaviStringSourceNew(inString)))
+	{
+		return XaviValueToResult(XaviParse(source));
+	}
+	else
+	{
+		XaviResult rVal;
 
-	return rVal;
+		rVal.status = XAVI_RE_MEMORY;
+		rVal.i = 0;
+
+		return rVal;
+	}
 }

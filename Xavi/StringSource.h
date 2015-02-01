@@ -1,6 +1,6 @@
 /*
- * XaviParser.h: Parser for Xavi
- * Copyright 2014, 2015 Vincent Damewood
+ * StringSource.h: Support for reading from a string
+ * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,12 +16,19 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_PARSER_H
-#define XAVI_PARSER_H
+#if !defined XAVI_STRING_SOURCE
+#define XAVI_STRING_SOURCE
 
-#include "XaviTree.h"
-#include "Lexer.h"
+#include "DataSource.h"
 
-XaviValue XaviParse(XaviDataSource *input);
+#if defined __cplusplus
+extern "C" {
+#endif
 
-#endif /* XAVI_PARSER_H */
+XaviDataSource *XaviStringSourceNew(const char *NewInput);
+
+#if defined __cplusplus
+}
+#endif
+
+#endif /* XAVI_STRING_SOURCE */

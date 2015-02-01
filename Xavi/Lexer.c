@@ -307,86 +307,29 @@ static void XaviLexerLoad(XaviLexer *lexer)
 	}
 }
 
-struct XaviStringSourceState
-{
-	char *string;
-	char *current;
-};
-
-typedef struct XaviStringSourceState XaviStringSourceState;
-
-static int XaviStringSourceAdvance(void *State)
-{
-	if (((XaviStringSourceState *)State)->current)
-	{
-		((XaviStringSourceState *)State)->current++;
-		return -1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-static char XaviStringSourceGet(void *State)
-{
-	return *((XaviStringSourceState *)State)->current;
-}
-
-static void XaviStringSourceDestroy(void *State)
-{
-	free(((XaviStringSourceState *)State)->string);
-	free(State);
-}
-
-
-XaviLexer *XaviLexerNew(const char *inputString)
+XaviLexer *XaviLexerNew(XaviDataSource *InputSource)
 {
 	XaviLexer *rVal = NULL;
-	XaviStringSourceState *state = NULL;
-	XaviDataSource *source = NULL;
-
-	if (!(state = malloc(sizeof(XaviStringSourceState))))
-		goto memerr;
-
-	state->string = strdup(inputString);
-	state->current = state->string;
-
-	if (!(source = malloc(sizeof(XaviDataSource))))
-		goto memerr;
-
-	source->State = state;
-	source->AdvanceFunction = XaviStringSourceAdvance;
-	source->GetFunction = XaviStringSourceGet;
-	source->DestroyFunction = XaviStringSourceDestroy;
 
 	if (!(rVal = malloc(sizeof(XaviLexer))))
-		goto memerr;
+		return NULL;
 
-	rVal->source = source;
+	rVal->source = InputSource;
 	rVal->token = UNSET;
 	rVal->value.i = 0;
 
 	return rVal;
-memerr:
-	free(rVal);
-	free(source);
-	free(state);
-
-	return NULL;
 }
 
-void XaviLexerDestroy(XaviLexer **theLexer)
+void XaviLexerDestroy(XaviLexer *lexer)
 {
-	XaviLexer *garbage = *theLexer;
-	if (garbage)
+	if (lexer)
 	{
-		if (garbage->token == ID)
-			free(garbage->value.s);
-		free((*theLexer)->source);
-		free(*theLexer);
+		if (lexer->token == ID)
+			free(lexer->value.s);
+		XaviDataSourceDestroy(lexer->source);
+		free(lexer);
 	}
-	*theLexer = NULL;
 }
 
 XaviToken XaviLexerGetToken(XaviLexer *lexer)
