@@ -19,11 +19,13 @@
 #if !defined XAVI_DATA_SOURCE
 #define XAVI_DATA_SOURCE
 
+#include "W32Dll.h"
+
 #if defined __cplusplus
 extern "C" {
 #endif
 
-struct XaviDataSource
+struct XAVI_API XaviDataSource
 {
 	void *State;
 	int (*AdvanceFunction)(void*);
@@ -32,9 +34,9 @@ struct XaviDataSource
 };
 typedef struct XaviDataSource XaviDataSource;
 
-int XaviDataSourceAdvance(XaviDataSource *);
-char XaviDataSourceGet(XaviDataSource *);
-void XaviDataSourceDestroy(XaviDataSource *);
+XAVI_API int XaviDataSourceAdvance(XaviDataSource *);
+XAVI_API char XaviDataSourceGet(XaviDataSource *);
+XAVI_API void XaviDataSourceDestroy(XaviDataSource *);
 
 #if defined __cplusplus
 }

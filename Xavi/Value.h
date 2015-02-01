@@ -19,7 +19,8 @@
 #if !defined Xavi_VALUE_H
 #define Xavi_VALUE_H
 
-enum XaviValueStatus
+#include "W32Dll.h"
+enum XAVI_API XaviValueStatus
 {
 	XAVI_INTEGER,       /* Success: The value is an integer. */
 	XAVI_FLOAT,         /* Success: The valis is a float. */
@@ -41,7 +42,7 @@ enum XaviValueStatus
 };
 typedef enum XaviValueStatus XaviValueStatus;
 
-struct XaviValue
+struct XAVI_API XaviValue
 {
 	XaviValueStatus status;
 	union

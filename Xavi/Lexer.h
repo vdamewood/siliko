@@ -19,9 +19,10 @@
 #if !defined XAVI_LEXER_H
 #define XAVI_LEXER_H
 
+#include "W32Dll.h"
 #include "DataSource.h"
 
-enum XaviToken
+enum XAVI_API XaviToken
 {
 	ERROR = -1,
 	UNSET = 0,
@@ -40,7 +41,7 @@ enum XaviToken
 };
 typedef enum XaviToken XaviToken;
 
-union XaviTokenValue
+union XAVI_API XaviTokenValue
 {
         char * s;
         int i;
@@ -48,7 +49,7 @@ union XaviTokenValue
 };
 typedef union XaviTokenValue XaviTokenValue;
 
-struct XaviLexer
+struct XAVI_API XaviLexer
 {
 	XaviDataSource *source;
 	XaviToken token;
@@ -56,10 +57,10 @@ struct XaviLexer
 };
 typedef struct XaviLexer XaviLexer;
 
-XaviLexer *XaviLexerNew(XaviDataSource *input);
-void XaviLexerDestroy(XaviLexer *lexer);
+XAVI_API XaviLexer *XaviLexerNew(XaviDataSource *input);
+XAVI_API void XaviLexerDestroy(XaviLexer *lexer);
 
-XaviToken XaviLexerGetToken(XaviLexer *lexer);
-XaviTokenValue XaviLexerGetValue(XaviLexer *lexer);
-void XaviLexerNext(XaviLexer *lexer);
+XAVI_API XaviToken XaviLexerGetToken(XaviLexer *lexer);
+XAVI_API XaviTokenValue XaviLexerGetValue(XaviLexer *lexer);
+XAVI_API void XaviLexerNext(XaviLexer *lexer);
 #endif /* XAVI_LEXER_H */

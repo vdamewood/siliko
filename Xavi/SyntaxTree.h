@@ -19,9 +19,10 @@
 #if !defined Xavi_TREE_H
 #define Xavi_TREE_H
 
+#include "W32Dll.h"
 #include "Value.h"
 
-enum XaviTreeNodeType
+enum XAVI_API XaviTreeNodeType
 {
 	XAVI_NODE_ERROR = -1,
 	XAVI_NODE_NOTHING = 0,
@@ -38,13 +39,13 @@ typedef struct XaviTreeNode XaviTreeNode;
 struct XaviTreeListNode;
 typedef struct XaviTreeListNode XaviTreeListNode;
 
-struct XaviTreeListNode
+struct XAVI_API XaviTreeListNode
 {
 	XaviTreeNode *value;
 	XaviTreeListNode *next;
 };
 
-struct XaviTreeBranch
+struct XAVI_API XaviTreeBranch
 {
 	char *id;
 	int count;
@@ -56,7 +57,7 @@ struct XaviTreeBranch
 };
 typedef struct XaviTreeBranch XaviTreeBranch;
 
-struct XaviTreeNode
+struct XAVI_API XaviTreeNode
 {
 	XaviTreeNodeType type;
 	union
@@ -67,18 +68,18 @@ struct XaviTreeNode
 	};
 };
 
-XaviTreeNode *XaviTreeNewError(void);
-XaviTreeNode *XaviTreeNewFloat(float Value);
-XaviTreeNode *XaviTreeNewInteger(int Value);
-XaviTreeNode *XaviTreeNewListBranch(XaviTreeNode *NewChild);
-XaviTreeNode *XaviTreeNewNothing(void);
-XaviTreeNode *XaviTreeNewVectorBranch(char *id, int count, XaviTreeNode **Children);
-void XaviTreeDelete(XaviTreeNode *TreeToDelete);
+XAVI_API XaviTreeNode *XaviTreeNewError(void);
+XAVI_API XaviTreeNode *XaviTreeNewFloat(float Value);
+XAVI_API XaviTreeNode *XaviTreeNewInteger(int Value);
+XAVI_API XaviTreeNode *XaviTreeNewListBranch(XaviTreeNode *NewChild);
+XAVI_API XaviTreeNode *XaviTreeNewNothing(void);
+XAVI_API XaviTreeNode *XaviTreeNewVectorBranch(char *id, int count, XaviTreeNode **Children);
+XAVI_API void XaviTreeDelete(XaviTreeNode *TreeToDelete);
 
-XaviValue XaviTreeEvaluate(XaviTreeNode *TreeToEvaluate);
-int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left);
-int XaviTreeNegate(XaviTreeNode *TreeToNegate);
-int XaviTreeCollapseBranch(XaviTreeNode *TreeToCollapse);
-int XaviTreePushFront(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
-int XaviTreePush(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
+XAVI_API XaviValue XaviTreeEvaluate(XaviTreeNode *TreeToEvaluate);
+XAVI_API int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left);
+XAVI_API int XaviTreeNegate(XaviTreeNode *TreeToNegate);
+XAVI_API int XaviTreeCollapseBranch(XaviTreeNode *TreeToCollapse);
+XAVI_API int XaviTreePushFront(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
+XAVI_API int XaviTreePush(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
 #endif // Xavi_TREE_H

@@ -19,9 +19,10 @@
 #if !defined XAVI_PARSER_H
 #define XAVI_PARSER_H
 
+#include "W32Dll.h"
 #include "Value.h"
 #include "DataSource.h"
 
-XaviValue XaviParse(XaviDataSource *input);
+XAVI_API XaviValue XaviParse(XaviDataSource *input);
 
 #endif /* XAVI_PARSER_H */
