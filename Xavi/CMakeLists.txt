@@ -6,27 +6,30 @@ else()
 	add_definitions(-DXAVI_USE_UNIX=0)
 endif()
 
-set(Xavi_PUBLIC_HEADERS Xavi.h)
-set(Xavi_INTERNAL_HEADERS
-  DataSource.h
-  StringSource.h
+set(Xavi_PUBLIC_HEADERS
+  Value.h
   FunctionCaller.h
   SyntaxTree.h
-  Value.h
+  DataSource.h
+  StringSource.h
+  Lexer.h
   InfixParser.h
-  Lexer.h)
+)
+
+set(Xavi_HEADERS
+  ${Xavi_PUBLIC_HEADERS})
+
 set(Xavi_SOURCES
-  DataSource.c
-  StringSource.c
-  Xavi.c
   FunctionCaller.c
   SyntaxTree.c
+  DataSource.c
+  StringSource.c
+  Lexer.c
   InfixParser.c
-  Lexer.c)
+)
 
 add_library(Xavi
-  ${Xavi_PUBLIC_HEADERS}
-  ${Xavi_INTERNAL_HEADERS}
+  ${Xavi_HEADERS}
   ${Xavi_SOURCES})
 target_link_libraries(Xavi
   ${MATH_LIB})

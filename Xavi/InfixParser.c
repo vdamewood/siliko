@@ -563,7 +563,7 @@ XaviValue XaviParse(XaviDataSource *Input)
 
 	if (XaviLexerGetToken(lexer) == EOL)
 	{
-		rVal.status = XS_INTEGER;
+		rVal.status = XAVI_INTEGER;
 		rVal.i = 0;
 	}
 	else if (!(syntaxTree = GetExpr0(lexer)))
@@ -575,7 +575,7 @@ XaviValue XaviParse(XaviDataSource *Input)
 		if (syntaxTree->type == XAVI_NODE_ERROR
 			|| XaviLexerGetToken(lexer) != EOL)
 		{
-			rVal.status = XE_SYNTAX;
+			rVal.status = XAVI_SYNTAX_ERR;
 			rVal.i = 0;
 		}
 		else
@@ -589,7 +589,7 @@ memerr:
 	XaviTreeDelete(syntaxTree);
 	XaviLexerDestroy(lexer);
 
-	rVal.status = XE_MEMORY;
+	rVal.status = XAVI_MEMORY_ERR;
 	rVal.i = 0;
 	return rVal;
 }

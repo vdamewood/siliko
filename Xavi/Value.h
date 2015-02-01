@@ -21,17 +21,23 @@
 
 enum XaviValueStatus
 {
-	XS_INTEGER,   /* Success: The value is an integer. */
-	XS_FLOAT,     /* Success: The valis is a floating-point */
-	XE_MEMORY,    /* Error: A call to malloc failed. */
-	XE_SYNTAX,    /* Error: A syntax error was encountered. */
-	XE_ZERO_DIV,  /* Error: Division by zero was attempted. */
-	XE_FUNCTION,  /* Error: A function call could not be resolved to a
-	                        valid function. */
-	XE_ARGUMENTS, /* Error: A function call was made with a number of
-	                        arguments that the function can't accept. */
-	XE_DOMAIN,    /* Error: A function call resulted in a domain error. */
-	XE_RANGE      /* Error: A function call resulted in a range error. */
+	XAVI_INTEGER,       /* Success: The value is an integer. */
+	XAVI_FLOAT,         /* Success: The valis is a float. */
+	XAVI_MEMORY_ERR,    /* Error: An attempt to allocate memory
+				failed. */
+	XAVI_SYNTAX_ERR,    /* Error: A syntax error was
+				encountered. */
+	XAVI_ZERO_DIV_ERR,  /* Error: Division by zero was
+				attempted. */
+	XAVI_BAD_FUNCTION,  /* Error: A function call could not be
+				resolved to a valid function. */
+	XAVI_BAD_ARGUMENTS, /* Error: A function call was made with
+				a number of arguments that the
+				function can't accept. */
+	XAVI_DOMAIN_ERR,    /* Error: A function call resulted in a
+				domain error. */
+	XAVI_RANGE_ERR      /* Error: A function call resulted in a
+				range error. */
 };
 typedef enum XaviValueStatus XaviValueStatus;
 

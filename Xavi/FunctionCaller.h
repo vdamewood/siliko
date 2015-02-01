@@ -16,13 +16,13 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Xavi_FUNCTIONS_H
-#define Xavi_FUNCTIONS_H
+#if !defined XAVI_FUNCTION_CALLER_H
+#define XAVI_FUNCTION_CALLER_H
 
 #include "Value.h"
 
-int XaviFunctionCallOpen();
-void XaviFunctionCallClose();
-XaviValue XaviFunctionCall(const char *FunctionName, int ArgumentCount, XaviValue *Arguments);
+int XaviFunctionCallerInitialize();
+void XaviFunctionCallerDestroy();
+XaviValue XaviFunctionCallerCall(const char *FunctionName, int ArgumentCount, XaviValue *Arguments);
 
-#endif // Xavi_FUNCTIONS_H
+#endif // Xavi_FUNCTION_CALLER_H

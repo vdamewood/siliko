@@ -26,7 +26,10 @@
 #	define ISATTY() (-1)
 #endif
 
-#include <Xavi/Xavi.h>
+#include <Xavi/FunctionCaller.h>
+#include <Xavi/InfixParser.h>
+#include <Xavi/Value.h>
+#include <Xavi/StringSource.h>
 
 char *readline(const char *prompt)
 {
@@ -86,7 +89,7 @@ char *readline(const char *prompt)
 int main(int argc, char *argv[])
 {
 	char *expression;
-	XaviResult value;
+	XaviValue value;
 	const char *prompt;
 	const char *response;
 
@@ -101,7 +104,7 @@ int main(int argc, char *argv[])
 		response = "";
 	}
 
-	XaviOpen();
+	XaviFunctionCallerInitialize();
 
 	while(-1)
 	{
@@ -110,42 +113,45 @@ int main(int argc, char *argv[])
 		if(!expression)
 			break;
 
-		value = XaviEvaluate(expression);
+		XaviDataSource *source = XaviStringSourceNew(expression);
+
+		value = XaviParse(source);
 		free(expression);
+
 
 		switch (value.status)
 		{
-		case XAVI_RS_INTEGER:
+		case XAVI_INTEGER:
 			printf("%s%i\n", response, value.i);
 			break;
-		case XAVI_RS_FLOAT:
+		case XAVI_FLOAT:
 			printf("%s%f\n", response, value.f);
 			break;
-		case XAVI_RE_MEMORY:
+		case XAVI_MEMORY_ERR:
 			printf("Out of memory.\n");
 			break;
-		case XAVI_RE_SYNTAX:
+		case XAVI_SYNTAX_ERR:
 			printf("Syntax error.\n");
 			break;
-		case XAVI_RE_ZERO_DIV:
+		case XAVI_ZERO_DIV_ERR:
 			printf("Division by zero error.\n");
 			break;
-		case XAVI_RE_FUNCTION:
+		case XAVI_BAD_FUNCTION:
 			printf("Function not found.\n");
 			break;
-		case XAVI_RE_ARGUMENTS:
+		case XAVI_BAD_ARGUMENTS:
 			printf("Bad argument count.\n");
 			break;
-		case XAVI_RE_DOMAIN:
+		case XAVI_DOMAIN_ERR:
 			printf("Domain error.\n");
 			break;
-		case XAVI_RE_RANGE:
+		case XAVI_RANGE_ERR:
 			printf("Range error.\n");
 			break;
 		}
 	}
 
-	XaviClose();
+	XaviFunctionCallerDestroy();
 
 	if (ISATTY())
 	{
