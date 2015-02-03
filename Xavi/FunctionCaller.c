@@ -768,6 +768,7 @@ void XaviFunctionCallerDestroy(void)
 				while (current)
 				{
 					next = current->next;
+					free(current->id);
 					free(current);
 					current = next;
 				}

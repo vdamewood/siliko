@@ -276,11 +276,13 @@ static void XaviLexerLoad(XaviLexer *lexer)
 	case DFA_TERM_E:
 		lexer->token = FLOAT;
 		lexer->value.f = EULER;
+		free(Lex.buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_PI:
 		lexer->token = FLOAT;
 		lexer->value.f = PI;
+		free(Lex.buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_CHAR:
@@ -297,11 +299,13 @@ static void XaviLexerLoad(XaviLexer *lexer)
 	case DFA_TERM_EOI:
 		lexer->token = EOL;
 		lexer->value.i = 0;
+		free(Lex.buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_ERROR:
 		lexer->token = ERROR;
 		lexer->value.i = 0;
+		free(Lex.buffer);
 		dfaState = DFA_END;
 		break;
 	}

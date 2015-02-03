@@ -584,6 +584,8 @@ XaviValue XaviParse(XaviDataSource *Input)
 		}
 		XaviTreeDelete(syntaxTree);
 	}
+
+	XaviLexerDestroy(lexer);
 	return rVal;
 memerr:
 	XaviTreeDelete(syntaxTree);
