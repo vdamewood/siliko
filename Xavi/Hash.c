@@ -1,5 +1,5 @@
 /*
- * FunctionCaller.h: Function handling
+ * Hash.c: Hashing function
  * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -16,17 +16,33 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_FUNCTION_CALLER_H
-#define XAVI_FUNCTION_CALLER_H
+#include <stdlib.h>
 
-#include "W32Dll.h"
-#include "Value.h"
+#include "Hash.h"
 
-typedef XaviValue (*XaviFunctionPointer)(int, XaviValue *);
+unsigned char XaviHash(const unsigned char *rawInput, size_t length)
+{
+	const unsigned char divisor = 0xD5;
+	unsigned char result = 0x00;
+	unsigned int i;
+	int j;
+	int hasHighBit;
 
-XAVI_API int XaviFunctionCallerInitialize(void);
-XAVI_API void XaviFunctionCallerDestroy(void);
-XAVI_API XaviValue XaviFunctionCallerCall(const char *FunctionName, int ArgumentCount, XaviValue *Arguments);
-XAVI_API int XaviFunctionCallerInstall(const char *FunctionName, XaviFunctionPointer Function);
+	for (i = 0; i <= length; i++)
+	{
+		for (j = 7; j >= 0; j--)
+		{
+			hasHighBit = result & 0x80;
+			result <<= 1;
 
-#endif // Xavi_FUNCTION_CALLER_H
+			result |= (i < length)
+				? (rawInput[i] >> j) & 0x01
+				: 0;
+
+			if (hasHighBit)
+				result ^= divisor;
+		}
+	}
+
+	return result;
+}

@@ -17,9 +17,13 @@ set(Xavi_PUBLIC_HEADERS
 )
 
 set(Xavi_HEADERS
-  ${Xavi_PUBLIC_HEADERS})
+  ${Xavi_PUBLIC_HEADERS}
+  Functions.h
+  Hash.h)
 
 set(Xavi_SOURCES
+  Hash.c
+  Functions.c
   FunctionCaller.c
   SyntaxTree.c
   DataSource.c
