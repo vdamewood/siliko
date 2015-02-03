@@ -27,7 +27,7 @@
 #include "Functions.h"
 #include "FunctionCaller.h"
 
-#if defined WIN32
+#if defined _WIN32
 #define strdup _strdup
 #endif
 
