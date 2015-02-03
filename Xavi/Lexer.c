@@ -269,19 +269,19 @@ static void XaviLexerLoad(XaviLexer *lexer)
 		break;
 	case DFA_TERM_FLOAT:
 		lexer->token = FLOAT;
-		lexer->value.f = atof(Lex.buffer);
+		lexer->value.f = (float)atof(Lex.buffer);
 		free(Lex.buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
 		lexer->token = FLOAT;
-		lexer->value.f = EULER;
+		lexer->value.f = (float)EULER;
 		free(Lex.buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_PI:
 		lexer->token = FLOAT;
-		lexer->value.f = PI;
+		lexer->value.f = (float)PI;
 		free(Lex.buffer);
 		dfaState = DFA_END;
 		break;
