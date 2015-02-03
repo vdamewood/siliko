@@ -27,6 +27,10 @@
 #include "Functions.h"
 #include "FunctionCaller.h"
 
+#if defined WIN32
+#define strdup _strdup
+#endif
+
 struct XaviFunctionChain
 {
 	char *id;
