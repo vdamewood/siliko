@@ -23,8 +23,11 @@
 
 #include "Value.h"
 
-XAVI_API int XaviFunctionCallerInitialize();
-XAVI_API void XaviFunctionCallerDestroy();
+typedef XaviValue (*XaviFunctionPointer)(int, XaviValue *);
+
+XAVI_API int XaviFunctionCallerInitialize(void);
+XAVI_API void XaviFunctionCallerDestroy(void);
 XAVI_API XaviValue XaviFunctionCallerCall(const char *FunctionName, int ArgumentCount, XaviValue *Arguments);
+XAVI_API int XaviFunctionCallerInstall(const char *FunctionName, XaviFunctionPointer Function);
 
 #endif // Xavi_FUNCTION_CALLER_H

@@ -681,103 +681,78 @@ unsigned char XaviHash(const unsigned char *rawInput, size_t length)
 
 ////////////////////////////////////////////////////////////////////////
 
-typedef XaviValue (*FunctionPointer)(int, XaviValue *);
-
-#define FUNCTION_COUNT 22
-#define FUNCTION_MAX (FUNCTION_COUNT - 1)
-static char *functionNames[] =
-{
-	"add", "subtract", "multiply", "divide",
-	"power", "dice",
-	"abs", "acos", "asin", "atan",
-	"ceil", "cos", "cosh", "exp",
-	"floor", "log","log10", "sin",
-	 "sinh", "sqrt", "tan", "tanh"
-};
-
-static FunctionPointer functions[] =
-{
-	XaviFunction_add, XaviFunction_subtract, XaviFunction_multiply, XaviFunction_divide,
-	XaviFunction_power, XaviFunction_dice,
-	XaviFunction_abs, XaviFunction_acos, XaviFunction_asin, XaviFunction_atan,
-	XaviFunction_ceil, XaviFunction_cos, XaviFunction_cosh, XaviFunction_exp,
-	XaviFunction_floor, XaviFunction_log, XaviFunction_log10, XaviFunction_sin,
-	XaviFunction_sinh, XaviFunction_sqrt, XaviFunction_tan, XaviFunction_tanh
-};
-
 struct XaviFunctionChain
 {
 	char *id;
-	FunctionPointer function;
+	XaviFunctionPointer function;
 	struct XaviFunctionChain *next;
 };
 typedef struct XaviFunctionChain XaviFunctionChain;
 
 static XaviFunctionChain **functionTable;
 
-int XaviFunctionCallerInitialize()
+int XaviFunctionCallerInstall(const char *name, XaviFunctionPointer function)
 {
-	int i;
-	int memoryError;
-	int index;
-	XaviFunctionChain *currentChain;
-	XaviFunctionChain **tempTable;
+	int bucket = XaviHash((const unsigned char *)name, strlen(name));
+	XaviFunctionChain  *newNode;
 
-	if (!(functionTable = malloc(256 * sizeof(XaviFunctionChain))))
+	if (!(newNode = malloc(sizeof(XaviFunctionChain))))
 		return 0;
 
-	if (!(tempTable = malloc(FUNCTION_COUNT * sizeof(XaviFunctionChain))))
+	newNode->id = strdup(name);
+	newNode->function = function;
+	newNode->next = NULL;
+
+	if (functionTable[bucket])
 	{
-		free(functionTable);
-		return 0;
+		XaviFunctionChain *currentNode = functionTable[bucket];
+		while (currentNode->next)
+			currentNode = currentNode->next;
+		currentNode->next = newNode;
+	}
+	else
+	{
+		functionTable[bucket] = newNode;
 	}
 
-	memoryError = 0;
-	for (i = 0; i<=FUNCTION_MAX; i++)
-	{
-		if (!(tempTable[i] = malloc(sizeof(XaviFunctionChain))))
-		{
-			memoryError = -1;
-			break;
-		}
-	}
-
-	if (memoryError)
-	{
-		for (i--; i >= 0; i--)
-			free(tempTable[i]);
-		free(functionTable);
-		return 0;
-	}
-
-	for (i = 0; i<=255; i++)
-		functionTable[i] = NULL;
-
-	for (i = 0; i <= FUNCTION_MAX; i++)
-	{
-		index = XaviHash((const unsigned char *)functionNames[i], strlen(functionNames[i]));
-		tempTable[i]->id = functionNames[i];
-		tempTable[i]->function = functions[i];
-		tempTable[i]->next = NULL;
-
-		if (functionTable[index])
-		{
-			currentChain = functionTable[index];
-			while (currentChain->next)
-				currentChain = currentChain->next;
-			currentChain->next = tempTable[i];
-		}
-		else
-		{
-			functionTable[index] = tempTable[i];
-		}
-	}
-
-	free(tempTable);
-	return -11;
+	return -1;
 }
 
-void XaviFunctionCallerDestroy()
+int XaviFunctionCallerInitialize()
+{
+	if (!(functionTable = calloc(256, sizeof(XaviFunctionChain))))
+		goto memerr;
+
+	XaviFunctionCallerInstall("add", XaviFunction_add);
+	XaviFunctionCallerInstall("subtract", XaviFunction_subtract);
+	XaviFunctionCallerInstall("multiply", XaviFunction_multiply);
+	XaviFunctionCallerInstall("divide", XaviFunction_divide);
+	XaviFunctionCallerInstall("power", XaviFunction_power);
+	XaviFunctionCallerInstall("dice", XaviFunction_dice);
+	XaviFunctionCallerInstall("abs", XaviFunction_abs);
+	XaviFunctionCallerInstall("acos", XaviFunction_acos);
+	XaviFunctionCallerInstall("asin", XaviFunction_asin);
+	XaviFunctionCallerInstall("atan", XaviFunction_atan);
+	XaviFunctionCallerInstall("ceil", XaviFunction_ceil);
+	XaviFunctionCallerInstall("cos", XaviFunction_cos);
+	XaviFunctionCallerInstall("cosh", XaviFunction_cosh);
+	XaviFunctionCallerInstall("exp", XaviFunction_exp);
+	XaviFunctionCallerInstall("floor", XaviFunction_floor);
+	XaviFunctionCallerInstall("log", XaviFunction_log);
+	XaviFunctionCallerInstall("log10", XaviFunction_log10);
+	XaviFunctionCallerInstall("sin", XaviFunction_sin);
+	XaviFunctionCallerInstall("sinh", XaviFunction_sinh);
+	XaviFunctionCallerInstall("sqrt", XaviFunction_sqrt);
+	XaviFunctionCallerInstall("tan", XaviFunction_tan);
+	XaviFunctionCallerInstall("tanh", XaviFunction_tanh);
+
+	return -1;
+memerr:
+	XaviFunctionCallerDestroy();
+	return 0;
+}
+
+void XaviFunctionCallerDestroy(void)
 {
 	int i;
 	XaviFunctionChain * current;
@@ -804,7 +779,7 @@ void XaviFunctionCallerDestroy()
 	}
 }
 
-static FunctionPointer GetFunction(const char *name)
+static XaviFunctionPointer GetFunction(const char *name)
 {
 	int index;
 	XaviFunctionChain *current;
@@ -826,7 +801,7 @@ static FunctionPointer GetFunction(const char *name)
 
 XaviValue XaviFunctionCallerCall(const char *name, int argc, XaviValue *argv)
 {
-	FunctionPointer f;
+	XaviFunctionPointer f;
 	XaviValue rVal;
 
 	f = GetFunction(name);
