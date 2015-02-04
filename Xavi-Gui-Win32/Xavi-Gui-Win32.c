@@ -23,7 +23,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <Xavi/Xavi.h>
+#include <Xavi/FunctionCaller.h>
+#include <Xavi/StringSource.h>
+#include <Xavi/InfixParser.h>
 
 #include "Menu.h"
 #include "About.h"
@@ -122,32 +124,29 @@ void RenderCalculation(HWND hwnd)
 	int ValueSize;
 	char *ExpressionString;
 	char *ValueString;
-	XaviResult Value;
+	XaviValue Value;
 
 	ExpressionSize = GetWindowTextLength(GetDlgItem(hwnd, CALCULATOR_INPUT)) + 1;
 	ExpressionString = (char*)GlobalAlloc(GPTR, ExpressionSize);
 	GetDlgItemText(hwnd, CALCULATOR_INPUT, ExpressionString, ExpressionSize);
 	
-	Value = XaviEvaluate(ExpressionString);
+	Value = XaviParse(XaviStringSourceNew(ExpressionString));
 
 	switch (Value.status)
 	{
-	case XAVI_RS_INTEGER:
+	case XAVI_INTEGER:
 		ValueSize = _snprintf(NULL, 0, "%i", Value.i) + 1;
 		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
 		_snprintf(ValueString, ValueSize, "%i", Value.i);
 		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
 		GlobalFree((HANDLE)ValueString);
 		break;
-	case XAVI_RS_FLOAT:
+	case XAVI_FLOAT:
 		ValueSize = _snprintf(NULL, 0, "%f", Value.f) + 1;
 		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
 		_snprintf(ValueString, ValueSize, "%f", Value.f);
 		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
 		GlobalFree((HANDLE)ValueString);
-		break;
-	case XAVI_RE_INTERNAL:
-		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, "Internal error.");
 		break;
 	default:
 		ValueSize = _snprintf(NULL, 0, "I'm too lazy to report. (%i)", (int)Value.status);
@@ -211,7 +210,7 @@ int WINAPI WinMain(
 	HWND Handle;
 	MSG Message;
 
-	XaviOpen();
+	XaviFunctionCallerInitialize();
 
 	CalculatorClass.cbSize = sizeof(WNDCLASSEX);
 	CalculatorClass.style = 0;
@@ -263,6 +262,6 @@ int WINAPI WinMain(
 		}
 	}
 
-	XaviClose();
+	XaviFunctionCallerDestroy();
 	return (int) Message.wParam;
 }
