@@ -1,6 +1,6 @@
 /*
- * XaviTestLexer.cpp: Program to test lexer for Xavi.
- * Copyright 2012 Vincent Damewood
+ * TestXavi++Lexer.cpp: Program to test lexer for Xavi++.
+ * Copyright 2012, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

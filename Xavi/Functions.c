@@ -31,8 +31,8 @@ XaviValue XaviFunction_add(int argc, XaviValue *argv)
 
 	if (!argc)
 	{
-		rVal.status = XAVI_INTEGER;
-		rVal.i = 0;
+		rVal.Status = XAVI_INTEGER;
+		rVal.Integer = 0;
 		return rVal;
 	}
 
@@ -40,27 +40,27 @@ XaviValue XaviFunction_add(int argc, XaviValue *argv)
 
 	for(i = 1; i < argc; i++)
 	{
-		if (rVal.status == XAVI_FLOAT)
+		if (rVal.Status == XAVI_FLOAT)
 		{
-			if (argv[i].status == XAVI_FLOAT)
+			if (argv[i].Status == XAVI_FLOAT)
 			{
-				rVal.f += argv[i].f;
+				rVal.Float += argv[i].Float;
 			}
 			else
 			{
-				rVal.f += (float)argv[i].i;
+				rVal.Float += (float)argv[i].Integer;
 			}
 		}
 		else
 		{
-			if (argv[i].status == XAVI_FLOAT)
+			if (argv[i].Status == XAVI_FLOAT)
 			{
-				rVal.f = (float)rVal.i + argv[i].f;
-				rVal.status = XAVI_FLOAT;
+				rVal.Float = (float)rVal.Integer + argv[i].Float;
+				rVal.Status = XAVI_FLOAT;
 			}
 			else
 			{
-				rVal.i += argv[i].i;
+				rVal.Integer += argv[i].Integer;
 			}
 		}
 	}
@@ -75,8 +75,8 @@ XaviValue XaviFunction_subtract(int argc, XaviValue *argv)
 
 	if (!argc)
 	{
-		rVal.status = XAVI_INTEGER;
-		rVal.i = 0;
+		rVal.Status = XAVI_INTEGER;
+		rVal.Integer = 0;
 		return rVal;
 	}
 
@@ -84,27 +84,27 @@ XaviValue XaviFunction_subtract(int argc, XaviValue *argv)
 
 	for(i = 1; i < argc; i++)
 	{
-		if (rVal.status == XAVI_FLOAT)
+		if (rVal.Status == XAVI_FLOAT)
 		{
-			if (argv[i].status == XAVI_FLOAT)
+			if (argv[i].Status == XAVI_FLOAT)
 			{
-				rVal.f -= argv[i].f;
+				rVal.Float -= argv[i].Float;
 			}
 			else
 			{
-				rVal.f -= (float)argv[i].i;
+				rVal.Float -= (float)argv[i].Integer;
 			}
 		}
 		else
 		{
-			if (argv[i].status == XAVI_FLOAT)
+			if (argv[i].Status == XAVI_FLOAT)
 			{
-				rVal.f = (float)rVal.i - argv[i].f;
-				rVal.status = XAVI_FLOAT;
+				rVal.Float = (float)rVal.Integer - argv[i].Float;
+				rVal.Status = XAVI_FLOAT;
 			}
 			else
 			{
-				rVal.i -= argv[i].i;
+				rVal.Integer -= argv[i].Integer;
 			}
 		}
 	}
@@ -119,8 +119,8 @@ XaviValue XaviFunction_multiply(int argc, XaviValue *argv)
 
 	if (!argc)
 	{
-		rVal.status = XAVI_INTEGER;
-		rVal.i = 0;
+		rVal.Status = XAVI_INTEGER;
+		rVal.Integer = 0;
 		return rVal;
 	}
 
@@ -128,26 +128,26 @@ XaviValue XaviFunction_multiply(int argc, XaviValue *argv)
 
 	for(i = 1; i < argc; i++)
 	{
-		if (rVal.status == XAVI_FLOAT)
+		if (rVal.Status == XAVI_FLOAT)
 		{
-			if (argv[i].status == XAVI_FLOAT)
+			if (argv[i].Status == XAVI_FLOAT)
 			{
-				rVal.f *= argv[i].f;
+				rVal.Float *= argv[i].Float;
 			}
 			else
 			{
-				rVal.f *= (float)argv[i].i;
+				rVal.Float *= (float)argv[i].Integer;
 			}
 		}
 		else {
-			if (argv[i].status == XAVI_FLOAT)
+			if (argv[i].Status == XAVI_FLOAT)
 			{
-				rVal.f = (float)rVal.i * argv[i].f;
-				rVal.status = XAVI_FLOAT;
+				rVal.Float = (float)rVal.Integer * argv[i].Float;
+				rVal.Status = XAVI_FLOAT;
 			}
 			else
 			{
-				rVal.i *= argv[i].i;
+				rVal.Integer *= argv[i].Integer;
 			}
 		}
 	}
@@ -162,7 +162,7 @@ XaviValue XaviFunction_divide(int argc, XaviValue *argv)
 
 	if (argc < 2)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
@@ -171,38 +171,38 @@ XaviValue XaviFunction_divide(int argc, XaviValue *argv)
 	for (i = 1; i < argc; i++)
 	{
 		/* Division-by-Zero Error */
-		if ((argv[i].status == XAVI_FLOAT && argv[i].f == 0.0)
-			|| (argv[i].status == XAVI_INTEGER && argv[i].i == 0))
+		if ((argv[i].Status == XAVI_FLOAT && argv[i].Float == 0.0)
+			|| (argv[i].Status == XAVI_INTEGER && argv[i].Integer == 0))
 		{
-			rVal.status = XAVI_ZERO_DIV_ERR;
+			rVal.Status = XAVI_ZERO_DIV_ERR;
 			return rVal;
 		}
 
-		if (rVal.status == XAVI_FLOAT)
+		if (rVal.Status == XAVI_FLOAT)
 		{
-			if (argv[i].status == XAVI_FLOAT)
+			if (argv[i].Status == XAVI_FLOAT)
 			{
-				rVal.f /= argv[i].f;
+				rVal.Float /= argv[i].Float;
 			}
 			else
 			{
-				rVal.f /= (float) argv[i].i;
+				rVal.Float /= (float) argv[i].Integer;
 			}
 		}
 		else {
-			if (argv[i].status == XAVI_FLOAT)
+			if (argv[i].Status == XAVI_FLOAT)
 			{
-				rVal.status = XAVI_FLOAT;
-				rVal.f = (float) rVal.i / argv[i].f;
+				rVal.Status = XAVI_FLOAT;
+				rVal.Float = (float) rVal.Integer / argv[i].Float;
 			}
-			else if (rVal.i % argv[i].i == 0)
+			else if (rVal.Integer % argv[i].Integer == 0)
 			{
-				rVal.i /= argv[i].i;
+				rVal.Integer /= argv[i].Integer;
 			}
 			else
 			{
-				rVal.status = XAVI_FLOAT;
-				rVal.f = (float) rVal.i / (float) argv[i].i;
+				rVal.Status = XAVI_FLOAT;
+				rVal.Float = (float) rVal.Integer / (float) argv[i].Integer;
 			}
 		}
 	}
@@ -216,21 +216,21 @@ XaviValue XaviFunction_power(int argc, XaviValue *argv)
 	float nextValue;
 	int i;
 
-	runningValue = (argv[0].status == XAVI_INTEGER)
-		? (float) argv[0].i
-		: argv[0].f;
+	runningValue = (argv[0].Status == XAVI_INTEGER)
+		? (float) argv[0].Integer
+		: argv[0].Float;
 
 	for (i = 1; i < argc; i++)
 	{
-		nextValue = (argv[i].status == XAVI_INTEGER)
-			? nextValue = (float) argv[i].i
-			: argv[i].f;
+		nextValue = (argv[i].Status == XAVI_INTEGER)
+			? nextValue = (float) argv[i].Integer
+			: argv[i].Float;
 
 		runningValue = (float) pow(runningValue, nextValue);
 	}
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = runningValue;
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = runningValue;
 	return rVal;
 }
 
@@ -247,17 +247,17 @@ XaviValue XaviFunction_dice(int argc, XaviValue *argv)
 
 	if(argc != 2)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	count = (argv[0].status == XAVI_INTEGER)
-		? argv[0].i
-		: (int) argv[0].f;
+	count = (argv[0].Status == XAVI_INTEGER)
+		? argv[0].Integer
+		: (int) argv[0].Float;
 
-	faces = (argv[1].status == XAVI_INTEGER)
-		? argv[1].i
-		: (int) argv[1].f;
+	faces = (argv[1].Status == XAVI_INTEGER)
+		? argv[1].Integer
+		: (int) argv[1].Float;
 
 	if (!hasSeeded)
 	{
@@ -266,8 +266,8 @@ XaviValue XaviFunction_dice(int argc, XaviValue *argv)
 	}
 
 	for (i = 1; i <= count; i++) runningTotal += (rand() % faces) + 1;
-	rVal.status = XAVI_INTEGER;
-	rVal.i = runningTotal;
+	rVal.Status = XAVI_INTEGER;
+	rVal.Integer = runningTotal;
 	return rVal;
 }
 
@@ -277,15 +277,15 @@ XaviValue XaviFunction_abs(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
 	rVal = argv[0];
-	if (rVal.status == XAVI_FLOAT)
-		rVal.f = (float) fabs(rVal.f);
-	else if (rVal.status == XAVI_INTEGER)
-		rVal.i = abs(rVal.i);
+	if (rVal.Status == XAVI_FLOAT)
+		rVal.Float = (float) fabs(rVal.Float);
+	else if (rVal.Status == XAVI_INTEGER)
+		rVal.Integer = abs(rVal.Integer);
 	return rVal;
 }
 
@@ -296,23 +296,23 @@ XaviValue XaviFunction_acos(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float) argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float) argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
 	if (input < -1 || input > 1)
 	{
-		rVal.status = XAVI_DOMAIN_ERR;
+		rVal.Status = XAVI_DOMAIN_ERR;
 		return rVal;
 	}
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) acos(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) acos(input);
 	return rVal;
 }
 
@@ -323,23 +323,23 @@ XaviValue XaviFunction_asin(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float) argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float) argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
 	if (input < -1 || input > 1)
 	{
-		rVal.status = XAVI_DOMAIN_ERR;
+		rVal.Status = XAVI_DOMAIN_ERR;
 		return rVal;
 	}
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) asin(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) asin(input);
 	return rVal;
 }
 
@@ -350,17 +350,17 @@ XaviValue XaviFunction_atan(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float) argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float) argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) atan(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) atan(input);
 	return rVal;
 }
 
@@ -372,25 +372,25 @@ XaviValue XaviFunction_ceil(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
 	result = (float) ceil(input);
 	if (result <= INT_MAX && result >= INT_MIN)
 	{
-		rVal.status = XAVI_INTEGER;
-		rVal.i = (int)result;
+		rVal.Status = XAVI_INTEGER;
+		rVal.Integer = (int)result;
 	}
 	else
 	{
-		rVal.status = XAVI_FLOAT;
-		rVal.f = result;
+		rVal.Status = XAVI_FLOAT;
+		rVal.Float = result;
 	}
 	return rVal;
 }
@@ -402,17 +402,17 @@ XaviValue XaviFunction_cos(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) cos(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) cos(input);
 	return rVal;
 }
 
@@ -423,17 +423,17 @@ XaviValue XaviFunction_cosh(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) cosh(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) cosh(input);
 	return rVal;
 }
 
@@ -444,17 +444,17 @@ XaviValue XaviFunction_exp(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) exp(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) exp(input);
 	return rVal;
 }
 
@@ -466,25 +466,25 @@ XaviValue XaviFunction_floor(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
 	result = (float) floor(input);
 	if (result <= INT_MAX && result >= INT_MIN)
 	{
-		rVal.status = XAVI_INTEGER;
-		rVal.i = (int)result;
+		rVal.Status = XAVI_INTEGER;
+		rVal.Integer = (int)result;
 	}
 	else
 	{
-		rVal.status = XAVI_FLOAT;
-		rVal.f = result;
+		rVal.Status = XAVI_FLOAT;
+		rVal.Float = result;
 	}
 	return rVal;
 }
@@ -496,17 +496,17 @@ XaviValue XaviFunction_log(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) log(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) log(input);
 	return rVal;
 }
 
@@ -517,17 +517,17 @@ XaviValue XaviFunction_log10(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) log10(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) log10(input);
 	return rVal;
 }
 
@@ -538,17 +538,17 @@ XaviValue XaviFunction_sin(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) sin(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) sin(input);
 	return rVal;
 }
 
@@ -559,17 +559,17 @@ XaviValue XaviFunction_sinh(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) sinh(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) sinh(input);
 	return rVal;
 }
 
@@ -580,28 +580,28 @@ XaviValue XaviFunction_sqrt(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if ((argv[0].status == XAVI_INTEGER && argv[0].i < 0)
-		|| (argv[0].status == XAVI_FLOAT && argv[0].f < 0.0))
+	if ((argv[0].Status == XAVI_INTEGER && argv[0].Integer < 0)
+		|| (argv[0].Status == XAVI_FLOAT && argv[0].Float < 0.0))
 	{
-			rVal.status = XAVI_DOMAIN_ERR;
+			rVal.Status = XAVI_DOMAIN_ERR;
 			return rVal;
 	}
 
-	if (argv[0].status == XAVI_FLOAT)
+	if (argv[0].Status == XAVI_FLOAT)
 	{
-		inVal = argv[0].f;
+		inVal = argv[0].Float;
 	}
 	else
 	{
-		inVal = (float) argv[0].i;
+		inVal = (float) argv[0].Integer;
 	}
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) sqrt(inVal);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) sqrt(inVal);
 
 	return rVal;
 }
@@ -616,15 +616,15 @@ XaviValue XaviFunction_tan(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER) input = (float)argv[0].i;
-	else input = argv[0].f;
+	if (argv[0].Status == XAVI_INTEGER) input = (float)argv[0].Integer;
+	else input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) tan(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) tan(input);
 	return rVal;
 }
 
@@ -635,16 +635,16 @@ XaviValue XaviFunction_tanh(int argc, XaviValue *argv)
 
 	if (argc != 1)
 	{
-		rVal.status = XAVI_BAD_ARGUMENTS;
+		rVal.Status = XAVI_BAD_ARGUMENTS;
 		return rVal;
 	}
 
-	if (argv[0].status == XAVI_INTEGER)
-		input = (float)argv[0].i;
+	if (argv[0].Status == XAVI_INTEGER)
+		input = (float)argv[0].Integer;
 	else
-		input = argv[0].f;
+		input = argv[0].Float;
 
-	rVal.status = XAVI_FLOAT;
-	rVal.f = (float) tanh(input);
+	rVal.Status = XAVI_FLOAT;
+	rVal.Float = (float) tanh(input);
 	return rVal;
 }

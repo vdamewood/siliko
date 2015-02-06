@@ -80,7 +80,7 @@ static XaviTreeNode *GetExpr0r(XaviLexer *lexer)
 	XaviTreeNode **operands;
 	XaviTreeNode *branchNode;
 
-	switch (XaviLexerGetToken(lexer))
+	switch (lexer->token.Type)
 	{
 	case '+':
 		operation = strdup("add");
@@ -177,7 +177,7 @@ static XaviTreeNode *GetExpr1r(XaviLexer *lexer)
 	XaviTreeNode **operands;
 	XaviTreeNode *branchNode;
 
-	switch (XaviLexerGetToken(lexer))
+	switch (lexer->token.Type)
 	{
 		case '*':
 			operation = strdup("multiply");
@@ -280,11 +280,11 @@ static XaviTreeNode *GetExpr2(XaviLexer *lexer)
 
 static XaviTreeNode *GetExpr2lf(XaviLexer *lexer)
 {
-	if (XaviLexerGetToken(lexer) == '^')
+	if (lexer->token.Type == '^')
 	{
 		XaviLexerNext(lexer);
 
-		switch (XaviLexerGetToken(lexer))
+		switch (lexer->token.Type)
 		{
 		case INTEGER:
 		case FLOAT:
@@ -346,17 +346,17 @@ static XaviTreeNode *GetExpr3(XaviLexer *lexer)
 
 static XaviTreeNode *GetExpr3lf(XaviLexer *lexer)
 {
-	XaviTokenValue value;
+	int value;
 
-	if(XaviLexerGetToken(lexer) == 'd')
+	if(lexer->token.Type == 'd')
 	{
 		XaviLexerNext(lexer);
-		if (XaviLexerGetToken(lexer) != INTEGER)
+		if (lexer->token.Type != INTEGER)
 			return XaviTreeNewError();
 
-		value = XaviLexerGetValue(lexer);
+		value = lexer->token.Integer;
 		XaviLexerNext(lexer);
-		return XaviTreeNewInteger(value.i);
+		return XaviTreeNewInteger(value);
 	}
 	else
 	{
@@ -368,7 +368,7 @@ static XaviTreeNode *GetAtom(XaviLexer *lexer)
 {
 	XaviTreeNode *value;
 
-	switch(XaviLexerGetToken(lexer))
+	switch(lexer->token.Type)
 	{
 	case '-':
 	case INTEGER:
@@ -379,7 +379,7 @@ static XaviTreeNode *GetAtom(XaviLexer *lexer)
 		if (!(value = GetExpr0(lexer)))
 			return NULL;
 
-		if (XaviLexerGetToken(lexer) != ')')
+		if (lexer->token.Type != ')')
 		{
 			XaviTreeDelete(value);
 			return XaviTreeNewError();
@@ -397,7 +397,7 @@ static XaviTreeNode *GetNumber(XaviLexer *lexer)
 {
 	XaviTreeNode * uNumber;
 
-	switch (XaviLexerGetToken(lexer))
+	switch (lexer->token.Type)
 	{
 	case INTEGER:
 	case FLOAT:
@@ -421,21 +421,23 @@ static XaviTreeNode *GetNumber(XaviLexer *lexer)
 
 static XaviTreeNode *GetUNumber(XaviLexer *lexer)
 {
-	XaviTokenValue value;
+	XaviTreeNode *rVal;
 
-	switch (XaviLexerGetToken(lexer))
+	switch (lexer->token.Type)
 	{
 	case INTEGER:
-		value = XaviLexerGetValue(lexer);
+		rVal = XaviTreeNewInteger(lexer->token.Integer);
 		XaviLexerNext(lexer);
-		return XaviTreeNewInteger(value.i);
+		break;
 	case FLOAT:
-		value = XaviLexerGetValue(lexer);
+		rVal = XaviTreeNewFloat(lexer->token.Float);
 		XaviLexerNext(lexer);
-		return XaviTreeNewFloat(value.f);
+		break;
 	default:
-		return XaviTreeNewError();
+		rVal = XaviTreeNewError();
 	}
+
+	return rVal;
 }
 
 static XaviTreeNode *GetFCall(XaviLexer *lexer)
@@ -443,14 +445,14 @@ static XaviTreeNode *GetFCall(XaviLexer *lexer)
 	char *id;
 	XaviTreeNode *rVal;
 
-	if (XaviLexerGetToken(lexer) != ID)
+	if (lexer->token.Type != ID)
 		return XaviTreeNewError();
 
-	if (!(id = strdup(XaviLexerGetValue(lexer).s)))
+	if (!(id = strdup(lexer->token.String)))
 		return NULL;
 
 	XaviLexerNext(lexer);
-	if (XaviLexerGetToken(lexer) != '(')
+	if (lexer->token.Type != '(')
 	{
 		free(id);
 		return XaviTreeNewError();
@@ -482,7 +484,7 @@ static XaviTreeNode *GetFCall(XaviLexer *lexer)
 			return XaviTreeNewError();
 	}
 
-	if (XaviLexerGetToken(lexer) != ')')
+	if (lexer->token.Type != ')')
 	{
 		XaviTreeDelete(rVal);
 		return XaviTreeNewError();
@@ -539,7 +541,7 @@ static XaviTreeNode *GetArguments(XaviLexer *lexer)
 
 static XaviTreeNode *GetNextArgument(XaviLexer *lexer)
 {
-	switch (XaviLexerGetToken(lexer))
+	switch (lexer->token.Type)
 	{
 	case ',':
 		XaviLexerNext(lexer);
@@ -551,47 +553,23 @@ static XaviTreeNode *GetNextArgument(XaviLexer *lexer)
 	}
 }
 
-XaviValue XaviParse(XaviDataSource *Input)
+XaviTreeNode *XaviParseInfix(XaviDataSource *Input)
 {
-	XaviValue rVal;
-	XaviTreeNode *syntaxTree = NULL;
+	XaviTreeNode *rVal = NULL;
 	XaviLexer *lexer = NULL;
 
 	if (!(lexer = XaviLexerNew(Input)))
-		goto memerr;
+		return NULL;
 
+	rVal = (lexer->token.Type == EOL)
+		? XaviTreeNewInteger(0)
+		: GetExpr0(lexer);
 
-	if (XaviLexerGetToken(lexer) == EOL)
+	if (lexer->token.Type != EOL)
 	{
-		rVal.status = XAVI_INTEGER;
-		rVal.i = 0;
+		XaviTreeDelete(rVal);
+		rVal = XaviTreeNewError();
 	}
-	else if (!(syntaxTree = GetExpr0(lexer)))
-	{
-		goto memerr;
-	}
-	else
-	{
-		if (syntaxTree->type == XAVI_NODE_ERROR
-			|| XaviLexerGetToken(lexer) != EOL)
-		{
-			rVal.status = XAVI_SYNTAX_ERR;
-			rVal.i = 0;
-		}
-		else
-		{
-			rVal = XaviTreeEvaluate(syntaxTree);
-		}
-		XaviTreeDelete(syntaxTree);
-	}
-
 	XaviLexerDestroy(lexer);
-	return rVal;
-memerr:
-	XaviTreeDelete(syntaxTree);
-	XaviLexerDestroy(lexer);
-
-	rVal.status = XAVI_MEMORY_ERR;
-	rVal.i = 0;
 	return rVal;
 }

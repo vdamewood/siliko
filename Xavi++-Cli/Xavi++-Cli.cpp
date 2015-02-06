@@ -107,22 +107,25 @@ int main(int argc, char *argv[])
 	while(-1)
 	{
 		char *expression = readline(prompt);
-
+		Xavi::SyntaxTreeNode *Tree;
 		if(!expression)
 			break;
 
-		Xavi::InfixParser MyParser(new StringSource(expression));
+		Tree = Xavi::ParseInfix(new StringSource(expression));
 		free(expression);
 
-		MyParser.Parse();
-		Xavi::Value result = MyParser.SyntaxTree().GetValue();
+		//MyParser.Parse();
+		Xavi::Value result = Tree->GetValue();
+		delete Tree;
+		Tree = 0;
+
 		switch (result.Status())
 		{
 		case Xavi::Value::INTEGER:
-			printf("%s%i\n", response, result.IntegerValue());
+			printf("%s%i\n", response, result.Integer());
 			break;
 		case Xavi::Value::FLOAT:
-			printf("%s%f\n", response, result.FloatValue());
+			printf("%s%f\n", response, result.Float());
 			break;
 		case Xavi::Value::MEMORY_ERR:
 			printf("Out of memory.\n");

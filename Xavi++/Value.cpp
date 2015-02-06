@@ -20,28 +20,28 @@
 
 #include "Value.hpp"
 
-Xavi::Value::Value(void)
+Xavi::Value::Value()
 {
 	MyStatus = INTEGER;
-	MyIntegerValue = 0;
+	MyInteger = 0;
 }
 
 Xavi::Value::Value(Xavi::Value::ValueStatus NewStatus)
 {
 	MyStatus = NewStatus;
-	MyIntegerValue = 0;
+	MyInteger = 0;
 }
 
 Xavi::Value::Value(int NewValue)
 {
 	MyStatus = INTEGER;
-	MyIntegerValue = NewValue;
+	MyInteger = NewValue;
 }
 
 Xavi::Value::Value(float NewValue)
 {
 	MyStatus = FLOAT;
-	MyFloatValue = NewValue;
+	MyFloat = NewValue;
 }
 
 Xavi::Value::ValueStatus Xavi::Value::Status(void) const
@@ -49,27 +49,27 @@ Xavi::Value::ValueStatus Xavi::Value::Status(void) const
 	return MyStatus;
 }
 
-int Xavi::Value::IntegerValue(void) const
+int Xavi::Value::Integer() const
 {
 	if (MyStatus == INTEGER)
-		return MyIntegerValue;
+		return MyInteger;
 	else if (MyStatus == FLOAT)
-		return static_cast<int>(MyFloatValue);
+		return static_cast<int>(MyFloat);
 	else
 		return 0;
 }
 
-float Xavi::Value::FloatValue(void) const
+float Xavi::Value::Float() const
 {
 	if (MyStatus == INTEGER)
-		return static_cast<float>(MyIntegerValue);
+		return static_cast<float>(MyInteger);
 	else if (MyStatus == FLOAT)
-		return MyFloatValue;
+		return MyFloat;
 	else
 		return std::numeric_limits<float>::quiet_NaN();
 }
 
-bool Xavi::Value::IsNumber(void) const
+bool Xavi::Value::IsNumber() const
 {
 	return (MyStatus == INTEGER || MyStatus == FLOAT);
 }

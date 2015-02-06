@@ -208,7 +208,7 @@ void XaviTreeDelete(XaviTreeNode *node)
 
 static int IsNumber(XaviValue n)
 {
-	return n.status == XAVI_INTEGER || n.status == XAVI_FLOAT;
+	return n.Status == XAVI_INTEGER || n.Status == XAVI_FLOAT;
 }
 
 static XaviValue EvaluateVectorBranch(XaviTreeBranch *branch)
@@ -222,7 +222,7 @@ static XaviValue EvaluateVectorBranch(XaviTreeBranch *branch)
 		if (!(arguments =
 			malloc(sizeof(XaviValue) * branch->count)))
 		{
-			rVal.status = XAVI_MEMORY_ERR;
+			rVal.Status = XAVI_MEMORY_ERR;
 			return rVal;
 		}
 
@@ -249,19 +249,19 @@ XaviValue XaviTreeEvaluate(XaviTreeNode *node)
 
 	if (!node)
 	{
-		rVal.status = XAVI_SYNTAX_ERR;
+		rVal.Status = XAVI_SYNTAX_ERR;
 		return rVal;
 	}
 
 	switch (node->type)
 	{
 	case XAVI_NODE_INTEGER:
-		rVal.status = XAVI_INTEGER;
-		rVal.i = node->i;
+		rVal.Status = XAVI_INTEGER;
+		rVal.Integer = node->i;
 		return rVal;
 	case XAVI_NODE_FLOAT:
-		rVal.status = XAVI_FLOAT;
-		rVal.f = node->f;
+		rVal.Status = XAVI_FLOAT;
+		rVal.Float = node->f;
 		return rVal;
 	case XAVI_NODE_LIST_BRANCH:
 		XaviTreeCollapseBranch(node);
@@ -269,7 +269,7 @@ XaviValue XaviTreeEvaluate(XaviTreeNode *node)
 	case XAVI_NODE_VECTOR_BRANCH:
 		return EvaluateVectorBranch(node->branch);
 	default:
-		rVal.status = XAVI_SYNTAX_ERR;
+		rVal.Status = XAVI_SYNTAX_ERR;
 		return rVal;
 	}
 }

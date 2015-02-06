@@ -31,9 +31,9 @@ Xavi::Value Xavi::Functions::add(std::vector<Xavi::Value> Args)
 	Xavi::Value rVal = Args[0];
 	for(int i = 1; i < Args.size(); i++)
 		if (rVal.Status() == Xavi::Value::INTEGER)
-			rVal = rVal.IntegerValue() + Args[i].IntegerValue();
+			rVal = rVal.Integer() + Args[i].Integer();
 		else
-			rVal = rVal.FloatValue() + Args[i].FloatValue();
+			rVal = rVal.Float() + Args[i].Float();
 
 	return rVal;
 }
@@ -46,9 +46,9 @@ Xavi::Value Xavi::Functions::subtract(std::vector<Xavi::Value> Args)
 	Xavi::Value rVal = Args[0];
 	for(int i = 1; i < Args.size(); i++)
 		if (rVal.Status() == Xavi::Value::INTEGER)
-			rVal = rVal.IntegerValue() - Args[i].IntegerValue();
+			rVal = rVal.Integer() - Args[i].Integer();
 		else
-			rVal = rVal.FloatValue() - Args[i].FloatValue();
+			rVal = rVal.Float() - Args[i].Float();
 
 		return rVal;
 }
@@ -61,9 +61,9 @@ Xavi::Value Xavi::Functions::multiply(std::vector<Xavi::Value> Args)
 	Xavi::Value rVal = Args[0];
 	for(int i = 1; i < Args.size(); i++)
 		if (rVal.Status() == Xavi::Value::INTEGER)
-			rVal = rVal.IntegerValue() * Args[i].IntegerValue();
+			rVal = rVal.Integer() * Args[i].Integer();
 		else
-			rVal = rVal.FloatValue() * Args[i].FloatValue();
+			rVal = rVal.Float() * Args[i].Float();
 
 		return rVal;
 }
@@ -78,26 +78,26 @@ Xavi::Value Xavi::Functions::divide(std::vector<Xavi::Value> Args)
 	for (int i = 1; i < Args.size(); i++)
 	{
 		/* Division-by-Zero Error */
-		if ((Args[i].Status() == Xavi::Value::FLOAT && Args[i].FloatValue() == 0.0)
-			|| (Args[i].Status() == Xavi::Value::INTEGER && Args[i].IntegerValue() == 0))
+		if ((Args[i].Status() == Xavi::Value::FLOAT && Args[i].Float() == 0.0)
+			|| (Args[i].Status() == Xavi::Value::INTEGER && Args[i].Integer() == 0))
 		{
 			return Xavi::Value::ZERO_DIV_ERR;
 		}
 
 		if (rVal.Status() == Xavi::Value::FLOAT)
 		{
-			rVal = rVal.FloatValue() / Args[i].FloatValue();
+			rVal = rVal.Float() / Args[i].Float();
 		}
 		else
 		{
 			if (Args[i].Status() == Xavi::Value::FLOAT
-				|| rVal.IntegerValue() % Args[i].IntegerValue() != 0)
+				|| rVal.Integer() % Args[i].Integer() != 0)
 			{
-				rVal = rVal.FloatValue() / Args[i].FloatValue();
+				rVal = rVal.Float() / Args[i].Float();
 			}
 			else
 			{
-				rVal = rVal.IntegerValue() / Args[i].IntegerValue();
+				rVal = rVal.Integer() / Args[i].Integer();
 			}
 		}
 	}
@@ -108,10 +108,10 @@ Xavi::Value Xavi::Functions::power(std::vector<Xavi::Value> Args)
 {
 	float runningValue;
 
-	runningValue = Args[0].FloatValue();
+	runningValue = Args[0].Float();
 
 	for (std::vector<Xavi::Value>::iterator i = Args.begin(); i != Args.end(); i++)
-		runningValue = std::pow(runningValue, i->FloatValue());
+		runningValue = std::pow(runningValue, i->Float());
 	return runningValue;
 }
 
@@ -131,8 +131,8 @@ Xavi::Value Xavi::Functions::dice(std::vector<Xavi::Value> Args)
 	}
 
 	int runningTotal = 0;
-	for (int i = 1; i <= Args[0].IntegerValue(); i++)
-		runningTotal += (std::rand() % Args[1].IntegerValue()) + 1;
+	for (int i = 1; i <= Args[0].Integer(); i++)
+		runningTotal += (std::rand() % Args[1].Integer()) + 1;
 
 	return runningTotal;
 }
@@ -145,9 +145,9 @@ Xavi::Value Xavi::Functions::abs(std::vector<Xavi::Value> Args)
 	switch (Args[0].Status())
 	{
 	case Xavi::Value::FLOAT:
-		return std::abs(Args[0].FloatValue());
+		return std::abs(Args[0].Float());
 	case Xavi::Value::INTEGER:
-		return std::abs(Args[0].IntegerValue());
+		return std::abs(Args[0].Integer());
 	default:
 		return Args[0];
 	}
@@ -158,10 +158,10 @@ Xavi::Value Xavi::Functions::acos(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (Args[0].FloatValue() < -1 || Args[0].FloatValue() > 1)
+	if (Args[0].Float() < -1 || Args[0].Float() > 1)
 		return Xavi::Value::DOMAIN_ERR;
 
-	return std::acos(Args[0].FloatValue());
+	return std::acos(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::asin(std::vector<Xavi::Value> Args)
@@ -169,10 +169,10 @@ Xavi::Value Xavi::Functions::asin(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (Args[0].FloatValue() < -1 || Args[0].FloatValue() > 1)
+	if (Args[0].Float() < -1 || Args[0].Float() > 1)
 		return Xavi::Value::DOMAIN_ERR;
 
-	return std::asin(Args[0].FloatValue());
+	return std::asin(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::atan(std::vector<Xavi::Value> Args)
@@ -180,7 +180,7 @@ Xavi::Value Xavi::Functions::atan(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::atan(Args[0].FloatValue());
+	return std::atan(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::ceil(std::vector<Xavi::Value> Args)
@@ -190,7 +190,7 @@ Xavi::Value Xavi::Functions::ceil(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	result = std::ceil(Args[0].FloatValue());
+	result = std::ceil(Args[0].Float());
 
 	if (result <= std::numeric_limits<int>::max() && result >= std::numeric_limits<int>::min())
 		return static_cast<int>(result);
@@ -203,7 +203,7 @@ Xavi::Value Xavi::Functions::cos(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::cos(Args[0].FloatValue());
+	return std::cos(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::cosh(std::vector<Xavi::Value> Args)
@@ -211,7 +211,7 @@ Xavi::Value Xavi::Functions::cosh(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::cosh(Args[0].FloatValue());
+	return std::cosh(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::exp(std::vector<Xavi::Value> Args)
@@ -219,7 +219,7 @@ Xavi::Value Xavi::Functions::exp(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::exp(Args[0].FloatValue());
+	return std::exp(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::floor(std::vector<Xavi::Value> Args)
@@ -229,7 +229,7 @@ Xavi::Value Xavi::Functions::floor(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	result = std::floor(Args[0].FloatValue());
+	result = std::floor(Args[0].Float());
 
 	if (result <= std::numeric_limits<int>::max() && result >= std::numeric_limits<int>::min())
 		return static_cast<int>(result);
@@ -242,7 +242,7 @@ Xavi::Value Xavi::Functions::log(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::log(Args[0].FloatValue());
+	return std::log(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::log10(std::vector<Xavi::Value> Args)
@@ -250,7 +250,7 @@ Xavi::Value Xavi::Functions::log10(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::log10(Args[0].FloatValue());
+	return std::log10(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::sin(std::vector<Xavi::Value> Args)
@@ -258,7 +258,7 @@ Xavi::Value Xavi::Functions::sin(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::sin(Args[0].FloatValue());
+	return std::sin(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::sinh(std::vector<Xavi::Value> Args)
@@ -266,7 +266,7 @@ Xavi::Value Xavi::Functions::sinh(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::sinh(Args[0].FloatValue());
+	return std::sinh(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::sqrt(std::vector<Xavi::Value> Args)
@@ -274,10 +274,10 @@ Xavi::Value Xavi::Functions::sqrt(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	if (Args[0].FloatValue() < 0.0)
+	if (Args[0].Float() < 0.0)
 		return Xavi::Value::DOMAIN_ERR;
 
-	return std::sqrt(Args[0].FloatValue());
+	return std::sqrt(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::tan(std::vector<Xavi::Value> Args)
@@ -288,7 +288,7 @@ Xavi::Value Xavi::Functions::tan(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::tan(Args[0].FloatValue());
+	return std::tan(Args[0].Float());
 }
 
 Xavi::Value Xavi::Functions::tanh(std::vector<Xavi::Value> Args)
@@ -296,6 +296,6 @@ Xavi::Value Xavi::Functions::tanh(std::vector<Xavi::Value> Args)
 	if (Args.size() != 1)
 		return Xavi::Value::BAD_ARGUMENTS;
 
-	return std::tanh(Args[0].FloatValue());
+	return std::tanh(Args[0].Float());
 }
 

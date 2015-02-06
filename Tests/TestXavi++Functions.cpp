@@ -1,6 +1,6 @@
 /*
- * XaviTestFunctions.cpp: Program to test Xavi's function-calling code.
- * Copyright 2012, 2014 Vincent Damewood
+ * TestXavi++Functions.cpp: Program to test Xavi++'s function-calling code.
+ * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ int main()
 	Result = Xavi::FunctionCaller::Call("abs", Inputs);
 	if (Result.Status() == Xavi::Value::INTEGER)
 	{
-		if (Result.IntegerValue() == 400)
+		if (Result.Integer() == 400)
 		{
 			std::cout << "success." << std::endl;
 			Success++;
@@ -50,13 +50,13 @@ int main()
 		else
 		{
 			std::cout << "failed. Value returned: "
-				<< Result.IntegerValue() << std::endl;
+				<< Result.Integer() << std::endl;
 		}
 	}
 	else if (Result.Status() == Xavi::Value::FLOAT)
 	{
 		std::cout << "failed. Value returned: "
-			<< Result.FloatValue() << std::endl;
+			<< Result.Float() << std::endl;
 	}
 	else
 	{

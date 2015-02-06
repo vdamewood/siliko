@@ -39,17 +39,17 @@ EvalWindow::~EvalWindow()
 
 void EvalWindow::calculate()
 {
-	Xavi::InfixParser MyParser(new QStringSource(input->text()));
+	Xavi::SyntaxTreeNode *MyTree = Xavi::ParseInfix(
+		new QStringSource(input->text()));
 
-	MyParser.Parse();
-	Xavi::Value result = MyParser.SyntaxTree().GetValue();
+	Xavi::Value result = MyTree->GetValue();
 	switch (result.Status())
 	{
 		case Xavi::Value::INTEGER:
-			output->setNum(result.IntegerValue());
+			output->setNum(result.Integer());
 			break;
 		case Xavi::Value::FLOAT:
-			output->setNum(result.FloatValue());
+			output->setNum(result.Float());
 			break;
 		case Xavi::Value::MEMORY_ERR:
 			output->setText("Out of memory.\n");

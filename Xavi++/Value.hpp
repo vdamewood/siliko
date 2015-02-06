@@ -47,22 +47,22 @@ namespace Xavi
 			                    range error. */
 		};
 
-		Value(void);
+		Value();
 		Value(ValueStatus NewStatus);
 		Value(int NewIntegerValue);
 		Value(float NewFloatValue);
 
 		ValueStatus Status(void) const;
-		int IntegerValue(void) const;
-		float FloatValue(void) const;
+		int Integer(void) const;
+		float Float(void) const;
 
 		bool IsNumber(void) const;
 	private:
 		ValueStatus MyStatus;
 		union
 		{
-			int MyIntegerValue;
-			float MyFloatValue;
+			int MyInteger;
+			float MyFloat;
 		};
 	};
 }

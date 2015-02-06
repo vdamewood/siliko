@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
 {
 	char *expression;
 	XaviValue value;
+	XaviTreeNode *tree;
 	const char *prompt;
 	const char *response;
 
@@ -115,17 +116,19 @@ int main(int argc, char *argv[])
 
 		XaviDataSource *source = XaviStringSourceNew(expression);
 
-		value = XaviParse(source);
+		tree = XaviParseInfix(source);
+		value = XaviTreeEvaluate(tree);
+
 		free(expression);
+		XaviTreeDelete(tree);
 
-
-		switch (value.status)
+		switch (value.Status)
 		{
 		case XAVI_INTEGER:
-			printf("%s%i\n", response, value.i);
+			printf("%s%i\n", response, value.Integer);
 			break;
 		case XAVI_FLOAT:
-			printf("%s%f\n", response, value.f);
+			printf("%s%f\n", response, value.Float);
 			break;
 		case XAVI_MEMORY_ERR:
 			printf("Out of memory.\n");

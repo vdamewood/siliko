@@ -18,7 +18,46 @@
 
 #include <typeinfo>
 
+#include "Lexer.hpp"
 #include "InfixParser.hpp"
+
+namespace Xavi
+{
+	class InfixParser
+	{
+	public:
+		InfixParser(Xavi::DataSource *);
+		~InfixParser(void);
+		void Parse(void);
+		SyntaxTreeNode *SyntaxTree(void);
+	private:
+		Xavi::SyntaxTreeNode        *GetExpr0(void);
+		Xavi::BranchNode            *GetExpr0r(void);
+		Xavi::SyntaxTreeNode        *GetExpr1(void);
+		Xavi::BranchNode            *GetExpr1r(void);
+		Xavi::SyntaxTreeNode        *GetExpr2(void);
+		Xavi::SyntaxTreeNode        *GetExpr2lf(void);
+		Xavi::SyntaxTreeNode        *GetExpr3(void);
+		Xavi::SyntaxTreeNode        *GetExpr3lf(void);
+		Xavi::SyntaxTreeNode        *GetAtom(void);
+		Xavi::SyntaxTreeNode        *GetNumber(void);
+		Xavi::SyntaxTreeNode        *GetUNumber(void);
+		Xavi::SyntaxTreeNode        *GetFCall(void);
+		void                         GetArguments(Xavi::BranchNode &);
+
+		Lexer MyLexer;
+		SyntaxTreeNode *MySyntaxTree;
+	};
+};
+
+Xavi::SyntaxTreeNode *Xavi::ParseInfix(Xavi::DataSource *NewSource)
+{
+	Xavi::SyntaxTreeNode *rValue;
+	Xavi::InfixParser Parser(NewSource);
+
+	Parser.Parse();
+	return Parser.SyntaxTree();
+}
 
 Xavi::InfixParser::InfixParser(Xavi::DataSource *NewSource)
 	: MyLexer(NewSource), MySyntaxTree(0)
@@ -27,7 +66,7 @@ Xavi::InfixParser::InfixParser(Xavi::DataSource *NewSource)
 
 Xavi::InfixParser::~InfixParser(void)
 {
-	delete MySyntaxTree;
+	//delete MySyntaxTree;
 }
 
 void Xavi::InfixParser::Parse(void)
@@ -51,12 +90,9 @@ void Xavi::InfixParser::Parse(void)
 	}
 }
 
-Xavi::SyntaxTreeNode &Xavi::InfixParser::SyntaxTree(void)
+Xavi::SyntaxTreeNode *Xavi::InfixParser::SyntaxTree(void)
 {
-	if (!MySyntaxTree)
-		Parse();
-
-	return *MySyntaxTree;
+	return MySyntaxTree;
 }
 
 Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr0(void)

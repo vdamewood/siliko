@@ -1,6 +1,6 @@
 /*
- * XaviParser.h: Parser for Xavi
- * Copyright 2014, 2015 Vincent Damewood
+ * Token.h: Token used by lexical analyzer
+ * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,13 +16,39 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_PARSER_H
-#define XAVI_PARSER_H
+#if !defined XAVI_TOKEN_H
+#define XAVI_TOKEN_H
 
-#include "W32Dll.h"
-#include "DataSource.h"
-#include "SyntaxTree.h"
+enum XAVI_API XaviTokenType
+{
+	ERROR = -1,
+	UNSET = 0,
+	LPAREN = '(',
+	RPAREN = ')',
+	MULTIPLY = '*',
+	ADDITION = '+',
+	COMMA = ',',
+	SUBTRACT = '-',
+	DIVISION = '/',
+	EXPONENT = '^',
+	DICE = 'd',
+	INTEGER = 256,
+	FLOAT,
+	ID,
+	EOL
+};
+typedef enum XaviTokenType XaviTokenType;
 
-XAVI_API XaviTreeNode *XaviParseInfix(XaviDataSource *input);
+struct XAVI_API XaviToken
+{
+	XaviTokenType Type;
+	union
+	{
+		char * String;
+		int Integer;
+		float Float;
+	};
+};
+typedef struct XaviToken XaviToken;
 
-#endif /* XAVI_PARSER_H */
+#endif /* XAVI_TOKEN_H */

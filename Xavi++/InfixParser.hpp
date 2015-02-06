@@ -22,34 +22,10 @@
 #include "W32Dll.hpp"
 #include "DataSource.hpp"
 #include "SyntaxTree.hpp"
-#include "Lexer.hpp"
 
 namespace Xavi
 {
-	class XAVI_API InfixParser
-	{
-	public:
-		InfixParser(Xavi::DataSource *);
-		~InfixParser(void);
-		void Parse(void);
-		SyntaxTreeNode &SyntaxTree(void);
-	private:
-		Xavi::SyntaxTreeNode        *GetExpr0(void);
-		Xavi::BranchNode            *GetExpr0r(void);
-		Xavi::SyntaxTreeNode        *GetExpr1(void);
-		Xavi::BranchNode            *GetExpr1r(void);
-		Xavi::SyntaxTreeNode        *GetExpr2(void);
-		Xavi::SyntaxTreeNode        *GetExpr2lf(void);
-		Xavi::SyntaxTreeNode        *GetExpr3(void);
-		Xavi::SyntaxTreeNode        *GetExpr3lf(void);
-		Xavi::SyntaxTreeNode        *GetAtom(void);
-		Xavi::SyntaxTreeNode        *GetNumber(void);
-		Xavi::SyntaxTreeNode        *GetUNumber(void);
-		Xavi::SyntaxTreeNode        *GetFCall(void);
-		void                         GetArguments(Xavi::BranchNode &);
-
-		Lexer MyLexer;
-		SyntaxTreeNode *MySyntaxTree;
-	};
+	SyntaxTreeNode *ParseInfix(DataSource *Input);
 };
+
 #endif // XAVI_INFIX_PARSER_H

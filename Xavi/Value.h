@@ -16,10 +16,11 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Xavi_VALUE_H
-#define Xavi_VALUE_H
+#if !defined XAVI_VALUE_H
+#define XAVI_VALUE_H
 
 #include "W32Dll.h"
+
 enum XAVI_API XaviValueStatus
 {
 	XAVI_INTEGER,       /* Success: The value is an integer. */
@@ -44,13 +45,13 @@ typedef enum XaviValueStatus XaviValueStatus;
 
 struct XAVI_API XaviValue
 {
-	XaviValueStatus status;
+	XaviValueStatus Status;
 	union
 	{
-		int i;
-		float f;
+		int Integer;
+		float Float;
 	};
 };
 typedef struct XaviValue XaviValue;
 
-#endif /* Xavi_VALUE_H */
+#endif /* XAVI_VALUE_H */
