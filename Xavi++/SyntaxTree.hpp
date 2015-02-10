@@ -85,6 +85,14 @@ namespace Xavi
 		virtual Value GetValue(void);
 		virtual void Negate(void);
 	};
-}
+
+	class XAVI_API NothingNode : public SyntaxTreeNode
+	{
+	public:
+		virtual ~NothingNode(void);
+		virtual Value GetValue(void);
+		virtual void Negate(void);
+	};
+};
 
 #endif // XAVI_SYNTAX_TREE_H

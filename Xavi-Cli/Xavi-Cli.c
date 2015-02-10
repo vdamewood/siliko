@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 {
 	char *expression;
 	XaviValue value;
-	XaviTreeNode *tree;
+	XaviSyntaxTreeNode *tree;
 	const char *prompt;
 	const char *response;
 
@@ -117,10 +117,10 @@ int main(int argc, char *argv[])
 		XaviDataSource *source = XaviStringSourceNew(expression);
 
 		tree = XaviParseInfix(source);
-		value = XaviTreeEvaluate(tree);
+		value = XaviSyntaxTreeEvaluate(tree);
 
 		free(expression);
-		XaviTreeDelete(tree);
+		XaviSyntaxTreeDelete(tree);
 
 		switch (value.Status)
 		{

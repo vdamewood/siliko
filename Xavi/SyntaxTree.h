@@ -1,5 +1,5 @@
 /*
- * XaviTree.h: Functions to manipulate abstract syntax trees
+ * SyntaxTree.h: Functions to manipulate abstract syntax trees
  * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -16,70 +16,57 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Xavi_TREE_H
-#define Xavi_TREE_H
+#if !defined XAVI_SYNTAX_TREE_H
+#define XAVI_SYNTAX_TREE_H
 
 #include "W32Dll.h"
 #include "Value.h"
 
-enum XAVI_API XaviTreeNodeType
+enum XAVI_API XaviSyntaxTreeNodeType
 {
 	XAVI_NODE_ERROR = -1,
 	XAVI_NODE_NOTHING = 0,
 	XAVI_NODE_INTEGER,
 	XAVI_NODE_FLOAT,
-	XAVI_NODE_VECTOR_BRANCH,
-	XAVI_NODE_LIST_BRANCH
+	XAVI_NODE_BRANCH
 };
-typedef enum XaviTreeNodeType XaviTreeNodeType;
+typedef enum XaviSyntaxTreeNodeType XaviSyntaxTreeNodeType;
 
-struct XaviTreeNode;
-typedef struct XaviTreeNode XaviTreeNode;
+struct XaviSyntaxTreeNode;
+typedef struct XaviSyntaxTreeNode XaviSyntaxTreeNode;
 
-struct XaviTreeListNode;
-typedef struct XaviTreeListNode XaviTreeListNode;
-
-struct XAVI_API XaviTreeListNode
-{
-	XaviTreeNode *value;
-	XaviTreeListNode *next;
-};
-
-struct XAVI_API XaviTreeBranch
+struct XAVI_API XaviSyntaxTreeBranch
 {
 	char *id;
 	int count;
-	union
-	{
-		XaviTreeListNode *list;
-		XaviTreeNode **vector;
-	};
+	int capacity;
+	XaviSyntaxTreeNode **children;
 };
-typedef struct XaviTreeBranch XaviTreeBranch;
+typedef struct XaviSyntaxTreeBranch XaviSyntaxTreeBranch;
 
-struct XAVI_API XaviTreeNode
+struct XAVI_API XaviSyntaxTreeNode
 {
-	XaviTreeNodeType type;
+	XaviSyntaxTreeNodeType type;
 	union
 	{
 		int i;
 		float f;
-		XaviTreeBranch *branch;
+		XaviSyntaxTreeBranch *branch;
 	};
 };
 
-XAVI_API XaviTreeNode *XaviTreeNewError(void);
-XAVI_API XaviTreeNode *XaviTreeNewFloat(float Value);
-XAVI_API XaviTreeNode *XaviTreeNewInteger(int Value);
-XAVI_API XaviTreeNode *XaviTreeNewListBranch(XaviTreeNode *NewChild);
-XAVI_API XaviTreeNode *XaviTreeNewNothing(void);
-XAVI_API XaviTreeNode *XaviTreeNewVectorBranch(char *id, int count, XaviTreeNode **Children);
-XAVI_API void XaviTreeDelete(XaviTreeNode *TreeToDelete);
+XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewError(void);
+XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewNothing(void);
+XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewInteger(int Value);
+XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewFloat(float Value);
+XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewBranch(char *Id);
+XAVI_API void XaviSyntaxTreeDelete(XaviSyntaxTreeNode *);
 
-XAVI_API XaviValue XaviTreeEvaluate(XaviTreeNode *TreeToEvaluate);
-XAVI_API int XaviTreeGraftLeft(XaviTreeNode *parent, XaviTreeNode *left);
-XAVI_API int XaviTreeNegate(XaviTreeNode *TreeToNegate);
-XAVI_API int XaviTreeCollapseBranch(XaviTreeNode *TreeToCollapse);
-XAVI_API int XaviTreePushFront(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
-XAVI_API int XaviTreePush(XaviTreeNode *MainBranch, XaviTreeNode *NewNode);
-#endif // Xavi_TREE_H
+XAVI_API XaviValue XaviSyntaxTreeEvaluate(XaviSyntaxTreeNode *);
+XAVI_API int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *tree);
+//XAVI_API int XaviSyntaxTreePushLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
+XAVI_API int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
+XAVI_API int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
+//XAVI_API int XaviSyntaxTreeGraftRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
+
+#endif // XAVI_SYNTAX_TREE_H

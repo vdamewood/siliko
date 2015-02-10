@@ -171,3 +171,18 @@ Xavi::Value Xavi::SyntaxErrorNode::GetValue(void)
 void Xavi::SyntaxErrorNode::Negate(void)
 {
 }
+
+Xavi::NothingNode::~NothingNode(void)
+{
+	// Do Nothing
+}
+
+Xavi::Value Xavi::NothingNode::GetValue(void)
+{
+	return 0;
+}
+
+void Xavi::NothingNode::Negate(void)
+{
+	// Do Nothing
+}

@@ -23,6 +23,6 @@
 #include "DataSource.h"
 #include "SyntaxTree.h"
 
-XAVI_API XaviTreeNode *XaviParseInfix(XaviDataSource *input);
+XAVI_API XaviSyntaxTreeNode *XaviParseInfix(XaviDataSource *input);
 
 #endif /* XAVI_PARSER_H */
