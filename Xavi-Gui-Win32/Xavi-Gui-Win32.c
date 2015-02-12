@@ -124,34 +124,37 @@ void RenderCalculation(HWND hwnd)
 	int ValueSize;
 	char *ExpressionString;
 	char *ValueString;
+	XaviSyntaxTreeNode *Node;
 	XaviValue Value;
 
 	ExpressionSize = GetWindowTextLength(GetDlgItem(hwnd, CALCULATOR_INPUT)) + 1;
 	ExpressionString = (char*)GlobalAlloc(GPTR, ExpressionSize);
 	GetDlgItemText(hwnd, CALCULATOR_INPUT, ExpressionString, ExpressionSize);
 	
-	Value = XaviParse(XaviStringSourceNew(ExpressionString));
-
-	switch (Value.status)
+	Node = XaviParseInfix(XaviStringSourceNew(ExpressionString));
+	Value = XaviSyntaxTreeEvaluate(Node);
+	free(Node);
+	
+	switch (Value.Status)
 	{
 	case XAVI_INTEGER:
-		ValueSize = _snprintf(NULL, 0, "%i", Value.i) + 1;
+		ValueSize = _snprintf(NULL, 0, "%i", Value.Integer) + 1;
 		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
-		_snprintf(ValueString, ValueSize, "%i", Value.i);
+		_snprintf(ValueString, ValueSize, "%i", Value.Integer);
 		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
 		GlobalFree((HANDLE)ValueString);
 		break;
 	case XAVI_FLOAT:
-		ValueSize = _snprintf(NULL, 0, "%f", Value.f) + 1;
+		ValueSize = _snprintf(NULL, 0, "%f", Value.Float) + 1;
 		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
-		_snprintf(ValueString, ValueSize, "%f", Value.f);
+		_snprintf(ValueString, ValueSize, "%f", Value.Float);
 		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
 		GlobalFree((HANDLE)ValueString);
 		break;
 	default:
-		ValueSize = _snprintf(NULL, 0, "I'm too lazy to report. (%i)", (int)Value.status);
+		ValueSize = _snprintf(NULL, 0, "I'm too lazy to report. (%i)", (int)Value.Status);
 		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
-		_snprintf(ValueString, ValueSize, "I'm too lazy to report. (%i)", (int)Value.status);
+		_snprintf(ValueString, ValueSize, "I'm too lazy to report. (%i)", (int)Value.Status);
 		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
 		GlobalFree((HANDLE)ValueString);
 		break;
@@ -210,7 +213,7 @@ int WINAPI WinMain(
 	HWND Handle;
 	MSG Message;
 
-	XaviFunctionCallerInitialize();
+	XaviFunctionCallerSetUp();
 
 	CalculatorClass.cbSize = sizeof(WNDCLASSEX);
 	CalculatorClass.style = 0;
@@ -262,6 +265,6 @@ int WINAPI WinMain(
 		}
 	}
 
-	XaviFunctionCallerDestroy();
+	XaviFunctionCallerTearDown();
 	return (int) Message.wParam;
 }

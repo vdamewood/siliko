@@ -525,10 +525,12 @@ static XaviSyntaxTreeNode *GetNextArgument(XaviLexer *lexer)
 
 XaviSyntaxTreeNode *GetFCall(XaviLexer *lexer)
 {
+	XaviSyntaxTreeNode *rVal = NULL;
+
 	if (lexer->Token.Type != ID)
 		return XaviSyntaxTreeNewError();
 
-	XaviSyntaxTreeNode *rVal = XaviSyntaxTreeNewBranch(lexer->Token.Id);
+	rVal = XaviSyntaxTreeNewBranch(lexer->Token.Id);
 	XaviLexerNext(lexer);
 
 	if (lexer->Token.Type != '(')

@@ -22,6 +22,10 @@
 #include "SyntaxTree.h"
 #include "FunctionCaller.h"
 
+#if defined _WIN32
+#define strdup _strdup
+#endif
+
 XaviSyntaxTreeNode *XaviSyntaxTreeNewError(void)
 {
 	XaviSyntaxTreeNode *rVal = NULL;
