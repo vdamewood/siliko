@@ -24,25 +24,25 @@
 
 void PrintToken(const Xavi::Token &MyToken)
 {
-	switch (MyToken.GetType())
+	switch (MyToken.Type())
 	{
 	case Xavi::Token::EOL:
 		std::cout << "EOL" << std::endl;
 		break;
 	case Xavi::Token::INTEGER:
-		std::cout << "Integer(" << MyToken.GetIntegerValue() << ")" << std::endl;
+		std::cout << "Integer(" << MyToken.Integer() << ")" << std::endl;
 		break;
 	case Xavi::Token::FLOAT:
-		std::cout << "Float(" << MyToken.GetFloatValue() << ")" << std::endl;
+		std::cout << "Float(" << MyToken.Float() << ")" << std::endl;
 		break;
 	case Xavi::Token::ID:
-		std::cout << "ID(" << MyToken.GetIdValue() << ")" << std::endl;
+		std::cout << "ID(" << MyToken.Id() << ")" << std::endl;
 		break;
 	case Xavi::Token::ERROR:
 		std::cout << "Error";
 		break;
 	default:
-		std::cout << "Character(" << (char)MyToken.GetType() << ")" << std::endl;
+		std::cout << "Character(" << (char)MyToken.Type() << ")" << std::endl;
 	}
 }
 
@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
 	Xavi::Lexer MyLexer(new DataSourceStub());
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::ID
-		|| std::strcmp(MyLexer.GetToken().GetIdValue(), "abs") != 0)
+	if (MyLexer.GetToken().Type() != Xavi::Token::ID
+		|| std::strcmp(MyLexer.GetToken().Id(), "abs") != 0)
 	{
 		std::cout << "Failed, expecting: ID(abs)" << std::endl;
 		return 1;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::LPAREN)
+	if (MyLexer.GetToken().Type() != Xavi::Token::LPAREN)
 	{
 		std::cout << "Failed, expecting: (" << std::endl;
 		return 1;
@@ -109,8 +109,8 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::INTEGER
-		|| MyLexer.GetToken().GetIntegerValue() != 2)
+	if (MyLexer.GetToken().Type() != Xavi::Token::INTEGER
+		|| MyLexer.GetToken().Integer() != 2)
 	{
 		std::cout << "Failed, expecting: Integer: 2" << std::endl;
 		return 1;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::RPAREN)
+	if (MyLexer.GetToken().Type() != Xavi::Token::RPAREN)
 	{
 		std::cout << "Failed, expecting: )" << std::endl;
 		return 1;
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::ADDITION)
+	if (MyLexer.GetToken().Type() != Xavi::Token::ADDITION)
 	{
 		std::cout << "Failed, expecting: +" << std::endl;
 		return 1;
@@ -134,8 +134,8 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::INTEGER
-		|| MyLexer.GetToken().GetIntegerValue() != 300)
+	if (MyLexer.GetToken().Type() != Xavi::Token::INTEGER
+		|| MyLexer.GetToken().Integer() != 300)
 	{
 		std::cout << "Failed, expecting: Integer: 300" << std::endl;
 		return 1;
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::DIVISION)
+	if (MyLexer.GetToken().Type() != Xavi::Token::DIVISION)
 	{
 		std::cout << "Failed, expecting: /" << std::endl;
 		return 1;
@@ -151,8 +151,8 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::INTEGER
-		|| MyLexer.GetToken().GetIntegerValue() != 3)
+	if (MyLexer.GetToken().Type() != Xavi::Token::INTEGER
+		|| MyLexer.GetToken().Integer() != 3)
 	{
 		std::cout << "Failed, expecting: Integer: 3" << std::endl;
 		return 1;
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::DICE)
+	if (MyLexer.GetToken().Type() != Xavi::Token::DICE)
 	{
 		std::cout << "Failed, expecting: d" << std::endl;
 		return 1;
@@ -168,8 +168,8 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::INTEGER
-		|| MyLexer.GetToken().GetIntegerValue() != 6)
+	if (MyLexer.GetToken().Type() != Xavi::Token::INTEGER
+		|| MyLexer.GetToken().Integer() != 6)
 	{
 		std::cout << "Failed, expecting: Integer: 6" << std::endl;
 		return 1;
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::ADDITION)
+	if (MyLexer.GetToken().Type() != Xavi::Token::ADDITION)
 	{
 		std::cout << "Failed, expecting: +" << std::endl;
 		return 1;
@@ -185,8 +185,8 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::FLOAT
-		|| MyLexer.GetToken().GetFloatValue() != 5.25)
+	if (MyLexer.GetToken().Type() != Xavi::Token::FLOAT
+		|| MyLexer.GetToken().Float() != 5.25)
 	{
 		std::cout << "Failed, expecting: Integer: 5.25" << std::endl;
 		return 1;
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 
 	//Character(*)
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::MULTIPLY)
+	if (MyLexer.GetToken().Type() != Xavi::Token::MULTIPLY)
 	{
 		std::cout << "Failed, expecting: *" << std::endl;
 		return 1;
@@ -203,8 +203,8 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 	//ID(sin)
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::ID
-		|| strcmp(MyLexer.GetToken().GetIdValue(), "sin") != 0)
+	if (MyLexer.GetToken().Type() != Xavi::Token::ID
+		|| strcmp(MyLexer.GetToken().Id(), "sin") != 0)
 	{
 		std::cout << "Failed, expecting: ID(sin)" << std::endl;
 		return 1;
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::LPAREN)
+	if (MyLexer.GetToken().Type() != Xavi::Token::LPAREN)
 	{
 		std::cout << "Failed, expecting: (" << std::endl;
 		return 1;
@@ -220,8 +220,8 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::INTEGER
-		|| MyLexer.GetToken().GetIntegerValue() != 200)
+	if (MyLexer.GetToken().Type() != Xavi::Token::INTEGER
+		|| MyLexer.GetToken().Integer() != 200)
 	{
 		std::cout << "Failed, expecting: Integer: 200" << std::endl;
 		return 1;
@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::RPAREN)
+	if (MyLexer.GetToken().Type() != Xavi::Token::RPAREN)
 	{
 		std::cout << "Failed, expecting: )" << std::endl;
 		return 1;
@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::SUBTRACT)
+	if (MyLexer.GetToken().Type() != Xavi::Token::SUBTRACT)
 	{
 		std::cout << "Failed, expecting: -" << std::endl;
 		return 1;
@@ -245,8 +245,8 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::INTEGER
-		|| MyLexer.GetToken().GetIntegerValue() != 5)
+	if (MyLexer.GetToken().Type() != Xavi::Token::INTEGER
+		|| MyLexer.GetToken().Integer() != 5)
 	{
 		std::cout << "Failed, expecting: Integer: 5" << std::endl;
 		return 1;
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
 	MyLexer.Next();
 
 	PrintToken(MyLexer.GetToken());
-	if (MyLexer.GetToken().GetType() != Xavi::Token::EOL)
+	if (MyLexer.GetToken().Type() != Xavi::Token::EOL)
 	{
 		std::cout << "Failed, expecting: EOL" << std::endl;
 		return 1;

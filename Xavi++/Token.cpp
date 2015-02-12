@@ -25,53 +25,53 @@
 
 #include "Token.hpp"
 
-Xavi::Token::Token(Type NewType)
+Xavi::Token::Token(TokenType NewType)
 {
 	MyType = NewType;
-	IntegerValue = 0;
+	MyInteger = 0;
 }
 
 Xavi::Token::Token(int NewIntegerValue)
 {
 	MyType = INTEGER;
-	IntegerValue = NewIntegerValue;
+	MyInteger = NewIntegerValue;
 }
 
 Xavi::Token::Token(float NewFloatValue)
 {
 	MyType = FLOAT;
-	FloatValue = NewFloatValue;
+	MyFloat = NewFloatValue;
 }
 
 Xavi::Token::Token(const char *NewIdValue)
 {
 	MyType = ID;
-	IdValue = new char[std::strlen(NewIdValue) + 1];
-	std::strcpy(IdValue, NewIdValue);
+	MyId = new char[std::strlen(NewIdValue) + 1];
+	std::strcpy(MyId, NewIdValue);
 }
 
 Xavi::Token::~Token()
 {
 	if (MyType == ID)
-		delete[] IdValue;
+		delete[] MyId;
 }
 
-Xavi::Token::Type Xavi::Token::GetType(void) const
+Xavi::Token::TokenType Xavi::Token::Type(void) const
 {
 	return MyType;
 }
 
-int Xavi::Token::GetIntegerValue(void) const
+int Xavi::Token::Integer(void) const
 {
-	return IntegerValue;
+	return MyInteger;
 }
 
-float Xavi::Token::GetFloatValue(void) const
+float Xavi::Token::Float(void) const
 {
-	return FloatValue;
+	return MyFloat;
 }
 
-const char *Xavi::Token::GetIdValue(void) const
+const char *Xavi::Token::Id(void) const
 {
-	return IdValue;
+	return MyId;
 }

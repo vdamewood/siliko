@@ -73,14 +73,14 @@ void Xavi::InfixParser::Parse(void)
 {
 	if (!MySyntaxTree)
 	{
-		if (MyLexer.GetToken().GetType() == Token::EOL)
+		if (MyLexer.GetToken().Type() == Token::EOL)
 		{
 			MySyntaxTree = new Xavi::IntegerNode(0);
 		}
 		else
 		{
 			MySyntaxTree = GetExpr0();
-			if (MyLexer.GetToken().GetType() != Token::EOL
+			if (MyLexer.GetToken().Type() != Token::EOL
 				&& typeid(MySyntaxTree) != typeid(Xavi::SyntaxErrorNode))
 			{
 				delete MySyntaxTree;
@@ -114,7 +114,7 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr0(void)
 Xavi::BranchNode *Xavi::InfixParser::GetExpr0r(void)
 {
 	const char *FunctionId;
-	switch (MyLexer.GetToken().GetType())
+	switch (MyLexer.GetToken().Type())
 	{
 	case '+':
 		FunctionId = "add";
@@ -163,7 +163,7 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr1(void)
 Xavi::BranchNode *Xavi::InfixParser::GetExpr1r(void)
 {
 	const char *FunctionId;
-	switch (MyLexer.GetToken().GetType())
+	switch (MyLexer.GetToken().Type())
 	{
 		case '*':
 			FunctionId = "multiply";
@@ -209,12 +209,12 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr2(void)
 
 Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr2lf(void)
 {
-	if (MyLexer.GetToken().GetType() != '^')
+	if (MyLexer.GetToken().Type() != '^')
 		return 0;
 
 	MyLexer.Next();
 
-	switch (MyLexer.GetToken().GetType())
+	switch (MyLexer.GetToken().Type())
 	{
 	case Xavi::Token::INTEGER:
 	case Xavi::Token::FLOAT:
@@ -243,14 +243,14 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr3(void)
 
 Xavi::SyntaxTreeNode *Xavi::InfixParser::GetExpr3lf(void)
 {
-	if(MyLexer.GetToken().GetType() != 'd')
+	if(MyLexer.GetToken().Type() != 'd')
 		return 0;
 
 	MyLexer.Next();
 
-	if (MyLexer.GetToken().GetType() == Xavi::Token::INTEGER)
+	if (MyLexer.GetToken().Type() == Xavi::Token::INTEGER)
 	{
-		Xavi::SyntaxTreeNode *rVal = new Xavi::IntegerNode(MyLexer.GetToken().GetIntegerValue());
+		Xavi::SyntaxTreeNode *rVal = new Xavi::IntegerNode(MyLexer.GetToken().Integer());
 		MyLexer.Next();
 		return rVal;
 	}
@@ -264,7 +264,7 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetAtom(void)
 {
 	Xavi::SyntaxTreeNode *value;
 
-	switch(MyLexer.GetToken().GetType())
+	switch(MyLexer.GetToken().Type())
 	{
 	case '-':
 	case Xavi::Token::INTEGER:
@@ -274,7 +274,7 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetAtom(void)
 		MyLexer.Next();
 		value = GetExpr0();
 
-		if (MyLexer.GetToken().GetType() != ')')
+		if (MyLexer.GetToken().Type() != ')')
 		{
 			delete value;
 			return new Xavi::SyntaxErrorNode();
@@ -293,7 +293,7 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetNumber(void)
 {
 	Xavi::SyntaxTreeNode *rVal;
 
-	switch (MyLexer.GetToken().GetType())
+	switch (MyLexer.GetToken().Type())
 	{
 	case Xavi::Token::INTEGER:
 	case Xavi::Token::FLOAT:
@@ -312,14 +312,14 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetUNumber(void)
 {
 	Xavi::SyntaxTreeNode *rVal;
 
-	switch (MyLexer.GetToken().GetType())
+	switch (MyLexer.GetToken().Type())
 	{
 	case Xavi::Token::INTEGER:
-		rVal = new Xavi::IntegerNode(MyLexer.GetToken().GetIntegerValue());
+		rVal = new Xavi::IntegerNode(MyLexer.GetToken().Integer());
 		MyLexer.Next();
 		return rVal;
 	case Xavi::Token::FLOAT:
-		rVal = new Xavi::FloatNode(MyLexer.GetToken().GetFloatValue());
+		rVal = new Xavi::FloatNode(MyLexer.GetToken().Float());
 		MyLexer.Next();
 		return rVal;
 	default:
@@ -329,13 +329,13 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetUNumber(void)
 
 Xavi::SyntaxTreeNode *Xavi::InfixParser::GetFCall(void)
 {
-	if (MyLexer.GetToken().GetType() != Xavi::Token::ID)
+	if (MyLexer.GetToken().Type() != Xavi::Token::ID)
 		return new Xavi::SyntaxErrorNode();
 
-	Xavi::BranchNode *rVal = new Xavi::BranchNode(MyLexer.GetToken().GetIdValue());
+	Xavi::BranchNode *rVal = new Xavi::BranchNode(MyLexer.GetToken().Id());
 	MyLexer.Next();
 
-	if (MyLexer.GetToken().GetType() != '(')
+	if (MyLexer.GetToken().Type() != '(')
 	{
 		rVal->PushRight(new Xavi::SyntaxErrorNode());
 		return rVal;
@@ -344,7 +344,7 @@ Xavi::SyntaxTreeNode *Xavi::InfixParser::GetFCall(void)
 
 	GetArguments(*rVal);
 
-	if (MyLexer.GetToken().GetType() != ')')
+	if (MyLexer.GetToken().Type() != ')')
 	{
 		rVal->PushRight(new Xavi::SyntaxErrorNode());
 		return rVal;
@@ -362,11 +362,11 @@ void Xavi::InfixParser::GetArguments(Xavi::BranchNode &rVal)
 		rVal.PushRight(Expression);
 
 		if (typeid(*Expression) == typeid(Xavi::SyntaxErrorNode)
-			|| MyLexer.GetToken().GetType() == ')')
+			|| MyLexer.GetToken().Type() == ')')
 		{
 			break;
 		}
-		else if (MyLexer.GetToken().GetType() != ',')
+		else if (MyLexer.GetToken().Type() != ',')
 		{
 			rVal.PushRight(new Xavi::SyntaxErrorNode());
 			break;

@@ -16,7 +16,7 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_W32_DLL
+#if !defined XAVI_W32_DLL_HPP
 
 #if defined _WIN32 && defined _MSC_VER
 #  if defined Xavipp_EXPORTS
@@ -31,4 +31,4 @@
 #  define XAVI_EXTERN
 #endif // _WIN32 && __MSC_VER
 
-#endif // XAVI_W32_DLL
+#endif // XAVI_W32_DLL_HPP

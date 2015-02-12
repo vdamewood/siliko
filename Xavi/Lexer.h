@@ -25,14 +25,15 @@
 
 struct XAVI_API XaviLexer
 {
-	XaviDataSource *source;
-	XaviToken token;
+	XaviDataSource *Source;
+	XaviToken Token;
 };
 typedef struct XaviLexer XaviLexer;
 
 XAVI_API XaviLexer *XaviLexerNew(XaviDataSource *input);
-XAVI_API void XaviLexerDestroy(XaviLexer *lexer);
+XAVI_API void XaviLexerDelete(XaviLexer *lexer);
 
-XAVI_API XaviToken XaviLexerGetToken(XaviLexer *lexer);
+//XAVI_API XaviToken XaviLexerGetToken(XaviLexer *lexer);
 XAVI_API void XaviLexerNext(XaviLexer *lexer);
+
 #endif /* XAVI_LEXER_H */

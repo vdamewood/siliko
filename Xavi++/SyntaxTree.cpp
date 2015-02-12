@@ -28,71 +28,71 @@
 
 Xavi::IntegerNode::IntegerNode(int NewValue)
 {
-	IntValue = NewValue;
+	MyInteger = NewValue;
 }
 
-Xavi::Value Xavi::IntegerNode::GetValue()
+Xavi::Value Xavi::IntegerNode::Evaluate()
 {
-	return IntValue;
+	return MyInteger;
 }
 
 void Xavi::IntegerNode::Negate()
 {
-	IntValue *= -1;
+	MyInteger *= -1;
 }
 
 Xavi::FloatNode::FloatNode(float NewValue)
 {
-	FloatValue = NewValue;
+	MyFloat = NewValue;
 }
 
-Xavi::Value Xavi::FloatNode::GetValue()
+Xavi::Value Xavi::FloatNode::Evaluate()
 {
-	return FloatValue;
+	return MyFloat;
 }
 
 void Xavi::FloatNode::Negate()
 {
-	FloatValue *= -1.0;
+	MyFloat *= -1.0;
 }
 
-Xavi::BranchNode::BranchNode(void)
+/*Xavi::BranchNode::BranchNode()
 {
-	FunctionId = 0;
-	Children = std::list<Xavi::SyntaxTreeNode *>();
+	MyFunctionId = 0;
+	MyChildren = std::list<Xavi::SyntaxTreeNode *>();
 	IsNegated = false;
-}
+}*/
 
 Xavi::BranchNode::BranchNode(const char *NewId)
 {
-	Children = std::list<Xavi::SyntaxTreeNode *>();
+	MyId = new char[strlen(NewId) + 1];
+	std::strcpy(MyId, NewId);
+	MyChildren = std::list<Xavi::SyntaxTreeNode *>();
 	IsNegated = false;
-	SetId(NewId);
 }
 
 Xavi::BranchNode::~BranchNode()
 {
-	delete[] FunctionId;
-	for (std::list<SyntaxTreeNode*>::iterator i = Children.begin(); i != Children.end(); i++)
+	delete[] MyId;
+	for (std::list<SyntaxTreeNode*>::iterator i = MyChildren.begin(); i != MyChildren.end(); i++)
 		delete *i;
 }
 
-void Xavi::BranchNode::SetId(const char *NewId)
+/*void Xavi::BranchNode::SetId(const char *NewId)
 {
-	FunctionId = new char[strlen(NewId) + 1];
-	std::strcpy(FunctionId, NewId);
-}
+}*/
 
-Xavi::Value Xavi::BranchNode::GetValue()
+Xavi::Value Xavi::BranchNode::Evaluate()
 {
+	Xavi::Value rVal;
 	std::vector<Xavi::Value> Arguments;
 
-	if (Children.size())
+	if (MyChildren.size())
 	{
 		std::list<Xavi::SyntaxTreeNode *>::iterator i;
-		for (i = Children.begin(); i != Children.end(); i++)
+		for (i = MyChildren.begin(); i != MyChildren.end(); i++)
 		{
-			Xavi::Value Current = (*i)->GetValue();
+			Xavi::Value Current = (*i)->Evaluate();
 			if (!Current.IsNumber())
 				return Current;
 
@@ -100,7 +100,16 @@ Xavi::Value Xavi::BranchNode::GetValue()
 		}
 	}
 
-	return Xavi::FunctionCaller::Call(FunctionId, Arguments);
+	rVal = Xavi::FunctionCaller::Call(MyId, Arguments);
+	if (IsNegated)
+	{
+		if (rVal.Status() == Value::INTEGER)
+			rVal = rVal.Integer() * -1;
+		else if (rVal.Status() == Value::FLOAT)
+			rVal = rVal.Float() * (float)-1.0;
+	}
+
+	return rVal;
 }
 
 void Xavi::BranchNode::Negate()
@@ -110,29 +119,29 @@ void Xavi::BranchNode::Negate()
 
 void Xavi::BranchNode::PushLeft(Xavi::SyntaxTreeNode *NewChild)
 {
-	Children.push_front(NewChild);
+	MyChildren.push_front(NewChild);
 }
 
 void Xavi::BranchNode::PushRight(Xavi::SyntaxTreeNode *NewChild)
 {
-	Children.push_back(NewChild);
+	MyChildren.push_back(NewChild);
 }
 
 
 bool Xavi::BranchNode::GraftLeft(Xavi::SyntaxTreeNode *NewChild)
 {
-	if (Children.size() == 0)
+	if (MyChildren.size() == 0)
 	{
 		return false;
 	}
-	else if (Children.front() == 0)
+	else if (MyChildren.front() == 0)
 	{
-		Children.front() = NewChild;
+		MyChildren.front() = NewChild;
 		return true;
 	}
 	else
 	{
-		if (BranchNode *ChildBranch = dynamic_cast<BranchNode*>(Children.front()))
+		if (BranchNode *ChildBranch = dynamic_cast<BranchNode*>(MyChildren.front()))
 			return ChildBranch->GraftLeft(NewChild);
 		else
 			return false;
@@ -141,18 +150,18 @@ bool Xavi::BranchNode::GraftLeft(Xavi::SyntaxTreeNode *NewChild)
 
 bool Xavi::BranchNode::GraftRight(Xavi::SyntaxTreeNode *NewChild)
 {
-	if (Children.size() == 0)
+	if (MyChildren.size() == 0)
 	{
 		return false;
 	}
-	else if (Children.back() == 0)
+	else if (MyChildren.back() == 0)
 	{
-		Children.back() = NewChild;
+		MyChildren.back() = NewChild;
 		return true;
 	}
 	else
 	{
-		if (BranchNode *ChildBranch = dynamic_cast<BranchNode*>(Children.back()))
+		if (BranchNode *ChildBranch = dynamic_cast<BranchNode*>(MyChildren.back()))
 			return ChildBranch->GraftRight(NewChild);
 		else
 			return false;
@@ -163,7 +172,7 @@ Xavi::SyntaxErrorNode::~SyntaxErrorNode(void)
 {
 }
 
-Xavi::Value Xavi::SyntaxErrorNode::GetValue(void)
+Xavi::Value Xavi::SyntaxErrorNode::Evaluate(void)
 {
 	return Xavi::Value::SYNTAX_ERR;
 }
@@ -177,7 +186,7 @@ Xavi::NothingNode::~NothingNode(void)
 	// Do Nothing
 }
 
-Xavi::Value Xavi::NothingNode::GetValue(void)
+Xavi::Value Xavi::NothingNode::Evaluate(void)
 {
 	return 0;
 }

@@ -28,7 +28,7 @@ int main()
 	int Total = 0;    // Total number of tests run.
 	int Success = 0;  // Number of successful tests.
 
-	Xavi::FunctionCaller::Initialize();
+	Xavi::FunctionCaller::SetUp();
 
 	////////////////////////////////////////////////////////////////////
 
@@ -66,7 +66,7 @@ int main()
 
 	////////////////////////////////////////////////////////////////////
 
-	Xavi::FunctionCaller::Destroy();
+	Xavi::FunctionCaller::TearDown();
 
 	// Summary
 	std::cout << "Tests passed/run: " << Success << "/" << Total << std::endl

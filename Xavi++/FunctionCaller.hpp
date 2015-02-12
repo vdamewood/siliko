@@ -16,8 +16,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_FUNCTION_CALL_H
-#define XAVI_FUNCTION_CALL_H
+#if !defined XAVI_FUNCTION_CALLER_HPP
+#define XAVI_FUNCTION_CALLER_HPP
 
 #include <string>
 #include <vector>
@@ -32,10 +32,10 @@ namespace Xavi
 	{
 		typedef Value (*FunctionPointer)(std::vector<Value>);
 
-		XAVI_API bool Initialize(void);
-		XAVI_API void Destroy(void);
+		XAVI_API bool SetUp(void);
+		XAVI_API void TearDown(void);
 		XAVI_API Value Call(const std::string &Name, std::vector<Value> Args);
 		XAVI_API void Install(const std::string &Name, FunctionPointer Function);
 	};
 };
-#endif // XAVI_FUNCTION_CALL_H
+#endif // XAVI_FUNCTION_CALLER_H

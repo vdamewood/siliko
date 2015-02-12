@@ -16,8 +16,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_PARSER_H
-#define XAVI_PARSER_H
+#if !defined XAVI_INFIX_PARSER_H
+#define XAVI_INFIX_PARSER_H
 
 #include "W32Dll.h"
 #include "DataSource.h"
@@ -25,4 +25,4 @@
 
 XAVI_API XaviSyntaxTreeNode *XaviParseInfix(XaviDataSource *input);
 
-#endif /* XAVI_PARSER_H */
+#endif /* XAVI_INFIX_PARSER_H */

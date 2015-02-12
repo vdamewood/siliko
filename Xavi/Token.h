@@ -44,7 +44,7 @@ struct XAVI_API XaviToken
 	XaviTokenType Type;
 	union
 	{
-		char * String;
+		char *Id;
 		int Integer;
 		float Float;
 	};

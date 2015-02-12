@@ -16,8 +16,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_SYNTAX_TREE_H
-#define XAVI_SYNTAX_TREE_H
+#if !defined XAVI_SYNTAX_TREE_HPP
+#define XAVI_SYNTAX_TREE_HPP
 
 #include <list>
 
@@ -34,7 +34,7 @@ namespace Xavi
 	{
 	public:
 		virtual ~SyntaxTreeNode(void) { };
-		virtual Value GetValue(void) = 0;
+		virtual Xavi::Value Evaluate(void) = 0;
 		virtual void Negate(void) = 0;
 	};
 
@@ -42,47 +42,45 @@ namespace Xavi
 	{
 	public:
 		IntegerNode(int NewValue);
-		virtual Value GetValue(void);
+		virtual Xavi::Value Evaluate(void);
 		virtual void Negate(void);
 	private:
-		int IntValue;
+		int MyInteger;
 	};
 
 	class XAVI_API FloatNode : public SyntaxTreeNode
 	{
 	public:
 		FloatNode(float NewValue);
-		virtual Value GetValue(void);
+		virtual Xavi::Value Evaluate(void);
 		virtual void Negate(void);
 	private:
-		float FloatValue;
+		float MyFloat;
 	};
 
 	class XAVI_API BranchNode : public SyntaxTreeNode
 	{
 	public:
-		BranchNode(void);
 		BranchNode(const char *NewFunctionId);
 		virtual ~BranchNode();
-		virtual Value GetValue(void);
+		virtual Xavi::Value Evaluate(void);
 		virtual void Negate(void);
 
-		void SetId(const char *NewId);
 		void PushLeft(SyntaxTreeNode *);
 		void PushRight(SyntaxTreeNode *);
 		bool GraftLeft(SyntaxTreeNode *);
 		bool GraftRight(SyntaxTreeNode *);
 	private:
 		bool IsNegated;
-		char *FunctionId;
-		std::list<SyntaxTreeNode *> Children;
+		char *MyId;
+		std::list<SyntaxTreeNode *> MyChildren;
 	};
 
 	class XAVI_API SyntaxErrorNode : public SyntaxTreeNode
 	{
 	public:
 		virtual ~SyntaxErrorNode(void);
-		virtual Value GetValue(void);
+		virtual Xavi::Value Evaluate(void);
 		virtual void Negate(void);
 	};
 
@@ -90,9 +88,9 @@ namespace Xavi
 	{
 	public:
 		virtual ~NothingNode(void);
-		virtual Value GetValue(void);
+		virtual Xavi::Value Evaluate(void);
 		virtual void Negate(void);
 	};
 };
 
-#endif // XAVI_SYNTAX_TREE_H
+#endif // XAVI_SYNTAX_TREE_HPP

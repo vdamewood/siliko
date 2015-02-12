@@ -25,7 +25,7 @@
 // bindings can be created for language interpreters written in C.
 std::unordered_map<std::string, Xavi::FunctionCaller::FunctionPointer> *lookup = 0;
 
-bool Xavi::FunctionCaller::Initialize(void)
+bool Xavi::FunctionCaller::SetUp(void)
 {
 	try
 	{
@@ -67,7 +67,7 @@ bool Xavi::FunctionCaller::Initialize(void)
 	return true;
 }
 
-void Xavi::FunctionCaller::Destroy(void)
+void Xavi::FunctionCaller::TearDown(void)
 {
 	delete lookup;
 	lookup = 0;

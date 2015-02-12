@@ -16,8 +16,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_VALUE_H
-#define XAVI_VALUE_H
+#if !defined XAVI_VALUE_HPP
+#define XAVI_VALUE_HPP
 
 #include "W32Dll.hpp"
 
@@ -67,4 +67,4 @@ namespace Xavi
 	};
 }
 
-#endif // XAVI_VALUE_H
+#endif // XAVI_VALUE_HPP

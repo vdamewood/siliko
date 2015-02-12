@@ -37,7 +37,7 @@ void PrintToken(XaviToken MyToken)
 		printf("Float(%f)\n", MyToken.Float);
 		break;
 	case ID:
-		printf("String(%s)\n", MyToken.String);
+		printf("String(%s)\n", MyToken.Id);
 		break;
 	case ERROR:
 		printf("Error");
@@ -54,102 +54,102 @@ int main(int argc, char *argv[])
 		XaviStringSourceNew(
 			"abs(2) + 300 / 3d6 + 5.25 * sin(200) - 5"));
 
-	PrintToken(MyLexer->token);
-	if (MyLexer->token.Type != ID
-		|| strcmp(MyLexer->token.String, "abs") != 0)
+	PrintToken(MyLexer->Token);
+	if (MyLexer->Token.Type != ID
+		|| strcmp(MyLexer->Token.Id, "abs") != 0)
 	{
 		printf("Failed, expecting: ID(abs)\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);
-	if (MyLexer->token.Type != LPAREN)
+	PrintToken(MyLexer->Token);
+	if (MyLexer->Token.Type != LPAREN)
 	{
 		printf("Failed, expecting: (\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);
-	if (MyLexer->token.Type != INTEGER
-		|| MyLexer->token.Integer != 2)
+	PrintToken(MyLexer->Token);
+	if (MyLexer->Token.Type != INTEGER
+		|| MyLexer->Token.Integer != 2)
 	{
 		printf("Failed, expecting: Integer: 2\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != RPAREN)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != RPAREN)
 	{
 		printf("Failed, expecting: )\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != ADDITION)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != ADDITION)
 	{
 		printf("Failed, expecting: +\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != INTEGER
-		|| MyLexer->token.Integer != 300)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != INTEGER
+		|| MyLexer->Token.Integer != 300)
 	{
 		printf("Failed, expecting: Integer: 300\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != DIVISION)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != DIVISION)
 	{
 		printf("Failed, expecting: /\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != INTEGER
-		|| MyLexer->token.Integer != 3)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != INTEGER
+		|| MyLexer->Token.Integer != 3)
 	{
 		printf("Failed, expecting: Integer: 3\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != DICE)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != DICE)
 	{
 		printf("Failed, expecting: d\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != INTEGER
-		|| MyLexer->token.Integer != 6)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != INTEGER
+		|| MyLexer->Token.Integer != 6)
 	{
 		printf("Failed, expecting: Integer: 6\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != ADDITION)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != ADDITION)
 	{
 		printf("Failed, expecting: +\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != FLOAT
-		|| MyLexer->token.Float != 5.25)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != FLOAT
+		|| MyLexer->Token.Float != 5.25)
 	{
 		printf("Failed, expecting: Integer: 5.25\n");
 		return 1;
@@ -157,8 +157,8 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	//Character(*)
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != MULTIPLY)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != MULTIPLY)
 	{
 		printf("Failed, expecting: *\n");
 		return 1;
@@ -166,59 +166,59 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	//ID(sin)
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != ID
-		|| strcmp(MyLexer->token.String, "sin") != 0)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != ID
+		|| strcmp(MyLexer->Token.Id, "sin") != 0)
 	{
 		printf("Failed, expecting: ID(sin)\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != LPAREN)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != LPAREN)
 	{
 		printf("Failed, expecting: (\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != INTEGER
-		|| MyLexer->token.Integer != 200)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != INTEGER
+		|| MyLexer->Token.Integer != 200)
 	{
 		printf("Failed, expecting: Integer: 200\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != RPAREN)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != RPAREN)
 	{
 		printf("Failed, expecting: )\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != SUBTRACT)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != SUBTRACT)
 	{
 		printf("Failed, expecting: -\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != INTEGER
-		|| MyLexer->token.Integer != 5)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != INTEGER
+		|| MyLexer->Token.Integer != 5)
 	{
 		printf("Failed, expecting: Integer: 5\n");
 		return 1;
 	}
 	XaviLexerNext(MyLexer);
 
-	PrintToken(MyLexer->token);;
-	if (MyLexer->token.Type != EOL)
+	PrintToken(MyLexer->Token);;
+	if (MyLexer->Token.Type != EOL)
 	{
 		printf("Failed, expecting: EOL\n");
 		return 1;

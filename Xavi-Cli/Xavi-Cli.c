@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 		response = "";
 	}
 
-	XaviFunctionCallerInitialize();
+	XaviFunctionCallerSetUp();
 
 	while(-1)
 	{
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	XaviFunctionCallerDestroy();
+	XaviFunctionCallerTearDown();
 
 	if (ISATTY())
 	{

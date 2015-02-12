@@ -30,8 +30,8 @@ char XaviDataSourceGet(XaviDataSource *Source)
 	return Source->GetFunction(Source->State);
 }
 
-void XaviDataSourceDestroy(XaviDataSource *Source)
+void XaviDataSourceDelete(XaviDataSource *Source)
 {
-	Source->DestroyFunction(Source->State);
+	Source->DeleteFunction(Source->State);
 	free(Source);
 }

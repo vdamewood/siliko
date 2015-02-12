@@ -24,47 +24,49 @@
 
 XaviSyntaxTreeNode *XaviSyntaxTreeNewError(void)
 {
-	XaviSyntaxTreeNode *rVal;
+	XaviSyntaxTreeNode *rVal = NULL;
+
 	if ((rVal = malloc(sizeof(XaviSyntaxTreeNode))))
 	{
-		rVal->type = XAVI_NODE_ERROR;
-		rVal->i = 0;
+		rVal->Type = XAVI_NODE_ERROR;
+		rVal->Integer = 0;
 	}
 	return rVal;
 }
 
 XaviSyntaxTreeNode *XaviSyntaxTreeNewNothing(void)
 {
-	XaviSyntaxTreeNode *rVal;
+	XaviSyntaxTreeNode *rVal = NULL;
+
 	if ((rVal = malloc(sizeof(XaviSyntaxTreeNode))))
 	{
-		rVal->type = XAVI_NODE_NOTHING;
-		rVal->i = 0;
+		rVal->Type = XAVI_NODE_NOTHING;
+		rVal->Integer = 0;
 	}
 	return rVal;
 }
 
-XaviSyntaxTreeNode *XaviSyntaxTreeNewInteger(int value)
+XaviSyntaxTreeNode *XaviSyntaxTreeNewInteger(int NewValue)
 {
-	XaviSyntaxTreeNode *rVal;
+	XaviSyntaxTreeNode *rVal = NULL;
 
-	if (!(rVal = malloc(sizeof(XaviSyntaxTreeNode))))
-		return NULL;
-
-	rVal->type = XAVI_NODE_INTEGER;
-	rVal->i = value;
+	if ((rVal = malloc(sizeof(XaviSyntaxTreeNode))))
+	{
+		rVal->Type = XAVI_NODE_INTEGER;
+		rVal->Integer = NewValue;
+	}
 	return rVal;
 }
 
-XaviSyntaxTreeNode *XaviSyntaxTreeNewFloat(float value)
+XaviSyntaxTreeNode *XaviSyntaxTreeNewFloat(float NewValue)
 {
-	XaviSyntaxTreeNode *rVal;
+	XaviSyntaxTreeNode *rVal = NULL;
 
-	if (!(rVal = malloc(sizeof(XaviSyntaxTreeNode))))
-		return NULL;
-
-	rVal->type = XAVI_NODE_FLOAT;
-	rVal->f = value;
+	if ((rVal = malloc(sizeof(XaviSyntaxTreeNode))))
+	{
+		rVal->Type = XAVI_NODE_FLOAT;
+		rVal->Float = NewValue;
+	}
 	return rVal;
 }
 
@@ -74,67 +76,73 @@ XaviSyntaxTreeNode *XaviSyntaxTreeNewBranch(char *NewId)
 	XaviSyntaxTreeNode *rVal = NULL;
 	XaviSyntaxTreeBranch *rValBranch = NULL;
 	XaviSyntaxTreeNode **rValChildren = NULL;
-
+	char * rValId = NULL;
 	if (!(rVal = malloc(sizeof(XaviSyntaxTreeNode))))
 		goto memerr;
 	if (!(rValBranch = malloc(sizeof(XaviSyntaxTreeBranch))))
 		goto memerr;
 	if (!(rValChildren = calloc(DefaultSize, sizeof(XaviSyntaxTreeNode*))))
 		goto memerr;
+	if (!(rValId = strdup(NewId)))
+		goto memerr;
 
-	rVal->type = XAVI_NODE_BRANCH;
-	rVal->branch = rValBranch;
-	rVal->branch->id = strdup(NewId);
-	rVal->branch->count = 0;
-	rVal->branch->capacity = DefaultSize;
-	rVal->branch->children = rValChildren;
+	rVal->Type = XAVI_NODE_BRANCH;
+	rVal->Branch = rValBranch;
+	rVal->Branch->Id = rValId;
+	rVal->Branch->Count = 0;
+	rVal->Branch->IsNegated = 0;
+	rVal->Branch->Capacity = DefaultSize;
+	rVal->Branch->Children = rValChildren;
 
 	return rVal;
 memerr:
 	free(rVal);
 	free(rValBranch);
 	free(rValChildren);
+	free(rValId);
 	return NULL;
 }
 
 int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewChild)
 {
-	const int INCREMENT = 2;
-	if (Tree->branch->count == Tree->branch->capacity)
+	const int Increment = 2;
+	if (Tree->Branch->Count == Tree->Branch->Capacity)
 	{
-		XaviSyntaxTreeNode **newChildren;
-		int newCapacity = Tree->branch->capacity + INCREMENT;
+		XaviSyntaxTreeNode **NewChildren = NULL;
+		int NewCapacity = Tree->Branch->Capacity + Increment;
 
-		if (!(newChildren = calloc(newCapacity, sizeof(XaviSyntaxTreeNode*))))
-			return 0; // FIXME
-		memcpy(newChildren, Tree->branch->children, Tree->branch->capacity * sizeof(XaviSyntaxTreeNode*));
-		free(Tree->branch->children);
-		Tree->branch->children = newChildren;
-		Tree->branch->capacity = newCapacity;
+		if (!(NewChildren = calloc(NewCapacity, sizeof(XaviSyntaxTreeNode*))))
+			return 0;
+
+		memcpy(NewChildren, Tree->Branch->Children, Tree->Branch->Capacity * sizeof(XaviSyntaxTreeNode*));
+		free(Tree->Branch->Children);
+
+		Tree->Branch->Children = NewChildren;
+		Tree->Branch->Capacity = NewCapacity;
 	}
 
-	Tree->branch->children[Tree->branch->count] = NewChild;
-	Tree->branch->count++;
+	Tree->Branch->Children[Tree->Branch->Count] = NewChild;
+	Tree->Branch->Count++;
 	return -1;
 }
 
 int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewBranch)
 {
-	if (Tree->type == XAVI_NODE_BRANCH)
+	if (Tree->Type == XAVI_NODE_BRANCH)
 	{
-		if (Tree->branch->count == 0)
+		if (Tree->Branch->Count == 0)
 		{
 			return 0;
 		}
-		else if (Tree->branch->children[0] == NULL)
+		else if (Tree->Branch->Children[0] == NULL)
 		{
-			Tree->branch->children[0] = NewBranch;
+			Tree->Branch->Children[0] = NewBranch;
 			return -1;
 		}
 		else
 		{
 			return XaviSyntaxTreeGraftLeft
-				(Tree->branch->children[0], NewBranch);
+				(Tree->Branch->Children[0], NewBranch);
 		}
 	}
 	else
@@ -143,36 +151,38 @@ int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewBra
 	}
 }
 
-int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *tree)
+int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *Tree)
 {
-	if (tree == NULL)
+	if (Tree == NULL)
 		return 0;
 
-	switch (tree->type)
+	switch (Tree->Type)
 	{
 	case XAVI_NODE_INTEGER:
-		tree->i *= -1;
+		Tree->Integer *= -1;
 		return -1;
 	case XAVI_NODE_FLOAT:
-		tree->f *= -1.0;
+		Tree->Float *= -1.0;
 		return -1;
+	case XAVI_NODE_BRANCH:
+		Tree->Branch->IsNegated = !Tree->Branch->IsNegated;
 	default:
 		return 0;
 	}
 }
 
-void XaviSyntaxTreeDelete(XaviSyntaxTreeNode *node)
+void XaviSyntaxTreeDelete(XaviSyntaxTreeNode *Node)
 {
-	if (node)
-		if (node->type == XAVI_NODE_BRANCH)
+	if (Node)
+		if (Node->Type == XAVI_NODE_BRANCH)
 		{
-			free(node->branch->id);
-			for (int i = 0; i <  node->branch->count; i++)
-				XaviSyntaxTreeDelete(node->branch->children[i]);
-			free(node->branch->children);
-			free(node->branch);
+			free(Node->Branch->Id);
+			for (int i = 0; i < Node->Branch->Count; i++)
+				XaviSyntaxTreeDelete(Node->Branch->Children[i]);
+			free(Node->Branch->Children);
+			free(Node->Branch);
 		}
-	free(node);
+	free(Node);
 }
 
 static int IsNumber(XaviValue n)
@@ -180,62 +190,68 @@ static int IsNumber(XaviValue n)
 	return n.Status == XAVI_INTEGER || n.Status == XAVI_FLOAT;
 }
 
-static XaviValue EvaluateBranch(XaviSyntaxTreeBranch *branch)
+static XaviValue EvaluateBranch(XaviSyntaxTreeBranch *Branch)
 {
 	XaviValue rVal;
-	XaviValue *arguments = NULL;
+	XaviValue *Arguments = NULL;
 
-	if (branch->count)
+	if (Branch->Count)
 	{
-		if (!(arguments =
-			calloc(branch->count, sizeof(XaviValue))))
+		if (!(Arguments =
+			calloc(Branch->Count, sizeof(XaviValue))))
 		{
 			rVal.Status = XAVI_MEMORY_ERR;
 			return rVal;
 		}
 
-		for(int i = 0; i < branch->count; i++)
+		for(int i = 0; i < Branch->Count; i++)
 		{
-			arguments[i] = XaviSyntaxTreeEvaluate(branch->children[i]);
-			if(!IsNumber(arguments[i]))
+			Arguments[i] = XaviSyntaxTreeEvaluate(Branch->Children[i]);
+			if(!IsNumber(Arguments[i]))
 			{
-				rVal = arguments[i];
-				free(arguments);
+				rVal = Arguments[i];
+				free(Arguments);
 				return rVal;
 			}
 		}
 	}
 
-	rVal = XaviFunctionCallerCall(branch->id, branch->count, arguments);
-	free(arguments);
+	rVal = XaviFunctionCallerCall(Branch->Id, Branch->Count, Arguments);
+	free(Arguments);
+
+	if (Branch->IsNegated)
+		if (rVal.Status == XAVI_INTEGER)
+			rVal.Integer *= -1;
+		if (rVal.Status == XAVI_FLOAT)
+			rVal.Float *= -1.0;
+
 	return rVal;
 }
 
-XaviValue XaviSyntaxTreeEvaluate(XaviSyntaxTreeNode *node)
+XaviValue XaviSyntaxTreeEvaluate(XaviSyntaxTreeNode *Node)
 {
 	XaviValue rVal;
 
-	if (!node)
+	if (!Node)
 	{
 		rVal.Status = XAVI_SYNTAX_ERR;
 		return rVal;
 	}
 
-	switch (node->type)
+	switch (Node->Type)
 	{
 	case XAVI_NODE_INTEGER:
 		rVal.Status = XAVI_INTEGER;
-		rVal.Integer = node->i;
+		rVal.Integer = Node->Integer;
 		return rVal;
 	case XAVI_NODE_FLOAT:
 		rVal.Status = XAVI_FLOAT;
-		rVal.Float = node->f;
+		rVal.Float = Node->Float;
 		return rVal;
 	case XAVI_NODE_BRANCH:
-		return EvaluateBranch(node->branch);
+		return EvaluateBranch(Node->Branch);
 	default:
 		rVal.Status = XAVI_SYNTAX_ERR;
 		return rVal;
 	}
 }
-

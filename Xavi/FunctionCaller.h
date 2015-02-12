@@ -24,8 +24,8 @@
 
 typedef XaviValue (*XaviFunctionPointer)(int, XaviValue *);
 
-XAVI_API int XaviFunctionCallerInitialize(void);
-XAVI_API void XaviFunctionCallerDestroy(void);
+XAVI_API int XaviFunctionCallerSetUp(void);
+XAVI_API void XaviFunctionCallerTearDown(void);
 XAVI_API XaviValue XaviFunctionCallerCall(const char *FunctionName, int ArgumentCount, XaviValue *Arguments);
 XAVI_API int XaviFunctionCallerInstall(const char *FunctionName, XaviFunctionPointer Function);
 

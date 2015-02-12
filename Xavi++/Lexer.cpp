@@ -67,15 +67,15 @@ enum XaviDfaState
 	DFA_END
 };
 
-void Xavi::Lexer::Load(void)
+void Xavi::Lexer::Next(void)
 {
 	XaviDfaState dfaState = DFA_START;
 	std::string lexeme = std::string();
 
-	if (token->GetType() == Token::EOL || token->GetType() == Token::ERROR)
+	if (MyToken->Type() == Token::EOL || MyToken->Type() == Token::ERROR)
 		return;
 
-	delete token;
+	delete MyToken;
 
 	while (dfaState != DFA_END)
 	switch (dfaState)
@@ -83,47 +83,47 @@ void Xavi::Lexer::Load(void)
 	case DFA_END:
 		break;
 	case DFA_START:
-		if(isOperator(Source->GetCurrent()))
+		if(isOperator(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_TERM_CHAR;
 		}
-		else if (Source->GetCurrent() == 'd')
+		else if (MySource->GetCurrent() == 'd')
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_DICE;
 		}
-		else if (Source->GetCurrent() == 'e')
+		else if (MySource->GetCurrent() == 'e')
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_E;
 		}
-		else if (Source->GetCurrent() == 'p')
+		else if (MySource->GetCurrent() == 'p')
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_PI_1;
 		}
-		else if (std::isdigit(Source->GetCurrent()))
+		else if (std::isdigit(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_INTEGER;
 		}
-		else if (std::isalpha(Source->GetCurrent()))
+		else if (std::isalpha(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_ID;
 		}
-		else if (std::isspace(Source->GetCurrent()))
+		else if (std::isspace(MySource->GetCurrent()))
 		{
-			Source->Advance();
+			MySource->Advance();
 		}
-		else if (Source->GetCurrent() == '\0')
+		else if (MySource->GetCurrent() == '\0')
 		{
 			dfaState = DFA_TERM_EOI;
 		}
@@ -133,10 +133,10 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_DICE:
-		if (std::isalpha(Source->GetCurrent()))
+		if (std::isalpha(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_ID;
 		}
 		else
@@ -145,10 +145,10 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_E:
-		if (std::isalnum(Source->GetCurrent()))
+		if (std::isalnum(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_ID;
 		}
 		else
@@ -157,16 +157,16 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_PI_1:
-		if (Source->GetCurrent() == 'i')
+		if (MySource->GetCurrent() == 'i')
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_PI_2;
 		}
-		else if (isIdCharacter(Source->GetCurrent()))
+		else if (isIdCharacter(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_ID;
 		}
 		else
@@ -175,10 +175,10 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_PI_2:
-		if (isIdCharacter(Source->GetCurrent()))
+		if (isIdCharacter(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_ID;
 		}
 		else
@@ -187,10 +187,10 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_ID:
-		if (isalnum(Source->GetCurrent()))
+		if (isalnum(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 		}
 		else
 		{
@@ -198,16 +198,16 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_INTEGER:
-		if (Source->GetCurrent() == '.')
+		if (MySource->GetCurrent() == '.')
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 			dfaState = DFA_FLOAT;
 		}
-		else if (std::isdigit(Source->GetCurrent()))
+		else if (std::isdigit(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 		}
 		else
 		{
@@ -215,10 +215,10 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_FLOAT:
-		if (std::isdigit(Source->GetCurrent()))
+		if (std::isdigit(MySource->GetCurrent()))
 		{
-			lexeme += Source->GetCurrent();
-			Source->Advance();
+			lexeme += MySource->GetCurrent();
+			MySource->Advance();
 		}
 		else
 		{
@@ -226,35 +226,35 @@ void Xavi::Lexer::Load(void)
 		}
 		break;
 	case DFA_TERM_INTEGER:
-		token = new Token(atoi(lexeme.c_str()));
+		MyToken = new Token(atoi(lexeme.c_str()));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_FLOAT:
-		token = new Token(static_cast<float>(atof(lexeme.c_str())));
+		MyToken = new Token(static_cast<float>(atof(lexeme.c_str())));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
-		token = new Token(static_cast<float>(EULER));
+		MyToken = new Token(static_cast<float>(EULER));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_PI:
-		token = new Token(static_cast<float>(PI));
+		MyToken = new Token(static_cast<float>(PI));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_CHAR:
-		token = new Token(static_cast<Token::Type>(lexeme[0]));
+		MyToken = new Token(static_cast<Token::TokenType>(lexeme[0]));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_STRING:
-		token = new Token(lexeme.c_str());
+		MyToken = new Token(lexeme.c_str());
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_EOI:
-		token = new Token(Token::EOL);
+		MyToken = new Token(Token::EOL);
 		dfaState = DFA_END;
 		break;
 	case DFA_ERROR:
-		token = new Token(Token::ERROR);
+		MyToken = new Token(Token::ERROR);
 		dfaState = DFA_END;
 		break;
 	}
@@ -262,23 +262,18 @@ void Xavi::Lexer::Load(void)
 
 Xavi::Lexer::Lexer(DataSource * InputSource)
 {
-	Source = InputSource;
-	token = new Token(Token::UNSET);
+	MySource = InputSource;
+	MyToken = new Token(Token::UNSET);
 	Next();
 }
 
 Xavi::Lexer::~Lexer(void)
 {
-	delete token;
-	delete Source;
+	delete MyToken;
+	delete MySource;
 }
 
 Xavi::Token &Xavi::Lexer::GetToken(void)
 {
-	return *token;
-}
-
-void Xavi::Lexer::Next(void)
-{
-	Load();
+	return *MyToken;
 }

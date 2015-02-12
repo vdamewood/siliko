@@ -71,42 +71,45 @@ typedef enum XaviDfaState XaviDfaState;
 
 struct Lexeme
 {
-	char *buffer;
-	size_t current;
-	size_t end;
+	char *Buffer;
+	size_t Current;
+	size_t End;
 };
 typedef struct Lexeme Lexeme;
 
-static void Append(Lexeme *Lex, char NewChar)
+int Append(Lexeme *Lex, char NewChar)
 {
-	char * tmp;
-
-	if (Lex->current == Lex->end)
+	if (Lex->Current == Lex->End)
 	{
-		Lex->end++;
-		tmp = realloc(Lex->buffer, Lex->end);
-		if(tmp)
-			Lex->buffer = tmp;
+		char *Temp;
+		Lex->End++;
+		if (!(Temp = realloc(Lex->Buffer, Lex->End)))
+			return 0;
 		else
-			return;
+			Lex->Buffer = Temp;
 	}
 
-	Lex->buffer[Lex->current++] = NewChar;
+	Lex->Buffer[Lex->Current++] = NewChar;
+	return -1;
 }
 
-void XaviLexerNext(XaviLexer *lexer)
+void XaviLexerNext(XaviLexer *Lexer)
 {
 	XaviDfaState dfaState = DFA_START;
 	Lexeme Lex = {NULL, 0, 4};
 
-	if (lexer->token.Type == ID)
-		free(lexer->token.String);
+	if (Lexer->Token.Type == ID)
+		free(Lexer->Token.Id);
 
-	if (lexer->token.Type == EOL || lexer->token.Type == ERROR)
+	if (Lexer->Token.Type == EOL || Lexer->Token.Type == ERROR)
 		return;
 
-	// FIXME: Return a proper indication of memory error.
-	Lex.buffer = malloc(Lex.end);
+	if (!(Lex.Buffer = malloc(Lex.End)))
+	{
+		Lexer->Token.Type = ERROR;
+		Lexer->Token.Integer = 0;
+		return;
+	}
 
 	while (dfaState != DFA_END)
 	switch (dfaState)
@@ -114,48 +117,48 @@ void XaviLexerNext(XaviLexer *lexer)
 	case DFA_END:
 		break;
 	case DFA_START:
-		if(isOperator(XaviDataSourceGet(lexer->source)))
+		if (isOperator(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
 			Append(&Lex, '\0');
-			XaviDataSourceAdvance(lexer->source);
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_TERM_CHAR;
 		}
-		else if (XaviDataSourceGet(lexer->source) == 'd')
+		else if (XaviDataSourceGet(Lexer->Source) == 'd')
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_DICE;
 		}
-		else if (XaviDataSourceGet(lexer->source) == 'e')
+		else if (XaviDataSourceGet(Lexer->Source) == 'e')
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_E;
 		}
-		else if (XaviDataSourceGet(lexer->source) == 'p')
+		else if (XaviDataSourceGet(Lexer->Source) == 'p')
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_PI_1;
 		}
-		else if (isdigit(XaviDataSourceGet(lexer->source)))
+		else if (isdigit(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_INTEGER;
 		}
-		else if (isalpha(XaviDataSourceGet(lexer->source)))
+		else if (isalpha(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
-		else if (isspace(XaviDataSourceGet(lexer->source)))
+		else if (isspace(XaviDataSourceGet(Lexer->Source)))
 		{
-			XaviDataSourceAdvance(lexer->source);
+			XaviDataSourceAdvance(Lexer->Source);
 		}
-		else if (XaviDataSourceGet(lexer->source) == '\0')
+		else if (XaviDataSourceGet(Lexer->Source) == '\0')
 		{
 			dfaState = DFA_TERM_EOI;
 		}
@@ -165,10 +168,10 @@ void XaviLexerNext(XaviLexer *lexer)
 		}
 		break;
 	case DFA_DICE:
-		if (isalpha(XaviDataSourceGet(lexer->source)))
+		if (isalpha(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
 		else
@@ -178,10 +181,10 @@ void XaviLexerNext(XaviLexer *lexer)
 		}
 		break;
 	case DFA_E:
-		if (isalnum(XaviDataSourceGet(lexer->source)))
+		if (isalnum(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
 		else
@@ -191,16 +194,16 @@ void XaviLexerNext(XaviLexer *lexer)
 		}
 		break;
 	case DFA_PI_1:
-		if (XaviDataSourceGet(lexer->source) == 'i')
+		if (XaviDataSourceGet(Lexer->Source) == 'i')
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_PI_2;
 		}
-		else if (isIdCharacter(XaviDataSourceGet(lexer->source)))
+		else if (isIdCharacter(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
 		else
@@ -210,10 +213,10 @@ void XaviLexerNext(XaviLexer *lexer)
 		}
 		break;
 	case DFA_PI_2:
-		if (isIdCharacter(XaviDataSourceGet(lexer->source)))
+		if (isIdCharacter(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
 		else
@@ -223,10 +226,10 @@ void XaviLexerNext(XaviLexer *lexer)
 		}
 		break;
 	case DFA_ID:
-		if (isalnum(XaviDataSourceGet(lexer->source)))
+		if (isalnum(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 		}
 		else
 		{
@@ -235,16 +238,16 @@ void XaviLexerNext(XaviLexer *lexer)
 		}
 		break;
 	case DFA_INTEGER:
-		if (XaviDataSourceGet(lexer->source) == '.')
+		if (XaviDataSourceGet(Lexer->Source) == '.')
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_FLOAT;
 		}
-		else if (isdigit(XaviDataSourceGet(lexer->source)))
+		else if (isdigit(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 		}
 		else
 		{
@@ -253,10 +256,10 @@ void XaviLexerNext(XaviLexer *lexer)
 		}
 		break;
 	case DFA_FLOAT:
-		if (isdigit(XaviDataSourceGet(lexer->source)))
+		if (isdigit(XaviDataSourceGet(Lexer->Source)))
 		{
-			Append(&Lex, XaviDataSourceGet(lexer->source));
-			XaviDataSourceAdvance(lexer->source);
+			Append(&Lex, XaviDataSourceGet(Lexer->Source));
+			XaviDataSourceAdvance(Lexer->Source);
 		}
 		else
 		{
@@ -265,50 +268,50 @@ void XaviLexerNext(XaviLexer *lexer)
 		}
 		break;
 	case DFA_TERM_INTEGER:
-		lexer->token.Type = INTEGER;
-		lexer->token.Integer = atoi(Lex.buffer);
-		free(Lex.buffer);
+		Lexer->Token.Type = INTEGER;
+		Lexer->Token.Integer = atoi(Lex.Buffer);
+		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_FLOAT:
-		lexer->token.Type = FLOAT;
-		lexer->token.Float = (float)atof(Lex.buffer);
-		free(Lex.buffer);
+		Lexer->Token.Type = FLOAT;
+		Lexer->Token.Float = (float)atof(Lex.Buffer);
+		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
-		lexer->token.Type = FLOAT;
-		lexer->token.Float = (float)EULER;
-		free(Lex.buffer);
+		Lexer->Token.Type = FLOAT;
+		Lexer->Token.Float = (float)EULER;
+		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_PI:
-		lexer->token.Type = FLOAT;
-		lexer->token.Float = (float)PI;
-		free(Lex.buffer);
+		Lexer->Token.Type = FLOAT;
+		Lexer->Token.Float = (float)PI;
+		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_CHAR:
-		lexer->token.Type = Lex.buffer[0];
-		free(Lex.buffer);
-		lexer->token.Integer = 0;
+		Lexer->Token.Type = Lex.Buffer[0];
+		Lexer->Token.Integer = 0;
+		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_STRING:
-		lexer->token.Type = ID;
-		lexer->token.String = Lex.buffer;
+		Lexer->Token.Type = ID;
+		Lexer->Token.Id = Lex.Buffer;
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_EOI:
-		lexer->token.Type = EOL;
-		lexer->token.Integer = 0;
-		free(Lex.buffer);
+		Lexer->Token.Type = EOL;
+		Lexer->Token.Integer = 0;
+		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_ERROR:
-		lexer->token.Type = ERROR;
-		lexer->token.Integer = 0;
-		free(Lex.buffer);
+		Lexer->Token.Type = ERROR;
+		Lexer->Token.Integer = 0;
+		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	}
@@ -321,39 +324,21 @@ XaviLexer *XaviLexerNew(XaviDataSource *InputSource)
 	if (!(rVal = malloc(sizeof(XaviLexer))))
 		return NULL;
 
-	rVal->source = InputSource;
-	rVal->token.Type = UNSET;
-	rVal->token.Integer = 0;
+	rVal->Source = InputSource;
+	rVal->Token.Type = UNSET;
+	rVal->Token.Integer = 0;
 	XaviLexerNext(rVal);
 
 	return rVal;
 }
 
-void XaviLexerDestroy(XaviLexer *lexer)
+void XaviLexerDelete(XaviLexer *Lexer)
 {
-	if (lexer)
+	if (Lexer)
 	{
-		if (lexer->token.Type == ID)
-			free(lexer->token.String);
-		XaviDataSourceDestroy(lexer->source);
-		free(lexer);
+		if (Lexer->Token.Type == ID)
+			free(Lexer->Token.Id);
+		XaviDataSourceDelete(Lexer->Source);
+		free(Lexer);
 	}
 }
-
-/*
-XaviToken XaviLexerGetToken(XaviLexer *lexer)
-{
-	if (lexer->token == UNSET)
-		XaviLexerLoad(lexer);
-
-	return lexer->token;
-}
-*/
-
-/*XaviToken XaviLexerGetToken(XaviLexer *lexer)
-{
-	if (lexer->token.Type == UNSET)
-		XaviLexerNext(lexer);
-
-	return lexer->token;
-}*/

@@ -68,7 +68,7 @@ int XaviFunctionCallerInstall(const char *name, XaviFunctionPointer function)
 	return -1;
 }
 
-int XaviFunctionCallerInitialize()
+int XaviFunctionCallerSetUp()
 {
 	if (!(functionTable = calloc(256, sizeof(XaviFunctionChain))))
 		goto memerr;
@@ -98,11 +98,11 @@ int XaviFunctionCallerInitialize()
 
 	return -1;
 memerr:
-	XaviFunctionCallerDestroy();
+	XaviFunctionCallerTearDown();
 	return 0;
 }
 
-void XaviFunctionCallerDestroy(void)
+void XaviFunctionCallerTearDown(void)
 {
 	int i;
 	XaviFunctionChain * current;

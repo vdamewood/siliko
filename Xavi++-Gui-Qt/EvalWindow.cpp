@@ -25,7 +25,7 @@
 EvalWindow::EvalWindow(QWidget * parent)
 	: QMainWindow(parent)
 {
-	Xavi::FunctionCaller::Initialize();
+	Xavi::FunctionCaller::SetUp();
 	setupUi(this);
 	output->setNum(0);
 	connect(calculateButton, SIGNAL(clicked(bool)),
@@ -34,7 +34,7 @@ EvalWindow::EvalWindow(QWidget * parent)
 
 EvalWindow::~EvalWindow()
 {
-	Xavi::FunctionCaller::Destroy();
+	Xavi::FunctionCaller::TearDown();
 }
 
 void EvalWindow::calculate()
@@ -42,7 +42,7 @@ void EvalWindow::calculate()
 	Xavi::SyntaxTreeNode *MyTree = Xavi::ParseInfix(
 		new QStringSource(input->text()));
 
-	Xavi::Value result = MyTree->GetValue();
+	Xavi::Value result = MyTree->Evaluate();
 	switch (result.Status())
 	{
 		case Xavi::Value::INTEGER:

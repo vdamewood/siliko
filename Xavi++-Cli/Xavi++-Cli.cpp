@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 		response = "";
 	}
 
-	Xavi::FunctionCaller::Initialize();
+	Xavi::FunctionCaller::SetUp();
 
 	while(-1)
 	{
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 		free(expression);
 
 		//MyParser.Parse();
-		Xavi::Value result = Tree->GetValue();
+		Xavi::Value result = Tree->Evaluate();
 		delete Tree;
 		Tree = 0;
 
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	Xavi::FunctionCaller::Destroy();
+	Xavi::FunctionCaller::TearDown();
 
 	if (ISATTY())
 	{

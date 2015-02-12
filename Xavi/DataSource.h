@@ -30,13 +30,13 @@ struct XAVI_API XaviDataSource
 	void *State;
 	int (*AdvanceFunction)(void*);
 	char (*GetFunction)(void*);
-	void (*DestroyFunction)(void*);
+	void (*DeleteFunction)(void*);
 };
 typedef struct XaviDataSource XaviDataSource;
 
 XAVI_API int XaviDataSourceAdvance(XaviDataSource *);
 XAVI_API char XaviDataSourceGet(XaviDataSource *);
-XAVI_API void XaviDataSourceDestroy(XaviDataSource *);
+XAVI_API void XaviDataSourceDelete(XaviDataSource *);
 
 #if defined __cplusplus
 }

@@ -16,8 +16,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_TOKENIZER_H
-#define XAVI_TOKENIZER_H
+#if !defined XAVI_LEXER_HPP
+#define XAVI_LEXER_HPP
 
 #include "W32Dll.hpp"
 #include "DataSource.hpp"
@@ -31,14 +31,14 @@ namespace Xavi
 		Lexer(DataSource *InputSource);
 		~Lexer();
 
-		Token &GetToken(void);
+		Xavi::Token &GetToken(void);
 		void Next(void);
 
 	private:
 		void Load(void);
-		DataSource *Source;
-		Token *token;
+		DataSource *MySource;
+		Xavi::Token *MyToken;
 	};
 };
 
-#endif // XAVI_TOKENIZER_H
+#endif // XAVI_LEXER_HPP

@@ -51,7 +51,7 @@ static char XaviStringSourceGet(void *State)
 	return *((XaviStringSourceState *)State)->current;
 }
 
-static void XaviStringSourceDestroy(void *State)
+static void XaviStringSourceDelete(void *State)
 {
 	if (State)
 		free(((XaviStringSourceState *)State)->string);
@@ -80,7 +80,7 @@ XaviDataSource *XaviStringSourceNew(const char *NewInput)
 	source->State = state;
 	source->AdvanceFunction = XaviStringSourceAdvance;
 	source->GetFunction = XaviStringSourceGet;
-	source->DestroyFunction = XaviStringSourceDestroy;
+	source->DeleteFunction = XaviStringSourceDelete;
 
 	return source;
 memerr:

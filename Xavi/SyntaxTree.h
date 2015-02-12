@@ -37,21 +37,22 @@ typedef struct XaviSyntaxTreeNode XaviSyntaxTreeNode;
 
 struct XAVI_API XaviSyntaxTreeBranch
 {
-	char *id;
-	int count;
-	int capacity;
-	XaviSyntaxTreeNode **children;
+	char *Id;
+	int Count;
+	int Capacity;
+	int IsNegated;
+	XaviSyntaxTreeNode **Children;
 };
 typedef struct XaviSyntaxTreeBranch XaviSyntaxTreeBranch;
 
 struct XAVI_API XaviSyntaxTreeNode
 {
-	XaviSyntaxTreeNodeType type;
+	XaviSyntaxTreeNodeType Type;
 	union
 	{
-		int i;
-		float f;
-		XaviSyntaxTreeBranch *branch;
+		int Integer;
+		float Float;
+		XaviSyntaxTreeBranch *Branch;
 	};
 };
 
@@ -64,9 +65,9 @@ XAVI_API void XaviSyntaxTreeDelete(XaviSyntaxTreeNode *);
 
 XAVI_API XaviValue XaviSyntaxTreeEvaluate(XaviSyntaxTreeNode *);
 XAVI_API int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *tree);
-//XAVI_API int XaviSyntaxTreePushLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
+XAVI_API int XaviSyntaxTreePushLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
 XAVI_API int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
 XAVI_API int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
-//XAVI_API int XaviSyntaxTreeGraftRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
+XAVI_API int XaviSyntaxTreeGraftRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
 
 #endif // XAVI_SYNTAX_TREE_H

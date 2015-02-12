@@ -16,8 +16,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_TOKEN_H
-#define XAVI_TOKEN_H
+#if !defined XAVI_TOKEN_HPP
+#define XAVI_TOKEN_HPP
 
 #include <string>
 
@@ -28,7 +28,7 @@ namespace Xavi
 	class XAVI_API Token
 	{
 	public:
-		enum Type
+		enum TokenType
 		{
 			ERROR = -1,
 			UNSET = 0,
@@ -47,26 +47,26 @@ namespace Xavi
 			EOL
 		};
 
-		Token(Type ValuelessType);
-		Token(int IntegerValue);
-		Token(float FloatValue);
-		Token(const char *IdValue);
+		Token(TokenType NewType);
+		Token(int NewInteger);
+		Token(float NewFloat);
+		Token(const char *NewString);
 		~Token(void);
 
-		Type        GetType(void) const;
-		int         GetIntegerValue(void) const;
-		float       GetFloatValue(void) const;
-		const char *GetIdValue(void) const;
+		TokenType   Type(void) const;
+		int         Integer(void) const;
+		float       Float(void) const;
+		const char *Id(void) const;
 
 	private:
-		Type MyType;
+		TokenType MyType;
 		union
 		{
-			int IntegerValue;
-			float FloatValue;
-			char *IdValue;
+			int MyInteger;
+			float MyFloat;
+			char *MyId;
 		};
 	};
 };
 
-#endif // XAVI_TOKEN_H
+#endif // XAVI_TOKEN_HPP

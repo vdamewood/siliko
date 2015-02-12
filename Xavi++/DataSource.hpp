@@ -16,8 +16,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined XAVI_DATASOURCE_HPP
-#define XAVI_DATASOURCE_HPP
+#if !defined XAVI_DATA_SOURCE_HPP
+#define XAVI_DATA_SOURCE_HPP
 
 #include "W32Dll.hpp"
 
@@ -32,4 +32,4 @@ namespace Xavi
 	};
 };
 
-#endif // XAVI_DATASOURCE_HPP
+#endif // XAVIPP_DATA_SOURCE_HPP
