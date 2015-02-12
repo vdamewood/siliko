@@ -23,7 +23,7 @@
 #include "SyntaxTree.h"
 #include "Lexer.h"
 
-#if defined WIN32
+#if defined _WIN32
 #define strdup _strdup
 #endif
 

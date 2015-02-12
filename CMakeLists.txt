@@ -69,6 +69,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
   OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang"
   OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 
+  list(APPEND CMAKE_C_FLAGS "-std=gnu11")
   list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
 endif()
 
