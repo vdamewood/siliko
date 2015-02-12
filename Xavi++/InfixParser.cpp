@@ -52,7 +52,6 @@ namespace Xavi
 
 Xavi::SyntaxTreeNode *Xavi::ParseInfix(Xavi::DataSource *NewSource)
 {
-	Xavi::SyntaxTreeNode *rValue;
 	Xavi::InfixParser Parser(NewSource);
 
 	Parser.Parse();
