@@ -22,6 +22,10 @@
 #include "W32Dll.h"
 #include "Value.h"
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 enum XAVI_API XaviSyntaxTreeNodeType
 {
 	XAVI_NODE_ERROR = -1,
@@ -69,5 +73,9 @@ XAVI_API int XaviSyntaxTreePushLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
 XAVI_API int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
 XAVI_API int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
 XAVI_API int XaviSyntaxTreeGraftRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
+
+#if defined __cplusplus
+}
+#endif
 
 #endif // XAVI_SYNTAX_TREE_H

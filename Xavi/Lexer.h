@@ -23,6 +23,10 @@
 #include "DataSource.h"
 #include "Token.h"
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 struct XAVI_API XaviLexer
 {
 	XaviDataSource *Source;
@@ -33,7 +37,10 @@ typedef struct XaviLexer XaviLexer;
 XAVI_API XaviLexer *XaviLexerNew(XaviDataSource *input);
 XAVI_API void XaviLexerDelete(XaviLexer *lexer);
 
-//XAVI_API XaviToken XaviLexerGetToken(XaviLexer *lexer);
 XAVI_API void XaviLexerNext(XaviLexer *lexer);
+
+#if defined __cplusplus
+}
+#endif
 
 #endif /* XAVI_LEXER_H */

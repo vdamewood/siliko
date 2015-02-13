@@ -21,6 +21,10 @@
 
 #include "W32Dll.h"
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 enum XAVI_API XaviValueStatus
 {
 	XAVI_INTEGER,       /* Success: The value is an integer. */
@@ -53,5 +57,9 @@ struct XAVI_API XaviValue
 	};
 };
 typedef struct XaviValue XaviValue;
+
+#if defined __cplusplus
+}
+#endif
 
 #endif /* XAVI_VALUE_H */

@@ -19,6 +19,10 @@
 #if !defined XAVI_TOKEN_H
 #define XAVI_TOKEN_H
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 enum XAVI_API XaviTokenType
 {
 	ERROR = -1,
@@ -50,5 +54,9 @@ struct XAVI_API XaviToken
 	};
 };
 typedef struct XaviToken XaviToken;
+
+#if defined __cplusplus
+}
+#endif
 
 #endif /* XAVI_TOKEN_H */

@@ -23,6 +23,14 @@
 #include "DataSource.h"
 #include "SyntaxTree.h"
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 XAVI_API XaviSyntaxTreeNode *XaviParseInfix(XaviDataSource *input);
+
+#if defined __cplusplus
+}
+#endif
 
 #endif /* XAVI_INFIX_PARSER_H */

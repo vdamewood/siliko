@@ -21,6 +21,10 @@
 
 #include "Value.h"
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 XaviValue XaviFunction_add(int argc, XaviValue *argv);
 XaviValue XaviFunction_subtract(int argc, XaviValue *argv);
 XaviValue XaviFunction_multiply(int argc, XaviValue *argv);
@@ -43,5 +47,9 @@ XaviValue XaviFunction_sinh(int argc, XaviValue *argv);
 XaviValue XaviFunction_sqrt(int argc, XaviValue *argv);
 XaviValue XaviFunction_tan(int argc, XaviValue *argv);
 XaviValue XaviFunction_tanh(int argc, XaviValue *argv);
+
+#if defined __cplusplus
+}
+#endif
 
 #endif /* XAVI_FUNCTIONS_H */
