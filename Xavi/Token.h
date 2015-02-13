@@ -25,21 +25,21 @@ extern "C" {
 
 enum XAVI_API XaviTokenType
 {
-	ERROR = -1,
-	UNSET = 0,
-	LPAREN = '(',
-	RPAREN = ')',
-	MULTIPLY = '*',
-	ADDITION = '+',
-	COMMA = ',',
-	SUBTRACT = '-',
-	DIVISION = '/',
-	EXPONENT = '^',
-	DICE = 'd',
-	INTEGER = 256,
-	FLOAT,
-	ID,
-	EOL
+	XAVI_TOK_ERROR = -1,
+	XAVI_TOK_UNSET = 0,
+	XAVI_TOK_LPAREN = '(',
+	XAVI_TOK_RPAREN = ')',
+	XAVI_TOK_MULTIPLY = '*',
+	XAVI_TOK_ADDITION = '+',
+	XAVI_TOK_COMMA = ',',
+	XAVI_TOK_SUBTRACT = '-',
+	XAVI_TOK_DIVISION = '/',
+	XAVI_TOK_EXPONENT = '^',
+	XAVI_TOK_DICE = 'd',
+	XAVI_TOK_INTEGER = 256,
+	XAVI_TOK_FLOAT,
+	XAVI_TOK_ID,
+	XAVI_TOK_EOL
 };
 typedef enum XaviTokenType XaviTokenType;
 

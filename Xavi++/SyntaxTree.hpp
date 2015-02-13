@@ -26,11 +26,11 @@
 
 // Windows requires this trickery.
 namespace Xavi { class SyntaxTreeNode; };
-XAVI_EXTERN template class XAVI_API std::list<Xavi::SyntaxTreeNode *>;
+XAVIPP_EXTERN template class XAVIPP_API std::list<Xavi::SyntaxTreeNode *>;
 
 namespace Xavi
 {
-	class XAVI_API SyntaxTreeNode
+	class XAVIPP_API SyntaxTreeNode
 	{
 	public:
 		virtual ~SyntaxTreeNode(void) { };
@@ -48,7 +48,7 @@ namespace Xavi
 		int MyInteger;
 	};
 
-	class XAVI_API FloatNode : public SyntaxTreeNode
+	class XAVIPP_API FloatNode : public SyntaxTreeNode
 	{
 	public:
 		FloatNode(float NewValue);
@@ -58,7 +58,7 @@ namespace Xavi
 		float MyFloat;
 	};
 
-	class XAVI_API BranchNode : public SyntaxTreeNode
+	class XAVIPP_API BranchNode : public SyntaxTreeNode
 	{
 	public:
 		BranchNode(const char *NewFunctionId);
@@ -76,7 +76,7 @@ namespace Xavi
 		std::list<SyntaxTreeNode *> MyChildren;
 	};
 
-	class XAVI_API SyntaxErrorNode : public SyntaxTreeNode
+	class XAVIPP_API SyntaxErrorNode : public SyntaxTreeNode
 	{
 	public:
 		virtual ~SyntaxErrorNode(void);
@@ -84,7 +84,7 @@ namespace Xavi
 		virtual void Negate(void);
 	};
 
-	class XAVI_API NothingNode : public SyntaxTreeNode
+	class XAVIPP_API NothingNode : public SyntaxTreeNode
 	{
 	public:
 		virtual ~NothingNode(void);

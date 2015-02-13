@@ -23,10 +23,10 @@
 
 namespace Xavi
 {
-	class XAVI_API Value
+	class XAVIPP_API Value
 	{
 	public:
-		enum XAVI_API ValueStatus
+		enum XAVIPP_API ValueStatus
 		{
 			INTEGER,       /* Success: The value is an integer. */
 			FLOAT,         /* Success: The valis is a float. */

@@ -27,19 +27,19 @@ void PrintToken(XaviToken MyToken)
 {
 	switch (MyToken.Type)
 	{
-	case EOL:
+	case XAVI_TOK_EOL:
 		printf("EOL\n");
 		break;
-	case INTEGER:
+	case XAVI_TOK_INTEGER:
 		printf("Integer(%d)\n", MyToken.Integer);
 		break;
-	case FLOAT:
+	case XAVI_TOK_FLOAT:
 		printf("Float(%f)\n", MyToken.Float);
 		break;
-	case ID:
+	case XAVI_TOK_ID:
 		printf("String(%s)\n", MyToken.Id);
 		break;
-	case ERROR:
+	case XAVI_TOK_ERROR:
 		printf("Error");
 		break;
 	default:
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 			"abs(2) + 300 / 3d6 + 5.25 * sin(200) - 5"));
 
 	PrintToken(MyLexer->Token);
-	if (MyLexer->Token.Type != ID
+	if (MyLexer->Token.Type != XAVI_TOK_ID
 		|| strcmp(MyLexer->Token.Id, "abs") != 0)
 	{
 		printf("Failed, expecting: ID(abs)\n");
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);
-	if (MyLexer->Token.Type != LPAREN)
+	if (MyLexer->Token.Type != XAVI_TOK_LPAREN)
 	{
 		printf("Failed, expecting: (\n");
 		return 1;
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);
-	if (MyLexer->Token.Type != INTEGER
+	if (MyLexer->Token.Type != XAVI_TOK_INTEGER
 		|| MyLexer->Token.Integer != 2)
 	{
 		printf("Failed, expecting: Integer: 2\n");
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != RPAREN)
+	if (MyLexer->Token.Type != XAVI_TOK_RPAREN)
 	{
 		printf("Failed, expecting: )\n");
 		return 1;
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != ADDITION)
+	if (MyLexer->Token.Type != XAVI_TOK_ADDITION)
 	{
 		printf("Failed, expecting: +\n");
 		return 1;
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != INTEGER
+	if (MyLexer->Token.Type != XAVI_TOK_INTEGER
 		|| MyLexer->Token.Integer != 300)
 	{
 		printf("Failed, expecting: Integer: 300\n");
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != DIVISION)
+	if (MyLexer->Token.Type != XAVI_TOK_DIVISION)
 	{
 		printf("Failed, expecting: /\n");
 		return 1;
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != INTEGER
+	if (MyLexer->Token.Type != XAVI_TOK_INTEGER
 		|| MyLexer->Token.Integer != 3)
 	{
 		printf("Failed, expecting: Integer: 3\n");
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != DICE)
+	if (MyLexer->Token.Type != XAVI_TOK_DICE)
 	{
 		printf("Failed, expecting: d\n");
 		return 1;
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != INTEGER
+	if (MyLexer->Token.Type != XAVI_TOK_INTEGER
 		|| MyLexer->Token.Integer != 6)
 	{
 		printf("Failed, expecting: Integer: 6\n");
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != ADDITION)
+	if (MyLexer->Token.Type != XAVI_TOK_ADDITION)
 	{
 		printf("Failed, expecting: +\n");
 		return 1;
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != FLOAT
+	if (MyLexer->Token.Type != XAVI_TOK_FLOAT
 		|| MyLexer->Token.Float != 5.25)
 	{
 		printf("Failed, expecting: Integer: 5.25\n");
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 
 	//Character(*)
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != MULTIPLY)
+	if (MyLexer->Token.Type != XAVI_TOK_MULTIPLY)
 	{
 		printf("Failed, expecting: *\n");
 		return 1;
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
 
 	//ID(sin)
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != ID
+	if (MyLexer->Token.Type != XAVI_TOK_ID
 		|| strcmp(MyLexer->Token.Id, "sin") != 0)
 	{
 		printf("Failed, expecting: ID(sin)\n");
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != LPAREN)
+	if (MyLexer->Token.Type != XAVI_TOK_LPAREN)
 	{
 		printf("Failed, expecting: (\n");
 		return 1;
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != INTEGER
+	if (MyLexer->Token.Type != XAVI_TOK_INTEGER
 		|| MyLexer->Token.Integer != 200)
 	{
 		printf("Failed, expecting: Integer: 200\n");
@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != RPAREN)
+	if (MyLexer->Token.Type != XAVI_TOK_RPAREN)
 	{
 		printf("Failed, expecting: )\n");
 		return 1;
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != SUBTRACT)
+	if (MyLexer->Token.Type != XAVI_TOK_SUBTRACT)
 	{
 		printf("Failed, expecting: -\n");
 		return 1;
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != INTEGER
+	if (MyLexer->Token.Type != XAVI_TOK_INTEGER
 		|| MyLexer->Token.Integer != 5)
 	{
 		printf("Failed, expecting: Integer: 5\n");
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
 	XaviLexerNext(MyLexer);
 
 	PrintToken(MyLexer->Token);;
-	if (MyLexer->Token.Type != EOL)
+	if (MyLexer->Token.Type != XAVI_TOK_EOL)
 	{
 		printf("Failed, expecting: EOL\n");
 		return 1;

@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-XAVI_API XaviDataSource *XaviStringSourceNew(const char *NewInput);
+XAVI_API XaviDataSource *XaviStringSourceNew(const char *InputString);
 
 #if defined __cplusplus
 }

@@ -28,11 +28,11 @@ extern "C" {
 
 enum XAVI_API XaviSyntaxTreeNodeType
 {
-	XAVI_NODE_ERROR = -1,
-	XAVI_NODE_NOTHING = 0,
-	XAVI_NODE_INTEGER,
-	XAVI_NODE_FLOAT,
-	XAVI_NODE_BRANCH
+	XAVI_AST_ERROR = -1,
+	XAVI_AST_NOTHING = 0,
+	XAVI_AST_INTEGER,
+	XAVI_AST_FLOAT,
+	XAVI_AST_BRANCH
 };
 typedef enum XaviSyntaxTreeNodeType XaviSyntaxTreeNodeType;
 
@@ -60,19 +60,20 @@ struct XAVI_API XaviSyntaxTreeNode
 	};
 };
 
+XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewInteger(int IntegerValue);
+XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewFloat(float FloatValue);
+XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewBranch(char *Id);
 XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewError(void);
 XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewNothing(void);
-XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewInteger(int Value);
-XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewFloat(float Value);
-XAVI_API XaviSyntaxTreeNode *XaviSyntaxTreeNewBranch(char *Id);
-XAVI_API void XaviSyntaxTreeDelete(XaviSyntaxTreeNode *);
+XAVI_API void XaviSyntaxTreeDelete(XaviSyntaxTreeNode *SyntaxTree);
 
-XAVI_API XaviValue XaviSyntaxTreeEvaluate(XaviSyntaxTreeNode *);
-XAVI_API int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *tree);
-XAVI_API int XaviSyntaxTreePushLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
-XAVI_API int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
-XAVI_API int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
-XAVI_API int XaviSyntaxTreeGraftRight(XaviSyntaxTreeNode *, XaviSyntaxTreeNode *);
+XAVI_API XaviValue XaviSyntaxTreeEvaluate(XaviSyntaxTreeNode *SyntaxTree);
+XAVI_API int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *SyntaxTree);
+
+XAVI_API int XaviSyntaxTreePushLeft(XaviSyntaxTreeNode *BaseTree, XaviSyntaxTreeNode *NewBranch);
+XAVI_API int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *BaseTree, XaviSyntaxTreeNode *NewBranch);
+XAVI_API int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *BaseTree, XaviSyntaxTreeNode *NewBranch);
+XAVI_API int XaviSyntaxTreeGraftRight(XaviSyntaxTreeNode *BaseTree, XaviSyntaxTreeNode *NewBranch);
 
 #if defined __cplusplus
 }

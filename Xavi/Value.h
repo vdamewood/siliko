@@ -27,23 +27,23 @@ extern "C" {
 
 enum XAVI_API XaviValueStatus
 {
-	XAVI_INTEGER,       /* Success: The value is an integer. */
-	XAVI_FLOAT,         /* Success: The valis is a float. */
-	XAVI_MEMORY_ERR,    /* Error: An attempt to allocate memory
-				failed. */
-	XAVI_SYNTAX_ERR,    /* Error: A syntax error was
-				encountered. */
-	XAVI_ZERO_DIV_ERR,  /* Error: Division by zero was
-				attempted. */
-	XAVI_BAD_FUNCTION,  /* Error: A function call could not be
-				resolved to a valid function. */
-	XAVI_BAD_ARGUMENTS, /* Error: A function call was made with
-				a number of arguments that the
-				function can't accept. */
-	XAVI_DOMAIN_ERR,    /* Error: A function call resulted in a
-				domain error. */
-	XAVI_RANGE_ERR      /* Error: A function call resulted in a
-				range error. */
+	XAVI_VAL_INTEGER,       /* Success: The value is an integer. */
+	XAVI_VAL_FLOAT,         /* Success: The valis is a float. */
+	XAVI_VAL_MEMORY_ERR,    /* Error: An attempt to allocate memory
+				    failed. */
+	XAVI_VAL_SYNTAX_ERR,    /* Error: A syntax error was
+				    encountered. */
+	XAVI_VAL_ZERO_DIV_ERR,  /* Error: Division by zero was
+				    attempted. */
+	XAVI_VAL_BAD_FUNCTION,  /* Error: A function call could not be
+				    resolved to a valid function. */
+	XAVI_VAL_BAD_ARGUMENTS, /* Error: A function call was made with
+				    a number of arguments that the
+				    function can't accept. */
+	XAVI_VAL_DOMAIN_ERR,    /* Error: A function call resulted in a
+				    domain error. */
+	XAVI_VAL_RANGE_ERR      /* Error: A function call resulted in a
+				    range error. */
 };
 typedef enum XaviValueStatus XaviValueStatus;
 

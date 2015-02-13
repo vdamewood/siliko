@@ -158,7 +158,7 @@ XaviValue XaviFunctionCallerCall(const char *name, int argc, XaviValue *argv)
 	f = GetFunction(name);
 
 	if (!f)
-		rVal.Status = XAVI_BAD_FUNCTION;
+		rVal.Status = XAVI_VAL_BAD_FUNCTION;
 	else
 		rVal = f(argc, argv);
 

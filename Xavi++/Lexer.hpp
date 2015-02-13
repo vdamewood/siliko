@@ -25,7 +25,7 @@
 
 namespace Xavi
 {
-	class XAVI_API Lexer
+	class XAVIPP_API Lexer
 	{
 	public:
 		Lexer(DataSource *InputSource);

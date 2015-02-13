@@ -124,31 +124,31 @@ int main(int argc, char *argv[])
 
 		switch (value.Status)
 		{
-		case XAVI_INTEGER:
+		case XAVI_VAL_INTEGER:
 			printf("%s%i\n", response, value.Integer);
 			break;
-		case XAVI_FLOAT:
+		case XAVI_VAL_FLOAT:
 			printf("%s%f\n", response, value.Float);
 			break;
-		case XAVI_MEMORY_ERR:
+		case XAVI_VAL_MEMORY_ERR:
 			printf("Out of memory.\n");
 			break;
-		case XAVI_SYNTAX_ERR:
+		case XAVI_VAL_SYNTAX_ERR:
 			printf("Syntax error.\n");
 			break;
-		case XAVI_ZERO_DIV_ERR:
+		case XAVI_VAL_ZERO_DIV_ERR:
 			printf("Division by zero error.\n");
 			break;
-		case XAVI_BAD_FUNCTION:
+		case XAVI_VAL_BAD_FUNCTION:
 			printf("Function not found.\n");
 			break;
-		case XAVI_BAD_ARGUMENTS:
+		case XAVI_VAL_BAD_ARGUMENTS:
 			printf("Bad argument count.\n");
 			break;
-		case XAVI_DOMAIN_ERR:
+		case XAVI_VAL_DOMAIN_ERR:
 			printf("Domain error.\n");
 			break;
-		case XAVI_RANGE_ERR:
+		case XAVI_VAL_RANGE_ERR:
 			printf("Range error.\n");
 			break;
 		}

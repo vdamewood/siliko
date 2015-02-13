@@ -32,7 +32,7 @@ XaviSyntaxTreeNode *XaviSyntaxTreeNewError(void)
 
 	if ((rVal = malloc(sizeof(XaviSyntaxTreeNode))))
 	{
-		rVal->Type = XAVI_NODE_ERROR;
+		rVal->Type = XAVI_AST_ERROR;
 		rVal->Integer = 0;
 	}
 	return rVal;
@@ -44,7 +44,7 @@ XaviSyntaxTreeNode *XaviSyntaxTreeNewNothing(void)
 
 	if ((rVal = malloc(sizeof(XaviSyntaxTreeNode))))
 	{
-		rVal->Type = XAVI_NODE_NOTHING;
+		rVal->Type = XAVI_AST_NOTHING;
 		rVal->Integer = 0;
 	}
 	return rVal;
@@ -56,7 +56,7 @@ XaviSyntaxTreeNode *XaviSyntaxTreeNewInteger(int NewValue)
 
 	if ((rVal = malloc(sizeof(XaviSyntaxTreeNode))))
 	{
-		rVal->Type = XAVI_NODE_INTEGER;
+		rVal->Type = XAVI_AST_INTEGER;
 		rVal->Integer = NewValue;
 	}
 	return rVal;
@@ -68,7 +68,7 @@ XaviSyntaxTreeNode *XaviSyntaxTreeNewFloat(float NewValue)
 
 	if ((rVal = malloc(sizeof(XaviSyntaxTreeNode))))
 	{
-		rVal->Type = XAVI_NODE_FLOAT;
+		rVal->Type = XAVI_AST_FLOAT;
 		rVal->Float = NewValue;
 	}
 	return rVal;
@@ -90,7 +90,7 @@ XaviSyntaxTreeNode *XaviSyntaxTreeNewBranch(char *NewId)
 	if (!(rValId = strdup(NewId)))
 		goto memerr;
 
-	rVal->Type = XAVI_NODE_BRANCH;
+	rVal->Type = XAVI_AST_BRANCH;
 	rVal->Branch = rValBranch;
 	rVal->Branch->Id = rValId;
 	rVal->Branch->Count = 0;
@@ -132,7 +132,7 @@ int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewChi
 
 int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewBranch)
 {
-	if (Tree->Type == XAVI_NODE_BRANCH)
+	if (Tree->Type == XAVI_AST_BRANCH)
 	{
 		if (Tree->Branch->Count == 0)
 		{
@@ -162,13 +162,13 @@ int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *Tree)
 
 	switch (Tree->Type)
 	{
-	case XAVI_NODE_INTEGER:
+	case XAVI_AST_INTEGER:
 		Tree->Integer *= -1;
 		return -1;
-	case XAVI_NODE_FLOAT:
+	case XAVI_AST_FLOAT:
 		Tree->Float *= -1.0;
 		return -1;
-	case XAVI_NODE_BRANCH:
+	case XAVI_AST_BRANCH:
 		Tree->Branch->IsNegated = !Tree->Branch->IsNegated;
 	default:
 		return 0;
@@ -178,7 +178,7 @@ int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *Tree)
 void XaviSyntaxTreeDelete(XaviSyntaxTreeNode *Node)
 {
 	if (Node)
-		if (Node->Type == XAVI_NODE_BRANCH)
+		if (Node->Type == XAVI_AST_BRANCH)
 		{
 			free(Node->Branch->Id);
 			for (int i = 0; i < Node->Branch->Count; i++)
@@ -191,7 +191,7 @@ void XaviSyntaxTreeDelete(XaviSyntaxTreeNode *Node)
 
 static int IsNumber(XaviValue n)
 {
-	return n.Status == XAVI_INTEGER || n.Status == XAVI_FLOAT;
+	return n.Status == XAVI_VAL_INTEGER || n.Status == XAVI_VAL_FLOAT;
 }
 
 static XaviValue EvaluateBranch(XaviSyntaxTreeBranch *Branch)
@@ -204,7 +204,7 @@ static XaviValue EvaluateBranch(XaviSyntaxTreeBranch *Branch)
 		if (!(Arguments =
 			calloc(Branch->Count, sizeof(XaviValue))))
 		{
-			rVal.Status = XAVI_MEMORY_ERR;
+			rVal.Status = XAVI_VAL_MEMORY_ERR;
 			return rVal;
 		}
 
@@ -224,9 +224,9 @@ static XaviValue EvaluateBranch(XaviSyntaxTreeBranch *Branch)
 	free(Arguments);
 
 	if (Branch->IsNegated)
-		if (rVal.Status == XAVI_INTEGER)
+		if (rVal.Status == XAVI_VAL_INTEGER)
 			rVal.Integer *= -1;
-		if (rVal.Status == XAVI_FLOAT)
+		if (rVal.Status == XAVI_VAL_FLOAT)
 			rVal.Float *= -1.0;
 
 	return rVal;
@@ -238,24 +238,24 @@ XaviValue XaviSyntaxTreeEvaluate(XaviSyntaxTreeNode *Node)
 
 	if (!Node)
 	{
-		rVal.Status = XAVI_SYNTAX_ERR;
+		rVal.Status = XAVI_VAL_SYNTAX_ERR;
 		return rVal;
 	}
 
 	switch (Node->Type)
 	{
-	case XAVI_NODE_INTEGER:
-		rVal.Status = XAVI_INTEGER;
+	case XAVI_AST_INTEGER:
+		rVal.Status = XAVI_VAL_INTEGER;
 		rVal.Integer = Node->Integer;
 		return rVal;
-	case XAVI_NODE_FLOAT:
-		rVal.Status = XAVI_FLOAT;
+	case XAVI_AST_FLOAT:
+		rVal.Status = XAVI_VAL_FLOAT;
 		rVal.Float = Node->Float;
 		return rVal;
-	case XAVI_NODE_BRANCH:
+	case XAVI_AST_BRANCH:
 		return EvaluateBranch(Node->Branch);
 	default:
-		rVal.Status = XAVI_SYNTAX_ERR;
+		rVal.Status = XAVI_VAL_SYNTAX_ERR;
 		return rVal;
 	}
 }

@@ -34,10 +34,10 @@ struct XAVI_API XaviLexer
 };
 typedef struct XaviLexer XaviLexer;
 
-XAVI_API XaviLexer *XaviLexerNew(XaviDataSource *input);
-XAVI_API void XaviLexerDelete(XaviLexer *lexer);
+XAVI_API XaviLexer *XaviLexerNew(XaviDataSource *InputSource);
+XAVI_API void XaviLexerDelete(XaviLexer *Lexer);
 
-XAVI_API void XaviLexerNext(XaviLexer *lexer);
+XAVI_API void XaviLexerNext(XaviLexer *Lexer);
 
 #if defined __cplusplus
 }

@@ -28,15 +28,15 @@ extern "C" {
 struct XAVI_API XaviDataSource
 {
 	void *State;
-	int (*AdvanceFunction)(void*);
-	char (*GetFunction)(void*);
-	void (*DeleteFunction)(void*);
+	int (*AdvanceFunction)(void *State);
+	char (*GetFunction)(void *State);
+	void (*DeleteFunction)(void *State);
 };
 typedef struct XaviDataSource XaviDataSource;
 
-XAVI_API int XaviDataSourceAdvance(XaviDataSource *);
-XAVI_API char XaviDataSourceGet(XaviDataSource *);
-XAVI_API void XaviDataSourceDelete(XaviDataSource *);
+XAVI_API int XaviDataSourceAdvance(XaviDataSource *Source);
+XAVI_API char XaviDataSourceGet(XaviDataSource *Source);
+XAVI_API void XaviDataSourceDelete(XaviDataSource *Source);
 
 #if defined __cplusplus
 }

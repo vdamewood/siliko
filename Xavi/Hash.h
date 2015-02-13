@@ -21,11 +21,13 @@
 
 #include <stdlib.h>
 
+#include "W32Dll.h"
+
 #if defined __cplusplus
 extern "C" {
 #endif
 
-unsigned char XaviHash(const unsigned char *rawInput, size_t length);
+XAVI_API unsigned char XaviHash(const unsigned char *rawInput, size_t length);
 
 #if defined __cplusplus
 }

@@ -25,7 +25,7 @@
 
 namespace Xavi
 {
-	XAVI_API SyntaxTreeNode *ParseInfix(DataSource *Input);
+	XAVIPP_API SyntaxTreeNode *ParseInfix(DataSource *Input);
 };
 
 #endif // XAVI_INFIX_PARSER_HPP

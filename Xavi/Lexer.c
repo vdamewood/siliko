@@ -64,7 +64,7 @@ enum XaviDfaState
 	DFA_TERM_PI,
 	DFA_TERM_CHAR,
 	DFA_TERM_STRING,
-	DFA_TERM_EOI,
+	DFA_TERM_EOL,
 	DFA_END
 };
 typedef enum XaviDfaState XaviDfaState;
@@ -98,15 +98,15 @@ void XaviLexerNext(XaviLexer *Lexer)
 	XaviDfaState dfaState = DFA_START;
 	Lexeme Lex = {NULL, 0, 4};
 
-	if (Lexer->Token.Type == ID)
+	if (Lexer->Token.Type == XAVI_TOK_ID)
 		free(Lexer->Token.Id);
 
-	if (Lexer->Token.Type == EOL || Lexer->Token.Type == ERROR)
+	if (Lexer->Token.Type == XAVI_TOK_EOL || Lexer->Token.Type == XAVI_TOK_ERROR)
 		return;
 
 	if (!(Lex.Buffer = malloc(Lex.End)))
 	{
-		Lexer->Token.Type = ERROR;
+		Lexer->Token.Type = XAVI_TOK_ERROR;
 		Lexer->Token.Integer = 0;
 		return;
 	}
@@ -160,7 +160,7 @@ void XaviLexerNext(XaviLexer *Lexer)
 		}
 		else if (XaviDataSourceGet(Lexer->Source) == '\0')
 		{
-			dfaState = DFA_TERM_EOI;
+			dfaState = DFA_TERM_EOL;
 		}
 		else
 		{
@@ -268,25 +268,25 @@ void XaviLexerNext(XaviLexer *Lexer)
 		}
 		break;
 	case DFA_TERM_INTEGER:
-		Lexer->Token.Type = INTEGER;
+		Lexer->Token.Type = XAVI_TOK_INTEGER;
 		Lexer->Token.Integer = atoi(Lex.Buffer);
 		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_FLOAT:
-		Lexer->Token.Type = FLOAT;
+		Lexer->Token.Type = XAVI_TOK_FLOAT;
 		Lexer->Token.Float = (float)atof(Lex.Buffer);
 		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
-		Lexer->Token.Type = FLOAT;
+		Lexer->Token.Type = XAVI_TOK_FLOAT;
 		Lexer->Token.Float = (float)EULER;
 		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_PI:
-		Lexer->Token.Type = FLOAT;
+		Lexer->Token.Type = XAVI_TOK_FLOAT;
 		Lexer->Token.Float = (float)PI;
 		free(Lex.Buffer);
 		dfaState = DFA_END;
@@ -298,18 +298,18 @@ void XaviLexerNext(XaviLexer *Lexer)
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_STRING:
-		Lexer->Token.Type = ID;
+		Lexer->Token.Type = XAVI_TOK_ID;
 		Lexer->Token.Id = Lex.Buffer;
 		dfaState = DFA_END;
 		break;
-	case DFA_TERM_EOI:
-		Lexer->Token.Type = EOL;
+	case DFA_TERM_EOL:
+		Lexer->Token.Type = XAVI_TOK_EOL;
 		Lexer->Token.Integer = 0;
 		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_ERROR:
-		Lexer->Token.Type = ERROR;
+		Lexer->Token.Type = XAVI_TOK_ERROR;
 		Lexer->Token.Integer = 0;
 		free(Lex.Buffer);
 		dfaState = DFA_END;
@@ -325,7 +325,7 @@ XaviLexer *XaviLexerNew(XaviDataSource *InputSource)
 		return NULL;
 
 	rVal->Source = InputSource;
-	rVal->Token.Type = UNSET;
+	rVal->Token.Type = XAVI_TOK_UNSET;
 	rVal->Token.Integer = 0;
 	XaviLexerNext(rVal);
 
@@ -336,7 +336,7 @@ void XaviLexerDelete(XaviLexer *Lexer)
 {
 	if (Lexer)
 	{
-		if (Lexer->Token.Type == ID)
+		if (Lexer->Token.Type == XAVI_TOK_ID)
 			free(Lexer->Token.Id);
 		XaviDataSourceDelete(Lexer->Source);
 		free(Lexer);
