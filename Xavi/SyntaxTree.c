@@ -1,5 +1,5 @@
 /*
- * XaviTree.c: Functions to manipulate abstract syntax trees
+ * SyntaxTree.c: Functions to manipulate abstract syntax trees
  * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify

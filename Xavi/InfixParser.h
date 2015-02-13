@@ -1,5 +1,5 @@
 /*
- * XaviParser.h: Parser for Xavi
+ * InfixParser.h: Infix notation parser
  * Copyright 2014, 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify

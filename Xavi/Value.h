@@ -1,5 +1,5 @@
 /*
- * XaviValue.c: Data structure to represent a single value
+ * Value.c: Data structure to represent a single value
  * Copyright 2014, 2015 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
