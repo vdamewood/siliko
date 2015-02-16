@@ -34,8 +34,8 @@ set_target_properties(Xavi-Gui-Cocoa Xavi PROPERTIES
 target_link_libraries(Xavi-Gui-Cocoa Xavi "-framework Cocoa")
 
 add_custom_command(
-	TARGET Xavi-Gui-Cocoa PRE_BUILD
-	COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/Xavi-Gui-Cocoa.app/Contents/Resources)
+	TARGET Xavi-Gui-Cocoa PRE_LINK
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/Xavi-Gui-Cocoa.app/Contents/Resources)
 
 add_custom_command(
 	TARGET Xavi-Gui-Cocoa POST_BUILD
