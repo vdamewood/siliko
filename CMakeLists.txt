@@ -159,6 +159,9 @@ endif()
 add_subdirectory(Xavi)
 add_subdirectory(Xavi++)
 
+# Allow other builds to include library headers.
+include_directories(${Xavi_SOURCE_DIR})
+
 # Command-line Programs
 add_subdirectory(Xavi-Cli)
 add_subdirectory(Xavi++-Cli)

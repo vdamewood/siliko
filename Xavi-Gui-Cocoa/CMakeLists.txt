@@ -27,11 +27,11 @@ add_executable(
 	${Xavi_Gui_Cocoa_HEADERS}
 )
 
-set_target_properties(Xavi-Gui-Cocoa PROPERTIES
+set_target_properties(Xavi-Gui-Cocoa Xavi PROPERTIES
 	MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 )
 
-target_link_libraries(Xavi-Gui-Cocoa "-framework Cocoa")
+target_link_libraries(Xavi-Gui-Cocoa Xavi "-framework Cocoa")
 
 add_custom_command(
 	TARGET Xavi-Gui-Cocoa PRE_BUILD
