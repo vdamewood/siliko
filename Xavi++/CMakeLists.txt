@@ -15,7 +15,7 @@ set(Xavi++_PUBLIC_HEADERS
 )
 
 set(Xavi++_HEADERS
-  ${XAVI++_PUBLIC_HEADERS}
+  ${Xavi++_PUBLIC_HEADERS}
 )
 
 set(Xavi++_SOURCES
