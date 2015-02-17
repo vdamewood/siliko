@@ -11,9 +11,9 @@ endif()
 set(SOURCES Xavi++-Cli.cpp StringSource.cpp)
 set(HEADERS StringSource.cpp)
 
-add_executable(Xavi++-Cli ${HEADERS} ${SOURCES})
-target_link_libraries(Xavi++-Cli Xavi++)
+add_executable(XaviPP-Cli ${HEADERS} ${SOURCES})
+target_link_libraries(XaviPP-Cli XaviPP)
 
-install(TARGETS Xavi++-Cli
+install(TARGETS XaviPP-Cli
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH}
 )

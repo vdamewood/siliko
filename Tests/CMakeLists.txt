@@ -5,10 +5,10 @@ add_executable(TestXaviLexer
 	TestXaviLexer.c)
 target_link_libraries(TestXaviLexer Xavi)
 
-add_executable(TestXavi++Functions
+add_executable(TestXaviPPFunctions
 	TestXavi++Functions.cpp)
-target_link_libraries(TestXavi++Functions Xavi++)
+target_link_libraries(TestXaviPPFunctions XaviPP)
 
-add_executable(TestXavi++Lexer
+add_executable(TestXaviPPLexer
 	TestXavi++Lexer.cpp)
-target_link_libraries(TestXavi++Lexer Xavi++)
+target_link_libraries(TestXaviPPLexer XaviPP)

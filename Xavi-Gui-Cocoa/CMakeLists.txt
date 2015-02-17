@@ -49,3 +49,6 @@ install(TARGETS Xavi-Gui-Cocoa
   RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH}
   BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH}
 )
+
+install(CODE "include(BundleUtilities)")
+install(CODE "fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/Xavi-Gui-Cocoa.app\" \"\" \"${Xavi_BINARY_DIR}\")")

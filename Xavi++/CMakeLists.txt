@@ -1,5 +1,7 @@
 # Xavi++
 
+set(Xavi++_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
+
 set(Xavi++_PUBLIC_HEADERS
   W32Dll.hpp
   Value.hpp
@@ -26,16 +28,16 @@ set(Xavi++_SOURCES
   InfixParser.cpp
 )
 
-add_library(Xavi++
+add_library(XaviPP
   ${Xavi++_HEADERS}
   ${Xavi++_SOURCES})
-set_target_properties(Xavi++
+set_target_properties(XaviPP
   PROPERTIES
     FRAMEWORK     TRUE
     DEFINE_SYMBOL "Xavipp_EXPORTS"
     PUBLIC_HEADER "${Xavi++_PUBLIC_HEADERS}")
 
-install(TARGETS Xavi++
+install(TARGETS XaviPP
   RUNTIME       DESTINATION ${RUNTIME_INSTALL_PATH}
   ARCHIVE       DESTINATION ${ARCHIVE_INSTALL_PATH}
   LIBRARY       DESTINATION ${LIBRARY_INSTALL_PATH}

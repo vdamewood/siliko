@@ -1,5 +1,7 @@
 # Xavi
 
+set(Xavi_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
+
 if (UNIX)
 	add_definitions(-DXAVI_USE_UNIX=1)
 else()
@@ -7,6 +9,7 @@ else()
 endif()
 
 set(Xavi_PUBLIC_HEADERS
+  W32Dll.h
   Value.h
   FunctionCaller.h
   SyntaxTree.h
@@ -40,7 +43,7 @@ target_link_libraries(Xavi
 set_target_properties(Xavi
   PROPERTIES
     FRAMEWORK     TRUE
-    PUBLIC_HEADER ${Xavi_PUBLIC_HEADERS})
+    PUBLIC_HEADER "${Xavi_PUBLIC_HEADERS}")
 
 install(TARGETS Xavi
   RUNTIME       DESTINATION ${RUNTIME_INSTALL_PATH}
