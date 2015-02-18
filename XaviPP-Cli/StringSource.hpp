@@ -1,5 +1,5 @@
 /*
- * QStringSource.hpp: Input Source abstaction for a QString
+ * StringSource.hpp: Class to input data from a string
  * Copyright 2014, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,23 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined Q_STRING_SOURCE_H
-#define Q_STRING_SOURCE_H
+#if !defined STRING_SOURCE_HPP
+#define STRING_SOURCE_HPP
 
-#include <QString>
-#include <Xavi++/DataSource.hpp>
+#include <string>
+#include <XaviPP/DataSource.hpp>
 
-class QStringSource : public Xavi::DataSource
+class StringSource : public Xavi::DataSource
 {
 public:
-	QStringSource(const QString &);
+	StringSource(const std::string &);
 	virtual bool Advance();
 	virtual char GetCurrent();
-	virtual ~QStringSource();
+	virtual ~StringSource();
 
 private:
-	QString Source;
-	QString::iterator Iterator;
+	const std::string Source;
+	std::string::const_iterator Iterator;;
 };
 
-#endif /* Q_STRING_SOURCE_H */
+#endif // STRING_SOURCE_HPP

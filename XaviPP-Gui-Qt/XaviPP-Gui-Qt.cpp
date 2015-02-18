@@ -1,6 +1,6 @@
 /*
- * StringSource.hpp: Class to input data from a string
- * Copyright 2014, 2015 Vincent Damewood
+ * XaviPP-Gui-Qt.cpp: XaviPP GUI frontend using Qt
+ * Copyright 2012, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined STRING_SOURCE_HPP
-#define STRING_SOURCE_HPP
+#include <QApplication>
 
-#include <string>
-#include <Xavi++/DataSource.hpp>
+#include "EvalWindow.hpp"
 
-class StringSource : public Xavi::DataSource
+int main(int argc, char *argv[])
 {
-public:
-	StringSource(const std::string &);
-	virtual bool Advance();
-	virtual char GetCurrent();
-	virtual ~StringSource();
-
-private:
-	const std::string Source;
-	std::string::const_iterator Iterator;;
-};
-
-#endif // STRING_SOURCE_HPP
+	QApplication XavippGuiQt(argc, argv);
+	EvalWindow * MainWindow = new EvalWindow;
+	MainWindow->show();
+	return XavippGuiQt.exec();
+}

@@ -47,29 +47,29 @@ endif()
 
 # CMake Standard
 option(CMAKE_BUILD_TYPE       "Build as Debug or Release."                         Debug)
-option(BUILD_SHARED_LIBS      "Build Xavi and Xavi++ as shared libraries."         On)
+option(BUILD_SHARED_LIBS      "Build Xavi and XaviPP as shared libraries."         On)
 
 # GUI frontends
 option(BUILD_TESTS            "Build testing programs."                            On)
 option(BUILD_XAVI_GUI_COCOA   "Build a GUI based on Cocoa for Xavi (OS X Only)."   ${APPLE})
-option(BUILD_XAVI++_GUI_COCOA "Build a GUI based on Cocoa for Xavi++ (OS X Only)." ${APPLE})
-option(BUILD_XAVI++_GUI_QT    "Build a Qt-based GUI frontend to Xavi++."           ${Qt5Widgets_FOUND})
+option(BUILD_XAVIPP_GUI_COCOA "Build a GUI based on Cocoa for XaviPP (OS X Only)." ${APPLE})
+option(BUILD_XAVIPP_GUI_QT    "Build a Qt-based GUI frontend to XaviPP."           ${Qt5Widgets_FOUND})
 option(BUILD_XAVI_GUI_WIN32   "Build GUI based on Win32 API (Windows Only)."       ${WIN32})
 
 ####################
 # Failure Messages #
 ####################
 
-if(${BUILD_XAVI_GUI_COCOA} OR ${BUILD_XAVI++_GUI_COCOA} AND NOT ${IBTOOL_FOUND})
-  message(FATAL_ERROR "Can't build Xavi-Gui-Cocoa or Xavi++-Gui-Cocoa: ibtool not found.")
+if(${BUILD_XAVI_GUI_COCOA} OR ${BUILD_XAVIPP_GUI_COCOA} AND NOT ${IBTOOL_FOUND})
+  message(FATAL_ERROR "Can't build Xavi-Gui-Cocoa or XaviPP-Gui-Cocoa: ibtool not found.")
 endif()
 
-if(${BUILD_XAVI++_GUI_QT} AND NOT ${Qt5Widgets_FOUND})
-  message(FATAL_ERROR "Can't build Xavi++-GUI-Qt: Qt5Widgets not found.")
+if(${BUILD_XAVIPP_GUI_QT} AND NOT ${Qt5Widgets_FOUND})
+  message(FATAL_ERROR "Can't build XaviPP-GUI-Qt: Qt5Widgets not found.")
 endif()
 
 if(${BUILD_XAVI_GUI_WIN32} AND NOT WIN32)
-  message(FATAL_ERROR "Can't build Xavi++-GUI-Win32: not building on Windows.")
+  message(FATAL_ERROR "Can't build XaviPP-GUI-Win32: not building on Windows.")
 endif()
 
 ###########################
@@ -124,12 +124,12 @@ endif()
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${Xavi_SOURCE_DIR}/Readme.txt")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
   "Xavi is a mathematical expression parser library.")
-set(CPACK_PACKAGE_EXECUTABLES Xavi-Cli "Xavi (Command Line)" Xavi++-Cli "Xavi++ (Command Line)")
+set(CPACK_PACKAGE_EXECUTABLES Xavi-Cli "Xavi (Command Line)" XaviPP-Cli "XaviPP (Command Line)")
 if (${BUILD_XAVI_GUI_WIN32})
   list(APPEND CPACK_PACKAGE_EXECUTABLES Xavi-Gui-Win32 "Xavi (Win32 GUI)")
 endif()
-if (${BUILD_XAVI++_GUI_QT})
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Xavi++-Gui-Qt "Xavi (Qt GUI)")
+if (${BUILD_XAVIPP_GUI_QT})
+  list(APPEND CPACK_PACKAGE_EXECUTABLES XaviPP-Gui-Qt "Xavi (Qt GUI)")
 endif()
 set(CPACK_PACKAGE_VERSION_MAJOR ${Xavi_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${Xavi_VERSION_MINOR})
@@ -157,14 +157,14 @@ endif()
 
 # Libraries
 add_subdirectory(Xavi)
-add_subdirectory(Xavi++)
+add_subdirectory(XaviPP)
 
 # Allow other builds to include library headers.
 include_directories(${Xavi_SOURCE_DIR})
 
 # Command-line Programs
 add_subdirectory(Xavi-Cli)
-add_subdirectory(Xavi++-Cli)
+add_subdirectory(XaviPP-Cli)
 
 # Tests
 if(${BUILD_TESTS})
@@ -175,8 +175,8 @@ endif()
 if(${BUILD_XAVI_GUI_COCOA})
   add_subdirectory(Xavi-Gui-Cocoa)
 endif()
-if(${BUILD_XAVI++_GUI_QT})
-  add_subdirectory(Xavi++-Gui-Qt)
+if(${BUILD_XAVIPP_GUI_QT})
+  add_subdirectory(XaviPP-Gui-Qt)
 endif()
 if(${BUILD_XAVI_GUI_WIN32})
   add_subdirectory(Xavi-Gui-Win32)

@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-#include "Xavi++/FunctionCaller.hpp"
+#include <XaviPP/FunctionCaller.hpp>
 
 int main()
 {

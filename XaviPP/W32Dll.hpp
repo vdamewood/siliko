@@ -19,13 +19,13 @@
 #if !defined XAVI_W32_DLL_HPP
 
 #if defined _WIN32 && defined _MSC_VER
-#  if defined Xavipp_EXPORTS
+#  if defined XaviPP_EXPORTS
 #    define XAVIPP_API __declspec(dllexport)
 #    define XAVIPP_EXTERN
-#  else // Xavipp_EXPORTS
+#  else // XaviPP_EXPORTS
 #    define XAVIPP_API __declspec(dllimport)
 #    define XAVIPP_EXTERN extern
-#  endif // Xavipp_EXPORTS
+#  endif // XaviPP_EXPORTS
 #else // _WIN32 && __MSC_VER
 #  define XAVIPP_API
 #  define XAVIPP_EXTERN

@@ -1,5 +1,5 @@
 /*
- * Xavi++-Cli.cpp: Command-line interface for Xavi++.
+ * XaviPP-Cli.cpp: Command-line interface for XaviPP.
  * Copyright 2012, 2014, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,8 +26,8 @@
 #	define ISATTY() (-1)
 #endif
 
-#include <Xavi++/FunctionCaller.hpp>
-#include <Xavi++/InfixParser.hpp>
+#include <XaviPP/FunctionCaller.hpp>
+#include <XaviPP/InfixParser.hpp>
 
 #include "StringSource.hpp"
 

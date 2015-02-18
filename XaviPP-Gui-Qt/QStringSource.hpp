@@ -1,6 +1,6 @@
 /*
- * Xavi++-Gui-Qt.cpp: Xavi++ GUI frontend using Qt
- * Copyright 2012, 2015 Vincent Damewood
+ * QStringSource.hpp: Input Source abstaction for a QString
+ * Copyright 2014, 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,14 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QApplication>
+#if !defined Q_STRING_SOURCE_H
+#define Q_STRING_SOURCE_H
 
-#include "EvalWindow.hpp"
+#include <QString>
+#include <XaviPP/DataSource.hpp>
 
-int main(int argc, char *argv[])
+class QStringSource : public Xavi::DataSource
 {
-	QApplication XavippGuiQt(argc, argv);
-	EvalWindow * MainWindow = new EvalWindow;
-	MainWindow->show();
-	return XavippGuiQt.exec();
-}
+public:
+	QStringSource(const QString &);
+	virtual bool Advance();
+	virtual char GetCurrent();
+	virtual ~QStringSource();
+
+private:
+	QString Source;
+	QString::iterator Iterator;
+};
+
+#endif /* Q_STRING_SOURCE_H */

@@ -19,8 +19,8 @@
 #include <iostream>
 #include <cstring>
 
-#include <Xavi++/DataSource.hpp>
-#include <Xavi++/Lexer.hpp>
+#include <XaviPP/DataSource.hpp>
+#include <XaviPP/Lexer.hpp>
 
 void PrintToken(const Xavi::Token &MyToken)
 {

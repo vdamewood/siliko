@@ -6,9 +6,9 @@ add_executable(TestXaviLexer
 target_link_libraries(TestXaviLexer Xavi)
 
 add_executable(TestXaviPPFunctions
-	TestXavi++Functions.cpp)
+	TestXaviPPFunctions.cpp)
 target_link_libraries(TestXaviPPFunctions XaviPP)
 
 add_executable(TestXaviPPLexer
-	TestXavi++Lexer.cpp)
+	TestXaviPPLexer.cpp)
 target_link_libraries(TestXaviPPLexer XaviPP)

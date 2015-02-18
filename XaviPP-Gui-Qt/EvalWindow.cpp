@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Xavi++/FunctionCaller.hpp>
-#include <Xavi++/InfixParser.hpp>
+#include <XaviPP/FunctionCaller.hpp>
+#include <XaviPP/InfixParser.hpp>
 
 #include "QStringSource.hpp"
 #include "EvalWindow.hpp"

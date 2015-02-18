@@ -8,7 +8,7 @@ else()
   add_definitions(-DXAVITA_USE_UNIX=0)
 endif()
 
-set(SOURCES Xavi++-Cli.cpp StringSource.cpp)
+set(SOURCES XaviPP-Cli.cpp StringSource.cpp)
 set(HEADERS StringSource.cpp)
 
 add_executable(XaviPP-Cli ${HEADERS} ${SOURCES})
