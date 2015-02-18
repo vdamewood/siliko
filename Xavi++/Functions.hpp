@@ -21,7 +21,6 @@
 
 #include <vector>
 
-#include "W32Dll.hpp"
 #include "Value.hpp"
 
 namespace Xavi
