@@ -170,6 +170,7 @@ int XaviSyntaxTreeNegate(XaviSyntaxTreeNode *Tree)
 		return -1;
 	case XAVI_AST_BRANCH:
 		Tree->Branch->IsNegated = !Tree->Branch->IsNegated;
+		return -1;
 	default:
 		return 0;
 	}
