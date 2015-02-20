@@ -11,6 +11,10 @@ set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
+
+# These are values shared by multiple subdirectories.
+set(Xavi_VERSION_STRING "${XAVI_VERSION_MAJOR}.${XAVI_VERSION_MINOR}.${XAVI_VERSION_PATCH}")
+set(Xavi_APP_COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015 Vincent Damewood. Licensed under the terms of the GNU General Public License, version 3 or later.")
 set(CMAKE_VERBOSE_MAKEFILE On)
 
 #######################
