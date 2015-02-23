@@ -29,7 +29,7 @@ set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
-set(CMAKE_VERBOSE_MAKEFILE On)
+#set(CMAKE_VERBOSE_MAKEFILE On)
 
 #######################
 # Dependency Searches #
@@ -194,9 +194,9 @@ endif()
 # Compiler-dependent values #
 #############################
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
-  OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang"
-  OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang"
+  OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"
+  OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 
   list(APPEND CMAKE_C_FLAGS "-std=gnu11")
   list(APPEND CMAKE_CXX_FLAGS "-std=c++11")

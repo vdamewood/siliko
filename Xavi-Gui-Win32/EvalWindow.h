@@ -1,5 +1,5 @@
 /*
- * About.h: About dialogue window
+ * EvalWindow.c: Expression evaluation window
  * Copyright 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,11 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- #if !defined ABOUT_H
-#define ABOUT_H
+#if !defined EVAL_WINDOW_H
+#define EVAL_WINDOW_H
 
-#define ABOUT_DIALOG 0xB0
+#include <windows.h>
 
-BOOL CALLBACK AboutDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
+ATOM RegisterEvalWindowClass(HINSTANCE hInstance);
+HWND CreateEvalWindow(HINSTANCE hInstance);
+BOOL HandleEvalWindowEvent(HWND Handle, MSG *Message);
 
-#endif /* ABOUT_H */
+#endif /* EVAL_WINDOW_H */

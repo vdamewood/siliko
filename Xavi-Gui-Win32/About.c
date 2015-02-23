@@ -1,5 +1,5 @@
 /*
- * About.h: About dialogue window
+ * About.c: About dialogue window
  * Copyright 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,11 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- #if !defined ABOUT_H
-#define ABOUT_H
+#include <windows.h> 
 
-#define ABOUT_DIALOG 0xB0
-
-BOOL CALLBACK AboutDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-#endif /* ABOUT_H */
+#include "About.h"
+ 
+BOOL CALLBACK AboutDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch(uMsg)
+	{
+	case WM_CLOSE:
+		EndDialog(hwndDlg, IDOK);
+		return TRUE;
+	case WM_COMMAND:
+		switch(LOWORD(wParam))
+		{
+		case IDOK:
+			EndDialog(hwndDlg, IDOK);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
