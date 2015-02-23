@@ -29,7 +29,7 @@ set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
-#set(CMAKE_VERBOSE_MAKEFILE On)
+set(CMAKE_VERBOSE_MAKEFILE On)
 
 #######################
 # Dependency Searches #

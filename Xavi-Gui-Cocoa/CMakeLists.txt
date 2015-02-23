@@ -30,11 +30,9 @@ set(MACOSX_BUNDLE_MAIN_NIB_FILE ${XIB})
 set(MACOSX_BUNDLE_PRINCIPAL_CLASS "NSApplication")
 
 add_custom_command(OUTPUT "${XIB}.nib"
-	COMMAND ${IBTOOL} --errors --warnings --notices --output-format human-readable-text
-		--compile
-		${CMAKE_CURRENT_BINARY_DIR}/${EXECUTABLE}.app/Contents/Resources/${XIB}.nib
-		${CMAKE_CURRENT_SOURCE_DIR}/${XIB}.xib
+	COMMAND ${IBTOOL} --compile ${XIB}.nib ${CMAKE_CURRENT_SOURCE_DIR}/${XIB}.xib
         COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/${XIB}.xib")
+set_source_files_properties("${XIB}.nib" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 add_executable(${EXENAME} MACOSX_BUNDLE ${HDRS} ${SRCS})
 target_link_libraries(${EXENAME} ${LIBS})
