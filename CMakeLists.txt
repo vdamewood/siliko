@@ -18,12 +18,9 @@
 # Preamble (Semi-Requied) #
 ###########################
 
-if(APPLE OR WIN32)
-    # Objective C files will build as Objective C++ in earlier
-    # versions of Cmake.
+if(APPLE)
     cmake_minimum_required(VERSION 3.1.0)
 else()
-    # This version is required for BundleUtilities.
     cmake_minimum_required(VERSION 2.8.6)
 endif()
 
@@ -96,7 +93,7 @@ if((CMAKE_MAJOR_VERSION LESS  2)
   OR (CMAKE_MINOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION EQUAL 8 AND CMAKE_PATCH_VERSION LESS 11))
     set(Qt5Widgets_POSSIBLE No)
     set(Qt5Widgets_FOUND No)
-    message("-- Can't build with Qt5. Skipping.")
+    message("-- Can't build with Qt5 (Needs Cmake 4.8.11 or later). Skipping.")
 else()
     set(Qt5Widgets_POSSIBLE On)
     message("-- Finding Qt5Widgets")
@@ -118,7 +115,7 @@ option(BUILD_SHARED_LIBS  "Build Xavi and XaviPP as shared libraries."  On)
 
 # Optional Components
 option(BUILD_TESTS        "Build testing programs."                     On)
-option(BUILD_NATIVE_GUI   "Build a native GUI."                         On)
+option(BUILD_PLATFORM_GUI "Build a native GUI."                         On)
 if(Qt5Widgets_POSSIBLE)
   option(BUILD_QT_GUI     "Build a Qt GUI (XaviPP Only)."               ${Qt5Widgets_FOUND})
 endif()
