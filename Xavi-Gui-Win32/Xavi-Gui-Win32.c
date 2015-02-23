@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <windows.h>
@@ -137,14 +136,14 @@ void RenderCalculation(HWND hwnd)
 	
 	switch (Value.Status)
 	{
-	case XAVI_INTEGER:
+	case XAVI_VAL_INTEGER:
 		ValueSize = _snprintf(NULL, 0, "%i", Value.Integer) + 1;
 		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
 		_snprintf(ValueString, ValueSize, "%i", Value.Integer);
 		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
 		GlobalFree((HANDLE)ValueString);
 		break;
-	case XAVI_FLOAT:
+	case XAVI_VAL_FLOAT:
 		ValueSize = _snprintf(NULL, 0, "%f", Value.Float) + 1;
 		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
 		_snprintf(ValueString, ValueSize, "%f", Value.Float);
