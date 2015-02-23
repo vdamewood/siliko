@@ -29,41 +29,37 @@ suffices to run cmake with the location of the Xavi's Project's source files:
 cmake ..
 
 On Windows, you will need to specify -G "NMake Makefiles" to use NMake for the build
-process.
+process. You will also need to build in the a Visual Studio command-prompt, which
+sets up an evironment suitable for building software, rather than the default
+command-prompt.
 
 cmake -G "NMake Makefiles" ..
 
 There are additional options that you can specify
 * BUILD_TESTS,           whether or not to build test programs
-* BUILD_XAVISTA          whether or not to build the Qt-based GUI frontend for
-                         Xavi++ (required Qt 5)
+* BUILD_NATIVE_GUI,      whether or not to build GUI frontends using the native
+                         GUI API for the system (Cocoa on OS X; Win32 on Windows;
+                         GTK+ on Linux, FreeBSD, and other Unix-like systems.)
+* BUILD_QT_GUI           whether or not to build the Qt-based GUI frontend for
+                         XaviPP (requires Qt 5)
 
 Use the -D paramter to CMake to specify these options. For example to disable
 building tests:
 
 cmake  .. -DBUILD_TESTS=Off
 
+Building an Installation Package
 
-Building the Installer
-
-On Windows, you will need the Nullsoft Install System to build an installer.
-Once you have it installed, building an installer is as easy as building the
-package target with nmake:
-
-nmake package
-
-On Mac OS X, you can build a drag-and-drop-style disk image with the package
-target:
-
-make package
-
-On Linux and FreeBSD, building a package with CMake is not supported. Instead
-you can build the 'install' target to install Xavi directly:
-
-make install
+CMake allows for building installation packages for various systems. At present,
+the Xavi project is configured to build an installer on Windows using the Nullsoft
+Scriptable Install System, and a Drag-and-Drop disk image on OS X. For other
+systems, It's assumed that an imediate installation suffices, and that package
+maintainers for each system will build installation packages using their own
+processes. To build an installation package on Windows and OS X, build the target
+"package" with make or nmake.
 
 If you are using external tools to build a package file, such as an RPM or DEB
-package, you can use the DESTDIR variable in make to specify a staging location
+package, you can use the DESTDIR variable to make to specify a staging location
 to install the packages:
 
 make DESTDIR=~/build/stage install

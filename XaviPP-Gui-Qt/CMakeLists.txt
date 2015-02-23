@@ -1,39 +1,40 @@
-# XaviPP-Gui-Qt
+# CMakeLists.txt: Build Script
+# Copyright 2012, 2014, 2015 Vincent Damewood
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-set(XaviPP_Gui_Qt_HEADERS     EvalWindow.hpp QStringSource.hpp)
-set(XaviPP_Gui_Qt_MOC_HEADERS EvalWindow.hpp)
-set(XaviPP_Gui_Qt_SOURCES     XaviPP-Gui-Qt.cpp EvalWindow.cpp QStringSource.cpp)
-set(XaviPP_Gui_Qt_UIS         EvalWindow.ui)
-set(XaviPP_Gui_Qt_LIBRARIES   XaviPP ${Qt5Widgets_LIBRARIES})
-set(XaviPP_Gui_Qt_PLUGINS)
+set(EXENAME XaviPP-Gui-Qt)
+set(MHDRS EvalWindow.hpp)
+set(HDRS ${MHDRS} QStringSource.hpp)
+set(SRCS XaviPP-Gui-Qt.cpp EvalWindow.cpp QStringSource.cpp)
+set(QUIS EvalWindow.ui)
+set(LIBS ${CXXLIB} ${Qt5Widgets_LIBRARIES})
 
-message(" Linking XaviPP with: " "${XaviPP_Gui_Qt_LIBRARIES}")
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${Qt5Widgets_INCLUDE_DIRS})
+qt5_wrap_ui(QUISRCS ${QUIS})
+qt5_wrap_cpp(MSRCS ${XaviPP_Gui_Qt_MOC_HEADERS})
 
-include_directories(
-  ${CMAKE_CURRENT_BINARY_DIR}
-  ${Xavi_SOURCE_DIR}
-  ${Qt5Widgets_INCLUDE_DIRS})
-
-qt5_wrap_ui(XaviPP_Gui_Qt_UI_SOURCES ${XaviPP_Gui_Qt_UIS})
-qt5_wrap_cpp(XaviPP_Gui_Qt_MOC_SOURCES ${XaviPP_Gui_Qt_MOC_HEADERS})
-
-add_executable(XaviPP-Gui-Qt
-  WIN32 MACOSX_BUNDLE
-  ${XaviPP_Gui_Qt_SOURCES}
-  ${XaviPP_Gui_Qt_UI_SOURCES}
-  ${XaviPP_Gui_Qt_MOC_SOURCES})
-target_link_libraries(XaviPP-Gui-Qt
-  ${XaviPP_Gui_Qt_LIBRARIES})
-
-install(TARGETS XaviPP-Gui-Qt
+add_executable(${EXENAME} WIN32 MACOSX_BUNDLE ${SRCS} ${QUISRCS} ${MSRCS})
+target_link_libraries(${EXENAME} ${LIBS})
+install(TARGETS ${EXENAME}
   RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH}
-  BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH}
-)
+  BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH})
 
 if(APPLE)
     set(PREPARE_BUNDLE ON)
-    set(XaviPP_Gui_Qt_EXECUTABLE "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.app")
-    set(XaviPP_Gui_Qt_QT_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.app/Contents/PlugIns/")
+    set(BUNDLE_EXENAME "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.app")
+    set(BUNDLE_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.app/Contents/PlugIns/")
     install(CODE
       "FILE(
         INSTALL \"${Xavi_SOURCE_DIR}/XaviPP-Gui-Qt/qt.conf\"
@@ -42,8 +43,8 @@ if(APPLE)
     )
 elseif(WIN32)
     set(PREPARE_BUNDLE ON)
-    set(XaviPP_Gui_Qt_EXECUTABLE "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.exe")
-    set(XaviPP_Gui_Qt_QT_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}")
+    set(BUNDLE_EXENAME "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.exe")
+    set(BUNDLE_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}")
 else()
     set(PREPARE_BUNDLE OFF)
 endif()
@@ -56,10 +57,10 @@ if(PREPARE_BUNDLE)
     string(SUBSTRING "${plugin}" "${idx}" -1 short)
     string(FIND ${short} "/" idxs REVERSE)
     string(SUBSTRING ${short} 0 ${idxs} directory)
-    install(CODE "FILE(INSTALL ${plugin} DESTINATION \"${XaviPP_Gui_Qt_QT_PLUGIN_DIR}/${directory}\")")
-    list(APPEND XaviPP_Gui_Qt_PLUGINS "${XaviPP_Gui_Qt_QT_PLUGIN_DIR}/${short}")
+    install(CODE "FILE(INSTALL ${plugin} DESTINATION \"${BUNDLE_PLUGIN_DIR}/${directory}\")")
+    list(APPEND XaviPP_Gui_Qt_PLUGINS "${BUNDLE_PLUGIN_DIR}/${short}")
   endforeach()
 
   install(CODE "include(BundleUtilities)")
-  install(CODE "fixup_bundle(\"${XaviPP_Gui_Qt_EXECUTABLE}\" \"${XaviPP_Gui_Qt_PLUGINS}\" \"${XaviPP_BINARY_DIR}\")")
+  install(CODE "fixup_bundle(\"${BUNDLE_EXENAME}\" \"${XaviPP_Gui_Qt_PLUGINS}\" \"${XaviPP_BINARY_DIR}\")")
 endif()

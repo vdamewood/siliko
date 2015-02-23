@@ -1,20 +1,20 @@
 Xavi Project Overview
 
-Xavi and Xavi++ are libraries for processing and evaluating mathematical
+Xavi and XaviPP are libraries for processing and evaluating mathematical
 expressions using mixed integer and floating-point arithmetic. Xavi is
-written in C, and Xavi++ is written in C++. They are both part of the overall
+written in C, and XaviPP is written in C++. They are both part of the overall
 Xavi project. the Xavi Project's home on the web is
 <http://damewood.us/projects/xavi>. For instructions on how to build them, see
 the file Build.txt, included in the source distribution.
 
-Xavi and Xavi++ may be copied, modified, and distributed under the terms of the
+Xavi and XaviPP may be copied, modified, and distributed under the terms of the
 GNU Lesser General Public License version 3 or later. The Xavi Project source
-distribution includes tests and example programs that work with Xavi and Xavi++.
+distribution includes tests and example programs that work with Xavi and XaviPP.
 These programs may be copied, modified, and distributed under the terms of the
 GNU General Public License version 3 or later. See the file GPL-3.0.txt for
 details.
 
-Using their default components Xavi and Xavi++ support infix-notation arithmatic
+Using their default components, Xavi and XaviPP support infix-notation arithmatic
 expressions with the following features:
 
 * Four-function calculations, such as "2 + 2", "3 * 4.0", "9.0 - 3.0" and
@@ -27,10 +27,10 @@ expressions with the following features:
   "3d6" or "1d20".
 * Functions: abs(), acos(), asin(), atan(), ceil(), cos(), cosh(), exp(),
   floor(), log(),log10(), sin(), sinh(), sqrt(), tan(), and tanh().
-* Xavi and Xavi++ ignore space and tab characters in their input, except to
+* Xavi and XaviPP ignore space and tab characters in their input, except to
   separate tokens.
 
-When mixing numeric types, Xavi and Xavi++ will give integer results in
+When mixing numeric types, Xavi and XaviPP will give integer results in
 calculations involving only integers and floating-point results in calculations
 involving either integers and floating-point numbers, or only floating-point
 numbers. If division involves two integers where the result would not be a whole

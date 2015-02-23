@@ -1,48 +1,111 @@
-# Root
+# CMakeLists.txt: Build Script
+# Copyright 2012, 2014, 2015 Vincent Damewood
+#
+# This library is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 ###########################
 # Preamble (Semi-Requied) #
 ###########################
 
-cmake_minimum_required(VERSION 2.8.11)
+if(APPLE OR WIN32)
+    # Objective C files will build as Objective C++ in earlier
+    # versions of Cmake.
+    cmake_minimum_required(VERSION 3.1.0)
+else()
+    # This version is required for BundleUtilities.
+    cmake_minimum_required(VERSION 2.8.6)
+endif()
 
 project(Xavi)
 set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
-
-# These are values shared by multiple subdirectories.
-set(Xavi_VERSION_STRING "${XAVI_VERSION_MAJOR}.${XAVI_VERSION_MINOR}.${XAVI_VERSION_PATCH}")
-set(Xavi_APP_COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015 Vincent Damewood. Licensed under the terms of the GNU General Public License, version 3 or later.")
 set(CMAKE_VERBOSE_MAKEFILE On)
 
 #######################
 # Dependency Searches #
 #######################
 
-# ibtool
+
+# Detect if system has separate math library (libm)
+message("-- Finding Math Library")
+find_library(MATH m)
+if(${MATH} STREQUAL "MATH-NOTFOUND")
+    message("-- Finding Math Library - not needed")
+    set(MATH "")
+else()
+    message("-- Finding Math Library - found")
+endif()
+
+# Find Cocoa and ibtool
 if(APPLE)
+  message("-- Finding Cocoa")
+  find_library(COCOA Cocoa)
+  if(NOT ${COCOA} STREQUAL "COCOA-NOTFOUND")
+    message("-- Finding Cocoa - found")
+    set(COCOA_FOUND Yes)
+  else()
+    message("-- Finding Cocoa - not found")
+    set(COCOA_FOUND No)
+  endif()
+
   message("-- Finding ibtool")
   find_program(IBTOOL ibtool)
   if (NOT ${IBTOOL} STREQUAL "IBTOOL-NOTFOUND")
-    message("-- Finding ibtool: - found")
+    message("-- Finding ibtool - found")
     set(IBTOOL_FOUND Yes)
   else()
-    message("-- Finding ibtool: - not found")
+    message("-- Finding ibtool - not found")
     set(IBTOOL_FOUND No)
   endif()
 else()
   set(IBTOOL_FOUND No)
+  set(COCOA_FOUND No)
 endif()
 
-# Qt
-message("-- Finding Qt5Widgets")
-find_package(Qt5Widgets QUIET)
-if(Qt5Widgets_FOUND)
-  message("-- Finding Qt5Widgets - found")
+# Find User32.dll
+if(WIN32)
+  message("-- Finding User32.dll")
+  find_library(USER32 User32)
+  if (NOT ${USER32} STREQUAL "USER32-NOTFOUND")
+    message("-- Finding User32.dll - found")
+    set(USER32_FOUND Yes)
+  else()
+    message("-- Finding User32.dll - not found")
+    set(USER32_FOUND No)
+  endif()
 else()
-  message("-- Finding Qt5Widgets - not found")
+  set(USER32_FOUND No)
+endif()
+
+# Find Qt
+if((CMAKE_MAJOR_VERSION LESS  2)
+  OR (CMAKE_MINOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION LESS  8)
+  OR (CMAKE_MINOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION EQUAL 8 AND CMAKE_PATCH_VERSION LESS 11))
+    set(Qt5Widgets_POSSIBLE No)
+    set(Qt5Widgets_FOUND No)
+    message("-- Can't build with Qt5. Skipping.")
+else()
+    set(Qt5Widgets_POSSIBLE On)
+    message("-- Finding Qt5Widgets")
+    find_package(Qt5Widgets QUIET)
+    if(Qt5Widgets_FOUND)
+        message("-- Finding Qt5Widgets - found")
+    else()
+        message("-- Finding Qt5Widgets - not found")
+    endif()
 endif()
 
 #########################
@@ -50,38 +113,61 @@ endif()
 #########################
 
 # CMake Standard
-option(CMAKE_BUILD_TYPE       "Build as Debug or Release."                         Debug)
-option(BUILD_SHARED_LIBS      "Build Xavi and XaviPP as shared libraries."         On)
+option(CMAKE_BUILD_TYPE   "Build as Debug or Release."                  Debug)
+option(BUILD_SHARED_LIBS  "Build Xavi and XaviPP as shared libraries."  On)
 
-# GUI frontends
-option(BUILD_TESTS            "Build testing programs."                            On)
-option(BUILD_XAVI_GUI_COCOA   "Build a GUI based on Cocoa for Xavi (OS X Only)."   ${APPLE})
-option(BUILD_XAVIPP_GUI_COCOA "Build a GUI based on Cocoa for XaviPP (OS X Only)." ${APPLE})
-option(BUILD_XAVIPP_GUI_QT    "Build a Qt-based GUI frontend to XaviPP."           ${Qt5Widgets_FOUND})
-option(BUILD_XAVI_GUI_WIN32   "Build GUI based on Win32 API (Windows Only)."       ${WIN32})
+# Optional Components
+option(BUILD_TESTS        "Build testing programs."                     On)
+option(BUILD_NATIVE_GUI   "Build a native GUI."                         On)
+if(Qt5Widgets_POSSIBLE)
+  option(BUILD_QT_GUI     "Build a Qt GUI (XaviPP Only)."               ${Qt5Widgets_FOUND})
+endif()
+
+# Enable Platform GUIs
+if (BUILD_PLATFORM_GUI AND APPLE)
+    set(BUILD_COCOA On)
+else()
+    set(BUILD_COCOA Off)
+endif()
+
+if (BUILD_PLATFORM_GUI AND UNIX)
+    set(BUILD_GTK On)
+else()
+    set(BUILD_GTK Off)
+endif()
+
+if (BUILD_PLATFORM_GUI AND WIN32)
+    set(BUILD_WIN32 On)
+else()
+    set(BUILD_WIN32 Off)
+endif()
 
 ####################
 # Failure Messages #
 ####################
 
-if(${BUILD_XAVI_GUI_COCOA} OR ${BUILD_XAVIPP_GUI_COCOA} AND NOT ${IBTOOL_FOUND})
-  message(FATAL_ERROR "Can't build Xavi-Gui-Cocoa or XaviPP-Gui-Cocoa: ibtool not found.")
+if(${BUILD_COCOA} AND NOT ${IBTOOL_FOUND})
+  message(FATAL_ERROR "Can't build native GUI on OS X: ibtool not found.")
 endif()
 
-if(${BUILD_XAVIPP_GUI_QT} AND NOT ${Qt5Widgets_FOUND})
-  message(FATAL_ERROR "Can't build XaviPP-GUI-Qt: Qt5Widgets not found.")
+if(${BUILD_QT_GUI} AND NOT ${Qt5Widgets_FOUND})
+  message(FATAL_ERROR "Can't build Qt GUI: Qt5Widgets not found.")
 endif()
 
-if(${BUILD_XAVI_GUI_WIN32} AND NOT WIN32)
-  message(FATAL_ERROR "Can't build XaviPP-GUI-Win32: not building on Windows.")
-endif()
+############################
+# Build-Independent Values #
+############################
+
+set(VERSION_STRING "${Xavi_VERSION_MAJOR}.${Xavi_VERSION_MINOR}.${Xavi_VERSION_PATCH}")
+set(LIB_COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015 Vincent Damewood. Licensed under the terms of the GNU Lesser General Public License, version 3 or later.")
+set(APP_COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015 Vincent Damewood. Licensed under the terms of the GNU General Public License, version 3 or later.")
+set(BUNDLE_ID_DOMAIN "com.vdamewood")
 
 ###########################
 # System-dependent Values #
 ###########################
 
 if(WIN32)
-  set(MATH_LIB)
   set(RUNTIME_INSTALL_PATH   .)
   set(ARCHIVE_INSTALL_PATH   .)
   set(LIBRARY_INSTALL_PATH   .)
@@ -90,7 +176,6 @@ if(WIN32)
   set(HEADER_INSTALL_PATH    ./include)
   set(DOC_INSTALL_PATH       .)
 elseif(APPLE)
-  set(MATH_LIB)
   set(RUNTIME_INSTALL_PATH   bin)
   set(ARCHIVE_INSTALL_PATH   Error)
   set(LIBRARY_INSTALL_PATH   Error)
@@ -99,7 +184,6 @@ elseif(APPLE)
   set(HEADER_INSTALL_PATH    Error)
   set(DOC_INSTALL_PATH       .)
 elseif(UNIX)
-  set(MATH_LIB               m)
   set(RUNTIME_INSTALL_PATH   bin)
   set(ARCHIVE_INSTALL_PATH   lib)
   set(LIBRARY_INSTALL_PATH   lib)
@@ -129,28 +213,28 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${Xavi_SOURCE_DIR}/Readme.txt")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
   "Xavi is a mathematical expression parser library.")
 set(CPACK_PACKAGE_EXECUTABLES Xavi-Cli "Xavi (Command Line)" XaviPP-Cli "XaviPP (Command Line)")
-if (${BUILD_XAVI_GUI_WIN32})
+if (${BUILD_WIN32})
   list(APPEND CPACK_PACKAGE_EXECUTABLES Xavi-Gui-Win32 "Xavi (Win32 GUI)")
 endif()
-if (${BUILD_XAVIPP_GUI_QT})
-  list(APPEND CPACK_PACKAGE_EXECUTABLES XaviPP-Gui-Qt "Xavi (Qt GUI)")
+if (${BUILD_QT})
+  list(APPEND CPACK_PACKAGE_EXECUTABLES XaviPP-Gui-Qt "XaviPP (Qt GUI)")
 endif()
 set(CPACK_PACKAGE_VERSION_MAJOR ${Xavi_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${Xavi_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${Xavi_VERSION_PATCH})
-set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_STRING}")
 set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
 set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
 set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/Build/")
 set(CPACK_RESOURCE_FILE_README "${Xavi_SOURCE_DIR}/Readme.txt")
 
-if(BUILD_XAVISTA)
-  set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${RUNTIME_INSTALL_PATH})
-endif()
 
 if(WIN32)
   set(CPACK_GENERATOR NSIS)
   set(CPACK_RESOURCE_FILE_LICENSE "${Xavi_SOURCE_DIR}/GPL-3.0.txt")
+  if(BUILD_QT OR BUILD_WIN32)
+    set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${RUNTIME_INSTALL_PATH})
+  endif()
 elseif(APPLE)
   set(CPACK_GENERATOR DragNDrop)
 endif()
@@ -163,7 +247,8 @@ endif()
 add_subdirectory(Xavi)
 add_subdirectory(XaviPP)
 
-# Allow other builds to include library headers.
+# Allow other executable builds to include
+# library headers.
 include_directories(${Xavi_SOURCE_DIR})
 
 # Command-line Programs
@@ -176,17 +261,24 @@ if(${BUILD_TESTS})
 endif()
 
 # GUI Programs
-if(${BUILD_XAVI_GUI_COCOA})
+if(${BUILD_COCOA})
   add_subdirectory(Xavi-Gui-Cocoa)
-endif()
-if(${BUILD_XAVIPP_GUI_COCOA})
   add_subdirectory(XaviPP-Gui-Cocoa)
 endif()
-if(${BUILD_XAVIPP_GUI_QT})
-  add_subdirectory(XaviPP-Gui-Qt)
+
+if(${BUILD_WIN32})
+    add_subdirectory(Xavi-Gui-Win32)
+#    add_subdirectory(XaviPP-Gui-Win32)
 endif()
-if(${BUILD_XAVI_GUI_WIN32})
-  add_subdirectory(Xavi-Gui-Win32)
+
+#if(${BUILD_GTK})
+#  add_subdirectory(Xavi-Gui-Gtk)
+#  add_subdirectory(XaviPP-Gui-Gtk)
+#endif()
+
+if(${BUILD_QT})
+#    add_subdirectory(Xavi-Gui-Qt)
+    add_subdirectory(XaviPP-Gui-Qt)
 endif()
 
 ##################################
@@ -194,7 +286,7 @@ endif()
 ##################################
 
 install(
-  FILES Readme.txt GPL-3.0.txt LGPL-3.0.txt
+  FILES Readme.txt Authors.txt GPL-3.0.txt LGPL-3.0.txt
   DESTINATION ${DOC_INSTALL_PATH})
 
 ###############################################
