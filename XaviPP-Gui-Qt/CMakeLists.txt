@@ -23,9 +23,16 @@ set(LIBS ${CXXLIB} ${Qt5Widgets_LIBRARIES})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${Qt5Widgets_INCLUDE_DIRS})
 qt5_wrap_ui(QUISRCS ${QUIS})
-qt5_wrap_cpp(MSRCS ${XaviPP_Gui_Qt_MOC_HEADERS})
+qt5_wrap_cpp(MSRCS ${MHDRS})
 
-add_executable(${EXENAME} WIN32 MACOSX_BUNDLE ${SRCS} ${QUISRCS} ${MSRCS})
+if(APPLE)
+  set(RESOURCES qt.conf)
+  set_source_files_properties(qt.conf PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+else()
+   set(RESOURCES "")
+endif()
+
+add_executable(${EXENAME} WIN32 MACOSX_BUNDLE ${SRCS} ${QUISRCS} ${MSRCS} ${RESOURCES})
 target_link_libraries(${EXENAME} ${LIBS})
 install(TARGETS ${EXENAME}
   RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH}
@@ -33,34 +40,32 @@ install(TARGETS ${EXENAME}
 
 if(APPLE)
     set(PREPARE_BUNDLE ON)
-    set(BUNDLE_EXENAME "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.app")
-    set(BUNDLE_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.app/Contents/PlugIns/")
-    install(CODE
-      "FILE(
-        INSTALL \"${Xavi_SOURCE_DIR}/XaviPP-Gui-Qt/qt.conf\"
-        DESTINATION \"\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.app/Contents/Resources\"
-       )"
-    )
+    set(BUNDLE_EXENAME "\${CMAKE_INSTALL_PREFIX}/${EXENAME}.app")
+    set(BUNDLE_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}/${EXENAME}.app/Contents/PlugIns/")
 elseif(WIN32)
     set(PREPARE_BUNDLE ON)
-    set(BUNDLE_EXENAME "\${CMAKE_INSTALL_PREFIX}/XaviPP-Gui-Qt.exe")
+    set(BUNDLE_EXENAME "\${CMAKE_INSTALL_PREFIX}/${EXENAME}.exe")
     set(BUNDLE_PLUGIN_DIR "\${CMAKE_INSTALL_PREFIX}")
 else()
     set(PREPARE_BUNDLE OFF)
 endif()
 
 if(PREPARE_BUNDLE)
-  foreach(plugin_target ${Qt5Gui_PLUGINS})
-    get_target_property(plugin ${plugin_target} LOCATION)
-    string(FIND "${plugin}" "plugins/" idx REVERSE)
-    math(EXPR idx "${idx} + 8")
-    string(SUBSTRING "${plugin}" "${idx}" -1 short)
-    string(FIND ${short} "/" idxs REVERSE)
-    string(SUBSTRING ${short} 0 ${idxs} directory)
-    install(CODE "FILE(INSTALL ${plugin} DESTINATION \"${BUNDLE_PLUGIN_DIR}/${directory}\")")
-    list(APPEND XaviPP_Gui_Qt_PLUGINS "${BUNDLE_PLUGIN_DIR}/${short}")
+  foreach(PLUGIN_TARGET ${Qt5Gui_PLUGINS})
+    get_target_property(PLUGIN_ABSOLUTE_PATH ${PLUGIN_TARGET} LOCATION)
+    string(FIND "${PLUGIN_ABSOLUTE_PATH}" "plugins/" INDEX REVERSE)
+    math(EXPR INDEX "${INDEX} + 8")
+    string(SUBSTRING ${PLUGIN_ABSOLUTE_PATH} ${INDEX} -1 PLUGIN_RELATIVE_PATH)
+    string(FIND ${PLUGIN_RELATIVE_PATH} "/" INDEX REVERSE)
+    string(SUBSTRING ${PLUGIN_RELATIVE_PATH} 0 ${INDEX} PLUGIN_RELATIVE_DIR)
+
+    install(CODE "FILE(INSTALL ${PLUGIN_ABSOLUTE_PATH} DESTINATION \"${BUNDLE_PLUGIN_DIR}/${PLUGIN_RELATIVE_DIR}\")")
+    list(APPEND PLUGINS "${BUNDLE_PLUGIN_DIR}/${PLUGIN_RELATIVE_PATH}")
+    message("Plugin:    ${PLUGIN_ABSOLUTE_PATH}")
+    message("Short:     ${PLUGIN_RELATIVE_PATH}")
+    message("Directory: ${PLUGIN_RELATIVE_DIR}")
   endforeach()
 
   install(CODE "include(BundleUtilities)")
-  install(CODE "fixup_bundle(\"${BUNDLE_EXENAME}\" \"${XaviPP_Gui_Qt_PLUGINS}\" \"${XaviPP_BINARY_DIR}\")")
+  install(CODE "fixup_bundle(\"${BUNDLE_EXENAME}\" \"${PLUGINS}\" ${CXXLIB_BINARY_DIR})")
 endif()

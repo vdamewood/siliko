@@ -29,8 +29,6 @@ set(Xavi_VERSION_MAJOR 0)
 set(Xavi_VERSION_MINOR 0)
 set(Xavi_VERSION_PATCH 0)
 
-set(CMAKE_VERBOSE_MAKEFILE On)
-
 #######################
 # Dependency Searches #
 #######################
@@ -110,14 +108,15 @@ endif()
 #########################
 
 # CMake Standard
-option(CMAKE_BUILD_TYPE   "Build as Debug or Release."                  Debug)
-option(BUILD_SHARED_LIBS  "Build Xavi and XaviPP as shared libraries."  On)
+option(CMAKE_BUILD_TYPE        "Build as Debug or Release."            Debug)
+option(BUILD_SHARED_LIBS       "Build libraries as shared libraries."  On)
+option(CMAKE_VERBOSE_MAKEFILES "Verbose output from makefiles."        Off)
 
 # Optional Components
-option(BUILD_TESTS        "Build testing programs."                     On)
-option(BUILD_PLATFORM_GUI "Build a native GUI."                         On)
+option(BUILD_TESTS             "Build testing programs."               On)
+option(BUILD_PLATFORM_GUI      "Build a native GUI for this platform." On)
 if(Qt5Widgets_POSSIBLE)
-  option(BUILD_QT_GUI     "Build a Qt GUI (XaviPP Only)."               ${Qt5Widgets_FOUND})
+  option(BUILD_QT_GUI          "Build a Qt GUI."                       ${Qt5Widgets_FOUND})
 endif()
 
 # Enable Platform GUIs
@@ -139,6 +138,9 @@ else()
     set(BUILD_WIN32 Off)
 endif()
 
+# This is redundant, but keeps things consistent.
+set(BUILD_QT ${BUILD_QT_GUI})
+
 ####################
 # Failure Messages #
 ####################
@@ -147,7 +149,7 @@ if(${BUILD_COCOA} AND NOT ${IBTOOL_FOUND})
   message(FATAL_ERROR "Can't build native GUI on OS X: ibtool not found.")
 endif()
 
-if(${BUILD_QT_GUI} AND NOT ${Qt5Widgets_FOUND})
+if(${BUILD_QT} AND NOT ${Qt5Widgets_FOUND})
   message(FATAL_ERROR "Can't build Qt GUI: Qt5Widgets not found.")
 endif()
 
@@ -244,8 +246,7 @@ endif()
 add_subdirectory(Xavi)
 add_subdirectory(XaviPP)
 
-# Allow other executable builds to include
-# library headers.
+# Allow executable builds to include library headers.
 include_directories(${Xavi_SOURCE_DIR})
 
 # Command-line Programs
