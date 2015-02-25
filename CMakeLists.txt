@@ -86,17 +86,16 @@ else()
 endif()
 
 # Find Qt
-if((CMAKE_MAJOR_VERSION LESS  2)
-  OR (CMAKE_MINOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION LESS  8)
-  OR (CMAKE_MINOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION EQUAL 8 AND CMAKE_PATCH_VERSION LESS 11))
+if(${CMAKE_VERSION} VERSION_LESS "2.8.11")
     set(Qt5Widgets_POSSIBLE No)
     set(Qt5Widgets_FOUND No)
+    set(BUILD_QT_GUI No)
     message("-- Can't build with Qt5 (Needs Cmake 4.8.11 or later). Skipping.")
 else()
     set(Qt5Widgets_POSSIBLE On)
     message("-- Finding Qt5Widgets")
     find_package(Qt5Widgets QUIET)
-    if(Qt5Widgets_FOUND)
+    if(${Qt5Widgets_FOUND})
         message("-- Finding Qt5Widgets - found")
     else()
         message("-- Finding Qt5Widgets - not found")
@@ -196,12 +195,22 @@ endif()
 # Compiler-dependent values #
 #############################
 
+
+if (${CMAKE_C_COMPILER_ID} STREQUAL "Clang"
+  OR ${CMAKE_C_COMPILER_ID} STREQUAL "AppleClang"
+  OR ${CMAKE_C_COMPILER_ID} STREQUAL "GNU")
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11")
+elseif(${CMAKE_C_COMPILER_ID} STREQUAL "SunPro")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+endif()
+
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang"
   OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"
-  OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+  OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU"
+  OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "SunPro")
 
-  list(APPEND CMAKE_C_FLAGS "-std=gnu11")
-  list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
 #############################

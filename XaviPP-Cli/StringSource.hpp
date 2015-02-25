@@ -32,7 +32,7 @@ public:
 
 private:
 	const std::string Source;
-	std::string::const_iterator Iterator;;
+	std::string::const_iterator Iterator;
 };
 
 #endif // STRING_SOURCE_HPP
