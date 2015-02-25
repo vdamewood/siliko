@@ -18,6 +18,8 @@
 
 #include <windows.h>
 
+#include <Xavi/FunctionCaller.h>
+
 #include "EvalWindow.h"
 
 int WINAPI WinMain(
