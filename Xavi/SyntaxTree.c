@@ -225,10 +225,12 @@ static XaviValue EvaluateBranch(XaviSyntaxTreeBranch *Branch)
 	free(Arguments);
 
 	if (Branch->IsNegated)
+	{
 		if (rVal.Status == XAVI_VAL_INTEGER)
 			rVal.Integer *= -1;
 		else if (rVal.Status == XAVI_VAL_FLOAT)
 			rVal.Float *= -1.0;
+	}
 
 	return rVal;
 }
