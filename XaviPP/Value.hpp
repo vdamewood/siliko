@@ -52,11 +52,12 @@ namespace Xavi
 		Value(int NewIntegerValue);
 		Value(float NewFloatValue);
 
-		ValueStatus Status(void) const;
-		int Integer(void) const;
-		float Float(void) const;
+		ValueStatus Status() const;
+		int Integer() const;
+		float Float() const;
 
-		bool IsNumber(void) const;
+		bool IsNumber() const;
+		char *ToCString() const;
 	private:
 		ValueStatus MyStatus;
 		union

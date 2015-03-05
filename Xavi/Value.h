@@ -58,6 +58,8 @@ struct XAVI_API XaviValue
 };
 typedef struct XaviValue XaviValue;
 
+char *XaviValueToString(XaviValue InputValue);
+
 #if defined __cplusplus
 }
 #endif

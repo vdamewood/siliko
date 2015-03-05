@@ -6,18 +6,11 @@
 
 #include <Xavi/StringSource.h>
 #include <Xavi/InfixParser.h>
+#include <Xavi/Value.h>
 
 #if !defined SHARE_PATH
 #error "You must define SHARE_PATH to build this file."
 #endif
-
-static char *ValueToString(XaviValue Value)
-{
-	int ValueSize = snprintf(NULL, 0, "%i", Value.Integer) + 1;
-	char *ValueString = malloc(ValueSize);
-	snprintf(ValueString, ValueSize, "%i", Value.Integer);
-	return ValueString;
-}
 
 static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 {
@@ -30,7 +23,7 @@ static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 	XaviValue Value = XaviSyntaxTreeEvaluate(ResultTree);
 	XaviSyntaxTreeDelete(ResultTree);
 
-	char *ResultString = ValueToString(Value);
+	char *ResultString = XaviValueToString(Value);
 	gtk_label_set_text(
 		GTK_LABEL(
 			glade_xml_get_widget(

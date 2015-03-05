@@ -85,7 +85,6 @@ char *readline(const char *prompt)
 	return rVal;
 }
 
-
 int main(int argc, char *argv[])
 {
 	char *expression;
@@ -114,44 +113,15 @@ int main(int argc, char *argv[])
 		if(!expression)
 			break;
 
-		XaviDataSource *source = XaviStringSourceNew(expression);
-
-		tree = XaviParseInfix(source);
+		tree = XaviParseInfix(
+			XaviStringSourceNew(expression));
 		value = XaviSyntaxTreeEvaluate(tree);
-
 		free(expression);
 		XaviSyntaxTreeDelete(tree);
 
-		switch (value.Status)
-		{
-		case XAVI_VAL_INTEGER:
-			printf("%s%i\n", response, value.Integer);
-			break;
-		case XAVI_VAL_FLOAT:
-			printf("%s%f\n", response, value.Float);
-			break;
-		case XAVI_VAL_MEMORY_ERR:
-			printf("Out of memory.\n");
-			break;
-		case XAVI_VAL_SYNTAX_ERR:
-			printf("Syntax error.\n");
-			break;
-		case XAVI_VAL_ZERO_DIV_ERR:
-			printf("Division by zero error.\n");
-			break;
-		case XAVI_VAL_BAD_FUNCTION:
-			printf("Function not found.\n");
-			break;
-		case XAVI_VAL_BAD_ARGUMENTS:
-			printf("Bad argument count.\n");
-			break;
-		case XAVI_VAL_DOMAIN_ERR:
-			printf("Domain error.\n");
-			break;
-		case XAVI_VAL_RANGE_ERR:
-			printf("Range error.\n");
-			break;
-		}
+		char *ResultString = XaviValueToString(value);
+		printf("%s\n", ResultString);
+		free(ResultString);
 	}
 
 	XaviFunctionCallerTearDown();

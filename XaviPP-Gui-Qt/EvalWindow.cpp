@@ -43,34 +43,8 @@ void EvalWindow::calculate()
 		new QStringSource(input->text()));
 
 	Xavi::Value result = MyTree->Evaluate();
-	switch (result.Status())
-	{
-		case Xavi::Value::INTEGER:
-			output->setNum(result.Integer());
-			break;
-		case Xavi::Value::FLOAT:
-			output->setNum(result.Float());
-			break;
-		case Xavi::Value::MEMORY_ERR:
-			output->setText("Out of memory.\n");
-			break;
-		case Xavi::Value::SYNTAX_ERR:
-			output->setText("Syntax error.\n");
-			break;
-		case Xavi::Value::ZERO_DIV_ERR:
-			output->setText("Division by zero error.\n");
-			break;
-		case Xavi::Value::BAD_FUNCTION:
-			output->setText("Function not found.\n");
-			break;
-		case Xavi::Value::BAD_ARGUMENTS:
-			output->setText("Bad argument count.\n");
-			break;
-		case Xavi::Value::DOMAIN_ERR:
-			output->setText("Domain error.\n");
-			break;
-		case Xavi::Value::RANGE_ERR:
-			output->setText("Range error.\n");
-			break;
-	}
+
+	char *text = result.ToCString();
+	output->setText(text);
+	delete[] text;
 }

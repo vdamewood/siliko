@@ -29,6 +29,7 @@ set(HDRS
   Functions.h
   Hash.h)
 set(SRCS
+  Value.c
   Hash.c
   Functions.c
   FunctionCaller.c

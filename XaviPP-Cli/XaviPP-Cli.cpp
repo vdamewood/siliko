@@ -26,6 +26,8 @@
 #	define ISATTY() (-1)
 #endif
 
+#include <iostream>
+
 #include <XaviPP/FunctionCaller.hpp>
 #include <XaviPP/InfixParser.hpp>
 
@@ -114,41 +116,13 @@ int main(int argc, char *argv[])
 		Tree = Xavi::ParseInfix(new StringSource(expression));
 		free(expression);
 
-		//MyParser.Parse();
 		Xavi::Value result = Tree->Evaluate();
 		delete Tree;
 		Tree = 0;
 
-		switch (result.Status())
-		{
-		case Xavi::Value::INTEGER:
-			printf("%s%i\n", response, result.Integer());
-			break;
-		case Xavi::Value::FLOAT:
-			printf("%s%f\n", response, result.Float());
-			break;
-		case Xavi::Value::MEMORY_ERR:
-			printf("Out of memory.\n");
-			break;
-		case Xavi::Value::SYNTAX_ERR:
-			printf("Syntax error.\n");
-			break;
-		case Xavi::Value::ZERO_DIV_ERR:
-			printf("Division by zero error.\n");
-			break;
-		case Xavi::Value::BAD_FUNCTION:
-			printf("Function not found.\n");
-			break;
-		case Xavi::Value::BAD_ARGUMENTS:
-			printf("Bad argument count.\n");
-			break;
-		case Xavi::Value::DOMAIN_ERR:
-			printf("Domain error.\n");
-			break;
-		case Xavi::Value::RANGE_ERR:
-			printf("Range error.\n");
-			break;
-		}
+		char *ResultString = result.ToCString();
+		std::cout << ResultString << std::endl;
+		delete[] ResultString;
 	}
 
 	Xavi::FunctionCaller::TearDown();
