@@ -16,13 +16,17 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if defined _WIN32 && defined _MSC_VER
+ #define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "Value.h"
 
-#if defined _WIN32
+#if defined _WIN32 && defined _MSC_VER
 #define strdup _strdup
 #define snprintf _snprintf
 #endif

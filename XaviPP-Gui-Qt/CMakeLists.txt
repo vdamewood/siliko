@@ -61,9 +61,6 @@ if(PREPARE_BUNDLE)
 
     install(CODE "FILE(INSTALL ${PLUGIN_ABSOLUTE_PATH} DESTINATION \"${BUNDLE_PLUGIN_DIR}/${PLUGIN_RELATIVE_DIR}\")")
     list(APPEND PLUGINS "${BUNDLE_PLUGIN_DIR}/${PLUGIN_RELATIVE_PATH}")
-    message("Plugin:    ${PLUGIN_ABSOLUTE_PATH}")
-    message("Short:     ${PLUGIN_RELATIVE_PATH}")
-    message("Directory: ${PLUGIN_RELATIVE_DIR}")
   endforeach()
 
   install(CODE "include(BundleUtilities)")

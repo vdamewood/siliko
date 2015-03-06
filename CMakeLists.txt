@@ -14,12 +14,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-###########################
-# Preamble (Semi-Requied) #
-###########################
+############################
+# Preamble (Semi-Required) #
+############################
 
 if(APPLE)
     cmake_minimum_required(VERSION 3.1.0)
+elseif(WIN32)
+    cmake_minimum_required(VERSION 2.8.11)
 else()
     cmake_minimum_required(VERSION 2.8.6)
 endif()
@@ -131,7 +133,7 @@ if(${CMAKE_VERSION} VERSION_LESS "2.8.11")
     set(Qt5Widgets_POSSIBLE No)
     set(Qt5Widgets_FOUND No)
     set(BUILD_QT_GUI No)
-    message("-- Can't build with Qt5 (Needs Cmake 4.8.11 or later). Skipping.")
+    message("-- Can't build with Qt5 (Needs Cmake 2.8.11 or later). Skipping.")
 else()
     set(Qt5Widgets_POSSIBLE On)
     message("-- Finding Qt5Widgets")

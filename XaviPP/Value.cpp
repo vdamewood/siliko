@@ -16,6 +16,10 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if defined _WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+ 
 #include <cstring>
 #include <sstream>
 #include <limits>
