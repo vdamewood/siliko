@@ -345,8 +345,8 @@ if(${BUILD_GTKMM})
 endif()
 
 if(${BUILD_QT})
-#    add_subdirectory(Xavi-Gui-Qt)
-    add_subdirectory(XaviPP-Gui-Qt)
+  add_subdirectory(Xavi-Gui-Qt)
+  add_subdirectory(XaviPP-Gui-Qt)
 endif()
 
 ##################################
