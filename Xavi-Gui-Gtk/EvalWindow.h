@@ -1,3 +1,3 @@
-#include <glade/glade.h>
+#include <gtk/gtk.h>
 
-GladeXML *EvalWindowNew(void);
+GtkBuilder *EvalWindowNew(void);

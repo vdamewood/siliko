@@ -24,11 +24,6 @@ void EvalWindow::Calculate()
 
 	char *ResultString = Value.ToCString();
 	MyOutput->set_text(ResultString);
-	/*gtk_label_set_text(
-		GTK_LABEL(
-			glade_xml_get_widget(
-			GLADE_XML(EvalWindow), "Output")),
-		ResultString);*/
 	delete[] ResultString;
 }
 

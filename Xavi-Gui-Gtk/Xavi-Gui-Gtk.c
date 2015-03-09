@@ -1,5 +1,4 @@
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include <Xavi/FunctionCaller.h>
 
@@ -9,7 +8,8 @@ int main(int argc, char *argv[])
 {
 	gtk_init(&argc, &argv);
 	XaviFunctionCallerSetUp();
-	GladeXML *MainWindow = EvalWindowNew();
+	GtkBuilder *MainWindow = EvalWindowNew();
+	gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(MainWindow, "EvalWindow")));
 	gtk_main();
 	XaviFunctionCallerTearDown();
 	return 0;

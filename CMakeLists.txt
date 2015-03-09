@@ -89,7 +89,7 @@ endif()
 
 if(UNIX AND NOT APPLE)
   message("-- Finding GTK+ 2")
-  find_package(GTK2 QUIET COMPONENTS gtk glade)
+  find_package(GTK2 QUIET COMPONENTS gtk)
   if(GTK2_FOUND)
     message("-- Finding GTK+ 2 - found")
 
