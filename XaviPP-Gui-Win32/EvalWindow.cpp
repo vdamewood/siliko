@@ -83,7 +83,7 @@ BOOL EvalWindow::PreTranslateMessage(MSG *Message)
 		&& Message->message == WM_KEYDOWN
 		&& Message->wParam == VK_RETURN)
 	{
-		PostMessage(WM_COMMAND, 102, 0);
+		PostMessage(WM_COMMAND, CALCULATOR_BUTTON, 0);
 		return TRUE;
 	}
 
