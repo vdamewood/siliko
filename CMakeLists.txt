@@ -72,8 +72,8 @@ else()
   set(COCOA_FOUND No)
 endif()
 
-# Find User32.dll
 if(WIN32)
+  # Find User32.dll -- Needed for Windows API
   message("-- Finding User32.dll")
   find_library(USER32 User32)
   if (NOT ${USER32} STREQUAL "USER32-NOTFOUND")
@@ -83,9 +83,21 @@ if(WIN32)
     message("-- Finding User32.dll - not found")
     set(USER32_FOUND No)
   endif()
+  
+  # Find MFC Framework -- C++ wrapper around Windows API
+  #message("-- Finding MFC Framework")
+  find_package(MFC QUIET)
+  #if(MFC_FOUND)
+  #  message("-- Finding MFC Framework - found")
+  #else()
+  #  message("-- Finding MFC Framework - not found")
+  #endif()
 else()
   set(USER32_FOUND No)
+  set(MFC_FOUND No)
 endif()
+
+
 
 if(UNIX AND NOT APPLE)
   message("-- Finding GTK+ 2")
@@ -334,7 +346,7 @@ endif()
 
 if(${BUILD_WIN32})
     add_subdirectory(Xavi-Gui-Win32)
-#    add_subdirectory(XaviPP-Gui-Win32)
+    add_subdirectory(XaviPP-Gui-Win32)
 endif()
 
 if(${BUILD_GTK})
