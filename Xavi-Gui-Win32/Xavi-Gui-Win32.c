@@ -17,7 +17,6 @@
  */
 
 #include <windows.h>
-
 #include <Xavi/FunctionCaller.h>
 
 #include "EvalWindow.h"
@@ -33,24 +32,21 @@ int WINAPI WinMain(
 
 	XaviFunctionCallerSetUp();
 
-	if(!RegisterEvalWindowClass(hInstance))
+	if(!EvalWindowRegister(hInstance)
+		|| !(Handle = EvalWindowCreate(hInstance)))
 	{
-		MessageBox(NULL, "Xavi was unable to register the evaluation window.", "Startup Error", MB_ICONEXCLAMATION | MB_OK);
+		MessageBox(NULL, "Xavi failed to initialize the evaluation window.", "Startup Error", MB_ICONEXCLAMATION | MB_OK);
 		return 1;
 	}
 
-	if (!(Handle = CreateEvalWindow(hInstance)))
-	{
-		MessageBox(NULL, "Xavi was unable to create the evaluation window.", "Startup Error", MB_ICONEXCLAMATION | MB_OK);
-		return 1;
-	}
-
+	
 	ShowWindow(Handle, nCmdShow);
+	PostMessage(Handle, WM_SIZE, 0, 0);
 	UpdateWindow(Handle);
 
 	while(GetMessage(&Message, NULL, 0, 0) > 0)
 	{
-		if(!HandleEvalWindowEvent(Handle, &Message))
+		if(!EvalWindowPretranslateMessage(Handle, &Message))
 		{
 			TranslateMessage(&Message);
 			DispatchMessage(&Message);

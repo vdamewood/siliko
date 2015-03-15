@@ -1,5 +1,5 @@
 /*
- * Menu.h: Menus for calculator window
+ * Menu.rc: Menus for calculator window
  * Copyright 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,12 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined MENU_H
-#define MENU_H
- 
-#define XAVI_MENU 0xA0
+#include "Id.h"
 
-#define CALCULATOR_EXIT 0xA1
-#define HELP_ABOUT 0xA2
+EVAL_WINDOW_MENU MENU
+BEGIN
+    POPUP "&Calculator"
+    BEGIN
+        MENUITEM "E&xit", CALCULATOR_EXIT
+    END
 
-#endif /* MENU_H */
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About", HELP_ABOUT
+    END
+END

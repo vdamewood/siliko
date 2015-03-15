@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- #if !defined ABOUT_H
+#if !defined ABOUT_H
 #define ABOUT_H
-
-#define ABOUT_DIALOG 0xB0
 
 BOOL CALLBACK AboutDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

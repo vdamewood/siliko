@@ -27,136 +27,109 @@
  
 #include "EvalWindow.h"
 #include "About.h"
-#include "Menu.h"
+#include "Id.h"
 
-#define CALCULATOR_INPUT  0x91
-#define CALCULATOR_OUTPUT 0x92
-#define CALCULATOR_BUTTON 0x93
+#define OUT_BORDER    8
+#define IN_BORDER     4
+#define TEXT_HEIGHT   24
+#define BUTTON_HEIGHT 28
+#define BUTTON_WIDTH  100
 
-BOOL BuildWindow(HWND hwnd)
+#define MIN_HEIGHT    (70 + OUT_BORDER * 2 + TEXT_HEIGHT + BUTTON_HEIGHT + IN_BORDER)
+#define MIN_WIDTH     420
+
+#define INPUT_X       OUT_BORDER
+#define INPUT_Y       OUT_BORDER
+#define INPUT_HT      TEXT_HEIGHT
+#define INPUT_WT      (OUT_BORDER * 2)
+
+#define OUTPUT_X      OUT_BORDER
+#define OUTPUT_Y      (OUT_BORDER + TEXT_HEIGHT + IN_BORDER)
+#define OUTPUT_HT     TEXT_HEIGHT
+#define OUTPUT_WT     (OUT_BORDER * 2 + IN_BORDER + BUTTON_WIDTH)
+
+#define BUTTON_X      (BUTTON_WIDTH + OUT_BORDER)
+#define BUTTON_Y      OUTPUT_Y
+#define BUTTON_HT     BUTTON_HEIGHT
+#define BUTTON_WT     BUTTON_WIDTH
+
+void OnCreate(HWND Handle)
 {
-	HWND Input;
-	HWND Output;
-	HWND Button;
-
-	Input = CreateWindowEx(
+	CreateWindowEx(
 		WS_EX_CLIENTEDGE, "EDIT", "", WS_CHILD | WS_VISIBLE,
-		8, 8, 24, 24, hwnd, (HMENU)CALCULATOR_INPUT,
+		INPUT_X, INPUT_Y, MIN_WIDTH - INPUT_WT, INPUT_HT,
+		Handle, (HMENU)CALCULATOR_INPUT,
 		GetModuleHandle(NULL), NULL);
-	Output = CreateWindowEx(
-		0, "STATIC", "0", WS_CHILD | WS_VISIBLE,
-		8, 36, 48, 24, hwnd, (HMENU)CALCULATOR_OUTPUT,
+	CreateWindowEx(
+		0, "STATIC", "", WS_CHILD | WS_VISIBLE,
+		OUTPUT_X, OUTPUT_Y, MIN_WIDTH - OUTPUT_WT, OUTPUT_HT,
+		Handle, (HMENU)CALCULATOR_OUTPUT,
 		GetModuleHandle(NULL), NULL);
-	Button = CreateWindowEx(
+	CreateWindowEx(
 		0, "BUTTON", "Calculate", WS_CHILD | WS_VISIBLE,
-		8, 36, 100, 28, hwnd, (HMENU)CALCULATOR_BUTTON,
+		MIN_WIDTH - BUTTON_X, BUTTON_Y, BUTTON_WT, BUTTON_HT,
+		Handle, (HMENU)CALCULATOR_BUTTON,
 		GetModuleHandle(NULL), NULL);
-
-	return (BOOL) (Input && Output && Button);
 }
 
-void ConstrainSize(WPARAM Edge, PRECT Area)
+
+void OnGetMinMaxInfo(HWND hwnd, MINMAXINFO *info)
 {
-	switch (Edge)
-	{
-	case WMSZ_TOP:
-	case WMSZ_TOPLEFT:
-	case WMSZ_TOPRIGHT:
-		Area->top = Area->bottom - 134;
-		break;
-	case WMSZ_BOTTOM:
-	case WMSZ_BOTTOMLEFT:
-	case WMSZ_BOTTOMRIGHT:
-		Area->bottom = Area->top + 134;
-		break;
-	}
-
-	switch (Edge)
-	{
-	case WMSZ_LEFT:
-	case WMSZ_TOPLEFT:
-	case WMSZ_BOTTOMLEFT:
-		if (Area->right - Area->left < 420)
-			Area->left = Area->right - 420;
-	case WMSZ_RIGHT:
-	case WMSZ_TOPRIGHT:
-	case WMSZ_BOTTOMRIGHT:
-		if (Area->right - Area->left < 420)
-			Area->right = Area->left + 420;
-	}
+	info->ptMinTrackSize.x = MIN_WIDTH;
+	info->ptMinTrackSize.y = MIN_HEIGHT;	
 }
 
-void ResizeControls(HWND hwnd)
+void OnSize(HWND hwnd)
 {
 	RECT Area;
 	GetClientRect(hwnd, &Area);
 
-	SetWindowPos(GetDlgItem(hwnd, CALCULATOR_INPUT),
-		NULL, 8, 8, Area.right - 16, 24, SWP_NOZORDER);
-	SetWindowPos(GetDlgItem(hwnd, CALCULATOR_OUTPUT),
-		NULL, 8, 36, Area.right - 124, 24, SWP_NOZORDER);
-	SetWindowPos(GetDlgItem(hwnd, CALCULATOR_BUTTON),
-		NULL, Area.right - 108, 36, 100, 28, SWP_NOZORDER);
+	SetWindowPos(GetDlgItem(hwnd, CALCULATOR_INPUT), NULL,
+		INPUT_X, INPUT_Y, Area.right - INPUT_WT, INPUT_HT,
+		SWP_NOZORDER);
+	SetWindowPos(GetDlgItem(hwnd, CALCULATOR_OUTPUT), NULL,
+		OUTPUT_X, OUTPUT_Y, Area.right - OUTPUT_WT, OUTPUT_HT,
+		SWP_NOZORDER);
+	SetWindowPos(GetDlgItem(hwnd, CALCULATOR_BUTTON), NULL,
+		Area.right - BUTTON_X, BUTTON_Y, BUTTON_WT, BUTTON_HT,
+		SWP_NOZORDER);
 }
 
-void RenderCalculation(HWND hwnd)
+
+void OnCalculate(HWND hwnd)
 {
 	int ExpressionSize;
-	int ValueSize;
-	char *ExpressionString;
-	char *ValueString;
+	char *tmpString;
 	XaviSyntaxTreeNode *Node;
 	XaviValue Value;
 
 	ExpressionSize = GetWindowTextLength(GetDlgItem(hwnd, CALCULATOR_INPUT)) + 1;
-	ExpressionString = (char*)GlobalAlloc(GPTR, ExpressionSize);
-	GetDlgItemText(hwnd, CALCULATOR_INPUT, ExpressionString, ExpressionSize);
+	tmpString = (char*)GlobalAlloc(GPTR, ExpressionSize);
+	GetDlgItemText(hwnd, CALCULATOR_INPUT, tmpString, ExpressionSize);
 	
-	Node = XaviParseInfix(XaviStringSourceNew(ExpressionString));
+	Node = XaviParseInfix(XaviStringSourceNew(tmpString));
+	GlobalFree((HANDLE)tmpString);
+
 	Value = XaviSyntaxTreeEvaluate(Node);
 	free(Node);
-	
-	switch (Value.Status)
-	{
-	case XAVI_VAL_INTEGER:
-		ValueSize = _snprintf(NULL, 0, "%i", Value.Integer) + 1;
-		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
-		_snprintf(ValueString, ValueSize, "%i", Value.Integer);
-		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
-		GlobalFree((HANDLE)ValueString);
-		break;
-	case XAVI_VAL_FLOAT:
-		ValueSize = _snprintf(NULL, 0, "%f", Value.Float) + 1;
-		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
-		_snprintf(ValueString, ValueSize, "%f", Value.Float);
-		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
-		GlobalFree((HANDLE)ValueString);
-		break;
-	default:
-		ValueSize = _snprintf(NULL, 0, "I'm too lazy to report. (%i)", (int)Value.Status);
-		ValueString = (char*)GlobalAlloc(GPTR, ValueSize);
-		_snprintf(ValueString, ValueSize, "I'm too lazy to report. (%i)", (int)Value.Status);
-		SetDlgItemText(hwnd, CALCULATOR_OUTPUT, ValueString);
-		GlobalFree((HANDLE)ValueString);
-		break;
-	}
 
-	GlobalFree((HANDLE)ExpressionString);
+	tmpString = XaviValueToString(Value);
+	SetDlgItemText(hwnd, CALCULATOR_OUTPUT, tmpString);
+	free(tmpString);
 }
 
-LRESULT CALLBACK CalculatorWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK EvalWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch(uMsg)
 	{
 	case WM_CREATE:
-		if (!BuildWindow(hwnd))
-			MessageBox(hwnd, "Error creating controls.", "Startup Error", MB_OK | MB_ICONERROR);
+		OnCreate(hwnd);
 		return 0;
-	case WM_SIZING:
-		ConstrainSize(wParam, (PRECT)lParam);
+	case WM_GETMINMAXINFO:
+		OnGetMinMaxInfo(hwnd, (MINMAXINFO*)lParam);
 		return 0;
 	case WM_SIZE:
-		ResizeControls(hwnd);
+		OnSize(hwnd);
 		return 0;
 	case WM_CLOSE:
 		DestroyWindow(hwnd);
@@ -167,36 +140,36 @@ LRESULT CALLBACK CalculatorWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
         case WM_COMMAND:
         	switch(LOWORD(wParam))
         	{
-		case CALCULATOR_BUTTON:
-			RenderCalculation(hwnd);
-			return 0;
-		case HELP_ABOUT:
-			DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(ABOUT_DIALOG), hwnd, (DLGPROC)AboutDialogProc);
-			return 0;
-		case CALCULATOR_EXIT:
-			PostMessage(hwnd, WM_CLOSE, 0, 0);
-			return 0;
-		default:
-			return 0;
-		}
+			case CALCULATOR_BUTTON:
+				OnCalculate(hwnd);
+				return 0;
+			case HELP_ABOUT:
+				DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(ABOUT_DIALOG), hwnd, (DLGPROC)AboutDialogProc);
+				return 0;
+			case CALCULATOR_EXIT:
+				PostMessage(hwnd, WM_CLOSE, 0, 0);
+				return 0;
+			default:
+				return 0;
+			}
 	default:
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 }
 
-ATOM RegisterEvalWindowClass(HINSTANCE hInstance)
+ATOM EvalWindowRegister(HINSTANCE hInstance)
 {
 	WNDCLASSEX CalculatorClass;
 
 	CalculatorClass.cbSize = sizeof(WNDCLASSEX);
 	CalculatorClass.style = 0;
-	CalculatorClass.lpfnWndProc = CalculatorWindowProc;
+	CalculatorClass.lpfnWndProc = EvalWindowProc;
 	CalculatorClass.cbClsExtra = 0;
 	CalculatorClass.cbWndExtra = 0;
 	CalculatorClass.hInstance = hInstance;
 	CalculatorClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	CalculatorClass.hbrBackground = (HBRUSH)(COLOR_WINDOW);
-	CalculatorClass.lpszMenuName = MAKEINTRESOURCE(XAVI_MENU);
+	CalculatorClass.lpszMenuName = MAKEINTRESOURCE(EVAL_WINDOW_MENU);
 	CalculatorClass.lpszClassName = "EvalWindow";
 	CalculatorClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	CalculatorClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
@@ -204,18 +177,18 @@ ATOM RegisterEvalWindowClass(HINSTANCE hInstance)
 	return RegisterClassEx(&CalculatorClass);
 }
 
-HWND CreateEvalWindow(HINSTANCE hInstance)
+HWND EvalWindowCreate(HINSTANCE hInstance)
 {
 	return CreateWindowEx(
 		WS_EX_CLIENTEDGE,
 		"EvalWindow",
 		"Xavi",
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, 420, 134,
+		CW_USEDEFAULT, CW_USEDEFAULT, MIN_WIDTH, MIN_HEIGHT,
 		NULL, NULL, hInstance, NULL);
 }
 
-int HandleEvalWindowEvent(HWND Handle, MSG *Message)
+int EvalWindowPretranslateMessage(HWND Handle, MSG *Message)
 {
 	if (GetDlgCtrlID(Message->hwnd) == CALCULATOR_INPUT
 			&& Message->message == WM_KEYDOWN

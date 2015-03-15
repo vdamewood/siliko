@@ -15,8 +15,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 set(EXENAME Xavi-Gui-Win32)
-set(HDRS EvalWindow.h About.h Menu.h)
-set(SRCS Xavi-Gui-Win32.c EvalWindow.c Menu.rc About.c About.rc)
+set(HDRS EvalWindow.h About.h Id.h)
+set(SRCS Xavi-Gui-Win32.c EvalWindow.c EvalWindow.rc About.c About.rc)
 set(LIBS ${USER32} ${CLIB})
 
 add_executable(${EXENAME} WIN32 ${HDRS} ${SRCS})

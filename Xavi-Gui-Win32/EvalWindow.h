@@ -21,8 +21,8 @@
 
 #include <windows.h>
 
-ATOM RegisterEvalWindowClass(HINSTANCE hInstance);
-HWND CreateEvalWindow(HINSTANCE hInstance);
-BOOL HandleEvalWindowEvent(HWND Handle, MSG *Message);
+ATOM EvalWindowRegister(HINSTANCE hInstance);
+HWND EvalWindowCreate(HINSTANCE hInstance);
+BOOL EvalWindowPretranslateMessage(HWND Handle, MSG *Message);
 
 #endif /* EVAL_WINDOW_H */
