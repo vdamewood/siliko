@@ -1,5 +1,5 @@
 /*
- * AboutRc.h: About dialogue window
+ * Id.h: ID Numbers
  * Copyright 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined ABOUTRC_H
-#define ABOUTRC_H
+#if !defined ID_H
+#define ID_H
 
-#define ABOUT_DIALOG 0xB0
+#define ABOUT_DIALOG      0xB0
+#define CALCULATOR_INPUT  0x91
+#define CALCULATOR_OUTPUT 0x92
+#define CALCULATOR_BUTTON 0x93
+#define XAVI_MENU         0xA0
+#define CALCULATOR_EXIT   0xA1
+#define HELP_ABOUT        0xA2
 
-#endif /* ABOUTRC_H */
+#endif /* ID_H */

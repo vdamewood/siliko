@@ -27,20 +27,18 @@ public:
 	EvalWindow();
 	BOOL PreTranslateMessage(MSG *Message);
 
-	afx_msg void Calculate();
-	afx_msg void CalculatorExit();
-	afx_msg void HelpAbout();
-
 protected:
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnSizing(UINT nSide, LPRECT lpRect);
+	void OnGetMinMaxInfo(MINMAXINFO* pMMI);
+	void OnSize(UINT nType, int cx, int cy);
+	void Calculate();
+	void CalculatorExit();
+	void HelpAbout();
 	DECLARE_MESSAGE_MAP();
 
 private:
-	CStatic m_output;
-	CEdit m_input;
-	CButton m_button;
-	CMenu m_menu;
+	CStatic Output;
+	CEdit Input;
+	CButton Button;
 };
 
 #endif /* EVAL_WINDOW_HPP */

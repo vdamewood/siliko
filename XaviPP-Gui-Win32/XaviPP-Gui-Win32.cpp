@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _WIN32_WINNT NTDDI_WIN7
 #include <afxwin.h>
 
 #include <XaviPP/FunctionCaller.hpp>

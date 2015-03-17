@@ -21,8 +21,6 @@
 
 #include <afxdialogex.h>
 
-#define ABOUT_DIALOG 0xB0
-
 class AboutDialog : public CDialogEx
 {
 	public:

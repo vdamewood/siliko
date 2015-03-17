@@ -16,29 +16,55 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _WIN32_WINNT NTDDI_WIN7
-#include <afxwin.h>
 #include <cstdlib>
+#include <afxwin.h>
 
 #include <XaviPP/CStringSource.hpp>
 #include <XaviPP/InfixParser.hpp>
 #include <XaviPP/Value.hpp>
 
-#include "Menu.h"
 #include "About.hpp"
 #include "EvalWindow.hpp"
+#include "Id.h"
 
-#define WIDTH 442
-#define HEIGHT (GetSystemMetrics(SM_CYMENU) + 112)
-#define CALCULATOR_INPUT  0x91
-#define CALCULATOR_OUTPUT 0x92
-#define CALCULATOR_BUTTON 0x93
+#define OUT_BORDER    8
+#define IN_BORDER     4
+#define TEXT_HEIGHT   24
+#define BUTTON_HEIGHT 28
+#define BUTTON_WIDTH  100
+
+#define MIN_HEIGHT    (70 + OUT_BORDER * 2 + TEXT_HEIGHT + BUTTON_HEIGHT + IN_BORDER)
+#define MIN_WIDTH     420
+
+#define INPUT_X       OUT_BORDER
+#define INPUT_Y       OUT_BORDER
+#define INPUT_HT      TEXT_HEIGHT
+#define INPUT_WT      (OUT_BORDER * 2)
+#define INPUT_X2      (MIN_WIDTH - OUT_BORDER*4)
+#define INPUT_Y2      (INPUT_X + INPUT_HT)
+
+
+#define OUTPUT_X      OUT_BORDER
+#define OUTPUT_Y      (OUT_BORDER + TEXT_HEIGHT + IN_BORDER)
+#define OUTPUT_HT     TEXT_HEIGHT
+#define OUTPUT_WT     (OUT_BORDER * 2 + IN_BORDER + BUTTON_WIDTH)
+#define OUTPUT_X2     (MIN_WIDTH - OUT_BORDER*4 - IN_BORDER - BUTTON_WIDTH)
+#define OUTPUT_Y2     (OUTPUT_Y + OUTPUT_HT)
+
+#define BUTTON_X      (BUTTON_WIDTH + OUT_BORDER)
+#define BUTTON_Y      OUTPUT_Y
+#define BUTTON_HT     BUTTON_HEIGHT
+#define BUTTON_WT     BUTTON_WIDTH
+#define BUTTON_X2     (MIN_WIDTH - OUT_BORDER*4)
+#define BUTTON_Y2     (BUTTON_Y + BUTTON_WT)
+
+
 
 BEGIN_MESSAGE_MAP(EvalWindow, CFrameWnd)
 	ON_COMMAND(CALCULATOR_BUTTON, &EvalWindow::Calculate)
 	ON_COMMAND(CALCULATOR_EXIT, &EvalWindow::CalculatorExit)
 	ON_COMMAND(HELP_ABOUT, &EvalWindow::HelpAbout)
-	ON_WM_SIZING()
+	ON_WM_GETMINMAXINFO()
 	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
@@ -48,38 +74,45 @@ EvalWindow::EvalWindow()
 		AfxRegisterWndClass(0, 0, (HBRUSH)(COLOR_WINDOW), 0),
 		"XaviPP");
 
-	m_input.Create(
+	Input.Create(
 		WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_AUTOHSCROLL | WS_BORDER,
-		CRect(8, 8, 412, 32), this, CALCULATOR_INPUT);
-	m_output.Create( 
+		CRect(INPUT_X, INPUT_Y, INPUT_X2, INPUT_Y2), this, CALCULATOR_INPUT);
+	Output.Create( 
 		_T(""),
 		WS_CHILD | WS_VISIBLE, 
-		CRect(8, 32, 304, 56), this, CALCULATOR_OUTPUT);
-	m_button.Create( 
+		CRect(OUTPUT_X, OUTPUT_Y, OUTPUT_X2, OUTPUT_Y2), this, CALCULATOR_OUTPUT);
+	Button.Create( 
 		_T("Calculate"),
 		WS_CHILD | WS_VISIBLE, 
-		CRect(304, 32, 412, 60), this, CALCULATOR_BUTTON);
+		CRect(MIN_WIDTH - BUTTON_X, BUTTON_Y, BUTTON_X2, OUTPUT_Y2), this, CALCULATOR_BUTTON);
 
-	SetWindowPos(NULL, 0, 0, WIDTH, HEIGHT, SWP_NOZORDER | SWP_NOMOVE);
+	SetWindowPos(NULL, 0, 0, MIN_WIDTH, MIN_HEIGHT, SWP_NOZORDER | SWP_NOMOVE);
 	CMenu menu;
 	menu.LoadMenu(XAVI_MENU);
 	SetMenu(&menu);
 	menu.Detach();
-	m_input.SetFocus();
+	Input.SetFocus();
 }
 
 void EvalWindow::OnSize(UINT nType, int cx, int cy)
 {
 	CFrameWnd::OnSize(nType, cx, cy);
-	m_input.SetWindowPos(NULL, 8, 8, cx - 16, 24, SWP_NOZORDER);
-	m_output.SetWindowPos(NULL, 8, 36, cx - 124, 24, SWP_NOZORDER);
-	m_button.SetWindowPos(NULL, cx - 108, 36, 100, 28, SWP_NOZORDER);
+	Input.SetWindowPos(NULL, INPUT_X, INPUT_Y, cx - INPUT_WT, INPUT_HT, SWP_NOZORDER);
+	Output.SetWindowPos(NULL, OUTPUT_X, OUTPUT_Y, cx - OUTPUT_WT, OUTPUT_HT, SWP_NOZORDER);
+	Button.SetWindowPos(NULL, cx - BUTTON_X, BUTTON_Y, BUTTON_WT, BUTTON_HT, SWP_NOZORDER);
 }
+
+void EvalWindow::OnGetMinMaxInfo(MINMAXINFO* info)
+{
+	info->ptMinTrackSize.x = MIN_WIDTH;
+	info->ptMinTrackSize.y = MIN_HEIGHT;
+}
+
 
 BOOL EvalWindow::PreTranslateMessage(MSG *Message)
 {
 	CFrameWnd::PreTranslateMessage(Message);
-	if (CWnd::FromHandle(Message->hwnd) == &m_input
+	if (CWnd::FromHandle(Message->hwnd) == &Input
 		&& Message->message == WM_KEYDOWN
 		&& Message->wParam == VK_RETURN)
 	{
@@ -90,39 +123,6 @@ BOOL EvalWindow::PreTranslateMessage(MSG *Message)
 	return FALSE;
 }
 
-void EvalWindow::OnSizing(UINT Edge, LPRECT Area)
-{
-	CFrameWnd::OnSizing(Edge, Area);
-	
-	switch (Edge)
-	{
-	case WMSZ_TOP:
-	case WMSZ_TOPLEFT:
-	case WMSZ_TOPRIGHT:
-		Area->top = Area->bottom - HEIGHT;
-		break;
-	case WMSZ_BOTTOM:
-	case WMSZ_BOTTOMLEFT:
-	case WMSZ_BOTTOMRIGHT:
-		Area->bottom = Area->top + HEIGHT;
-		break;
-	}
-
-	switch (Edge)
-	{
-	case WMSZ_LEFT:
-	case WMSZ_TOPLEFT:
-	case WMSZ_BOTTOMLEFT:
-		if (Area->right - Area->left < WIDTH)
-			Area->left = Area->right - WIDTH;
-	case WMSZ_RIGHT:
-	case WMSZ_TOPRIGHT:
-	case WMSZ_BOTTOMRIGHT:
-		if (Area->right - Area->left < WIDTH)
-			Area->right = Area->left + WIDTH;
-	}
-}
-
 void EvalWindow::Calculate()
 {
 	int ExpressionSize;
@@ -131,9 +131,9 @@ void EvalWindow::Calculate()
 	Xavi::SyntaxTreeNode *Node;
 	Xavi::Value Value;
 
-	ExpressionSize = m_input.GetWindowTextLength() + 1;
+	ExpressionSize = Input.GetWindowTextLength() + 1;
 	ExpressionString = (char*)GlobalAlloc(GPTR, ExpressionSize);
-	m_input.GetWindowText(ExpressionString, ExpressionSize);
+	Input.GetWindowText(ExpressionString, ExpressionSize);
 	
 	Node = Xavi::ParseInfix(new Xavi::CStringSource(ExpressionString));
 	Value = Node->Evaluate();
@@ -141,7 +141,7 @@ void EvalWindow::Calculate()
 	GlobalFree((HANDLE)ExpressionString);
 	
 	ValueString = Value.ToCString();
-	m_output.SetWindowText(ValueString);
+	Output.SetWindowText(ValueString);
 	std::free(ValueString);	
 }
 

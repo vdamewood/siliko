@@ -15,11 +15,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 set(EXENAME XaviPP-Gui-Win32)
-set(HDRS EvalWindow.hpp Menu.h  About.hpp AboutRc.h)
-set(SRCS XaviPP-Gui-Win32.cpp EvalWindow.cpp Menu.rc About.cpp About.rc)
+set(HDRS EvalWindow.hpp About.hpp Id.h)
+set(SRCS XaviPP-Gui-Win32.cpp EvalWindow.cpp EvalWindow.rc About.cpp About.rc)
 set(LIBS ${CXXLIB})
 
-ADD_DEFINITIONS(-D_AFXDLL)
+ADD_DEFINITIONS(-D_AFXDLL -D_WIN32_WINNT=NTDDI_WIN7)
 SET(CMAKE_MFC_FLAG 2) 
 
 add_executable(${EXENAME} WIN32 ${HDRS} ${SRCS})

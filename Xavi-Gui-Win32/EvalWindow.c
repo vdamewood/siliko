@@ -76,7 +76,7 @@ void OnCreate(HWND Handle)
 void OnGetMinMaxInfo(HWND hwnd, MINMAXINFO *info)
 {
 	info->ptMinTrackSize.x = MIN_WIDTH;
-	info->ptMinTrackSize.y = MIN_HEIGHT;	
+	info->ptMinTrackSize.y = MIN_HEIGHT;
 }
 
 void OnSize(HWND hwnd)
