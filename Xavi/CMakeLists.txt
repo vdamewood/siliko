@@ -22,6 +22,7 @@ set(PHDRS
   SyntaxTree.h
   DataSource.h
   StringSource.h
+  Token.h
   Lexer.h
   InfixParser.h)
 set(HDRS

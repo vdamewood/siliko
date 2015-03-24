@@ -51,12 +51,12 @@ namespace Xavi
 		Token(int NewInteger);
 		Token(float NewFloat);
 		Token(const char *NewString);
-		~Token(void);
+		~Token();
 
-		TokenType   Type(void) const;
-		int         Integer(void) const;
-		float       Float(void) const;
-		const char *Id(void) const;
+		TokenType   Type() const;
+		int         Integer() const;
+		float       Float() const;
+		const char *Id() const;
 
 	private:
 		TokenType MyType;

@@ -33,9 +33,9 @@ namespace Xavi
 	class XAVIPP_API SyntaxTreeNode
 	{
 	public:
-		virtual ~SyntaxTreeNode(void) { };
-		virtual Xavi::Value Evaluate(void) = 0;
-		virtual void Negate(void) = 0;
+		virtual ~SyntaxTreeNode() { };
+		virtual Xavi::Value Evaluate() = 0;
+		virtual void Negate() = 0;
 	};
 
 	class IntegerNode : public SyntaxTreeNode

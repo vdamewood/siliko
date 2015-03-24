@@ -31,11 +31,11 @@ namespace Xavi
 		Lexer(DataSource *InputSource);
 		~Lexer();
 
-		Xavi::Token &GetToken(void);
-		void Next(void);
+		Xavi::Token &GetToken();
+		void Next();
 
 	private:
-		void Load(void);
+		void Load();
 		DataSource *MySource;
 		Xavi::Token *MyToken;
 	};

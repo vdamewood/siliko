@@ -1,6 +1,6 @@
 /*
  * TestXaviLinkage.c: Program to test public linkage
- * Copyright 2012, 2015 Vincent Damewood
+ * Copyright 2015 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <Xavi/SyntaxTree.h>
 #include <Xavi/DataSource.h>
 #include <Xavi/StringSource.h>
+#include <Xavi/Token.h>
 #include <Xavi/Lexer.h>
 #include <Xavi/InfixParser.h>
 

@@ -16,3 +16,7 @@ target_link_libraries(TestXaviPPFunctions XaviPP)
 add_executable(TestXaviPPLexer
 	TestXaviPPLexer.cpp)
 target_link_libraries(TestXaviPPLexer XaviPP)
+
+add_executable(TestXaviPPLinkage
+	TestXaviPPLinkage.cpp)
+target_link_libraries(TestXaviPPLinkage XaviPP)
