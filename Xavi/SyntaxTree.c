@@ -107,23 +107,42 @@ memerr:
 	return NULL;
 }
 
-int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewChild)
+static int ExpandChildren(XaviSyntaxTreeNode *Tree)
 {
 	const int Increment = 2;
-	if (Tree->Branch->Count == Tree->Branch->Capacity)
-	{
-		XaviSyntaxTreeNode **NewChildren = NULL;
-		int NewCapacity = Tree->Branch->Capacity + Increment;
+	XaviSyntaxTreeNode **NewChildren = NULL;
+	int NewCapacity = Tree->Branch->Capacity + Increment;
 
-		if (!(NewChildren = calloc(NewCapacity, sizeof(XaviSyntaxTreeNode*))))
+	if (!(NewChildren = calloc(NewCapacity, sizeof(XaviSyntaxTreeNode*))))
+		return 0;
+
+	memcpy(NewChildren, Tree->Branch->Children, Tree->Branch->Capacity * sizeof(XaviSyntaxTreeNode*));
+	free(Tree->Branch->Children);
+
+	Tree->Branch->Children = NewChildren;
+	Tree->Branch->Capacity = NewCapacity;
+	return -1;
+}
+
+int XaviSyntaxTreePushLeft(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewChild)
+{
+	if (Tree->Branch->Count == Tree->Branch->Capacity)
+		if (!ExpandChildren(Tree))
 			return 0;
 
-		memcpy(NewChildren, Tree->Branch->Children, Tree->Branch->Capacity * sizeof(XaviSyntaxTreeNode*));
-		free(Tree->Branch->Children);
+	for (int i = Tree->Branch->Count; i < 0; i--)
+		Tree->Branch->Children[i] = Tree->Branch->Children[i-1];
 
-		Tree->Branch->Children = NewChildren;
-		Tree->Branch->Capacity = NewCapacity;
-	}
+	Tree->Branch->Children[0] = NewChild;
+	Tree->Branch->Count++;
+	return -1;
+}
+
+int XaviSyntaxTreePushRight(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewChild)
+{
+	if (Tree->Branch->Count == Tree->Branch->Capacity)
+		if (!ExpandChildren(Tree))
+			return 0;
 
 	Tree->Branch->Children[Tree->Branch->Count] = NewChild;
 	Tree->Branch->Count++;
@@ -147,6 +166,32 @@ int XaviSyntaxTreeGraftLeft(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewBra
 		{
 			return XaviSyntaxTreeGraftLeft
 				(Tree->Branch->Children[0], NewBranch);
+		}
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int XaviSyntaxTreeGraftRight(XaviSyntaxTreeNode *Tree, XaviSyntaxTreeNode *NewBranch)
+{
+	if (Tree->Type == XAVI_AST_BRANCH)
+	{
+		if (Tree->Branch->Count == 0)
+		{
+			return 0;
+		}
+		else if (Tree->Branch->Children[Tree->Branch->Count - 1] == NULL)
+		{
+			Tree->Branch->Children[Tree->Branch->Count - 1] = NewBranch;
+			return -1;
+		}
+		else
+		{
+			return XaviSyntaxTreeGraftRight(
+				Tree->Branch->Children[Tree->Branch->Count - 1],
+				NewBranch);
 		}
 	}
 	else
