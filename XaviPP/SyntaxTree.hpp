@@ -63,8 +63,8 @@ namespace Xavi
 	public:
 		BranchNode(const char *NewFunctionId);
 		virtual ~BranchNode();
-		virtual Xavi::Value Evaluate(void);
-		virtual void Negate(void);
+		virtual Xavi::Value Evaluate();
+		virtual void Negate();
 
 		void PushLeft(SyntaxTreeNode *);
 		void PushRight(SyntaxTreeNode *);

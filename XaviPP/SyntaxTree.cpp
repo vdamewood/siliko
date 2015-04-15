@@ -56,13 +56,6 @@ void Xavi::FloatNode::Negate()
 	MyFloat *= -1.0;
 }
 
-/*Xavi::BranchNode::BranchNode()
-{
-	MyFunctionId = 0;
-	MyChildren = std::list<Xavi::SyntaxTreeNode *>();
-	IsNegated = false;
-}*/
-
 Xavi::BranchNode::BranchNode(const char *NewId)
 {
 	MyId = new char[strlen(NewId) + 1];
@@ -77,10 +70,6 @@ Xavi::BranchNode::~BranchNode()
 	for (std::list<SyntaxTreeNode*>::iterator i = MyChildren.begin(); i != MyChildren.end(); i++)
 		delete *i;
 }
-
-/*void Xavi::BranchNode::SetId(const char *NewId)
-{
-}*/
 
 Xavi::Value Xavi::BranchNode::Evaluate()
 {
