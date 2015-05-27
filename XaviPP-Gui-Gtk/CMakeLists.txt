@@ -18,11 +18,16 @@ set(EXENAME XaviPP-Gui-Gtk)
 set(HDRS EvalWindow.hpp)
 set(SRCS XaviPP-Gui-Gtk.cpp EvalWindow.cpp)
 set(LIBS ${CXXLIB} ${GTKMM2_LIBRARIES})
+set(SHARE "${SHARE_INSTALL_PATH}/XaviPP-Gui-Gtk")
 
 include_directories(${GTKMM2_INCLUDE_DIRS})
-add_definitions("-DSHARE_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}\"")
+add_definitions("-DSHARE_PATH=\"${CMAKE_INSTALL_PREFIX}/${SHARE}\"")
 add_executable(${EXENAME} ${SRCS} ${HDRS})
 target_link_libraries(${EXENAME} ${LIBS})
 
 install(TARGETS ${EXENAME}
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH})
+
+install(
+  FILES EvalWindow.glade
+  DESTINATION ${SHARE})

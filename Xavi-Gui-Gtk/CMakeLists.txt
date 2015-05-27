@@ -18,11 +18,16 @@ set(EXENAME Xavi-Gui-Gtk)
 set(HDRS EvalWindow.h)
 set(SRCS Xavi-Gui-Gtk.c EvalWindow.c)
 set(LIBS ${CLIB} ${GTK2_LIBRARIES})
+set(SHARE "${SHARE_INSTALL_PATH}/Xavi-Gui-Gtk")
 
 include_directories(${GTK2_INCLUDE_DIRS})
-add_definitions("-DSHARE_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}\"")
+add_definitions("-DSHARE_PATH=\"${CMAKE_INSTALL_PREFIX}/${SHARE}\"")
 add_executable(${EXENAME} ${SRCS} ${HDRS})
 target_link_libraries(${EXENAME} ${LIBS})
 
 install(TARGETS ${EXENAME}
   RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH})
+
+install(
+  FILES EvalWindow.glade
+  DESTINATION ${SHARE})
