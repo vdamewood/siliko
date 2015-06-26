@@ -64,5 +64,5 @@ if(PREPARE_BUNDLE)
   endforeach()
 
   install(CODE "include(BundleUtilities)")
-  install(CODE "fixup_bundle(\"${BUNDLE_EXENAME}\" \"${PLUGINS}\" ${CXXLIB_BINARY_DIR})")
+  install(CODE "fixup_bundle(\"${BUNDLE_EXENAME}\" \"${PLUGINS}\" ${CLIB_BINARY_DIR})")
 endif()
