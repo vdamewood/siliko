@@ -292,7 +292,7 @@ endif()
 # Package-creation Settings #
 #############################
 
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${Xavi_SOURCE_DIR}/Readme.txt")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${Xavi_SOURCE_DIR}/Readme.md")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
   "Xavi is a mathematical expression parser library.")
 set(CPACK_PACKAGE_EXECUTABLES Xavi-Cli "Xavi (Command Line)" XaviPP-Cli "XaviPP (Command Line)")
@@ -309,7 +309,7 @@ set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_STRING}")
 set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
 set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
 set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/Build/")
-set(CPACK_RESOURCE_FILE_README "${Xavi_SOURCE_DIR}/Readme.txt")
+set(CPACK_RESOURCE_FILE_README "${Xavi_SOURCE_DIR}/Readme.md")
 
 
 if(WIN32)
@@ -370,7 +370,7 @@ endif()
 ##################################
 
 install(
-  FILES Readme.txt Authors.txt GPL-3.0.txt LGPL-3.0.txt
+  FILES Readme.md Authors.txt GPL-3.0.txt LGPL-3.0.txt
   DESTINATION ${DOC_INSTALL_PATH})
 
 ###############################################
