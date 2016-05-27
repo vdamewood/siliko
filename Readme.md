@@ -1,28 +1,28 @@
-# Xavi Project Overview
+# Siliko Project Overview
 
-<http://damewood.us/projects/xavi>
+<http://damewood.us/projects/Siliko>
 
-The Xavi project is an example project for teaching programmers how to manage
+The Siliko project is an example project for teaching programmers how to manage
 and organize their code, as well as streamline the development process. As
-the main examples, Xavi and XaviPP are libraries for processing and evaluating
+the main examples, Siliko and SilikoPP are libraries for processing and evaluating
 mathematical expressions using mixed integer and floating-point arithmetic.
-Xavi is written in C, and XaviPP is written in C++. They are mutually redundant.
-So a C programmer can safely ignore XaviPP and a C++ programmer can ignore Xavi.
-The Xavi Project also includes example programs and tests that interact with the
+Siliko is written in C, and SilikoPP is written in C++. They are mutually redundant.
+So a C programmer can safely ignore SilikoPP and a C++ programmer can ignore Siliko.
+The Siliko Project also includes example programs and tests that interact with the
 libraries. These programs offer a minimal user interface, and demonstrate how to
-use the base libraries. There is also a companion book to the Xavi project.
-Information on finding the book is on the Xavi Project page linked above. 
+use the base libraries. There is also a companion book to the Siliko project.
+Information on finding the book is on the Siliko Project page linked above.
 
-For instructions on how to build the Xavi project, see the file Build.txt.
+For instructions on how to build the Siliko project, see the file Build.txt.
 
-The libraries, Xavi and XaviPP, may be copied, modified, and distributed under
+The libraries, Siliko and SilikoPP, may be copied, modified, and distributed under
 the terms of the GNU Lesser General Public License version 3 or later. See the
 file LGPL-3.0.txt for details. Tests and example programs may be copied,
 modified, and distributed under the terms of the GNU General Public License
 version 3 or later. See the file GPL-3.0.txt for details.
 
-Xavi and XaviPP have some level of extendability. Using their default
-components, Xavi and XaviPP support infix-notation arithmatic expressions with
+Siliko and SilikoPP have some level of extendability. Using their default
+components, Siliko and SilikoPP support infix-notation arithmatic expressions with
 the following features:
 
 * Four-function calculations, such as `2 + 2`, `3 * 4.0`, `9.0 - 3.0` and
@@ -36,10 +36,10 @@ the following features:
 * Functions: `abs()`, `acos()`, `asin()`, `atan()`, `ceil()`, `cos()`,
   `cosh()`, `exp()`, `floor()`, `log()`, `log10()`, `sin()`, `sinh()`,
   `sqrt()`, `tan()`, and `tanh()`.
-* Xavi and XaviPP ignore space and tab characters in their input, except to
+* Siliko and SilikoPP ignore space and tab characters in their input, except to
   separate tokens.
 
-When mixing numeric types, Xavi and XaviPP will give integer results in
+When mixing numeric types, Siliko and SilikoPP will give integer results in
 calculations involving only integers and floating-point results in calculations
 involving either integers and floating-point numbers, or only floating-point
 numbers. If division involves two integers where the result would not be a whole

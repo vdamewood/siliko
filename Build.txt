@@ -1,7 +1,6 @@
-The Xavi project uses CMake <http://www.cmake.org> to automate its build setup.
-
+The Siliko project uses CMake <http://www.cmake.org> to automate its build setup.
 CMake allows for creating build systems based on makefiles and various IDEs. The
-Xavi Project's build system is tested and designed to work with the following
+Siliko Project's build system is tested and designed to work with the following
 operating systems and generators:
 
 * Linux: Unix Makefiles
@@ -9,14 +8,14 @@ operating systems and generators:
 * OS X: Unix Makefiles
 * Microsoft Windows: NMake Makefiles
 
-Xavi is also tested with the following compilers:
+Siliko is also tested with the following compilers:
 
 * Linux: GCC and Clang
 * FreeBSD: Clang
 * OS X: Clang
 * Windows: Visual C++ (cl.exe)
 
-To build the Xavi project, using the default values, create directory called Build,
+To build the Siliko project, using the default values, create a directory called Build,
 then cd into the directory:
 
 mkdir Build
@@ -24,7 +23,7 @@ cd Build
 
 Once in the Build directory, you will need to run the cmake command. On Mac OS X,
 FreeBSD, and Linux, the default generator is the Unix Makefiles generator. It
-suffices to run cmake with the location of the Xavi's Project's source files:
+suffices to run cmake with the location of the Siliko Project's source files:
 
 cmake ..
 
@@ -36,12 +35,8 @@ command-prompt.
 cmake -G "NMake Makefiles" ..
 
 There are additional options that you can specify
-* BUILD_TESTS,           whether or not to build test programs
-* BUILD_NATIVE_GUI,      whether or not to build GUI frontends using the native
-                         GUI API for the system (Cocoa on OS X; Win32 on Windows;
-                         GTK+ on Linux, FreeBSD, and other Unix-like systems.)
-* BUILD_QT_GUI           whether or not to build the Qt-based GUI frontend for
-                         XaviPP (requires Qt 5)
+* BUILD_TESTS: Whether or not to build test programs. Default On.
+* BUILD_GUI:   Whether or not to build GUI frontends. Default On.
 
 Use the -D paramter to CMake to specify these options. For example to disable
 building tests:
@@ -51,7 +46,7 @@ cmake  .. -DBUILD_TESTS=Off
 Building an Installation Package
 
 CMake allows for building installation packages for various systems. At present,
-the Xavi project is configured to build an installer on Windows using the Nullsoft
+the Siliko project is configured to build an installer on Windows using the Nullsoft
 Scriptable Install System, and a Drag-and-Drop disk image on OS X. For other
 systems, It's assumed that an imediate installation suffices, and that package
 maintainers for each system will build installation packages using their own

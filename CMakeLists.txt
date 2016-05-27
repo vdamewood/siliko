@@ -20,10 +20,10 @@
 
 cmake_minimum_required(VERSION 3.1.0)
 
-project(Xavi C)
-set(Xavi_VERSION_MAJOR 0)
-set(Xavi_VERSION_MINOR 0)
-set(Xavi_VERSION_PATCH 0)
+project(Siliko C)
+set(Siliko_VERSION_MAJOR 0)
+set(Siliko_VERSION_MINOR 0)
+set(Siliko_VERSION_PATCH 0)
 
 #########################
 # Configuration Options #
@@ -132,7 +132,7 @@ endif()
 # Build-Independent Values #
 ############################
 
-set(VERSION_STRING "${Xavi_VERSION_MAJOR}.${Xavi_VERSION_MINOR}.${Xavi_VERSION_PATCH}")
+set(VERSION_STRING "${Siliko_VERSION_MAJOR}.${Siliko_VERSION_MINOR}.${Siliko_VERSION_PATCH}")
 set(LIB_COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood. Licensed under the terms of the GNU Lesser General Public License, version 3 or later.")
 set(APP_COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood. Licensed under the terms of the GNU General Public License, version 3 or later.")
 set(BUNDLE_ID_DOMAIN "com.vdamewood")
@@ -163,11 +163,11 @@ elseif(UNIX)
   set(RUNTIME_INSTALL_PATH   bin)
   set(ARCHIVE_INSTALL_PATH   lib)
   set(LIBRARY_INSTALL_PATH   lib)
-  set(BUNDLE_INSTALL_PATH    share/Xavi/error)
-  set(FRAMEWORK_INSTALL_PATH share/Xavi/error)
+  set(BUNDLE_INSTALL_PATH    share/Siliko/error)
+  set(FRAMEWORK_INSTALL_PATH share/Siliko/error)
   set(HEADER_INSTALL_PATH    include)
-  set(SHARE_INSTALL_PATH     share/Xavi)
-  set(DOC_INSTALL_PATH       share/Xavi/docs)
+  set(SHARE_INSTALL_PATH     share/Siliko)
+  set(DOC_INSTALL_PATH       share/Siliko/docs)
 endif()
 
 
@@ -187,38 +187,38 @@ endif()
 # Package-creation Settings #
 #############################
 
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${Xavi_SOURCE_DIR}/Readme.md")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${Siliko_SOURCE_DIR}/Readme.md")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-  "Xavi is a mathematical expression parser library.")
-set(CPACK_PACKAGE_EXECUTABLES Xavi-Cli "Xavi (Command Line)" Xavi-Cli "Xavi (Command Line)")
-list(APPEND CPACK_PACKAGE_EXECUTABLES Xavi-Cli "Xavi (Command Line)" XaviPP-Cli "XaviPP (Command Line)")
+  "Siliko is a mathematical expression parser library.")
+set(CPACK_PACKAGE_EXECUTABLES Siliko-Cli "Siliko (Command Line)" Siliko-Cli "Siliko (Command Line)")
+list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Cli "Siliko (Command Line)" SilikoPP-Cli "SilikoPP (Command Line)")
 
 if (USE_COCOA)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Xavi-Gui-Cocoa "Xavi (Cocoa GUI)")
+  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Gui-Cocoa "Siliko (Cocoa GUI)")
 endif()
 
 if (USE_GTK2)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Xavi-Gui-Gtk "Xavi (Gtk+ GUI)")
+  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Gui-Gtk "Siliko (Gtk+ GUI)")
 endif()
 
 if (USE_USER32)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Xavi-Gui-Win32 "Xavi (Win32 GUI)")
+  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Gui-Win32 "Siliko (Win32 GUI)")
 endif()
 
-set(CPACK_PACKAGE_VERSION_MAJOR ${Xavi_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${Xavi_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${Xavi_VERSION_PATCH})
+set(CPACK_PACKAGE_VERSION_MAJOR ${Siliko_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${Siliko_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${Siliko_VERSION_PATCH})
 set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_STRING}")
 set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
 set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
 set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/Build/")
-set(CPACK_RESOURCE_FILE_README "${Xavi_SOURCE_DIR}/Readme.md")
+set(CPACK_RESOURCE_FILE_README "${Siliko_SOURCE_DIR}/Readme.md")
 
 if(APPLE)
   set(CPACK_GENERATOR DragNDrop)
 elseif(WIN32)
   set(CPACK_GENERATOR NSIS)
-  set(CPACK_RESOURCE_FILE_LICENSE "${Xavi_SOURCE_DIR}/GPL-3.0.txt")
+  set(CPACK_RESOURCE_FILE_LICENSE "${Siliko_SOURCE_DIR}/GPL-3.0.txt")
   if(BUILD_GUI_NATIVE OR BUILD_GUI_QT)
     set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${RUNTIME_INSTALL_PATH})
   endif()
@@ -229,30 +229,30 @@ endif()
 ###########################
 
 # Libraries
-add_subdirectory(Xavi)
+add_subdirectory(lib)
 
 # Allow executable builds to include library headers.
-include_directories(${Xavi_SOURCE_DIR})
+include_directories("${Siliko_SOURCE_DIR}/lib")
 
 # Command-line Programs
-add_subdirectory(Xavi-Cli)
+add_subdirectory(cli)
 
 # Tests
 if(BUILD_TESTS)
-  add_subdirectory(Tests)
+  add_subdirectory(tests)
 endif()
 
 # GUI Programs
 if(USE_COCOA)
-  add_subdirectory(Xavi-Gui-Cocoa)
+  add_subdirectory(gui-osx)
 endif()
 
 if(USE_GTK)
-  add_subdirectory(Xavi-Gui-Gtk)
+  add_subdirectory(gui-unix)
 endif()
 
 if(USE_USER32)
-    add_subdirectory(Xavi-Gui-Win32)
+    add_subdirectory(gui-windows)
 endif()
 
 ##################################
