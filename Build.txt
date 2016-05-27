@@ -1,54 +1,54 @@
-The Siliko project uses CMake <http://www.cmake.org> to automate its build setup.
-CMake allows for creating build systems based on makefiles and various IDEs. The
-Siliko Project's build system is tested and designed to work with the following
-operating systems and generators:
+Siliko uses CMake <http://www.cmake.org> to automate its build setup. The build
+system is tested and designed to work with the following operating systems
+and generators:
 
 * Linux: Unix Makefiles
 * FreeBSD: Unix Makefiles
 * OS X: Unix Makefiles
 * Microsoft Windows: NMake Makefiles
 
-Siliko is also tested with the following compilers:
+The build system is tested with the following compilers:
 
 * Linux: GCC and Clang
 * FreeBSD: Clang
 * OS X: Clang
 * Windows: Visual C++ (cl.exe)
 
-To build the Siliko project, using the default values, create a directory called Build,
+To build Siliko, using the default values, create a directory called Build,
 then cd into the directory:
 
 mkdir Build
 cd Build
 
-Once in the Build directory, you will need to run the cmake command. On Mac OS X,
-FreeBSD, and Linux, the default generator is the Unix Makefiles generator. It
-suffices to run cmake with the location of the Siliko Project's source files:
+In the Build directory, you will need to run the cmake command. On Mac OS X,
+FreeBSD, and Linux, the default generator is the Unix Makefiles generator.
+Running cmake without specifying a generator suffices, but you will need to
+point cmake to the location of Siliko's source files:
 
 cmake ..
 
-On Windows, you will need to specify -G "NMake Makefiles" to use NMake for the build
-process. You will also need to build in the a Visual Studio command-prompt, which
-sets up an evironment suitable for building software, rather than the default
-command-prompt.
+On Windows, you will need to specify the NMake Makefiles generator with
+-G "NMake Makefiles".
 
 cmake -G "NMake Makefiles" ..
 
-There are additional options that you can specify
-* BUILD_TESTS: Whether or not to build test programs. Default On.
-* BUILD_GUI:   Whether or not to build GUI frontends. Default On.
+You will also need to build in the a Visual Studio command prompt, rather than
+the default command prompt.
 
-Use the -D paramter to CMake to specify these options. For example to disable
+There are additional options that you can specify
+* BUILD_TESTS: Build programs used for testing the library. Default On.
+* BUILD_GUI:   Build a GUI frontend for the library. Default On.
+
+Use -D, followed by teh option name to specify these options. For example to disable
 building tests:
 
-cmake  .. -DBUILD_TESTS=Off
+cmake .. -DBUILD_TESTS=Off
 
-Building an Installation Package
+= Building an Installation Package
 
-CMake allows for building installation packages for various systems. At present,
-the Siliko project is configured to build an installer on Windows using the Nullsoft
-Scriptable Install System, and a Drag-and-Drop disk image on OS X. For other
-systems, It's assumed that an imediate installation suffices, and that package
+Siliko is configured to build an installer using the Nullsoft Scriptable Install
+System on Windows, and a Drag-and-Drop disk image on OS X. For other systems,
+It's assumed that an imediate installation suffices, and that package
 maintainers for each system will build installation packages using their own
 processes. To build an installation package on Windows and OS X, build the target
 "package" with make or nmake.

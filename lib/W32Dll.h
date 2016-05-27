@@ -1,6 +1,5 @@
-/*
- * W32Dll.h: Header to accomodate building a DLL on Microsoft Windows
- * Copyright 2014, 2015 Vincent Damewood
+/* W32Dll.h: Header to accomodate building a DLL on Microsoft Windows
+ * Copyright 2014, 2015, 2016 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by

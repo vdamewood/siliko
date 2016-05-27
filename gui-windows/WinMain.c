@@ -1,6 +1,5 @@
-/*
- * Siliko-Gui-Win32.c: GUI Frontend for Siliko using Win32 API
- * Copyright 2015 Vincent Damewood
+/* WinMain.c: Entry point for GUI Program
+ * Copyright 2015, 2016 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

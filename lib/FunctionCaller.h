@@ -1,5 +1,4 @@
-/*
- * FunctionCaller.h: Function handling
+/* FunctionCaller.h: Function handling
  * Copyright 2012, 2014, 2015, 2016 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify

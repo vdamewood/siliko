@@ -1,6 +1,5 @@
-/*
- * TestSilikoLinkage.c: Program to test public linkage
- * Copyright 2015 Vincent Damewood
+/* TestSilikoLinkage.c: Program to test public linkage
+ * Copyright 2015, 2016 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

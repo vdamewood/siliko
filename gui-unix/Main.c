@@ -1,6 +1,5 @@
-/*
- * Siliko-Gui-Gtk.c: GUI Frontend for Siliko using GTK+
- * Copyright 2015 Vincent Damewood
+/* Main.c: Entry point for GUI program
+ * Copyright 2015, 2016 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

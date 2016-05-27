@@ -1,6 +1,5 @@
-/*
- * About.c: About dialogue window
- * Copyright 2015 Vincent Damewood
+/* About.c: About dialog window
+ * Copyright 2015, 2016 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <windows.h> 
+#include <windows.h>
 
 #include "About.h"
- 
+
 BOOL CALLBACK AboutDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch(uMsg)

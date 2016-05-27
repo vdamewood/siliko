@@ -1,6 +1,5 @@
-/*
- * Id.h: ID Numbers used by controls, etc.
- * Copyright 2015 Vincent Damewood
+/* Id.h: ID Numbers used by controls, etc.
+ * Copyright 2015, 2016 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #if !defined ID_H
 #define ID_H
- 
+
 #define CALCULATOR_INPUT  0x91
 #define CALCULATOR_OUTPUT 0x92
 #define CALCULATOR_BUTTON 0x93

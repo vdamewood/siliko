@@ -1,5 +1,4 @@
-/*
- * Siliko.c: Command-line interface for Siliko
+/* Siliko.c: Command-line interface for Siliko
  * Copyright 2012, 2014, 2015, 2016 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
