@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012, 2014, 2015 Vincent Damewood
+# Copyright 2012, 2014, 2015, 2016 Vincent Damewood
 #
 # This library is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -15,6 +15,11 @@
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 set(LIBNAME Xavi)
+set(LIB_VERSION_MAJOR 1)
+set(LIB_VERSION_MINOR 0)
+set(LIB_VERSION_PATCH 0)
+set(LIB_VERSION_STRING "${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR}.${LIB_VERSION_PATCH}")
+
 set(PHDRS
   W32Dll.h
   Value.h
@@ -45,7 +50,9 @@ add_library("${LIBNAME}" ${HDRS} ${SRCS})
 target_link_libraries("${LIBNAME}" ${LIBS})
 set_target_properties("${LIBNAME}" PROPERTIES
     FRAMEWORK     TRUE
-    PUBLIC_HEADER "${PHDRS}")
+    PUBLIC_HEADER "${PHDRS}"
+    VERSION       ${VERSION_STRING}
+    SOVERSION     ${LIB_VERSION_STRING})
 install(TARGETS ${LIBNAME}
   RUNTIME       DESTINATION ${RUNTIME_INSTALL_PATH}
   ARCHIVE       DESTINATION ${ARCHIVE_INSTALL_PATH}
