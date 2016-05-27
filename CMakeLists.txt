@@ -247,7 +247,7 @@ if(USE_COCOA)
   add_subdirectory(gui-osx)
 endif()
 
-if(USE_GTK)
+if(USE_GTK2)
   add_subdirectory(gui-unix)
 endif()
 
