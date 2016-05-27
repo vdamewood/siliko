@@ -29,7 +29,7 @@ set(Xavi_VERSION_PATCH 0)
 # Configuration Options #
 #########################
 
-include(CmakeDependentOption)
+include(CMakeDependentOption)
 option(BUILD_SHARED_LIBS "Build shared libraries" On)
 option(BUILD_TESTS "Build testing programs" On)
 option(BUILD_CXX "Build C++ Code" On)
