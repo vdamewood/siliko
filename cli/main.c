@@ -17,6 +17,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #if defined USE_UNIX
 #	include <unistd.h>
@@ -30,6 +31,9 @@
 #include "Value.h"
 #include "StringSource.h"
 
+#if HAVE_READLINE
+#include <readline/readline.h>
+#else
 char *readline(const char *prompt)
 {
 	size_t inputChar = 0;
@@ -84,9 +88,13 @@ char *readline(const char *prompt)
 	return rVal;
 }
 
+void add_history(char *command)
+{
+}
+#endif /* HAVE_READLINE */
+
 int main(int argc, char *argv[])
 {
-	char *expression;
 	SilikoValue value;
 	SilikoSyntaxTreeNode *tree;
 	const char *prompt;
@@ -105,22 +113,36 @@ int main(int argc, char *argv[])
 
 	SilikoFunctionCallerSetUp();
 
+	char *expression = NULL;
+	char *old_expression = NULL;
+
 	while(-1)
 	{
 		expression = readline(prompt);
 
 		if(!expression)
+		{
+			free(old_expression);
+			old_expression = NULL;
 			break;
+		}
+
+		if(*expression && (!old_expression || strcmp(expression, old_expression) != 0))
+			add_history(expression);
+
+		free(old_expression);
+		old_expression = NULL;
 
 		tree = SilikoParseInfix(
 			SilikoStringSourceNew(expression));
 		value = SilikoSyntaxTreeEvaluate(tree);
-		free(expression);
 		SilikoSyntaxTreeDelete(tree);
 
 		char *ResultString = SilikoValueToString(value);
 		printf("%s\n", ResultString);
 		free(ResultString);
+
+		old_expression = expression;
 	}
 
 	SilikoFunctionCallerTearDown();
