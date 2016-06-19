@@ -30,7 +30,6 @@ set(Siliko_VERSION_PATCH 0)
 #########################
 
 option(BUILD_SHARED_LIBS "Build shared libraries" On)
-option(BUILD_TESTS       "Build testing programs" On)
 option(BUILD_GUI         "Build a GUI Program"    On)
 
 #######################
@@ -241,11 +240,6 @@ include_directories("${Siliko_SOURCE_DIR}/lib")
 
 # Command-line Programs
 add_subdirectory(cli)
-
-# Tests
-if(BUILD_TESTS)
-  add_subdirectory(tests)
-endif()
 
 # GUI Programs
 if(USE_COCOA)

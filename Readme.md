@@ -8,7 +8,7 @@ evaluating mathematical expressions using mixed integer and floating-point
 arithmetic. C++ Developers may be intereted in Silikego, a C++ library that is
 virtually identical to Siliko.
 
-Testing and interface programs are also included in the project. These programs
+Interface programs are also included in the project. These programs
 demonstrate how to use the base library. There is also a companion book for the
 Siliko and Silikego. Information on finding the book is on the Siliko Project
 page linked above.
@@ -17,9 +17,9 @@ For instructions on how to build Siliko, see the file Build.txt.
 
 The library may be copied, modified, and distributed under the terms of the GNU
 Lesser General Public License version 3 or later. See the file LGPL-3.0.txt for
-details. The text and interface programs may be copied, modified, and
-distributed under the terms of the GNU General Public License version 3 or
-later. See the file GPL-3.0.txt for details.
+details. The interface programs may be copied, modified, and distributed under
+the terms of the GNU General Public License version 3 or later. See the file
+GPL-3.0.txt for details.
 
 Siliko has some level of extendability. Using its default components, Siliko
 supports infix-notation arithmatic expressions with the following features:
