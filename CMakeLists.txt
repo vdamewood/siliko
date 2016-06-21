@@ -239,19 +239,19 @@ add_subdirectory(lib)
 include_directories("${Siliko_SOURCE_DIR}/lib")
 
 # Command-line Programs
-add_subdirectory(cli)
+add_subdirectory(command)
 
 # GUI Programs
 if(USE_COCOA)
-  add_subdirectory(gui-osx)
+  add_subdirectory(cocoa)
 endif()
 
 if(USE_GTK2)
-  add_subdirectory(gui-unix)
+  add_subdirectory(gtk2)
 endif()
 
 if(USE_USER32)
-    add_subdirectory(gui-windows)
+    add_subdirectory(win32)
 endif()
 
 ##################################
