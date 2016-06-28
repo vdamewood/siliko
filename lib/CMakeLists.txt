@@ -61,7 +61,7 @@ endif()
 add_library(${LIBNAME} ${HDRS} ${SRCS} ${RESOURCES})
 target_link_libraries(${LIBNAME} ${LIBS})
 set_target_properties(${LIBNAME} PROPERTIES
-    FRAMEWORK     TRUE
+    FRAMEWORK     ${BUILD_MACOSX}
     PUBLIC_HEADER "${PHDRS}"
     RESOURCE      "${RESOURCES}"
     VERSION       ${LIB_VERSION_STRING}
