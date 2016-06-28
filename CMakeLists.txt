@@ -71,9 +71,9 @@ set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood.\
  Siliko library licensed under the terms of the GNU Lesser General Public License, version 3 or later.\
  Siliko interface programs licensed under the terms of the GNU General Public License, version 3 or later.")
 
-#######################
-# Install Directories #
-#######################
+######################
+# Build-Based Values #
+######################
 
 if(BUILD_MACOSX)
   set(INSTBIN bin)
@@ -81,12 +81,18 @@ if(BUILD_MACOSX)
   set(INSTINC err)
   set(INSTDAT err)
   set(INSTDOC .)
+  set(ONAMEDLIB Siliko)
+  set(ONAMECLI  siliko)
+  set(ONAMEGUI  Siliko)
 elseif(BUILD_WINDOWS)
   set(INSTBIN .)
   set(INSTLIB .)
   set(INSTINC include)
   set(INSTDAT .)
   set(INSTDOC .)
+  set(ONAMEDLIB siliko)
+  set(ONAMECLI  siliko)
+  set(ONAMEGUI  siliko-gui)
 else()
   include(GNUInstallDirs)
   set(INSTBIN ${CMAKE_INSTALL_BINDIR})
@@ -94,6 +100,9 @@ else()
   set(INSTINC ${CMAKE_INSTALL_INCLUDEDIR})
   set(INSTDAT "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}")
   set(INSTDOC ${CMAKE_INSTALL_DOCDIR})
+  set(ONAMEDLIB siliko)
+  set(ONAMECLI  siliko)
+  set(ONAMEGUI  siliko-gui)
 endif()
 
 #############################
@@ -116,16 +125,16 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
 
 set(CPACK_PACKAGE_EXECUTABLES)
 if(BUILD_CLI)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Cli "Siliko (Command Line)")
+  list(APPEND CPACK_PACKAGE_EXECUTABLES SilikoCli "Siliko (Command Line)")
 endif()
 if(BUILD_GUI)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Gui "Siliko (GUI)")
+  list(APPEND CPACK_PACKAGE_EXECUTABLES SilikoGui "Siliko (GUI)")
 endif()
 
-set(CPACK_PACKAGE_VERSION_MAJOR ${Siliko_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${Siliko_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${Siliko_VERSION_PATCH})
-set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_STRING}")
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}")
 set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
 set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
 set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/Build/" "/build/")
@@ -175,7 +184,7 @@ endif()
 
 install(
   FILES Readme.md Authors.txt GPL-3.0.txt LGPL-3.0.txt
-  DESTINATION ${DOC_INSTDIR})
+  DESTINATION ${INSTDOC})
 
 ###############################################
 # CPack Inclusion (Used for package creation) #

@@ -14,13 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-set(LIBNAME Siliko)
-set(LIB_VERSION_MAJOR 0)
-set(LIB_VERSION_MINOR 0)
-set(LIB_VERSION_PATCH 0)
-set(LIB_VERSION_STRING "${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR}.${LIB_VERSION_PATCH}")
-
-set(PHDRS
+set(TARGET SilikoLib)
+set(PUB_HEADERS
   W32Dll.h
   Value.h
   FunctionCaller.h
@@ -30,11 +25,11 @@ set(PHDRS
   Token.h
   Lexer.h
   InfixParser.h)
-set(HDRS
-  ${PHDRS}
+set(HEADERS
+  ${PUB_HEADERS}
   Functions.h
   Hash.h)
-set(SRCS
+set(SOURCES
   Value.c
   Hash.c
   Functions.c
@@ -46,33 +41,34 @@ set(SRCS
   InfixParser.c)
 set(RESOURCES
   SilikoConfig.cmake)
+set(DEPS "")
 
 # Detect if system has separate math library (libm)
-message("-- Finding Math Library")
-find_library(MATH m)
-if(${MATH} STREQUAL "MATH-NOTFOUND")
-    message("-- Finding Math Library - not needed")
-    set(LIBS "")
+message("-- Finding math library")
+find_library(MATHLIB m)
+if(${MATHLIB} STREQUAL "MATHLIB-NOTFOUND")
+    message("-- Finding math library - not needed")
 else()
-    message("-- Finding Math Library - found")
-    set(LIBS ${MATH})
+    message("-- Finding math library - found")
+    list(APPEND DEPS ${MATHLIB})
 endif()
 
-add_library(${LIBNAME} ${HDRS} ${SRCS} ${RESOURCES})
-target_link_libraries(${LIBNAME} ${LIBS})
-set_target_properties(${LIBNAME} PROPERTIES
+add_library(${TARGET} ${HEADERS} ${SOURCES} ${RESOURCES})
+set_target_properties(${TARGET} PROPERTIES
+    OUTPUT_NAME   ${ONAMEDLIB}
     FRAMEWORK     ${BUILD_MACOSX}
-    PUBLIC_HEADER ${PHDRS}
+    PUBLIC_HEADER ${PUB_HEADERS}
     RESOURCE      ${RESOURCES}
-    VERSION       ${LIB_VERSION_STRING}
-    SOVERSION     ${LIB_VERSION_MAJOR})
-install(TARGETS ${LIBNAME}
+    VERSION       ${PROJECT_VERSION}
+    SOVERSION     ${PROJECT_VERSION_MAJOR})
+target_link_libraries(${TARGET} ${DEPS})
+
+install(TARGETS ${TARGET}
   RUNTIME       DESTINATION ${INSTBIN}
   ARCHIVE       DESTINATION ${INSTLIB}
   LIBRARY       DESTINATION ${INSTLIB}
   FRAMEWORK     DESTINATION .
   RESOURCE      DESTINATION ${INSTDAT}
-  PUBLIC_HEADER DESTINATION ${INSTINC}/${LIBNAME})
+  PUBLIC_HEADER DESTINATION ${INSTINC}/Siliko)
 
-set(LIB ${LIBNAME} PARENT_SCOPE)
 set(LIB_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)

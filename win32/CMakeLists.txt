@@ -14,16 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-set(EXENAME Siliko-Gui)
-set(HDRS EvalWindow.h About.h Id.h)
-set(SRCS WinMain.c EvalWindow.c EvalWindow.rc About.c About.rc)
-set(LIBS ${LIB})
+set(TARGET SilikoGui)
+set(HEADERS EvalWindow.h About.h Id.h)
+set(SOURCES WinMain.c EvalWindow.c EvalWindow.rc About.c About.rc)
+set(DEPS SilikoLib)
 
 message("-- Finding User32.dll")
 find_library(USER32 User32)
 if (NOT ${USER32} STREQUAL "USER32-NOTFOUND")
   message("-- Finding User32.dll - found")
-  list(APPEND LIBS ${USER32})
+  list(APPEND DEPS ${USER32})
   set(USER32_FOUND Yes)
 else()
   message("-- Finding User32.dll - not found")
@@ -34,8 +34,10 @@ if (NOT USER32_FOUND)
   message(FATAL_ERROR "Can't build GUI. Quitting.")
 endif()
 
-add_executable(${EXENAME} WIN32 ${HDRS} ${SRCS})
-target_link_libraries(${EXENAME} ${LIBS})
+add_executable(${TARGET} WIN32 ${HEADERS} ${SOURCES})
+set_target_properties(${TARGET} PROPERTIES
+	OUTPUT_NAME ${ONAMEGUI})
+target_link_libraries(${TARGET} ${DEPS})
 
-install(TARGETS ${EXENAME}
+install(TARGETS ${TARGET}
   RUNTIME DESTINATION ${INSTBIN})

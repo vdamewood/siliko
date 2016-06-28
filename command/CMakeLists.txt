@@ -14,17 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-set(EXENAME Siliko-Cli)
-set(SRCS main.c)
+set(TARGET SilikoCli)
+set(SOURCES main.c)
+set(DEPS SilikoLib)
 
-set(LIBS ${LIB})
 message("-- Finding readline")
 find_path(READLINE_INC NAMES readline/readline.h)
 find_library(READLINE_LIB readline)
 
 if(READLINE_LIB AND READLINE_INC)
 	message("-- Finding readline -- found")
-	list(APPEND LIBS ${READLINE_LIB})
+	list(APPEND DEPS ${READLINE_LIB})
 	include_directories(${READLINE_INC})
 	add_definitions(-DHAVE_READLINE=1)
 else()
@@ -38,8 +38,10 @@ else()
   add_definitions(-DUSE_UNIX=0)
 endif()
 
-add_executable(${EXENAME} ${SRCS})
-target_link_libraries(${EXENAME} ${LIBS})
+add_executable(${TARGET} ${SOURCES})
+set_target_properties(${TARGET} PROPERTIES
+	OUTPUT_NAME ${ONAMECLI})
+target_link_libraries(${TARGET} ${DEPS})
 
-install(TARGETS ${EXENAME}
+install(TARGETS ${TARGET}
   RUNTIME    DESTINATION ${INSTBIN})
