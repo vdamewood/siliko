@@ -14,10 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-set(EXENAME Siliko-Gui-Gtk)
+set(EXENAME Siliko-Gui)
 set(HDRS EvalWindow.h)
 set(SRCS Main.c EvalWindow.c)
-set(SHARE "${SHARE_INSTALL_PATH}/Siliko-Gui-Gtk")
 
 set(LIBS ${LIB})
 message("-- Finding GTK+ 2")
@@ -30,11 +29,11 @@ else()
   message("-- Finding GTK+ 2 - not found")
 endif()
 
-if(USE_GTK2 AND NOT GTK2_FOUND)
+if(NOT GTK2_FOUND)
   message(FATAL_ERROR "Can't build GUI. Quitting.")
 endif()
 
-add_definitions("-DSHARE_PATH=\"${CMAKE_INSTALL_PREFIX}/${SHARE}\"")
+add_definitions("-DSHARE_PATH=\"${SHARE_INSTALL_PREFIX}\"")
 add_executable(${EXENAME} ${SRCS} ${HDRS})
 target_link_libraries(${EXENAME} ${LIBS})
 
@@ -43,4 +42,4 @@ install(TARGETS ${EXENAME}
 
 install(
   FILES EvalWindow.glade
-  DESTINATION ${SHARE})
+  DESTINATION ${SHARE_INSTALL_PREFIX})

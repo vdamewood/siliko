@@ -58,9 +58,9 @@ else()
     set(LIBS ${MATH})
 endif()
 
-add_library("${LIBNAME}" ${HDRS} ${SRCS} ${RESOURCES})
-target_link_libraries("${LIBNAME}" ${LIBS})
-set_target_properties("${LIBNAME}" PROPERTIES
+add_library(${LIBNAME} ${HDRS} ${SRCS} ${RESOURCES})
+target_link_libraries(${LIBNAME} ${LIBS})
+set_target_properties(${LIBNAME} PROPERTIES
     FRAMEWORK     TRUE
     PUBLIC_HEADER "${PHDRS}"
     RESOURCE      "${RESOURCES}"

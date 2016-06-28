@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-set(EXENAME Siliko-Gui-Win32)
+set(EXENAME Siliko-Gui)
 set(HDRS EvalWindow.h About.h Id.h)
-set(SRCS Siliko-Gui-Win32.c EvalWindow.c EvalWindow.rc About.c About.rc)
+set(SRCS WinMain.c EvalWindow.c EvalWindow.rc About.c About.rc)
 set(LIBS ${LIB})
 
 message("-- Finding User32.dll")

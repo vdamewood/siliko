@@ -97,19 +97,13 @@ endif()
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${Siliko_SOURCE_DIR}/Readme.md")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
   "Siliko is a mathematical expression parser library.")
-set(CPACK_PACKAGE_EXECUTABLES Siliko-Cli "Siliko (Command Line)" Siliko-Cli "Siliko (Command Line)")
-list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Cli "Siliko (Command Line)" SilikoPP-Cli "SilikoPP (Command Line)")
 
-if (BUILD_GUI AND APPLE)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Gui-Cocoa "Siliko (Cocoa GUI)")
+set(CPACK_PACKAGE_EXECUTABLES)
+if(BUILD_CLI)
+  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Cli "Siliko (Command Line)")
 endif()
-
-if (BUILD_GUI AND USE_GTK2)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Gui-Gtk "Siliko (Gtk+ GUI)")
-endif()
-
-if (BUILD_GUI AND USE_USER32)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Gui-Win32 "Siliko (Win32 GUI)")
+if(BUILD_GUI)
+  list(APPEND CPACK_PACKAGE_EXECUTABLES Siliko-Gui "Siliko (GUI)")
 endif()
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${Siliko_VERSION_MAJOR})
@@ -118,7 +112,7 @@ set(CPACK_PACKAGE_VERSION_PATCH ${Siliko_VERSION_PATCH})
 set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_STRING}")
 set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
 set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
-set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/Build/")
+set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/Build/" "/build/")
 set(CPACK_RESOURCE_FILE_README "${Siliko_SOURCE_DIR}/Readme.md")
 
 if(APPLE)
