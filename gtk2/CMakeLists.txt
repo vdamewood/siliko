@@ -33,13 +33,13 @@ if(NOT GTK2_FOUND)
   message(FATAL_ERROR "Can't build GUI. Quitting.")
 endif()
 
-add_definitions("-DSHARE_PATH=\"${CMAKE_INSTALL_PREFIX}/${SHARE_INSTALL_PATH}\"")
+add_definitions("-DSHARE_PATH=\"${CMAKE_INSTALL_PREFIX}/${INSTDAT}\"")
 add_executable(${EXENAME} ${SRCS} ${HDRS})
 target_link_libraries(${EXENAME} ${LIBS})
 
 install(TARGETS ${EXENAME}
-  RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH})
+  RUNTIME    DESTINATION ${INSTBIN})
 
 install(
   FILES EvalWindow.glade
-  DESTINATION ${SHARE_INSTALL_PATH})
+  DESTINATION ${INSTDAT})

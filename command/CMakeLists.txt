@@ -42,4 +42,4 @@ add_executable(${EXENAME} ${SRCS})
 target_link_libraries(${EXENAME} ${LIBS})
 
 install(TARGETS ${EXENAME}
-  RUNTIME    DESTINATION ${RUNTIME_INSTALL_PATH})
+  RUNTIME    DESTINATION ${INSTBIN})

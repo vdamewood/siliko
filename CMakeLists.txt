@@ -73,38 +73,29 @@ set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood.\
  Siliko library licensed under the terms of the GNU Lesser General Public License, version 3 or later.\
  Siliko interface programs licensed under the terms of the GNU General Public License, version 3 or later.")
 
-###########################
-# System-dependent Values #
-###########################
+#######################
+# Install Directories #
+#######################
 
-if(BUILD_WINDOWS)
-  set(RUNTIME_INSTALL_PATH   .)
-  set(ARCHIVE_INSTALL_PATH   .)
-  set(LIBRARY_INSTALL_PATH   .)
-  set(BUNDLE_INSTALL_PATH    Error)
-  set(FRAMEWORK_INSTALL_PATH Error)
-  set(HEADER_INSTALL_PATH    ./include)
-  set(SHARE_INSTALL_PATH     .)
-  set(DOC_INSTALL_PATH       .)
-elseif(BUILD_MACOSX)
-  set(RUNTIME_INSTALL_PATH   bin)
-  set(ARCHIVE_INSTALL_PATH   Error)
-  set(LIBRARY_INSTALL_PATH   Error)
-  set(BUNDLE_INSTALL_PATH    .)
-  set(FRAMEWORK_INSTALL_PATH .)
-  set(HEADER_INSTALL_PATH    Error)
-  set(SHARE_INSTALL_PATH     Error)
-  set(DOC_INSTALL_PATH       .)
+if(BUILD_MACOSX)
+  set(INSTBIN bin)
+  set(INSTLIB err)
+  set(INSTINC err)
+  set(INSTDAT err)
+  set(INSTDOC .)
+elseif(BUILD_WINDOWS)
+  set(INSTBIN .)
+  set(INSTLIB .)
+  set(INSTINC include)
+  set(INSTDAT .)
+  set(INSTDOC .)
 else()
   include(GNUInstallDirs)
-  set(RUNTIME_INSTALL_PATH   ${CMAKE_INSTALL_BINDIR})
-  set(ARCHIVE_INSTALL_PATH   ${CMAKE_INSTALL_LIBDIR})
-  set(LIBRARY_INSTALL_PATH   ${CMAKE_INSTALL_LIBDIR})
-  set(BUNDLE_INSTALL_PATH    "${CMAKE_INSTALL_DATADIR}/Siliko/error")
-  set(FRAMEWORK_INSTALL_PATH "${CMAKE_INSTALL_DATADIR}/Siliko/error")
-  set(HEADER_INSTALL_PATH    ${CMAKE_INSTALL_INCLUDEDIR})
-  set(SHARE_INSTALL_PATH     "${CMAKE_INSTALL_DATADIR}/Siliko")
-  set(DOC_INSTALL_PATH       ${CMAKE_INSTALL_DOCDIR})
+  set(INSTBIN ${CMAKE_INSTALL_BINDIR})
+  set(INSTLIB ${CMAKE_INSTALL_LIBDIR})
+  set(INSTINC ${CMAKE_INSTALL_INCLUDEDIR})
+  set(INSTDAT "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}")
+  set(INSTDOC ${CMAKE_INSTALL_DOCDIR})
 endif()
 
 #############################
@@ -148,7 +139,7 @@ elseif(BUILD_WINDOWS)
   set(CPACK_GENERATOR NSIS)
   set(CPACK_RESOURCE_FILE_LICENSE "${Siliko_SOURCE_DIR}/GPL-3.0.txt")
   if(BUILD_GUI)
-    set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${RUNTIME_INSTALL_PATH})
+    set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${INSTBIN})
   endif()
 endif()
 
@@ -186,7 +177,7 @@ endif()
 
 install(
   FILES Readme.md Authors.txt GPL-3.0.txt LGPL-3.0.txt
-  DESTINATION ${DOC_INSTALL_PATH})
+  DESTINATION ${DOC_INSTDIR})
 
 ###############################################
 # CPack Inclusion (Used for package creation) #

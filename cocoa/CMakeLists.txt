@@ -63,8 +63,8 @@ target_link_libraries(${EXENAME} ${LIBS})
 set_target_properties(${EXENAME} PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in")
 install(TARGETS "${EXENAME}"
-  RUNTIME DESTINATION ${RUNTIME_INSTALL_PATH}
-  BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH})
+  RUNTIME DESTINATION ${INSTBIN}
+  BUNDLE  DESTINATION .)
 
 install(CODE "include(BundleUtilities)")
 install(CODE "fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${EXENAME}.app\" \"\" \"${LIB_BINARY_DIR}\")")
