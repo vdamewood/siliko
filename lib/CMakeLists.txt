@@ -46,7 +46,17 @@ set(SRCS
   InfixParser.c)
 set(RESOURCES
   SilikoConfig.cmake)
-set(LIBS ${MATH})
+
+# Detect if system has separate math library (libm)
+message("-- Finding Math Library")
+find_library(MATH m)
+if(${MATH} STREQUAL "MATH-NOTFOUND")
+    message("-- Finding Math Library - not needed")
+    set(LIBS "")
+else()
+    message("-- Finding Math Library - found")
+    set(LIBS ${MATH})
+endif()
 
 add_library("${LIBNAME}" ${HDRS} ${SRCS} ${RESOURCES})
 target_link_libraries("${LIBNAME}" ${LIBS})
@@ -64,5 +74,5 @@ install(TARGETS ${LIBNAME}
   RESOURCE      DESTINATION ${SHARE_INSTALL_PATH}
   PUBLIC_HEADER DESTINATION ${HEADER_INSTALL_PATH}/${LIBNAME})
 
-set(CLIB ${LIBNAME} PARENT_SCOPE)
-set(CLIB_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
+set(LIB ${LIBNAME} PARENT_SCOPE)
+set(LIB_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)

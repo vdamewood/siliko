@@ -16,8 +16,8 @@
 
 set(EXENAME Siliko-Cli)
 set(SRCS main.c)
-set(LIBS ${CLIB})
 
+set(LIBS ${LIB})
 message("-- Finding readline")
 find_path(READLINE_INC NAMES readline/readline.h)
 find_library(READLINE_LIB readline)

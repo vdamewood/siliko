@@ -18,16 +18,40 @@ set(EXENAME Siliko-Gui)
 set(HDRS Delegate.h)
 set(XIB MainMenu)
 set(SRCS Delegate.m Main.m "${XIB}.nib")
-set(LIBS ${COCOA} ${CLIB})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc")
 set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.vdamewood.${EXENAME}")
 set(MACOSX_BUNDLE_BUNDLE_NAME "Siliko")
 set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${Siliko_VERSION_STRING})
 set(MACOSX_BUNDLE_BUNDLE_VERSION 1.0.0)
-set(MACOSX_BUNDLE_COPYRIGHT ${Siliko_APP_COPYRIGHT_STATEMENT})
+set(MACOSX_BUNDLE_COPYRIGHT ${COPYRIGHT_STATEMENT})
 set(MACOSX_BUNDLE_MAIN_NIB_FILE ${XIB})
 set(MACOSX_BUNDLE_PRINCIPAL_CLASS "NSApplication")
+
+set(LIBS ${LIB})
+message("-- Finding Cocoa")
+find_library(COCOA Cocoa)
+if(NOT ${COCOA} STREQUAL "COCOA-NOTFOUND")
+  message("-- Finding Cocoa - found")
+  list(APPEND LIBS ${COCOA})
+  set(COCOA_FOUND Yes)
+else()
+  message("-- Finding Cocoa - not found")
+  set(COCOA_FOUND No)
+endif()
+
+find_program(IBTOOL ibtool)
+if (NOT ${IBTOOL} STREQUAL "IBTOOL-NOTFOUND")
+  message("-- Finding ibtool - found")
+  set(IBTOOL_FOUND Yes)
+else()
+  message("-- Finding ibtool - not found")
+  set(IBTOOL_FOUND No)
+endif()
+
+if(NOT COCOA_FOUND OR NOT IBTOOL_FOUND)
+  message(FATAL_ERROR "Can't build GUI. Quitting.")
+endif()
 
 add_custom_command(OUTPUT "${XIB}.nib"
 	COMMAND ${IBTOOL} --compile ${XIB}.nib ${CMAKE_CURRENT_SOURCE_DIR}/${XIB}.xib
@@ -43,4 +67,4 @@ install(TARGETS "${EXENAME}"
   BUNDLE  DESTINATION ${BUNDLE_INSTALL_PATH})
 
 install(CODE "include(BundleUtilities)")
-install(CODE "fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${EXENAME}.app\" \"\" \"${CLIB_BINARY_DIR}\")")
+install(CODE "fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${EXENAME}.app\" \"\" \"${LIB_BINARY_DIR}\")")
