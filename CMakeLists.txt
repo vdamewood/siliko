@@ -20,10 +20,9 @@
 
 cmake_minimum_required(VERSION 3.1.0)
 
-project(Siliko C)
-set(Siliko_VERSION_MAJOR 0)
-set(Siliko_VERSION_MINOR 0)
-set(Siliko_VERSION_PATCH 0)
+project(Siliko
+  LANGUAGES C
+  VERSION   0.0.0)
 
 #########################
 # Configuration Options #
@@ -68,7 +67,6 @@ endif()
 # Build-Independent Values #
 ############################
 
-set(VERSION_STRING      "${Siliko_VERSION_MAJOR}.${Siliko_VERSION_MINOR}.${Siliko_VERSION_PATCH}")
 set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood.\
  Siliko library licensed under the terms of the GNU Lesser General Public License, version 3 or later.\
  Siliko interface programs licensed under the terms of the GNU General Public License, version 3 or later.")
