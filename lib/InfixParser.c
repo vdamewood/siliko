@@ -75,7 +75,6 @@ static SilikoSyntaxTreeNode *GetExpr0r(SilikoLexer *lexer)
 	char *operation = NULL;
 	SilikoSyntaxTreeNode *leftValue = NULL;
 	SilikoSyntaxTreeNode *rest = NULL;
-	//SilikoSyntaxTreeNode **operands = NULL;
 	SilikoSyntaxTreeNode *branchNode = NULL;
 
 	switch (lexer->Token.Type)
@@ -100,13 +99,7 @@ static SilikoSyntaxTreeNode *GetExpr0r(SilikoLexer *lexer)
 	if (!(rest = GetExpr0r(lexer)))
 		goto memerr;
 
-	//if (!(operands = malloc(2 * sizeof(SilikoSyntaxTreeNode *))))
-	//	goto memerr;
-
-	//operands[0] = NULL;
-	//operands[1] = leftValue;
-
-	if (!(branchNode = SilikoSyntaxTreeNewBranch(operation))) //, 2, operands)))
+	if (!(branchNode = SilikoSyntaxTreeNewBranch(operation)))
 		goto memerr;
 
 	SilikoSyntaxTreePushRight(branchNode, NULL);
@@ -124,7 +117,6 @@ memerr:
 	free(operation);
 	SilikoSyntaxTreeDelete(leftValue);
 	SilikoSyntaxTreeDelete(rest);
-	//free(operands);
 	return NULL;
 }
 
@@ -187,18 +179,7 @@ static SilikoSyntaxTreeNode *GetExpr1r(SilikoLexer *lexer)
 	if (!(rest = GetExpr1r(lexer)))
 		goto memerr;
 
-	/*if (!(operands = malloc(2 * sizeof(SilikoSyntaxTreeNode *))))
-	{
-		free(operation);
-		SilikoSyntaxTreeDelete(leftValue);
-		SilikoSyntaxTreeDelete(rest);
-		return NULL;
-	}*/
-
-	//operands[0] = NULL;
-	//operands[1] = leftValue;
-
-	if (!(branchNode = SilikoSyntaxTreeNewBranch(operation))) // , 2, operands)))
+	if (!(branchNode = SilikoSyntaxTreeNewBranch(operation)))
 		goto memerr;
 
 	SilikoSyntaxTreePushRight(branchNode, NULL);
@@ -408,119 +389,6 @@ static SilikoSyntaxTreeNode *GetUNumber(SilikoLexer *lexer)
 
 	return rVal;
 }
-
-/*static SilikoSyntaxTreeNode *GetFCall(SilikoLexer *lexer)
-{
-	char *id;
-	SilikoSyntaxTreeNode *rVal;
-
-	if (lexer->Token.Type != SILIKO_TOK_ID)
-		return SilikoSyntaxTreeNewError();
-
-	if (!(id = strdup(lexer->Token.String)))
-		return NULL;
-
-	SilikoLexerNext(lexer);
-	if (lexer->Token.Type != '(')
-	{
-		free(id);
-		return SilikoSyntaxTreeNewError();
-	}
-
-	SilikoLexerNext(lexer);
-	if (!(rVal = GetArguments(lexer)))
-	{
-		free(id);
-		return NULL;
-	}
-
-	switch (rVal->type)
-	{
-		case SILIKO_NODE_LIST_BRANCH:
-			rVal->branch->id = id;
-			if (!SilikoSyntaxTreeCollapseBranch(rVal))
-			{
-				SilikoSyntaxTreeDelete(rVal);
-				return NULL;
-			}
-			break;
-		case SILIKO_AST_ERROR:
-			free(id);
-			return rVal;
-		default:
-			free(id);
-			SilikoSyntaxTreeDelete(rVal);
-			return SilikoSyntaxTreeNewError();
-	}
-
-	if (lexer->Token.Type != ')')
-	{
-		SilikoSyntaxTreeDelete(rVal);
-		return SilikoSyntaxTreeNewError();
-	}
-	SilikoLexerNext(lexer);
-
-	return rVal;
-}
-
-static SilikoSyntaxTreeNode *GetArguments(SilikoLexer *lexer)
-{
-	SilikoSyntaxTreeNode *expression;
-	SilikoSyntaxTreeNode *rest;
-
-	expression = GetExpr0(lexer);
-
-	if (expression == NULL)
-		return NULL;
-
-	rest = GetNextArgument(lexer);
-
-	if (rest == NULL)
-	{
-		SilikoSyntaxTreeDelete(expression);
-		return NULL;
-	}
-
-	switch (rest->type)
-	{
-	case SILIKO_NODE_LIST_BRANCH:
-		if (!SilikoSyntaxTreePushFront(rest, expression))
-		{
-			SilikoSyntaxTreeDelete(expression);
-			SilikoSyntaxTreeDelete(rest);
-			return NULL;
-		}
-		break;
-	case SILIKO_AST_ERROR:
-			SilikoSyntaxTreeDelete(expression);
-		break;
-	case SILIKO_AST_NOTHING:
-		free(rest);
-		if (!(rest = SilikoSyntaxTreeNewListBranch(expression)))
-			free(expression);
-		break;
-	default:
-		SilikoSyntaxTreeDelete(expression);
-		SilikoSyntaxTreeDelete(rest);
-		rest = SilikoSyntaxTreeNewError();
-	}
-
-	return rest;
-}
-
-static SilikoSyntaxTreeNode *GetNextArgument(SilikoLexer *lexer)
-{
-	switch (lexer->Token.Type)
-	{
-	case ',':
-		SilikoLexerNext(lexer);
-		return GetArguments(lexer);
-	case ')':
-		return SilikoSyntaxTreeNewNothing();
-	default:
-		return SilikoSyntaxTreeNewError();
-	}
-}*/
 
 SilikoSyntaxTreeNode *GetFCall(SilikoLexer *lexer)
 {
