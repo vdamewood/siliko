@@ -175,7 +175,7 @@ endif()
 
 install(
   FILES Readme.md Authors.txt GPL-3.0.txt LGPL-3.0.txt
-  DESTINATION ${DOC_INSTDIR})
+  DESTINATION ${INSTDOC})
 
 ###############################################
 # CPack Inclusion (Used for package creation) #
