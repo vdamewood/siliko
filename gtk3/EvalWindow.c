@@ -24,8 +24,8 @@
 #include "InfixParser.h"
 #include "Value.h"
 
-#if !defined SHARE_PATH
-#error "You must define SHARE_PATH to build this file."
+#if !defined GLADEDIR
+#error "You must define GLADEDIR to build this file."
 #endif
 
 static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
@@ -53,7 +53,7 @@ GtkBuilder *EvalWindowNew(void)
 	GtkBuilder *EvalWindow = gtk_builder_new();
 
 	GError *error = NULL;
-	if (!gtk_builder_add_from_file(EvalWindow, SHARE_PATH "/EvalWindow.glade", &error))
+	if (!gtk_builder_add_from_file(EvalWindow, GLADEDIR "/EvalWindow.glade", &error))
 	{
 		g_warning("Couldn't load builder file: %s", error->message);
 		g_error_free(error);
