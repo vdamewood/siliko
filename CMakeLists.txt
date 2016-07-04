@@ -106,16 +106,6 @@ else()
 endif()
 
 #############################
-# Compiler-dependent values #
-#############################
-
-set(COMPILER_LIST Clang AppleClang GNU)
-list(FIND COMPILER_LIST ${CMAKE_C_COMPILER_ID} COMPILER_INDEX)
-if(NOT ${COMPILER_INDEX} LESS 0)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11")
-endif()
-
-#############################
 # Package-creation Settings #
 #############################
 
@@ -170,7 +160,7 @@ if(BUILD_GUI)
   if(BUILD_MACOSX)
     add_subdirectory(cocoa)
   elseif(BUILD_UNIX)
-    add_subdirectory(gtk2)
+    add_subdirectory(gtk3)
   elseif(BUILD_WINDOWS)
     add_subdirectory(win32)
   else()

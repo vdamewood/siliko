@@ -30,11 +30,14 @@ else()
   message("-- Finding GTK+ 2 - not found")
 endif()
 
-if(NOT GTK2_FOUND)
-  message(FATAL_ERROR "Can't build GUI. Quitting.")
-endif()
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+list(APPEND LIBS ${GTK3_LIBRARIES})
+include_directories(${GTK3_INCLUDE_DIRS})
+link_directories(${GTK3_LIBRARY_DIRS})
+add_definitions(${GTK3_CFLAGS_OTHER})
 
-add_definitions("-DSHARE_PATH=\"${CMAKE_INSTALL_PREFIX}/${INSTDAT}\"")
+add_definitions("-DGLADEDIR=\"${CMAKE_INSTALL_PREFIX}/${INSTDAT}\"")
 add_executable(${TARGET} ${SOURCES} ${HEADERS})
 set_target_properties(${TARGET} PROPERTIES
 	OUTPUT_NAME ${ONAMEGUI})
