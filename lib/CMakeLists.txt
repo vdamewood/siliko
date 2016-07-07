@@ -43,16 +43,16 @@ set(SOURCES
   InfixParser.c)
 set(RESOURCES
   SilikoConfig.cmake)
-set(DEPS "")
 
 # Detect if system has separate math library (libm)
-message("-- Finding math library")
-find_library(MATHLIB m)
-if(${MATHLIB} STREQUAL "MATHLIB-NOTFOUND")
-    message("-- Finding math library - not needed")
-else()
-    message("-- Finding math library - found")
-    list(APPEND DEPS ${MATHLIB})
+set(NEED_LM Off)
+check_symbol_exists(sin math.h FOUND_SIN)
+if(NOT "${FOUND_SIN}")
+  set(CMAKE_REQUIRED_LIBRARIES m)
+  check_symbol_exists(sin math.h FOUND_SIN_WITH_LM)
+  if(${FOUND_SIN_WITH_LM})
+    set(NEED_LM On)
+  endif()
 endif()
 
 if(BUILD_DLIB)
@@ -64,7 +64,9 @@ if(BUILD_DLIB)
       RESOURCE      "${RESOURCES}"
       VERSION       ${PROJECT_VERSION}
       SOVERSION     ${PROJECT_VERSION_MAJOR})
-  target_link_libraries(${DTARGET} ${DEPS})
+  if("${NEED_M}")
+    target_link_libraries(${DTARGET} m)
+  endif()
 
   install(TARGETS ${DTARGET}
     RUNTIME       DESTINATION ${INSTBIN}
@@ -82,7 +84,9 @@ if(BUILD_SLIB)
       RESOURCE      ${RESOURCES}
       VERSION       ${PROJECT_VERSION}
       SOVERSION     ${PROJECT_VERSION_MAJOR})
-  target_link_libraries(${STARGET} ${DEPS})
+  if("${NEED_M}")
+    target_link_libraries(${STARGET} m)
+  endif()
 
   install(TARGETS ${STARGET}
     ARCHIVE       DESTINATION ${INSTLIB}
