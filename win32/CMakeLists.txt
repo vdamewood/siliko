@@ -17,7 +17,7 @@
 set(TARGET SilikoGui)
 set(HEADERS EvalWindow.h About.h Id.h)
 set(SOURCES WinMain.c EvalWindow.c EvalWindow.rc About.c About.rc)
-set(DEPS SilikoLib)
+set(DEPS ${LIB})
 
 message("-- Finding User32.dll")
 find_library(USER32 User32)

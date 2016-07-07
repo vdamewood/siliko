@@ -16,7 +16,7 @@
 
 set(TARGET SilikoCli)
 set(SOURCES main.c)
-set(DEPS SilikoLib)
+set(DEPS ${LIB})
 
 message("-- Finding readline")
 find_path(READLINE_INC NAMES readline/readline.h)

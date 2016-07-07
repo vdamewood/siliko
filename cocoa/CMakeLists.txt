@@ -18,7 +18,7 @@ set(TARGET SilikoGui)
 set(HEADERS Delegate.h)
 set(XIB MainMenu)
 set(SOURCES Delegate.m Main.m "${XIB}.nib")
-set(DEPS SilikoLib)
+set(DEPS ${LIB})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc")
 set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.vdamewood.${TARGET}")

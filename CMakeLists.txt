@@ -28,11 +28,20 @@ project(Siliko
 # Configuration Options #
 #########################
 
-option(BUILD_SHARED_LIBS "Build shared libraries"          On)
-option(BUILD_CLI         "Build command-line application." On)
-option(BUILD_GUI         "Build a GUI Program"             On)
 if(APPLE)
-  option(FORCE_UNIX      "Force Unix-style installation (Macintosh OS X Only)" Off)
+  include(CMakeDependentOption)
+  option(FORCE_UNIX "Force Unix-style installation" Off)
+  cmake_dependent_option(BUILD_SLIB "Build static library" On "FORCE_UNIX" Off)
+else()
+  option(BUILD_SLIB "Build static library" On)
+endif()
+
+option(BUILD_DLIB "Build shared library" On)
+option(BUILD_CLI "Build command-line program" On)
+option(BUILD_GUI "Build GUI Program" On)
+
+if(NOT BUILD_DLIB AND NOT BUILD_SLIB)
+  message(FATAL_ERROR "You must build at least one library configuration.")
 endif()
 
 ###############
@@ -82,6 +91,7 @@ if(BUILD_MACOSX)
   set(INSTDAT err)
   set(INSTDOC .)
   set(ONAMEDLIB Siliko)
+  set(ONAMESLIB SilikoStatic) # This will be ignored.
   set(ONAMECLI  siliko)
   set(ONAMEGUI  "Siliko GUI")
 elseif(BUILD_WINDOWS)
@@ -91,6 +101,7 @@ elseif(BUILD_WINDOWS)
   set(INSTDAT .)
   set(INSTDOC .)
   set(ONAMEDLIB siliko)
+  set(ONAMESLIB siliko-static)
   set(ONAMECLI  siliko)
   set(ONAMEGUI  siliko-gui)
 else()
@@ -101,6 +112,7 @@ else()
   set(INSTDAT "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}")
   set(INSTDOC ${CMAKE_INSTALL_DOCDIR})
   set(ONAMEDLIB siliko)
+  set(ONAMESLIB siliko)
   set(ONAMECLI  siliko)
   set(ONAMEGUI  siliko-gui)
 endif()

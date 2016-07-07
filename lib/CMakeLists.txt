@@ -14,7 +14,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-set(TARGET SilikoLib)
+set(DTARGET SilikoDLib)
+set(STARGET SilikoSLib)
+
 set(PUB_HEADERS
   W32Dll.h
   Value.h
@@ -53,22 +55,48 @@ else()
     list(APPEND DEPS ${MATHLIB})
 endif()
 
-add_library(${TARGET} ${HEADERS} ${SOURCES} ${RESOURCES})
-set_target_properties(${TARGET} PROPERTIES
-    OUTPUT_NAME   ${ONAMEDLIB}
-    FRAMEWORK     ${BUILD_MACOSX}
-    PUBLIC_HEADER ${PUB_HEADERS}
-    RESOURCE      ${RESOURCES}
-    VERSION       ${PROJECT_VERSION}
-    SOVERSION     ${PROJECT_VERSION_MAJOR})
-target_link_libraries(${TARGET} ${DEPS})
+if(BUILD_DLIB)
+  add_library(${DTARGET} SHARED ${HEADERS} ${SOURCES} ${RESOURCES})
+  set_target_properties(${DTARGET} PROPERTIES
+      OUTPUT_NAME   ${ONAMEDLIB}
+      FRAMEWORK     ${BUILD_MACOSX}
+      PUBLIC_HEADER "${PUB_HEADERS}"
+      RESOURCE      "${RESOURCES}"
+      VERSION       ${PROJECT_VERSION}
+      SOVERSION     ${PROJECT_VERSION_MAJOR})
+  target_link_libraries(${DTARGET} ${DEPS})
 
-install(TARGETS ${TARGET}
-  RUNTIME       DESTINATION ${INSTBIN}
-  ARCHIVE       DESTINATION ${INSTLIB}
-  LIBRARY       DESTINATION ${INSTLIB}
-  FRAMEWORK     DESTINATION .
-  RESOURCE      DESTINATION ${INSTDAT}
-  PUBLIC_HEADER DESTINATION ${INSTINC}/Siliko)
+  install(TARGETS ${DTARGET}
+    RUNTIME       DESTINATION ${INSTBIN}
+    ARCHIVE       DESTINATION ${INSTLIB}
+    LIBRARY       DESTINATION ${INSTLIB}
+    FRAMEWORK     DESTINATION .
+    RESOURCE      DESTINATION ${INSTDAT}
+    PUBLIC_HEADER DESTINATION ${INSTINC}/Siliko)
+endif()
+
+if(BUILD_SLIB)
+  add_library(${STARGET} STATIC ${HEADERS} ${SOURCES} ${RESOURCES})
+  set_target_properties(${STARGET} PROPERTIES
+      OUTPUT_NAME   ${ONAMESLIB}
+      RESOURCE      ${RESOURCES}
+      VERSION       ${PROJECT_VERSION}
+      SOVERSION     ${PROJECT_VERSION_MAJOR})
+  target_link_libraries(${STARGET} ${DEPS})
+
+  install(TARGETS ${STARGET}
+    ARCHIVE       DESTINATION ${INSTLIB}
+    RESOURCE      DESTINATION ${INSTDAT}
+    PUBLIC_HEADER DESTINATION ${INSTINC}/Siliko)
+
+  install(FILES ${PUB_HEADERS}
+    DESTINATION ${INSTINC}/Siliko)
+endif()
+
+if(BUILD_DLIB)
+  set(LIB "${DTARGET}" PARENT_SCOPE)
+else()
+  set(LIB "${STARGET}" PARENT_SCOPE)
+endif()
 
 set(LIB_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
