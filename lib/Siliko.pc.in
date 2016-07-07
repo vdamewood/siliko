@@ -1,0 +1,9 @@
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+incdir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+Name: @PROJECT_NAME@
+Description: Math parser library
+Version: @PROJECT_VERSION@
+Cflags: -I${incdir}
+Libs: -L${libdir} -lSiliko
+Libs.private: -lm
