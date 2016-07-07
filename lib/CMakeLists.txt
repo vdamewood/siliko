@@ -46,6 +46,7 @@ set(RESOURCES
 
 # Detect if system has separate math library (libm)
 set(NEED_LM Off)
+include(CheckSymbolExists)
 check_symbol_exists(sin math.h FOUND_SIN)
 if(NOT "${FOUND_SIN}")
   set(CMAKE_REQUIRED_LIBRARIES m)
