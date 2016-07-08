@@ -24,6 +24,12 @@ project(Siliko
   LANGUAGES C
   VERSION   0.0.0)
 
+set(DESCRIPTION "Mathematical expression parser written in C")
+set(VENDOR      "Vincent Damewood")
+set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood.\
+ Siliko library licensed under the terms of the GNU Lesser General Public License, version 3 or later.\
+ Siliko interface programs licensed under the terms of the GNU General Public License, version 3 or later.")
+
 #########################
 # Configuration Options #
 #########################
@@ -72,14 +78,6 @@ else()
     set(BUILD_MACOSX Off)
 endif()
 
-############################
-# Build-Independent Values #
-############################
-
-set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood.\
- Siliko library licensed under the terms of the GNU Lesser General Public License, version 3 or later.\
- Siliko interface programs licensed under the terms of the GNU General Public License, version 3 or later.")
-
 ######################
 # Build-Based Values #
 ######################
@@ -115,41 +113,6 @@ else()
   set(ONAMESLIB siliko)
   set(ONAMECLI  siliko)
   set(ONAMEGUI  siliko-gui)
-endif()
-
-#############################
-# Package-creation Settings #
-#############################
-
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${Siliko_SOURCE_DIR}/Readme.md")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-  "Siliko is a mathematical expression parser library.")
-
-set(CPACK_PACKAGE_EXECUTABLES)
-if(BUILD_CLI)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES SilikoCli "Siliko (Command Line)")
-endif()
-if(BUILD_GUI)
-  list(APPEND CPACK_PACKAGE_EXECUTABLES SilikoGui "Siliko (GUI)")
-endif()
-
-set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
-set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}")
-set(CPACK_SOURCE_GENERATOR TGZ TBZ2 ZIP)
-set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
-set(CPACK_SOURCE_IGNORE_FILES "/.git/" "/.gitignore" "/Build/" "/build/")
-set(CPACK_RESOURCE_FILE_README "${Siliko_SOURCE_DIR}/Readme.md")
-
-if(BUILD_MACOSX)
-  set(CPACK_GENERATOR DragNDrop)
-elseif(BUILD_WINDOWS)
-  set(CPACK_GENERATOR NSIS)
-  set(CPACK_RESOURCE_FILE_LICENSE "${Siliko_SOURCE_DIR}/GPL-3.0.txt")
-  if(BUILD_GUI)
-    set(CPACK_NSIS_EXECUTABLES_DIRECTORY ${INSTBIN})
-  endif()
 endif()
 
 ###########################
@@ -188,8 +151,50 @@ install(
   FILES Readme.md Authors.txt GPL-3.0.txt LGPL-3.0.txt
   DESTINATION ${INSTDOC})
 
-###############################################
-# CPack Inclusion (Used for package creation) #
-###############################################
+#############################
+# Package-creation Settings #
+#############################
+
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+set(CPACK_PACKAGE_VENDOR "${VENDOR}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+#set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/Cpack/Description.txt")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${DESCRIPTION}")
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
+#set(CPACK_PACKAGE_INSTALL_DIRECTORY)
+#set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}Cpack/Icon.png")
+#set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_SOURCE_DIR}Cpack/Config.cm")
+
+#set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/Cpack/License.txt")
+#set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/Cpack/Readme.txt")
+#set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/Cpack/Welcome.txt")
+
+set(CPACK_MONOLITHIC_INSTALL Off)
+set(CPACK_GENERATOR ZIP TXZ)
+if(APPLE AND NOT FORCE_UNIX)
+  set(CPACK_GENERATOR DragNDrop)
+elseif(WIN32)
+  set(CPACK_GENERATOR WIX)
+endif()
+#set(CPACK_OUTPUT_CONFIG_FILE)
+if(BUILD_GUI)
+  list(APPEND CPACK_PACKAGE_EXECUTABLES SilikoGui ${PROJECT_NAME})
+endif()
+set(CPACK_STRIP_FILES On)
+set(CPACK_VERBATIM_VARIABLES Off)
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}")
+set(CPACK_SOURCE_STRIP_FILES Off)
+set(CPACK_SOURCE_GENERATOR TXZ ZIP)
+#set(CPACK_SOURCE_OUTPUT_CONFIG_FILE)
+set(CPACK_SOURCE_IGNORE_FILES "/\.git/" "/\.gitignore" "/[Bb]uild/")
+
+set(CPACK_DMG_VOLUME_NAME "${PROJECT_NAME}")
+set(CPACK_DMG_FORMAT UDZO)
+#set(CPACK_DMG_DS_STORE "${CMAKE_SOURCE_DIR}/Cpack/DmgDsStore")
+#set(CPACK_DMG_DS_STORE_SETUP_SCRIPT)
+#set(CPACK_DMG_BACKGROUND_IMAGE "${CMAKE_SOURCE_DIR}/Cpack/DmgBackground.png")
+set(CPACK_DMG_DISABLE_APPLICATIONS_SYMLINK On)
 
 include(CPack)
