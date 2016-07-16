@@ -26,6 +26,7 @@ project(Siliko
 
 set(DESCRIPTION "Mathematical expression parser written in C")
 set(VENDOR      "Vincent Damewood")
+set(URL         "http://vdamewood.com/projects/siliko")
 set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood.\
  Siliko library licensed under the terms of the GNU Lesser General Public\
  License, version 3 or later. Siliko interface programs licensed under the\

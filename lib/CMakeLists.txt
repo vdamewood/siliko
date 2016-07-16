@@ -98,7 +98,7 @@ if(BUILD_SLIB)
     DESTINATION ${INSTINC}/Siliko)
 endif()
 
-if(UNIX)
+if(BUILD_UNIX)
   configure_file(Siliko.pc.in Siliko.pc @ONLY)
   install(FILES "${CMAKE_CURRENT_BINARY_DIR}/Siliko.pc" DESTINATION "${INSTLIB}/pkgconfig")
 endif()
