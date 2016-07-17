@@ -150,7 +150,7 @@ endif()
 ##################################
 
 install(
-  FILES Readme.md Authors.txt GPL-3.0.txt LGPL-3.0.txt
+  FILES Readme.md Authors.txt License.txt GPL-3.0.txt LGPL-3.0.txt
   DESTINATION ${INSTDOC})
 
 #############################
@@ -169,7 +169,7 @@ set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CMAKE_SYSTEM_N
 #set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}Cpack/Icon.png")
 #set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_SOURCE_DIR}Cpack/Config.cm")
 
-#set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/Cpack/License.txt")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/License.txt")
 #set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/Cpack/Readme.txt")
 #set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/Cpack/Welcome.txt")
 
