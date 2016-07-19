@@ -35,8 +35,6 @@ endif()
 
 if (UNIX)
   add_definitions(-DUSE_UNIX=1)
-else()
-  add_definitions(-DUSE_UNIX=0)
 endif()
 
 add_executable(${TARGET} ${SOURCES})
