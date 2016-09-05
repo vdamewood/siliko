@@ -268,7 +268,7 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		break;
 	case DFA_TERM_INTEGER:
 		Lexer->Token.Type = SILIKO_TOK_INTEGER;
-		Lexer->Token.Integer = atoi(Lex.Buffer);
+		Lexer->Token.Integer = strtoll(Lex.Buffer, NULL, 10);
 		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
