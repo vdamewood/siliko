@@ -76,7 +76,7 @@ struct Lexeme
 };
 typedef struct Lexeme Lexeme;
 
-int Append(Lexeme *Lex, char NewChar)
+static int Append(Lexeme *Lex, char NewChar)
 {
 	if (Lex->Current == Lex->End)
 	{
