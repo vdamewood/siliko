@@ -48,8 +48,8 @@ struct SILIKO_API SilikoToken
 	union
 	{
 		char *Id;
-		int Integer;
-		float Float;
+		long long int Integer;
+		double Float;
 	};
 };
 typedef struct SilikoToken SilikoToken;

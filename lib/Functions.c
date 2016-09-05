@@ -47,14 +47,14 @@ SilikoValue SilikoFunction_add(int argc, SilikoValue *argv)
 			}
 			else
 			{
-				rVal.Float += (float)argv[i].Integer;
+				rVal.Float += (double)argv[i].Integer;
 			}
 		}
 		else
 		{
 			if (argv[i].Status == SILIKO_VAL_FLOAT)
 			{
-				rVal.Float = (float)rVal.Integer + argv[i].Float;
+				rVal.Float = (double)rVal.Integer + argv[i].Float;
 				rVal.Status = SILIKO_VAL_FLOAT;
 			}
 			else
@@ -91,14 +91,14 @@ SilikoValue SilikoFunction_subtract(int argc, SilikoValue *argv)
 			}
 			else
 			{
-				rVal.Float -= (float)argv[i].Integer;
+				rVal.Float -= (double)argv[i].Integer;
 			}
 		}
 		else
 		{
 			if (argv[i].Status == SILIKO_VAL_FLOAT)
 			{
-				rVal.Float = (float)rVal.Integer - argv[i].Float;
+				rVal.Float = (double)rVal.Integer - argv[i].Float;
 				rVal.Status = SILIKO_VAL_FLOAT;
 			}
 			else
@@ -135,13 +135,13 @@ SilikoValue SilikoFunction_multiply(int argc, SilikoValue *argv)
 			}
 			else
 			{
-				rVal.Float *= (float)argv[i].Integer;
+				rVal.Float *= (double)argv[i].Integer;
 			}
 		}
 		else {
 			if (argv[i].Status == SILIKO_VAL_FLOAT)
 			{
-				rVal.Float = (float)rVal.Integer * argv[i].Float;
+				rVal.Float = (double)rVal.Integer * argv[i].Float;
 				rVal.Status = SILIKO_VAL_FLOAT;
 			}
 			else
@@ -185,14 +185,14 @@ SilikoValue SilikoFunction_divide(int argc, SilikoValue *argv)
 			}
 			else
 			{
-				rVal.Float /= (float) argv[i].Integer;
+				rVal.Float /= (double) argv[i].Integer;
 			}
 		}
 		else {
 			if (argv[i].Status == SILIKO_VAL_FLOAT)
 			{
 				rVal.Status = SILIKO_VAL_FLOAT;
-				rVal.Float = (float) rVal.Integer / argv[i].Float;
+				rVal.Float = (double) rVal.Integer / argv[i].Float;
 			}
 			else if (rVal.Integer % argv[i].Integer == 0)
 			{
@@ -201,7 +201,7 @@ SilikoValue SilikoFunction_divide(int argc, SilikoValue *argv)
 			else
 			{
 				rVal.Status = SILIKO_VAL_FLOAT;
-				rVal.Float = (float) rVal.Integer / (float) argv[i].Integer;
+				rVal.Float = (double) rVal.Integer / (double) argv[i].Integer;
 			}
 		}
 	}
@@ -211,21 +211,21 @@ SilikoValue SilikoFunction_divide(int argc, SilikoValue *argv)
 SilikoValue SilikoFunction_power(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float runningValue;
-	float nextValue;
+	double runningValue;
+	double nextValue;
 	int i;
 
 	runningValue = (argv[0].Status == SILIKO_VAL_INTEGER)
-		? (float) argv[0].Integer
+		? (double) argv[0].Integer
 		: argv[0].Float;
 
 	for (i = 1; i < argc; i++)
 	{
 		nextValue = (argv[i].Status == SILIKO_VAL_INTEGER)
-			? nextValue = (float) argv[i].Integer
+			? nextValue = (double) argv[i].Integer
 			: argv[i].Float;
 
-		runningValue = (float) pow(runningValue, nextValue);
+		runningValue = pow(runningValue, nextValue);
 	}
 
 	rVal.Status = SILIKO_VAL_FLOAT;
@@ -238,10 +238,10 @@ SilikoValue SilikoFunction_dice(int argc, SilikoValue *argv)
 {
 	/* TODO: Make this function handle fractional dice. */
 	static int hasSeeded = 0;
-	int runningTotal = 0;
+	long long int runningTotal = 0;
 	SilikoValue rVal;
-	int count;
-	int faces;
+	long long int count;
+	long long int faces;
 	int i;
 
 	if(argc != 2)
@@ -252,11 +252,11 @@ SilikoValue SilikoFunction_dice(int argc, SilikoValue *argv)
 
 	count = (argv[0].Status == SILIKO_VAL_INTEGER)
 		? argv[0].Integer
-		: (int) argv[0].Float;
+		: (long long int) argv[0].Float;
 
 	faces = (argv[1].Status == SILIKO_VAL_INTEGER)
 		? argv[1].Integer
-		: (int) argv[1].Float;
+		: (long long int) argv[1].Float;
 
 	if (!hasSeeded)
 	{
@@ -282,16 +282,16 @@ SilikoValue SilikoFunction_abs(int argc, SilikoValue *argv)
 
 	rVal = argv[0];
 	if (rVal.Status == SILIKO_VAL_FLOAT)
-		rVal.Float = (float) fabs(rVal.Float);
+		rVal.Float = fabs(rVal.Float);
 	else if (rVal.Status == SILIKO_VAL_INTEGER)
-		rVal.Integer = abs(rVal.Integer);
+		rVal.Integer = llabs(rVal.Integer);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_acos(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -300,7 +300,7 @@ SilikoValue SilikoFunction_acos(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float) argv[0].Integer;
+		input = (double) argv[0].Integer;
 	else
 		input = argv[0].Float;
 
@@ -311,14 +311,14 @@ SilikoValue SilikoFunction_acos(int argc, SilikoValue *argv)
 	}
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) acos(input);
+	rVal.Float = acos(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_asin(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -327,7 +327,7 @@ SilikoValue SilikoFunction_asin(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float) argv[0].Integer;
+		input = (double) argv[0].Integer;
 	else
 		input = argv[0].Float;
 
@@ -338,14 +338,14 @@ SilikoValue SilikoFunction_asin(int argc, SilikoValue *argv)
 	}
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) asin(input);
+	rVal.Float = asin(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_atan(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -354,20 +354,20 @@ SilikoValue SilikoFunction_atan(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float) argv[0].Integer;
+		input = (double) argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) atan(input);
+	rVal.Float = atan(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_ceil(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
-	float result;
+	double input;
+	double result;
 
 	if (argc != 1)
 	{
@@ -376,15 +376,15 @@ SilikoValue SilikoFunction_ceil(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
-	result = (float) ceil(input);
+	result = ceil(input);
 	if (result <= INT_MAX && result >= INT_MIN)
 	{
 		rVal.Status = SILIKO_VAL_INTEGER;
-		rVal.Integer = (int)result;
+		rVal.Integer = (long long int)result;
 	}
 	else
 	{
@@ -397,7 +397,7 @@ SilikoValue SilikoFunction_ceil(int argc, SilikoValue *argv)
 SilikoValue SilikoFunction_cos(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -406,19 +406,19 @@ SilikoValue SilikoFunction_cos(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) cos(input);
+	rVal.Float = cos(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_cosh(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -427,19 +427,19 @@ SilikoValue SilikoFunction_cosh(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) cosh(input);
+	rVal.Float = cosh(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_exp(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -448,20 +448,20 @@ SilikoValue SilikoFunction_exp(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) exp(input);
+	rVal.Float = exp(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_floor(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
-	float result;
+	double input;
+	double result;
 
 	if (argc != 1)
 	{
@@ -470,15 +470,15 @@ SilikoValue SilikoFunction_floor(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
-	result = (float) floor(input);
+	result = floor(input);
 	if (result <= INT_MAX && result >= INT_MIN)
 	{
 		rVal.Status = SILIKO_VAL_INTEGER;
-		rVal.Integer = (int)result;
+		rVal.Integer = (long long int)result;
 	}
 	else
 	{
@@ -491,7 +491,7 @@ SilikoValue SilikoFunction_floor(int argc, SilikoValue *argv)
 SilikoValue SilikoFunction_log(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -500,19 +500,19 @@ SilikoValue SilikoFunction_log(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) log(input);
+	rVal.Float = log(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_log10(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -521,19 +521,19 @@ SilikoValue SilikoFunction_log10(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) log10(input);
+	rVal.Float = (double) log10(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_sin(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -542,19 +542,19 @@ SilikoValue SilikoFunction_sin(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) sin(input);
+	rVal.Float = sin(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_sinh(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -563,19 +563,19 @@ SilikoValue SilikoFunction_sinh(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) sinh(input);
+	rVal.Float = sinh(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_sqrt(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float inVal;
+	double inVal;
 
 	if (argc != 1)
 	{
@@ -596,11 +596,11 @@ SilikoValue SilikoFunction_sqrt(int argc, SilikoValue *argv)
 	}
 	else
 	{
-		inVal = (float) argv[0].Integer;
+		inVal = (double) argv[0].Integer;
 	}
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) sqrt(inVal);
+	rVal.Float = sqrt(inVal);
 
 	return rVal;
 }
@@ -611,7 +611,7 @@ SilikoValue SilikoFunction_tan(int argc, SilikoValue *argv)
 	// input of pi/2 or 3*pi/2. Probably due to the imprecision of
 	// floating point numbers.
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -619,18 +619,18 @@ SilikoValue SilikoFunction_tan(int argc, SilikoValue *argv)
 		return rVal;
 	}
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER) input = (float)argv[0].Integer;
+	if (argv[0].Status == SILIKO_VAL_INTEGER) input = (double)argv[0].Integer;
 	else input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) tan(input);
+	rVal.Float = tan(input);
 	return rVal;
 }
 
 SilikoValue SilikoFunction_tanh(int argc, SilikoValue *argv)
 {
 	SilikoValue rVal;
-	float input;
+	double input;
 
 	if (argc != 1)
 	{
@@ -639,11 +639,11 @@ SilikoValue SilikoFunction_tanh(int argc, SilikoValue *argv)
 	}
 
 	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (float)argv[0].Integer;
+		input = (double)argv[0].Integer;
 	else
 		input = argv[0].Float;
 
 	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (float) tanh(input);
+	rVal.Float = tanh(input);
 	return rVal;
 }

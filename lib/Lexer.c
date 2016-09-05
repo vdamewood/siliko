@@ -274,19 +274,19 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		break;
 	case DFA_TERM_FLOAT:
 		Lexer->Token.Type = SILIKO_TOK_FLOAT;
-		Lexer->Token.Float = (float)atof(Lex.Buffer);
+		Lexer->Token.Float = atof(Lex.Buffer);
 		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
 		Lexer->Token.Type = SILIKO_TOK_FLOAT;
-		Lexer->Token.Float = (float)EULER;
+		Lexer->Token.Float = EULER;
 		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_PI:
 		Lexer->Token.Type = SILIKO_TOK_FLOAT;
-		Lexer->Token.Float = (float)PI;
+		Lexer->Token.Float = PI;
 		free(Lex.Buffer);
 		dfaState = DFA_END;
 		break;

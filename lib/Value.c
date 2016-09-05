@@ -37,9 +37,9 @@ char *SilikoValueToString(SilikoValue InputValue)
 	switch (InputValue.Status)
 	{
 	case (SILIKO_VAL_INTEGER):
-		size = snprintf(NULL, 0, "%i", InputValue.Integer) + 1;
+		size = snprintf(NULL, 0, "%lli", InputValue.Integer) + 1;
 		rValue = malloc(size);
-		snprintf(rValue, size, "%i", InputValue.Integer);
+		snprintf(rValue, size, "%lli", InputValue.Integer);
 		break;
 	case (SILIKO_VAL_FLOAT):
 		size = snprintf(NULL, 0, "%f", InputValue.Float) + 1;

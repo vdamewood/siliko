@@ -296,7 +296,7 @@ memerr:
 
 static SilikoSyntaxTreeNode *GetExpr3lf(SilikoLexer *lexer)
 {
-	int value;
+	long long int value;
 
 	if(lexer->Token.Type == 'd')
 	{

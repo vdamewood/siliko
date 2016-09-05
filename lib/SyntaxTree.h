@@ -53,14 +53,14 @@ struct SILIKO_API SilikoSyntaxTreeNode
 	SilikoSyntaxTreeNodeType Type;
 	union
 	{
-		int Integer;
-		float Float;
+		long long int Integer;
+		double Float;
 		SilikoSyntaxTreeBranch *Branch;
 	};
 };
 
-SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(int IntegerValue);
-SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(float FloatValue);
+SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int IntegerValue);
+SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(double FloatValue);
 SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *Id);
 SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void);
 SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void);

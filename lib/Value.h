@@ -51,8 +51,8 @@ struct SILIKO_API SilikoValue
 	SilikoValueStatus Status;
 	union
 	{
-		int Integer;
-		float Float;
+		long long int Integer;
+		double Float;
 	};
 };
 typedef struct SilikoValue SilikoValue;

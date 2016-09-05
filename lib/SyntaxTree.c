@@ -49,7 +49,7 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void)
 	return rVal;
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(int NewValue)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int NewValue)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 
@@ -61,7 +61,7 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(int NewValue)
 	return rVal;
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(float NewValue)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(double NewValue)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 
