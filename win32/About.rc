@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "winres.h"
+#include "afxres.h"
 #include "Id.h"
 
 ABOUT_DIALOG DIALOG DISCARDABLE  0, 0, 240, 110
@@ -24,15 +24,20 @@ CAPTION "About Siliko"
 FONT 8, "MS Sans Serif"
 
 BEGIN
-	CTEXT		"Siliko is a simple math parser."
-			-1,
-			8,8,220,8
-	CTEXT		"The Siliko library is licensed under the terms of the GNU Lesser General Public License, version 3 or later as released by the Free Software Foundataion. For more information, see the file LGPL-3.0.txt."
-			-1,
-			8,24,220,24
-	CTEXT		"This GUI frontend is licensed under the terms of the GNU General Public License, version 3 or later as released by the Free Software Foundation. See the file GPL-3.0.txt for details.",
-			-1,
-			8,56,220,24
-	DEFPUSHBUTTON	"&OK",IDOK,
-			95,88,48,14
+	CTEXT
+		"Siliko is a simple math parser.",
+		-1,
+		8,8,220,8
+	CTEXT
+		"The Siliko library is licensed under the terms of the GNU Lesser General Public License, version 3 or later as released by the Free Software Foundataion. For more information, see the file LGPL-3.0.txt.",
+		-1,
+		8,24,220,24
+	CTEXT
+		"This GUI frontend is licensed under the terms of the GNU General Public License, version 3 or later as released by the Free Software Foundation. See the file GPL-3.0.txt for details.",
+		-1,
+		8,56,220,24
+	DEFPUSHBUTTON
+		"&OK",
+		IDOK,
+		95,88,48,14
 END
