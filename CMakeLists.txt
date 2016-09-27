@@ -117,6 +117,12 @@ else()
   set(ONAMEGUI  siliko-gui)
 endif()
 
+#############################
+# Compiler-dependent values #
+#############################
+
+set(CMAKE_C_STANDARD 11)
+
 ###########################
 # Subdirectory Inclusions #
 ###########################
