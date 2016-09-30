@@ -16,7 +16,7 @@
 
 set(TARGET SilikoGui)
 set(HEADERS EvalWindow.h About.h Id.h)
-set(SOURCES WinMain.c EvalWindow.c EvalWindow.rc About.c About.rc)
+set(SOURCES WinMain.c EvalWindow.c EvalWindow.rc About.c About.rc Icon.rc)
 set(DEPS ${LIB})
 
 message("-- Finding User32.dll")
