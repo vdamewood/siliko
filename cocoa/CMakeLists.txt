@@ -17,7 +17,8 @@
 set(TARGET SilikoGui)
 set(HEADERS Delegate.h)
 set(XIB MainMenu)
-set(SOURCES Delegate.m Main.m "${XIB}.nib")
+set(ICON siliko.icns)
+set(SOURCES Delegate.m Main.m "${XIB}.nib" ${ICON})
 set(DEPS ${LIB})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc")
@@ -28,6 +29,7 @@ set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
 set(MACOSX_BUNDLE_COPYRIGHT ${COPYRIGHT_STATEMENT})
 set(MACOSX_BUNDLE_MAIN_NIB_FILE ${XIB})
 set(MACOSX_BUNDLE_PRINCIPAL_CLASS "NSApplication")
+set(MACOSX_BUNDLE_ICON_FILE "${ICON}")
 
 message("-- Finding Cocoa")
 find_library(COCOA Cocoa)
@@ -57,6 +59,7 @@ add_custom_command(OUTPUT "${XIB}.nib"
 	COMMAND ${IBTOOL} --compile ${XIB}.nib ${CMAKE_CURRENT_SOURCE_DIR}/${XIB}.xib
         COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/${XIB}.xib")
 set_source_files_properties("${XIB}.nib" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+set_source_files_properties("${ICON}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 add_executable(${TARGET} MACOSX_BUNDLE ${HEADERS} ${SOURCES})
 target_link_libraries(${TARGET} ${DEPS})
