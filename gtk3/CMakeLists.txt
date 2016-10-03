@@ -18,7 +18,7 @@ set(TARGET SilikoGui)
 set(HEADERS EvalWindow.h)
 set(SOURCES Main.c EvalWindow.c)
 set(LAYOUTS EvalWindow.glade)
-set(DEPS ${LIB})
+set(DEPS ${LIB} ${LIB_DEPS})
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0)

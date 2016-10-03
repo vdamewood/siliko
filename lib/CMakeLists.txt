@@ -53,6 +53,7 @@ if(NOT "${FOUND_SIN}")
   check_symbol_exists(sin math.h FOUND_SIN_WITH_LM)
   if(${FOUND_SIN_WITH_LM})
     set(NEED_LM On)
+    set(LIB_DEPS m PARENT_SCOPE)
   endif()
 endif()
 
@@ -110,5 +111,6 @@ if(BUILD_DLIB)
 else()
   set(LIB "${STARGET}" PARENT_SCOPE)
 endif()
+
 
 set(LIB_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
