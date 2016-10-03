@@ -1,3 +1,1 @@
-/[bB]uild
-.*DS_Store*
-._.DS_Store
+/[bB]uild*/
