@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Siliko
+Comment=Math parser and calculator
+Type=Application
+Exec=siliko-gui
+Icon=siliko
+Terminal=false
+Categories=GTK;Utility

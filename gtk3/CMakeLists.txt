@@ -19,6 +19,7 @@ set(HEADERS EvalWindow.h)
 set(SOURCES Main.c EvalWindow.c)
 set(LAYOUTS EvalWindow.glade)
 set(DEPS ${LIB} ${LIB_DEPS})
+set(APPFILES siliko.desktop)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
@@ -39,3 +40,14 @@ install(TARGETS ${TARGET}
 install(
   FILES ${LAYOUTS}
   DESTINATION ${INSTDAT})
+
+install(
+  FILES ${APPFILES}
+  DESTINATION "${INSTSHR}/applications"
+)
+
+install(
+       FILES ${CMAKE_SOURCE_DIR}/icon/siliko-48.png
+       DESTINATION "${INSTSHR}/icons/hicolor/48x48"
+       RENAME siliko.png
+)
