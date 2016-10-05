@@ -31,8 +31,6 @@ set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood.\
  Siliko library licensed under the terms of the GNU Lesser General Public\
  License, version 3 or later. Siliko interface programs licensed under the\
  terms of the GNU General Public License, version 3 or later.")
-set(MSVC_UPGRADE_GUID  "9A29ACC2-5BDB-407C-AAFB-56897BABD10A")
-set(MINGW_UPGRADE_GUID "D168D857-2E54-40DF-ACDB-DD3B505D2D12")
 
 #########################
 # Configuration Options #
@@ -187,6 +185,7 @@ if(BUILD_MACOSX)
 elseif(BUILD_WINDOWS)
   set(CPACK_GENERATOR 7Z ZIP WIX)
   set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/cpack/WixLicense.txt")
+  set(CPACK_WIX_UPGRADE_GUID "9A29ACC2-5BDB-407C-AAFB-56897BABD10A")
 else()
   set(CPACK_GENERATOR 7Z ZIP TXZ)
 endif()
@@ -201,14 +200,6 @@ set(CPACK_SOURCE_STRIP_FILES Off)
 set(CPACK_SOURCE_GENERATOR TXZ ZIP)
 #set(CPACK_SOURCE_OUTPUT_CONFIG_FILE)
 set(CPACK_SOURCE_IGNORE_FILES "/\.git/" "/\.gitignore" "/[Bb]uild/")
-
-if(WIN32)
-  if(MSVC)
-    set(CPACK_WIX_UPGRADE_GUID ${MSVC_UPGRADE_GUID})
-  elseif(MINGW)
-    set(CPACK_WIX_UPGRADE_GUID ${MINGW_UPGRADE_GUID})
-  endif()
-endif()
 
 set(CPACK_DMG_VOLUME_NAME "${PROJECT_NAME}")
 set(CPACK_DMG_FORMAT UDZO)
