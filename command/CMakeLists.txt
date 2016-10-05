@@ -42,5 +42,18 @@ set_target_properties(${TARGET} PROPERTIES
 	OUTPUT_NAME ${ONAMECLI})
 target_link_libraries(${TARGET} ${DEPS})
 
+if(WIN32)
+  add_custom_command(
+    TARGET ${TARGET} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:SilikoDLib>
+    ${CMAKE_CURRENT_BINARY_DIR})
+  add_custom_command(
+    TARGET ${TARGET} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_PDB_FILE:SilikoDLib>
+    ${CMAKE_CURRENT_BINARY_DIR})
+endif()
+
 install(TARGETS ${TARGET}
   RUNTIME    DESTINATION ${INSTBIN})
