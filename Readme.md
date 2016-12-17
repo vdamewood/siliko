@@ -42,4 +42,4 @@ When mixing numeric types, Siliko will give integer results in operations
 involving only integers and will give floating-point results in calculations
 involving floating-point numbers whether integers are also included or not. If
 division involves two integers where the result would not be a whole number, the
-operation will yeald a floating-point value.
+operation will yield a floating-point value.
