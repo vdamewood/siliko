@@ -1,5 +1,5 @@
 /* SyntaxTree.c: Functions to manipulate abstract syntax trees
- * Copyright 2012, 2014, 2015, 2016 Vincent Damewood
+ * Copyright 2012, 2014, 2015, 2016, 2017 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -30,7 +30,10 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void)
 	SilikoSyntaxTreeNode *rVal = NULL;
 
 	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
-		rVal->Type = SILIKO_AST_ERROR;
+	{
+		rVal->Type = SILIKO_AST_LEAF;
+		rVal->Leaf.Status = SILIKO_VAL_SYNTAX_ERR;
+	}
 
 	return rVal;
 }
@@ -295,12 +298,12 @@ SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node)
 
 	switch (Node->Type)
 	{
+	case SILIKO_AST_NOTHING:
+		rVal.Status = SILIKO_VAL_SYNTAX_ERR;
+		return rVal;
 	case SILIKO_AST_LEAF:
 		return Node->Leaf;
 	case SILIKO_AST_BRANCH:
 		return EvaluateBranch(Node->Branch);
-	default:
-		rVal.Status = SILIKO_VAL_SYNTAX_ERR;
-		return rVal;
 	}
 }

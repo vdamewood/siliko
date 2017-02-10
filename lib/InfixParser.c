@@ -1,5 +1,5 @@
 /* InfixParser.c: Infix notation parser
- * Copyright 2014, 2015, 2016 Vincent Damewood
+ * Copyright 2014, 2015, 2016, 2017 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -426,7 +426,9 @@ static void GetArguments(SilikoLexer *lexer, SilikoSyntaxTreeNode *rVal)
 		SilikoSyntaxTreeNode *Expression = GetExpr0(lexer);
 		SilikoSyntaxTreePushRight(rVal, Expression);
 
-		if (Expression->Type == SILIKO_AST_ERROR
+		if (
+			(Expression->Type == SILIKO_AST_LEAF
+				&& Expression->Leaf.Status == SILIKO_VAL_SYNTAX_ERR)
 			|| lexer->Token.Type == ')')
 		{
 			break;

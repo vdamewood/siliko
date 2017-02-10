@@ -1,5 +1,5 @@
 /* SyntaxTree.h: Functions to manipulate abstract syntax trees
- * Copyright 2012, 2014, 2015, 2016 Vincent Damewood
+ * Copyright 2012, 2014, 2015, 2016, 2017 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,6 @@ extern "C" {
 
 enum SILIKO_API SilikoSyntaxTreeNodeType
 {
-	SILIKO_AST_ERROR = -1,
 	SILIKO_AST_NOTHING = 0,
 	SILIKO_AST_BRANCH,
 	SILIKO_AST_LEAF
