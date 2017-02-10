@@ -30,10 +30,8 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void)
 	SilikoSyntaxTreeNode *rVal = NULL;
 
 	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
-	{
 		rVal->Type = SILIKO_AST_ERROR;
-		rVal->Integer = 0;
-	}
+
 	return rVal;
 }
 
@@ -42,10 +40,8 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void)
 	SilikoSyntaxTreeNode *rVal = NULL;
 
 	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
-	{
 		rVal->Type = SILIKO_AST_NOTHING;
-		rVal->Integer = 0;
-	}
+
 	return rVal;
 }
 
@@ -55,8 +51,9 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int NewValue)
 
 	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
 	{
-		rVal->Type = SILIKO_AST_INTEGER;
-		rVal->Integer = NewValue;
+		rVal->Type = SILIKO_AST_LEAF;
+		rVal->Leaf.Status = SILIKO_VAL_INTEGER;
+		rVal->Leaf.Integer = NewValue;
 	}
 	return rVal;
 }
@@ -67,8 +64,9 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(double NewValue)
 
 	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
 	{
-		rVal->Type = SILIKO_AST_FLOAT;
-		rVal->Float = NewValue;
+		rVal->Type = SILIKO_AST_LEAF;
+		rVal->Leaf.Status = SILIKO_VAL_FLOAT;
+		rVal->Leaf.Float = NewValue;
 	}
 	return rVal;
 }
@@ -206,12 +204,18 @@ int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *Tree)
 
 	switch (Tree->Type)
 	{
-	case SILIKO_AST_INTEGER:
-		Tree->Integer *= -1;
-		return -1;
-	case SILIKO_AST_FLOAT:
-		Tree->Float *= -1.0;
-		return -1;
+	case SILIKO_AST_LEAF:
+		switch(Tree->Leaf.Status)
+		{
+		case SILIKO_VAL_INTEGER:
+			Tree->Leaf.Integer *= -1;
+			return -1;
+		case SILIKO_VAL_FLOAT:
+			Tree->Leaf.Float *= -1.0;
+			return -1;
+		default:
+			return 0;
+		}
 	case SILIKO_AST_BRANCH:
 		Tree->Branch->IsNegated = !Tree->Branch->IsNegated;
 		return -1;
@@ -291,14 +295,8 @@ SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node)
 
 	switch (Node->Type)
 	{
-	case SILIKO_AST_INTEGER:
-		rVal.Status = SILIKO_VAL_INTEGER;
-		rVal.Integer = Node->Integer;
-		return rVal;
-	case SILIKO_AST_FLOAT:
-		rVal.Status = SILIKO_VAL_FLOAT;
-		rVal.Float = Node->Float;
-		return rVal;
+	case SILIKO_AST_LEAF:
+		return Node->Leaf;
 	case SILIKO_AST_BRANCH:
 		return EvaluateBranch(Node->Branch);
 	default:

@@ -29,9 +29,8 @@ enum SILIKO_API SilikoSyntaxTreeNodeType
 {
 	SILIKO_AST_ERROR = -1,
 	SILIKO_AST_NOTHING = 0,
-	SILIKO_AST_INTEGER,
-	SILIKO_AST_FLOAT,
-	SILIKO_AST_BRANCH
+	SILIKO_AST_BRANCH,
+	SILIKO_AST_LEAF
 };
 typedef enum SilikoSyntaxTreeNodeType SilikoSyntaxTreeNodeType;
 
@@ -53,8 +52,7 @@ struct SILIKO_API SilikoSyntaxTreeNode
 	SilikoSyntaxTreeNodeType Type;
 	union
 	{
-		long long int Integer;
-		double Float;
+		SilikoValue Leaf;
 		SilikoSyntaxTreeBranch *Branch;
 	};
 };
