@@ -298,12 +298,12 @@ SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node)
 
 	switch (Node->Type)
 	{
-	case SILIKO_AST_NOTHING:
-		rVal.Status = SILIKO_VAL_SYNTAX_ERR;
-		return rVal;
 	case SILIKO_AST_LEAF:
 		return Node->Leaf;
 	case SILIKO_AST_BRANCH:
 		return EvaluateBranch(Node->Branch);
+	default: // Shouldn't happen, but just in case.
+		rVal.Status = SILIKO_VAL_SYNTAX_ERR;
+		return rVal;
 	}
 }
