@@ -1,5 +1,5 @@
 # SilikoConfig.cmake: Find Siliko library
-# Copyright 2016 Vincent Damewood
+# Copyright 2016, 2017 Vincent Damewood
 #
 # This library is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -16,15 +16,15 @@
 
 include(FindPackageHandleStandardArgs)
 
-find_path(SILIKO_INC
+find_path(Siliko_INC
   NAMES Siliko/Value.h
   DOC "Siliko Include Files")
 
-find_library(SILIKO_LIB
+find_library(Siliko_LIB
   NAMES Siliko
   DOC "Siliko Library")
 
-find_package_handle_standard_args(Siliko DEFAULT_MSG SILIKO_INC SILIKO_LIB)
+find_package_handle_standard_args(Siliko DEFAULT_MSG Siliko_INC Siliko_LIB)
 
 if(Siliko_FOUND)
   # Detect if system has separate math library (libm)
@@ -39,9 +39,9 @@ if(Siliko_FOUND)
     endif()
   endif()
 
-  set(SILIKO_LIBRARIES    ${SILIKO_LIB} ${LM})
-  set(SILIKO_INCLUDE_DIRS ${SILIKO_INC})
-  set(SILIKO_DEFINITIONS  )
+  set(Siliko_LIBRARIES    ${Siliko_LIB} ${LM})
+  set(Siliko_INCLUDE_DIRS ${Siliko_INC})
+  set(Siliko_DEFINITIONS  )
 endif()
 
-mark_as_advanced(SILIKO_INC SILIKO_LIB)
+mark_as_advanced(Siliko_INC Siliko_LIB)
