@@ -48,11 +48,13 @@ if(WIN32)
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     $<TARGET_FILE:SilikoDLib>
     ${CMAKE_CURRENT_BINARY_DIR})
-  add_custom_command(
-    TARGET ${TARGET} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    $<TARGET_PDB_FILE:SilikoDLib>
-    ${CMAKE_CURRENT_BINARY_DIR})
+  if(DEBUG)
+    add_custom_command(
+      TARGET ${TARGET} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      $<TARGET_PDB_FILE:SilikoDLib>
+      ${CMAKE_CURRENT_BINARY_DIR})
+  endif()
 endif()
 
 install(TARGETS ${TARGET}
