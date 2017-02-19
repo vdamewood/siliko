@@ -28,6 +28,7 @@
 
 #if HAVE_READLINE
 #include <readline/readline.h>
+#include <readline/history.h>
 #else
 char *readline(const char *);
 void add_history(const char *);
