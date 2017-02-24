@@ -6,5 +6,4 @@ Description: @DESCRIPTION@
 Version: @PROJECT_VERSION@
 URL: @URL@
 Cflags: -I${incdir}
-Libs: -L${libdir} -lsiliko
-Libs.private: -lm
+Libs: -L${libdir} -lsiliko -lm
