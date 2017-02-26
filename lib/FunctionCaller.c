@@ -69,7 +69,7 @@ int SilikoFunctionCallerInstall(const char *name, SilikoFunctionPointer function
 
 int SilikoFunctionCallerSetUp()
 {
-	if (!(functionTable = calloc(256, sizeof(SilikoFunctionChain))))
+	if (!(functionTable = calloc(256, sizeof(SilikoFunctionChain*))))
 		goto memerr;
 
 	SilikoFunctionCallerInstall("add", SilikoFunction_add);
