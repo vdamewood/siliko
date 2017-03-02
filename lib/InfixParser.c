@@ -16,15 +16,10 @@
  */
 
 #include <stdlib.h>
-#include <string.h>
 
 #include "InfixParser.h"
 #include "SyntaxTree.h"
 #include "Lexer.h"
-
-#if defined _WIN32
-#define strdup _strdup
-#endif
 
 static SilikoSyntaxTreeNode *GetExpr0(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetExpr0r(SilikoLexer *lexer);
@@ -80,17 +75,14 @@ static SilikoSyntaxTreeNode *GetExpr0r(SilikoLexer *lexer)
 	switch (lexer->Token.Type)
 	{
 	case '+':
-		operation = strdup("add");
+		operation = "add";
 		break;
 	case '-':
-		operation = strdup("subtract");
+		operation = "subtract";
 		break;
 	default:
 		return SilikoSyntaxTreeNewNothing();
 	}
-
-	if (!operation)
-		goto memerr;
 
 	SilikoLexerNext(lexer);
 	if (!(leftValue = GetExpr1(lexer)))
@@ -114,7 +106,6 @@ static SilikoSyntaxTreeNode *GetExpr0r(SilikoLexer *lexer)
 	SilikoSyntaxTreeDelete(rest);
 	return branchNode;
 memerr:
-	free(operation);
 	SilikoSyntaxTreeDelete(leftValue);
 	SilikoSyntaxTreeDelete(rest);
 	return NULL;
@@ -160,17 +151,14 @@ static SilikoSyntaxTreeNode *GetExpr1r(SilikoLexer *lexer)
 	switch (lexer->Token.Type)
 	{
 		case '*':
-			operation = strdup("multiply");
+			operation = "multiply";
 			break;
 		case '/':
-			operation = strdup("divide");
+			operation = "divide";
 			break;
 		default:
 			return SilikoSyntaxTreeNewNothing();
 	}
-
-	if (!operation)
-		goto memerr;
 
 	SilikoLexerNext(lexer);
 	if (!(leftValue = GetExpr2(lexer)))
@@ -194,7 +182,6 @@ static SilikoSyntaxTreeNode *GetExpr1r(SilikoLexer *lexer)
 	SilikoSyntaxTreeDelete(rest);
 	return branchNode;
 memerr:
-	free(operation);
 	SilikoSyntaxTreeDelete(leftValue);
 	SilikoSyntaxTreeDelete(rest);
 	return NULL;
@@ -204,7 +191,6 @@ static SilikoSyntaxTreeNode *GetExpr2(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *leftValue = NULL;
 	SilikoSyntaxTreeNode *rest = NULL;
-	char *operation = NULL;
 	SilikoSyntaxTreeNode * rVal;
 
 	if (!(leftValue = GetExpr3(lexer)))
@@ -219,10 +205,7 @@ static SilikoSyntaxTreeNode *GetExpr2(SilikoLexer *lexer)
 		return leftValue;
 	}
 
-	if (!(operation = strdup("power")))
-		goto memerr;
-
-	if (!(rVal = SilikoSyntaxTreeNewBranch(operation)))
+	if (!(rVal = SilikoSyntaxTreeNewBranch("power")))
 		goto memerr;
 
 	SilikoSyntaxTreePushRight(rVal, leftValue);
@@ -231,7 +214,6 @@ static SilikoSyntaxTreeNode *GetExpr2(SilikoLexer *lexer)
 memerr:
 	SilikoSyntaxTreeDelete(leftValue);
 	SilikoSyntaxTreeDelete(rest);
-	free(operation);
 	return NULL;
 }
 
@@ -263,7 +245,6 @@ static SilikoSyntaxTreeNode *GetExpr3(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *leftValue = NULL;
 	SilikoSyntaxTreeNode *rest = NULL;
-	char *operation = NULL;
 	SilikoSyntaxTreeNode *rVal;
 
 	if (!(leftValue = GetAtom(lexer)))
@@ -278,10 +259,7 @@ static SilikoSyntaxTreeNode *GetExpr3(SilikoLexer *lexer)
 		return leftValue;
 	}
 
-	if (!(operation = strdup("dice")))
-		goto memerr;
-
-	if (!(rVal = SilikoSyntaxTreeNewBranch(operation)))
+	if (!(rVal = SilikoSyntaxTreeNewBranch("dice")))
 		goto memerr;
 	SilikoSyntaxTreePushRight(rVal, leftValue);
 	SilikoSyntaxTreePushRight(rVal, rest);
@@ -289,7 +267,6 @@ static SilikoSyntaxTreeNode *GetExpr3(SilikoLexer *lexer)
 memerr:
 	SilikoSyntaxTreeDelete(leftValue);
 	SilikoSyntaxTreeDelete(rest);
-	free(operation);
 	return NULL;
 
 }
