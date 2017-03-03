@@ -21,31 +21,31 @@
 #include "SyntaxTree.h"
 #include "Lexer.h"
 
-static SilikoSyntaxTreeNode *GetExpr0(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetExpr0r(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetExpr1(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetExpr1r(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetExpr2(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetExpr2lf(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetExpr3(SilikoLexer *lexe);
-static SilikoSyntaxTreeNode *GetExpr3lf(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetExprAddSub(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetExprAddSubRest(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetExprMulDiv(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetExprMulDivRest(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetExprExp(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetExprExpLeftFactor(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetExprRoll(SilikoLexer *lexe);
+static SilikoSyntaxTreeNode *GetExprRollLeftFactor(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetAtom(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetNumber(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetUNumber(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetFCall(SilikoLexer *lexer);
 static void GetArguments(SilikoLexer *lexer, SilikoSyntaxTreeNode *rVal);
 
-static SilikoSyntaxTreeNode *GetExpr0(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExprAddSub(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *leftValue;
 	SilikoSyntaxTreeNode *rest;
 
-	leftValue = GetExpr1(lexer);
+	leftValue = GetExprMulDiv(lexer);
 
 	if (leftValue == NULL)
 		return NULL;
 
-	if (!(rest = GetExpr0r(lexer)))
+	if (!(rest = GetExprAddSubRest(lexer)))
 	{
 		SilikoSyntaxTreeDelete(leftValue);
 		return NULL;
@@ -65,7 +65,7 @@ static SilikoSyntaxTreeNode *GetExpr0(SilikoLexer *lexer)
 	return SilikoSyntaxTreeNewError();
 }
 
-static SilikoSyntaxTreeNode *GetExpr0r(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExprAddSubRest(SilikoLexer *lexer)
 {
 	char *operation = NULL;
 	SilikoSyntaxTreeNode *leftValue = NULL;
@@ -85,10 +85,10 @@ static SilikoSyntaxTreeNode *GetExpr0r(SilikoLexer *lexer)
 	}
 
 	SilikoLexerNext(lexer);
-	if (!(leftValue = GetExpr1(lexer)))
+	if (!(leftValue = GetExprMulDiv(lexer)))
 		goto memerr;
 
-	if (!(rest = GetExpr0r(lexer)))
+	if (!(rest = GetExprAddSubRest(lexer)))
 		goto memerr;
 
 	if (!(branchNode = SilikoSyntaxTreeNewBranch(operation)))
@@ -111,17 +111,17 @@ memerr:
 	return NULL;
 }
 
-static SilikoSyntaxTreeNode *GetExpr1(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExprMulDiv(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *leftValue;
 	SilikoSyntaxTreeNode *rest;
 
-	leftValue = GetExpr2(lexer);
+	leftValue = GetExprExp(lexer);
 
 	if (leftValue == NULL)
 		return NULL;
 
-	if (!(rest = GetExpr1r(lexer)))
+	if (!(rest = GetExprMulDivRest(lexer)))
 	{
 		SilikoSyntaxTreeDelete(leftValue);
 		return NULL;
@@ -141,7 +141,7 @@ static SilikoSyntaxTreeNode *GetExpr1(SilikoLexer *lexer)
 	return SilikoSyntaxTreeNewError();
 }
 
-static SilikoSyntaxTreeNode *GetExpr1r(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExprMulDivRest(SilikoLexer *lexer)
 {
 	char *operation;
 	SilikoSyntaxTreeNode *leftValue;
@@ -161,10 +161,10 @@ static SilikoSyntaxTreeNode *GetExpr1r(SilikoLexer *lexer)
 	}
 
 	SilikoLexerNext(lexer);
-	if (!(leftValue = GetExpr2(lexer)))
+	if (!(leftValue = GetExprExp(lexer)))
 		goto memerr;
 
-	if (!(rest = GetExpr1r(lexer)))
+	if (!(rest = GetExprMulDivRest(lexer)))
 		goto memerr;
 
 	if (!(branchNode = SilikoSyntaxTreeNewBranch(operation)))
@@ -187,16 +187,16 @@ memerr:
 	return NULL;
 }
 
-static SilikoSyntaxTreeNode *GetExpr2(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExprExp(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *leftValue = NULL;
 	SilikoSyntaxTreeNode *rest = NULL;
 	SilikoSyntaxTreeNode * rVal;
 
-	if (!(leftValue = GetExpr3(lexer)))
+	if (!(leftValue = GetExprRoll(lexer)))
 		goto memerr;
 
-	if (!(rest = GetExpr2lf(lexer)))
+	if (!(rest = GetExprExpLeftFactor(lexer)))
 		goto memerr;
 
 	if (rest->Type == SILIKO_AST_NOTHING)
@@ -217,7 +217,7 @@ memerr:
 	return NULL;
 }
 
-static SilikoSyntaxTreeNode *GetExpr2lf(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExprExpLeftFactor(SilikoLexer *lexer)
 {
 	if (lexer->Token.Type == '^')
 	{
@@ -230,7 +230,7 @@ static SilikoSyntaxTreeNode *GetExpr2lf(SilikoLexer *lexer)
 		case '-':
 		case SILIKO_TOK_ID:
 		case '(':
-			return GetExpr2(lexer);
+			return GetExprExp(lexer);
 		default:
 			return SilikoSyntaxTreeNewError();
 		}
@@ -241,7 +241,7 @@ static SilikoSyntaxTreeNode *GetExpr2lf(SilikoLexer *lexer)
 	}
 }
 
-static SilikoSyntaxTreeNode *GetExpr3(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExprRoll(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *leftValue = NULL;
 	SilikoSyntaxTreeNode *rest = NULL;
@@ -250,7 +250,7 @@ static SilikoSyntaxTreeNode *GetExpr3(SilikoLexer *lexer)
 	if (!(leftValue = GetAtom(lexer)))
 		goto memerr;
 
-	if (!(rest = GetExpr3lf(lexer)))
+	if (!(rest = GetExprRollLeftFactor(lexer)))
 		goto memerr;
 
 	if (rest->Type == SILIKO_AST_NOTHING)
@@ -271,7 +271,7 @@ memerr:
 
 }
 
-static SilikoSyntaxTreeNode *GetExpr3lf(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExprRollLeftFactor(SilikoLexer *lexer)
 {
 	long long int value;
 
@@ -303,7 +303,7 @@ static SilikoSyntaxTreeNode *GetAtom(SilikoLexer *lexer)
 		return GetNumber(lexer);
 	case '(':
 		SilikoLexerNext(lexer);
-		if (!(value = GetExpr0(lexer)))
+		if (!(value = GetExprAddSub(lexer)))
 			return NULL;
 
 		if (lexer->Token.Type != ')')
@@ -400,7 +400,7 @@ static void GetArguments(SilikoLexer *lexer, SilikoSyntaxTreeNode *rVal)
 {
 	while(-1)
 	{
-		SilikoSyntaxTreeNode *Expression = GetExpr0(lexer);
+		SilikoSyntaxTreeNode *Expression = GetExprAddSub(lexer);
 		SilikoSyntaxTreePushRight(rVal, Expression);
 
 		if (
@@ -430,7 +430,7 @@ SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *Input)
 
 	rVal = (lexer->Token.Type == SILIKO_TOK_EOL)
 		? SilikoSyntaxTreeNewInteger(0)
-		: GetExpr0(lexer);
+		: GetExprAddSub(lexer);
 
 	if (lexer->Token.Type != SILIKO_TOK_EOL)
 	{
