@@ -160,7 +160,7 @@ endif()
 ##################################
 
 install(
-  FILES Readme.md Authors.txt License.txt GPL-3.0.txt LGPL-3.0.txt
+  FILES Readme.md Authors.txt LicenseStatement.txt License.txt License.Gpl.txt
   DESTINATION ${INSTDOC})
 
 #############################
