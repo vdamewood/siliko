@@ -1,5 +1,5 @@
 /* EvalWindow.c: Expression evaluation window
- * Copyright 2015, 2016 Vincent Damewood
+ * Copyright 2015, 2016, 2018 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,7 @@
 #include "InfixParser.h"
 #include "Value.h"
 
-#if !defined GLADEDIR
-#error "You must define GLADEDIR to build this file."
-#endif
+static const char GladeFile[] = "/com/vdamewood/Siliko/EvalWindow.glade";
 
 static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 {
@@ -50,15 +48,7 @@ static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 
 GtkBuilder *EvalWindowNew(void)
 {
-	GtkBuilder *EvalWindow = gtk_builder_new();
-
-	GError *error = NULL;
-	if (!gtk_builder_add_from_file(EvalWindow, GLADEDIR "/EvalWindow.glade", &error))
-	{
-		g_warning("Couldn't load builder file: %s", error->message);
-		g_error_free(error);
-		return EvalWindow;
-	}
+	GtkBuilder *EvalWindow = gtk_builder_new_from_resource(GladeFile);
 
 	g_signal_connect(
 		gtk_builder_get_object(EvalWindow, "EvalWindow"),
