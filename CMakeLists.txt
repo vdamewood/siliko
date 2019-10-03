@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012, 2014, 2015, 2016 Vincent Damewood
+# Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood
 #
 # This library is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -18,16 +18,18 @@
 # Preamble (Semi-Required) #
 ############################
 
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.14)
 
 project(Siliko
   LANGUAGES C
   VERSION   0.0.0)
 
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 set(DESCRIPTION "Mathematical expression parser written in C")
 set(VENDOR      "Vincent Damewood")
 set(URL         "http://vdamewood.com/projects/siliko")
-set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016 Vincent Damewood.\
+set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood.\
  Siliko library licensed under the terms of the GNU Lesser General Public\
  License, version 3 or later. Siliko interface programs licensed under the\
  terms of the GNU General Public License, version 3 or later.")
@@ -38,20 +40,11 @@ set(UPGRADE_GUID "9A29ACC2-5BDB-407C-AAFB-56897BABD10A")
 #########################
 
 if(APPLE)
-  include(CMakeDependentOption)
   option(FORCE_UNIX "Force Unix-style installation" Off)
-  cmake_dependent_option(BUILD_SLIB "Build static library" On "FORCE_UNIX" Off)
-else()
-  option(BUILD_SLIB "Build static library" On)
 endif()
 
-option(BUILD_DLIB "Build shared library" On)
 option(BUILD_CLI "Build command-line program" On)
 option(BUILD_GUI "Build GUI Program" On)
-
-if(NOT BUILD_DLIB AND NOT BUILD_SLIB)
-  message(FATAL_ERROR "You must build at least one library configuration.")
-endif()
 
 ###############
 # Build Style #
@@ -61,31 +54,31 @@ if(APPLE)
   if(FORCE_UNIX)
     set(BUILD_UNIX On)
     set(BUILD_WINDOWS Off)
-    set(BUILD_MACOSX Off)
+    set(BUILD_MACOS Off)
   else()
     set(BUILD_UNIX Off)
     set(BUILD_WINDOWS Off)
-    set(BUILD_MACOSX On)
+    set(BUILD_MACOS On)
   endif()
 elseif(UNIX)
     set(BUILD_UNIX On)
     set(BUILD_WINDOWS Off)
-    set(BUILD_MACOSX Off)
+    set(BUILD_MACOS Off)
 elseif(WIN32)
     set(BUILD_UNIX Off)
     set(BUILD_WINDOWS On)
-    set(BUILD_MACOSX Off)
+    set(BUILD_MACOS Off)
 else()
     set(BUILD_UNIX Off)
     set(BUILD_WINDOWS Off)
-    set(BUILD_MACOSX Off)
+    set(BUILD_MACOS Off)
 endif()
 
 ######################
 # Build-Based Values #
 ######################
 
-if(BUILD_MACOSX)
+if(BUILD_MACOS)
   set(INSTBIN bin)
   set(INSTLIB err)
   set(INSTINC err)
@@ -121,30 +114,17 @@ else()
   set(ONAMEGUI  siliko-gui)
 endif()
 
-#############################
-# Compiler-dependent values #
-#############################
-
-set(CMAKE_C_STANDARD 11)
-
 ###########################
 # Subdirectory Inclusions #
 ###########################
 
 # Libraries
 add_subdirectory(lib)
-
-# Allow executable builds to include library headers.
-include_directories("${Siliko_SOURCE_DIR}/lib")
-
-# Command-line Programs
 if(BUILD_CLI)
   add_subdirectory(command)
 endif()
-
-# GUI Programs
 if(BUILD_GUI)
-  if(BUILD_MACOSX)
+  if(BUILD_MACOS)
     add_subdirectory(cocoa)
   elseif(BUILD_UNIX)
     add_subdirectory(gtk3)
@@ -185,7 +165,7 @@ if(BUILD_GUI)
   list(APPEND CPACK_PACKAGE_EXECUTABLES ${ONAMEGUI} ${PROJECT_NAME})
 endif()
 
-if(BUILD_MACOSX)
+if(BUILD_MACOS)
   set(CPACK_GENERATOR DragNDrop)
   set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-macOS")
   set(CPACK_DMG_VOLUME_NAME "${PROJECT_NAME}")
