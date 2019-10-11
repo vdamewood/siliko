@@ -18,7 +18,7 @@
 #if !defined SILIKO_W32_DLL
 
 #if defined _WIN32 && defined _MSC_VER && !defined SILIKO_STATIC
-#  if defined SilikoDLib_EXPORTS
+#  if defined SilikoCore_EXPORTS
 #    define SILIKO_API __declspec(dllexport)
 #    define SILIKO_EXTERN
 #  else // SILIKO_EXPORTS
