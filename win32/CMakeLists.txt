@@ -14,16 +14,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-add_executable(SilikoGui WIN32
-	EvalWindow.h
-	About.h
-	Id.h
-	WinMain.c
-	EvalWindow.c
-	EvalWindow.rc
-	About.c
-	About.rc
-	Icon.rc
+add_executable(SilikoGui WIN32)
+target_Sources(SilikoGui
+	PRIVATE
+		EvalWindow.h
+		About.h
+		Id.h
+		WinMain.c
+		EvalWindow.c
+		EvalWindow.rc
+		About.c
+		About.rc
+		Icon.rc
 )
 set_target_properties(SilikoGui PROPERTIES
 	OUTPUT_NAME ${ONAMEGUI})
