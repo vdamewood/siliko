@@ -14,30 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-set(XIB MainMenu)
-
-set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.vdamewood.SilikoGui")
-set(MACOSX_BUNDLE_BUNDLE_NAME "Siliko")
-set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION})
-set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
-set(MACOSX_BUNDLE_COPYRIGHT ${COPYRIGHT_STATEMENT})
-set(MACOSX_BUNDLE_MAIN_NIB_FILE ${XIB})
-set(MACOSX_BUNDLE_PRINCIPAL_CLASS "NSApplication")
-set(MACOSX_BUNDLE_ICON_FILE siliko.icns)
-
 find_program(IBTOOL ibtool)
-if (NOT ${IBTOOL} STREQUAL "IBTOOL-NOTFOUND")
-	message("-- Finding ibtool - found at ${IBTOOL}")
-	set(IBTOOL_FOUND Yes)
-else()
-	message("-- Finding ibtool - not found")
-	message(FATAL_ERROR "Can't build GUI. Quitting.")
+if (NOT IBTOOL)
+	message(FATAL_ERROR "Command ibtool not found. Can't build GUI. Quitting.")
 endif()
 
-add_custom_command(OUTPUT "${XIB}.nib"
-	COMMAND ${IBTOOL} --compile ${XIB}.nib ${CMAKE_CURRENT_SOURCE_DIR}/${XIB}.xib
-		COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/${XIB}.xib")
-set_source_files_properties("${XIB}.nib" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+add_custom_command(OUTPUT MainMenu.nib
+	COMMAND "${IBTOOL}" --compile MainMenu.nib "${CMAKE_CURRENT_SOURCE_DIR}/MainMenu.xib"
+	COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/MainMenu.xib"
+)
+set_source_files_properties(MainMenu.nib PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 set_source_files_properties(siliko.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 add_executable(SilikoGui MACOSX_BUNDLE)
@@ -46,8 +32,8 @@ target_sources(SilikoGui
 		Delegate.h
 		Delegate.m
 		Main.m
+		MainMenu.nib
 		siliko.icns
-		"${XIB}.nib"
 )
 target_compile_options(SilikoGui
 	PRIVATE
@@ -61,8 +47,14 @@ target_link_libraries(SilikoGui
 )
 set_target_properties(SilikoGui
 	PROPERTIES
-		OUTPUT_NAME              "${ONAMEGUI}"
-		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
+		OUTPUT_NAME                         "${ONAMEGUI}"
+		MACOSX_BUNDLE_GUI_IDENTIFIER        "com.vdamewood.SilikoGui"
+		MACOSX_BUNDLE_BUNDLE_NAME           "Siliko"
+		MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
+		MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
+		MACOSX_BUNDLE_COPYRIGHT             ${COPYRIGHT_STATEMENT}
+		MACOSX_BUNDLE_ICON_FILE             siliko.icns
+		MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 )
 
 install(TARGETS SilikoGui

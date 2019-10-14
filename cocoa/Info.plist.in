@@ -25,8 +25,8 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
 	<key>NSMainNibFile</key>
-	<string>${MACOSX_BUNDLE_MAIN_NIB_FILE}</string>
+	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>${MACOSX_BUNDLE_PRINCIPAL_CLASS}</string>
+	<string>NSApplication</string>
 </dict>
 </plist>
