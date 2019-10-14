@@ -39,17 +39,19 @@ add_library(SilikoCore SHARED
 )
 add_library(Siliko::Core ALIAS SilikoCore)
 target_include_directories(SilikoCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set(PUBLIC_HEADERS
+	W32Dll.h
+	Value.h
+	FunctionCaller.h
+	SyntaxTree.h
+	DataSource.h
+	StringSource.h
+	Token.h
+	Lexer.h
+	InfixParser.h
+)
 set_target_properties(SilikoCore PROPERTIES
-		PUBLIC_HEADER
-			W32Dll.h
-			Value.h
-			FunctionCaller.h
-			SyntaxTree.h
-			DataSource.h
-			StringSource.h
-			Token.h
-			Lexer.h
-			InfixParser.h
+		PUBLIC_HEADER     "${PUBLIC_HEADERS}"
 		RESOURCE
 			SilikoConfig.cmake
 		OUTPUT_NAME       ${ONAMEDLIB}
