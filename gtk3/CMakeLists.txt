@@ -50,6 +50,7 @@ add_executable(SilikoGui
 )
 set_target_properties(SilikoGui PROPERTIES
 	OUTPUT_NAME ${ONAMEGUI})
+target_compile_features(SilikoGui PRIVATE c_std_11)
 target_link_libraries(SilikoGui PRIVATE Siliko::Core PkgConfig::Gtk3)
 
 install(TARGETS SilikoGui

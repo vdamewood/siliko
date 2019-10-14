@@ -19,6 +19,7 @@ find_package(Readline)
 add_executable(SilikoCli)
 target_sources(SilikoCli PRIVATE main.c)
 target_link_libraries(SilikoCli PRIVATE Siliko::Core)
+target_compile_features(SilikoCli PRIVATE c_std_11)
 set_target_properties(SilikoCli PROPERTIES
 	OUTPUT_NAME ${ONAMECLI})
 

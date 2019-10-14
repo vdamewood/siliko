@@ -40,17 +40,31 @@ add_custom_command(OUTPUT "${XIB}.nib"
 set_source_files_properties("${XIB}.nib" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 set_source_files_properties(siliko.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-add_executable(SilikoGui MACOSX_BUNDLE
-	Delegate.h
-	Delegate.m
-	Main.m
-	siliko.icns
-	"${XIB}.nib")
-target_compile_options(SilikoGui PRIVATE "-fobjc-arc")
-target_link_libraries(SilikoGui PRIVATE Siliko::Core "-framework Cocoa")
-set_target_properties(SilikoGui PROPERTIES
-	OUTPUT_NAME              "${ONAMEGUI}"
-	MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in")
+add_executable(SilikoGui MACOSX_BUNDLE)
+target_sources(SilikoGui
+	PRIVATE
+		Delegate.h
+		Delegate.m
+		Main.m
+		siliko.icns
+		"${XIB}.nib"
+)
+target_compile_options(SilikoGui
+	PRIVATE
+		"-fobjc-arc"
+)
+target_compile_features(SilikoGui PRIVATE c_std_11)
+target_link_libraries(SilikoGui
+	PRIVATE
+		Siliko::Core
+		"-framework Cocoa"
+)
+set_target_properties(SilikoGui
+	PROPERTIES
+		OUTPUT_NAME              "${ONAMEGUI}"
+		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
+)
+
 install(TARGETS SilikoGui
 	RUNTIME DESTINATION ${INSTBIN}
 	BUNDLE  DESTINATION .)

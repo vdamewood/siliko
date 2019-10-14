@@ -39,6 +39,8 @@ add_library(SilikoCore SHARED
 )
 add_library(Siliko::Core ALIAS SilikoCore)
 target_include_directories(SilikoCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_features(SilikoCore PRIVATE c_std_11)
+
 set(PUBLIC_HEADERS
 	W32Dll.h
 	Value.h

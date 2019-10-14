@@ -27,6 +27,7 @@ add_executable(SilikoGui WIN32
 )
 set_target_properties(SilikoGui PROPERTIES
 	OUTPUT_NAME ${ONAMEGUI})
+target_compile_features(SilikoGui PRIVATE c_std_11)
 target_link_libraries(SilikoGui PRIVATE Siliko::Core)
 
 add_custom_command(
