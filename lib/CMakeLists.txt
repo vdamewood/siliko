@@ -59,7 +59,7 @@ set_target_properties(SilikoCore PROPERTIES
 		RESOURCE
 			SilikoConfig.cmake
 		OUTPUT_NAME       ${ONAMEDLIB}
-		FRAMEWORK         ${BUILD_MACOS}
+		FRAMEWORK         TRUE
 		FRAMEWORK_VERSION ${PROJECT_VERSION}
 		VERSION           ${PROJECT_VERSION}
 		SOVERSION         ${PROJECT_VERSION_MAJOR})
@@ -77,7 +77,7 @@ install(TARGETS SilikoCore
 	RESOURCE      DESTINATION ${INSTDAT}
 	PUBLIC_HEADER DESTINATION ${INSTINC}/Siliko)
 
-if(BUILD_UNIX)
+if(UNIX AND NOT APPLE)
 	configure_file(Siliko.pc.in Siliko.pc @ONLY)
 	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/Siliko.pc" DESTINATION "${INSTLIB}/pkgconfig")
 endif()

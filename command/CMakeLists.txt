@@ -21,10 +21,11 @@ target_sources(SilikoCli
 	PRIVATE
 		main.c
 )
-target_link_libraries(SilikoCli PRIVATE Siliko::Core)
 target_compile_features(SilikoCli PRIVATE c_std_11)
+target_link_libraries(SilikoCli PRIVATE Siliko::Core)
 set_target_properties(SilikoCli PROPERTIES
-	OUTPUT_NAME ${ONAMECLI})
+	OUTPUT_NAME ${ONAMECLI}
+)
 
 if (UNIX)
 	target_compile_definitions(SilikoCli PRIVATE USE_UNIX=1)
