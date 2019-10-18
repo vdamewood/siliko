@@ -22,7 +22,7 @@ target_sources(Silikilo
 		main.c
 )
 target_compile_features(Silikilo PRIVATE c_std_11)
-target_link_libraries(Silikilo PRIVATE Siliko::Core)
+target_link_libraries(Silikilo PRIVATE Siliko::Siliko)
 set_target_properties(Silikilo PROPERTIES
 	OUTPUT_NAME silikilo
 )
@@ -43,8 +43,8 @@ if(WIN32)
 	add_custom_command(
 		TARGET Silikilo POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
-		$<TARGET_FILE:Siliko::Core>
-		$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Core>>
+		$<TARGET_FILE:Siliko::Siliko>
+		$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Siliko>>
 		${CMAKE_CURRENT_BINARY_DIR})
 endif()
 

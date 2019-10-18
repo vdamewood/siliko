@@ -39,7 +39,7 @@ target_sources(Siliko
 		InfixParser.c
 		SilikoConfig.cmake
 )
-add_library(Siliko::Core ALIAS Siliko)
+add_library(Siliko::Siliko ALIAS Siliko)
 target_include_directories(Siliko PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_features(Siliko PRIVATE c_std_11)
 

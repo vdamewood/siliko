@@ -53,7 +53,7 @@ target_sources(SilikujoForUnix
 set_target_properties(SilikujoForUnix PROPERTIES
 	OUTPUT_NAME Silikujo)
 target_compile_features(SilikujoForUnix PRIVATE c_std_11)
-target_link_libraries(SilikujoForUnix PRIVATE Siliko::Core PkgConfig::Gtk3)
+target_link_libraries(SilikujoForUnix PRIVATE Siliko::Siliko PkgConfig::Gtk3)
 
 install(TARGETS SilikujoForUnix
 	RUNTIME    DESTINATION ${INSTBIN})

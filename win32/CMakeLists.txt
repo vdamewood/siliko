@@ -30,13 +30,13 @@ target_Sources(SilikujoForWindows
 set_target_properties(SilikujoForWindows PROPERTIES
 	OUTPUT_NAME Silikujo)
 target_compile_features(SilikujoForWindows PRIVATE c_std_11)
-target_link_libraries(SilikujoForWindows PRIVATE Siliko::Core)
+target_link_libraries(SilikujoForWindows PRIVATE Siliko::Siliko)
 
 add_custom_command(
 	TARGET SilikujoForWindows POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	$<TARGET_FILE:Siliko::Core>
-	$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Core>>
+	$<TARGET_FILE:Siliko::Siliko>
+	$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Siliko>>
 	${CMAKE_CURRENT_BINARY_DIR})
 
 install(TARGETS SilikujoForWindows

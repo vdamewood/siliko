@@ -42,7 +42,7 @@ target_compile_options(SilikujoForMacOS
 target_compile_features(SilikujoForMacOS PRIVATE c_std_11)
 target_link_libraries(SilikujoForMacOS
 	PRIVATE
-		Siliko::Core
+		Siliko::Siliko
 		"-framework Cocoa"
 )
 set_target_properties(SilikujoForMacOS
@@ -62,4 +62,4 @@ install(TARGETS SilikujoForMacOS
 	BUNDLE  DESTINATION .)
 
 install(CODE "include(BundleUtilities)")
-install(CODE "fixup_bundle(\"$<TARGET_FILE:SilikujoForMacOS>\" \"\" \"$<TARGET_FILE_DIR:Siliko::Core>\")")
+install(CODE "fixup_bundle(\"$<TARGET_FILE:SilikujoForMacOS>\" \"\" \"$<TARGET_FILE_DIR:Siliko::Siliko>\")")
