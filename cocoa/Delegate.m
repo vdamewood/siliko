@@ -22,7 +22,7 @@
 
 #import "Delegate.h"
 
-@implementation SilikoDelegate
+@implementation SilikujoDelegate
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification

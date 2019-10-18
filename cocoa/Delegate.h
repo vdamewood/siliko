@@ -17,7 +17,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface SilikoDelegate : NSObject <NSApplicationDelegate>
+@interface SilikujoDelegate : NSObject <NSApplicationDelegate>
 
 @property (weak) IBOutlet NSTextField *input;
 @property (weak) IBOutlet NSTextField *output;

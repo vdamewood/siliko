@@ -28,8 +28,8 @@ add_custom_command(
 	COMMAND "${GRESOURCE}"
 		--generate-header
 		--target=${CMAKE_CURRENT_BINARY_DIR}/gresource.h
-		siliko.gresource.xml
-	DEPENDS siliko.gresource.xml
+		gresource.xml
+	DEPENDS gresource.xml
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_custom_command(
@@ -37,8 +37,8 @@ add_custom_command(
 	COMMAND "${GRESOURCE}"
 		--generate-source
 		--target=${CMAKE_CURRENT_BINARY_DIR}/gresource.c
-		siliko.gresource.xml
-	DEPENDS siliko.gresource.xml
+		gresource.xml
+	DEPENDS gresource.xml
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(SilikujoForUnix)

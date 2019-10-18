@@ -49,7 +49,7 @@ set_target_properties(SilikujoForMacOS
 	PROPERTIES
 		OUTPUT_NAME                         Silikujo
 		MACOSX_BUNDLE_GUI_IDENTIFIER        "com.vdamewood.SilikujoForMacOS"
-		MACOSX_BUNDLE_BUNDLE_NAME           "Siliko"
+		MACOSX_BUNDLE_BUNDLE_NAME           "Silikujo"
 		MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
 		MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
 		MACOSX_BUNDLE_COPYRIGHT             ${COPYRIGHT_STATEMENT}
