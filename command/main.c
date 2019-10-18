@@ -34,10 +34,10 @@ char *readline(const char *);
 void add_history(const char *);
 #endif /* HAVE_READLINE */
 
-#include "FunctionCaller.h"
-#include "InfixParser.h"
-#include "Value.h"
-#include "StringSource.h"
+#include <Siliko/FunctionCaller.h>
+#include <Siliko/InfixParser.h>
+#include <Siliko/Value.h>
+#include <Siliko/StringSource.h>
 
 int main(int argc, char *argv[])
 {

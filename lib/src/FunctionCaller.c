@@ -21,10 +21,11 @@
 #include <string.h>
 #include <time.h>
 
-#include "Hash.h"
-#include "Value.h"
+#include <Siliko/FunctionCaller.h>
+#include <Siliko/Value.h>
+
 #include "Functions.h"
-#include "FunctionCaller.h"
+#include "Hash.h"
 
 #if defined _WIN32
 #define strdup _strdup

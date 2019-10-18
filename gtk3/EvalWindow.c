@@ -20,9 +20,9 @@
 
 #include <gtk/gtk.h>
 
-#include "StringSource.h"
-#include "InfixParser.h"
-#include "Value.h"
+#include <Siliko/StringSource.h>
+#include <Siliko/InfixParser.h>
+#include <Siliko/Value.h>
 
 static const char GladeFile[] = "/com/vdamewood/Siliko/EvalWindow.glade";
 

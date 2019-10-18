@@ -17,42 +17,42 @@
 add_library(Siliko SHARED)
 target_sources(Siliko
 	PRIVATE
-		W32Dll.h
-		Value.h
-		FunctionCaller.h
-		SyntaxTree.h
-		DataSource.h
-		StringSource.h
-		Token.h
-		Lexer.h
-		InfixParser.h
-		Functions.h
-		Hash.h
-		Value.c
-		Hash.c
-		Functions.c
-		FunctionCaller.c
-		SyntaxTree.c
-		DataSource.c
-		StringSource.c
-		Lexer.c
-		InfixParser.c
+		include/Siliko/W32Dll.h
+		include/Siliko/Value.h
+		include/Siliko/FunctionCaller.h
+		include/Siliko/SyntaxTree.h
+		include/Siliko/DataSource.h
+		include/Siliko/StringSource.h
+		include/Siliko/Token.h
+		include/Siliko/Lexer.h
+		include/Siliko/InfixParser.h
+		src/Functions.h
+		src/Hash.h
+		src/Value.c
+		src/Hash.c
+		src/Functions.c
+		src/FunctionCaller.c
+		src/SyntaxTree.c
+		src/DataSource.c
+		src/StringSource.c
+		src/Lexer.c
+		src/InfixParser.c
 		SilikoConfig.cmake
 )
 add_library(Siliko::Siliko ALIAS Siliko)
-target_include_directories(Siliko PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(Siliko PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_compile_features(Siliko PRIVATE c_std_11)
 
 set(PUBLIC_HEADERS
-	W32Dll.h
-	Value.h
-	FunctionCaller.h
-	SyntaxTree.h
-	DataSource.h
-	StringSource.h
-	Token.h
-	Lexer.h
-	InfixParser.h
+	include/Siliko/W32Dll.h
+	include/Siliko/Value.h
+	include/Siliko/FunctionCaller.h
+	include/Siliko/SyntaxTree.h
+	include/Siliko/DataSource.h
+	include/Siliko/StringSource.h
+	include/Siliko/Token.h
+	include/Siliko/Lexer.h
+	include/Siliko/InfixParser.h
 )
 set_target_properties(Siliko PROPERTIES
 		PUBLIC_HEADER     "${PUBLIC_HEADERS}"

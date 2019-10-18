@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 
-#include "DataSource.h"
+#include <Siliko/DataSource.h>
 
 int SilikoDataSourceAdvance(SilikoDataSource *Source)
 {

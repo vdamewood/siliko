@@ -18,7 +18,7 @@
 #if !defined SILIKO_FUNCTIONS_H
 #define SILIKO_FUNCTIONS_H
 
-#include "Value.h"
+#include <Siliko/Value.h>
 
 SilikoValue SilikoFunction_add(int argc, SilikoValue *argv);
 SilikoValue SilikoFunction_subtract(int argc, SilikoValue *argv);

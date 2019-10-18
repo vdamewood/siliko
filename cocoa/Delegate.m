@@ -17,10 +17,10 @@
 
 #import "Delegate.h"
 
-#include "StringSource.h"
-#include "InfixParser.h"
-#include "SyntaxTree.h"
-#include "FunctionCaller.h"
+#include <Siliko/StringSource.h>
+#include <Siliko/InfixParser.h>
+#include <Siliko/SyntaxTree.h>
+#include <Siliko/FunctionCaller.h>
 
 @implementation SilikoDelegate
 

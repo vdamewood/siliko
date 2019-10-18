@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "Value.h"
+#include <Siliko/Value.h>
 
 #if defined _WIN32 && defined _MSC_VER
 #define strdup _strdup

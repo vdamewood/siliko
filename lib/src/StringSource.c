@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "StringSource.h"
+#include <Siliko/StringSource.h>
 
 #if defined WIN32
 #define strdup _strdup

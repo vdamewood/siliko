@@ -21,9 +21,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "StringSource.h"
-#include "InfixParser.h"
+#include <Siliko/StringSource.h>
+#include <Siliko/InfixParser.h>
+
 #include "EvalWindow.h"
+
 #include "About.h"
 #include "Id.h"
 
