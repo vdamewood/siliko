@@ -18,9 +18,9 @@
 #if !defined SILIKO_LEXER_H
 #define SILIKO_LEXER_H
 
-#include "W32Dll.h"
-#include "DataSource.h"
-#include "Token.h"
+#include <Siliko/W32Dll.h>
+#include <Siliko/DataSource.h>
+#include <Siliko/Token.h>
 
 #if defined __cplusplus
 extern "C" {

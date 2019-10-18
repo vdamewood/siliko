@@ -18,8 +18,8 @@
 #if !defined SILIKO_SYNTAX_TREE_H
 #define SILIKO_SYNTAX_TREE_H
 
-#include "W32Dll.h"
-#include "Value.h"
+#include <Siliko/W32Dll.h>
+#include <Siliko/Value.h>
 
 #if defined __cplusplus
 extern "C" {

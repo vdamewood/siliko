@@ -18,9 +18,9 @@
 #if !defined SILIKO_INFIX_PARSER_H
 #define SILIKO_INFIX_PARSER_H
 
-#include "W32Dll.h"
-#include "DataSource.h"
-#include "SyntaxTree.h"
+#include <Siliko/W32Dll.h>
+#include <Siliko/DataSource.h>
+#include <Siliko/SyntaxTree.h>
 
 #if defined __cplusplus
 extern "C" {

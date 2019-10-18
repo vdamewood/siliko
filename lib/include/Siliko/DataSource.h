@@ -18,7 +18,7 @@
 #if !defined SILIKO_DATA_SOURCE
 #define SILIKO_DATA_SOURCE
 
-#include "W32Dll.h"
+#include <Siliko/W32Dll.h>
 
 #if defined __cplusplus
 extern "C" {

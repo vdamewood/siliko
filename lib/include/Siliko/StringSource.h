@@ -18,7 +18,7 @@
 #if !defined SILIKO_STRING_SOURCE
 #define SILIKO_STRING_SOURCE
 
-#include "DataSource.h"
+#include <Siliko/DataSource.h>
 
 #if defined __cplusplus
 extern "C" {

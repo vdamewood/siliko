@@ -18,6 +18,8 @@
 #if !defined SILIKO_TOKEN_H
 #define SILIKO_TOKEN_H
 
+#include <Siliko/W32Dll.h>
+
 #if defined __cplusplus
 extern "C" {
 #endif
