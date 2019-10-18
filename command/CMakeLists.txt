@@ -16,37 +16,37 @@
 
 find_package(Readline)
 
-add_executable(SilikoCli)
-target_sources(SilikoCli
+add_executable(Silikilo)
+target_sources(Silikilo
 	PRIVATE
 		main.c
 )
-target_compile_features(SilikoCli PRIVATE c_std_11)
-target_link_libraries(SilikoCli PRIVATE Siliko::Core)
-set_target_properties(SilikoCli PROPERTIES
-	OUTPUT_NAME ${ONAMECLI}
+target_compile_features(Silikilo PRIVATE c_std_11)
+target_link_libraries(Silikilo PRIVATE Siliko::Core)
+set_target_properties(Silikilo PROPERTIES
+	OUTPUT_NAME silikilo
 )
 
 if (UNIX)
-	target_compile_definitions(SilikoCli PRIVATE USE_UNIX=1)
+	target_compile_definitions(Silikilo PRIVATE USE_UNIX=1)
 endif()
 
 if(Readline_FOUND)
-	target_link_libraries(SilikoCli PRIVATE Readline::Readline)
-	target_compile_definitions(SilikoCli PRIVATE HAVE_READLINE=1)
+	target_link_libraries(Silikilo PRIVATE Readline::Readline)
+	target_compile_definitions(Silikilo PRIVATE HAVE_READLINE=1)
 else()
-	target_sources(SilikoCli PRIVATE rl.c)
-	target_compile_definitions(SilikoCli PRIVATE HAVE_READLINE=0)
+	target_sources(Silikilo PRIVATE rl.c)
+	target_compile_definitions(Silikilo PRIVATE HAVE_READLINE=0)
 endif()
 
 if(WIN32)
 	add_custom_command(
-		TARGET SilikoCli POST_BUILD
+		TARGET Silikilo POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
 		$<TARGET_FILE:Siliko::Core>
 		$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Core>>
 		${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
-install(TARGETS SilikoCli
+install(TARGETS Silikilo
 	RUNTIME    DESTINATION ${INSTBIN})

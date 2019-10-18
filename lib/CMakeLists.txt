@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-add_library(SilikoCore SHARED)
-target_sources(SilikoCore
+add_library(Siliko SHARED)
+target_sources(Siliko
 	PRIVATE
 		W32Dll.h
 		Value.h
@@ -39,9 +39,9 @@ target_sources(SilikoCore
 		InfixParser.c
 		SilikoConfig.cmake
 )
-add_library(Siliko::Core ALIAS SilikoCore)
-target_include_directories(SilikoCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_compile_features(SilikoCore PRIVATE c_std_11)
+add_library(Siliko::Core ALIAS Siliko)
+target_include_directories(Siliko PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_features(Siliko PRIVATE c_std_11)
 
 set(PUBLIC_HEADERS
 	W32Dll.h
@@ -54,11 +54,10 @@ set(PUBLIC_HEADERS
 	Lexer.h
 	InfixParser.h
 )
-set_target_properties(SilikoCore PROPERTIES
+set_target_properties(Siliko PROPERTIES
 		PUBLIC_HEADER     "${PUBLIC_HEADERS}"
 		RESOURCE
 			SilikoConfig.cmake
-		OUTPUT_NAME       ${ONAMEDLIB}
 		FRAMEWORK         TRUE
 		FRAMEWORK_VERSION ${PROJECT_VERSION}
 		VERSION           ${PROJECT_VERSION}
@@ -66,10 +65,10 @@ set_target_properties(SilikoCore PROPERTIES
 
 find_library(LIBM m)
 if(LIBM)
-	target_link_libraries(SilikoCore PUBLIC m)
+	target_link_libraries(Siliko PUBLIC m)
 endif()
 
-install(TARGETS SilikoCore
+install(TARGETS Siliko
 	RUNTIME       DESTINATION ${INSTBIN}
 	ARCHIVE       DESTINATION ${INSTLIB}
 	LIBRARY       DESTINATION ${INSTLIB}

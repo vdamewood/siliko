@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012, 2014, 2015, 2016 Vincent Damewood
+# Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-add_executable(SilikoGui WIN32)
-target_Sources(SilikoGui
+add_executable(SilikujoForWindows WIN32)
+target_Sources(SilikujoForWindows
 	PRIVATE
 		EvalWindow.h
 		About.h
@@ -27,17 +27,17 @@ target_Sources(SilikoGui
 		About.rc
 		Icon.rc
 )
-set_target_properties(SilikoGui PROPERTIES
-	OUTPUT_NAME ${ONAMEGUI})
-target_compile_features(SilikoGui PRIVATE c_std_11)
-target_link_libraries(SilikoGui PRIVATE Siliko::Core)
+set_target_properties(SilikujoForWindows PROPERTIES
+	OUTPUT_NAME Silikujo)
+target_compile_features(SilikujoForWindows PRIVATE c_std_11)
+target_link_libraries(SilikujoForWindows PRIVATE Siliko::Core)
 
 add_custom_command(
-	TARGET SilikoGui POST_BUILD
+	TARGET SilikujoForWindows POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	$<TARGET_FILE:Siliko::Core>
 	$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Core>>
 	${CMAKE_CURRENT_BINARY_DIR})
 
-install(TARGETS SilikoGui
+install(TARGETS SilikujoForWindows
 	RUNTIME DESTINATION ${INSTBIN})
