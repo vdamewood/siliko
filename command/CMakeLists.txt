@@ -40,12 +40,16 @@ else()
 endif()
 
 if(WIN32)
+	if (CMAKE_C_LINKER_SUPPORTS_PDB)
+		set(PDB_GENEX "$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Siliko>>")
+	endif()
 	add_custom_command(
 		TARGET Silikilo POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
 		$<TARGET_FILE:Siliko::Siliko>
-		$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Siliko>>
-		${CMAKE_CURRENT_BINARY_DIR})
+		"${PDB_GENEX}"
+		"${CMAKE_CURRENT_BINARY_DIR}"
+	)
 endif()
 
 install(TARGETS Silikilo
