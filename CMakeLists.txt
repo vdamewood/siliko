@@ -106,8 +106,6 @@ endif()
 install(
 	FILES
 		Readme.md
-		Authors.txt
-		LicenseStatement.txt
 		License.txt
 		License.Gpl.txt
 	DESTINATION ${INSTDOC}
