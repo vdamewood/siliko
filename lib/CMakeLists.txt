@@ -15,17 +15,20 @@
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 add_library(Siliko SHARED)
+set(PUBLIC_HEADERS
+	include/Siliko/Value.h
+	include/Siliko/FunctionCaller.h
+	include/Siliko/SyntaxTree.h
+	include/Siliko/DataSource.h
+	include/Siliko/StringSource.h
+	include/Siliko/Token.h
+	include/Siliko/Lexer.h
+	include/Siliko/InfixParser.h
+	${CMAKE_CURRENT_BINARY_DIR}/include/Siliko/Api.h
+)
 target_sources(Siliko
 	PRIVATE
-		include/Siliko/W32Dll.h
-		include/Siliko/Value.h
-		include/Siliko/FunctionCaller.h
-		include/Siliko/SyntaxTree.h
-		include/Siliko/DataSource.h
-		include/Siliko/StringSource.h
-		include/Siliko/Token.h
-		include/Siliko/Lexer.h
-		include/Siliko/InfixParser.h
+		${PUBLIC_HEADERS}
 		src/Functions.h
 		src/Hash.h
 		src/Value.c
@@ -40,28 +43,28 @@ target_sources(Siliko
 		SilikoConfig.cmake
 )
 add_library(Siliko::Siliko ALIAS Siliko)
-target_include_directories(Siliko PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_compile_features(Siliko PRIVATE c_std_11)
-
-set(PUBLIC_HEADERS
-	include/Siliko/W32Dll.h
-	include/Siliko/Value.h
-	include/Siliko/FunctionCaller.h
-	include/Siliko/SyntaxTree.h
-	include/Siliko/DataSource.h
-	include/Siliko/StringSource.h
-	include/Siliko/Token.h
-	include/Siliko/Lexer.h
-	include/Siliko/InfixParser.h
+target_include_directories(Siliko
+	PUBLIC
+		"${CMAKE_CURRENT_SOURCE_DIR}/include"
+		"${CMAKE_CURRENT_BINARY_DIR}/include"
 )
+target_compile_features(Siliko PRIVATE c_std_11)
 set_target_properties(Siliko PROPERTIES
-		PUBLIC_HEADER     "${PUBLIC_HEADERS}"
-		RESOURCE
-			SilikoConfig.cmake
-		FRAMEWORK         TRUE
-		FRAMEWORK_VERSION ${PROJECT_VERSION}
-		VERSION           ${PROJECT_VERSION}
-		SOVERSION         ${PROJECT_VERSION_MAJOR})
+	PUBLIC_HEADER             "${PUBLIC_HEADERS}"
+	C_VISIBILITY_PRESET       hidden
+	VISIBILITY_INLINES_HIDDEN On
+	RESOURCE                  SilikoConfig.cmake
+	FRAMEWORK                 TRUE
+	FRAMEWORK_VERSION         ${PROJECT_VERSION}
+	VERSION                   ${PROJECT_VERSION}
+	SOVERSION                 ${PROJECT_VERSION_MAJOR}
+)
+
+include(GenerateExportHeader)
+generate_export_header(Siliko
+	EXPORT_FILE_NAME include/Siliko/Api.h
+	EXPORT_MACRO_NAME SILIKO_API
+)
 
 find_library(LIBM m)
 if(LIBM)

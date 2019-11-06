@@ -18,7 +18,7 @@
 #if !defined SILIKO_VALUE_H
 #define SILIKO_VALUE_H
 
-#include <Siliko/W32Dll.h>
+#include <Siliko/Api.h>
 
 #if defined __cplusplus
 extern "C" {

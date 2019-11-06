@@ -18,7 +18,7 @@
 #if !defined SILIKO_LEXER_H
 #define SILIKO_LEXER_H
 
-#include <Siliko/W32Dll.h>
+#include <Siliko/Api.h>
 #include <Siliko/DataSource.h>
 #include <Siliko/Token.h>
 

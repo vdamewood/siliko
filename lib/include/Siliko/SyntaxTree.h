@@ -18,7 +18,7 @@
 #if !defined SILIKO_SYNTAX_TREE_H
 #define SILIKO_SYNTAX_TREE_H
 
-#include <Siliko/W32Dll.h>
+#include <Siliko/Api.h>
 #include <Siliko/Value.h>
 
 #if defined __cplusplus

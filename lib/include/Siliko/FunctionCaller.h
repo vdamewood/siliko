@@ -18,7 +18,7 @@
 #if !defined SILIKO_FUNCTION_CALLER_H
 #define SILIKO_FUNCTION_CALLER_H
 
-#include <Siliko/W32Dll.h>
+#include <Siliko/Api.h>
 #include <Siliko/Value.h>
 
 #if defined __cplusplus

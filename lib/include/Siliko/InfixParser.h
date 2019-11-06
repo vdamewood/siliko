@@ -18,7 +18,7 @@
 #if !defined SILIKO_INFIX_PARSER_H
 #define SILIKO_INFIX_PARSER_H
 
-#include <Siliko/W32Dll.h>
+#include <Siliko/Api.h>
 #include <Siliko/DataSource.h>
 #include <Siliko/SyntaxTree.h>
 
