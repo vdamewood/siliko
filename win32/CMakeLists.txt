@@ -32,16 +32,5 @@ set_target_properties(SilikujoForWindows PROPERTIES
 target_compile_features(SilikujoForWindows PRIVATE c_std_11)
 target_link_libraries(SilikujoForWindows PRIVATE Siliko::Siliko)
 
-if (CMAKE_C_LINKER_SUPPORTS_PDB)
-	set(PDB_GENEX "$<$<CONFIG:Debug>:$<TARGET_PDB_FILE:Siliko::Siliko>>")
-endif()
-add_custom_command(
-	TARGET SilikujoForWindows POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	$<TARGET_FILE:Siliko::Siliko>
-	"${PDB_GENEX}"
-	"${CMAKE_CURRENT_BINARY_DIR}"
-)
-
 install(TARGETS SilikujoForWindows
 	RUNTIME DESTINATION ${INSTBIN})
