@@ -58,8 +58,8 @@ set_target_properties(SilikujoForMacOS
 )
 
 install(TARGETS SilikujoForMacOS
-	RUNTIME DESTINATION ${INSTBIN}
-	BUNDLE  DESTINATION .)
+	BUNDLE  DESTINATION 
+)
 
 install(CODE "include(BundleUtilities)")
 install(CODE "fixup_bundle(\"$<TARGET_FILE:SilikujoForMacOS>\" \"\" \"$<TARGET_FILE_DIR:Siliko::Siliko>\")")

@@ -56,14 +56,13 @@ target_compile_features(SilikujoForUnix PRIVATE c_std_11)
 target_link_libraries(SilikujoForUnix PRIVATE Siliko::Siliko PkgConfig::Gtk3)
 
 install(TARGETS SilikujoForUnix
-	RUNTIME    DESTINATION ${INSTBIN})
-
-install(
-	FILES siliko.desktop
-	DESTINATION "${INSTSHR}/applications"
+	RUNTIME    DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(
-	FILES siliko.png
-	DESTINATION "${INSTSHR}/icons/hicolor/48x48/apps"
+install(FILES siliko.desktop
+	DESTINATION "${CMAKE_INSTALL_DATADIR}/applications"
+)
+
+install(FILES siliko.png
+	DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/48x48/apps"
 )

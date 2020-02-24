@@ -40,6 +40,8 @@ set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood
 # Configuration Options #
 #########################
 
+include(GNUInstallDirs)
+
 option(BUILD_CLI "Build command-line program" On)
 option(BUILD_GUI "Build GUI Program" On)
 option(BUILD_SHARED_LIBS "Build as a shared library" On)
@@ -50,35 +52,6 @@ endif()
 
 if(WIN32)
 	option(PACK_MSI "Package as MSI Installer" On)
-endif()
-
-
-######################
-# Build-Based Values #
-######################
-
-if(APPLE)
-	set(INSTBIN bin)
-	set(INSTLIB err)
-	set(INSTINC err)
-	set(INSTSHR err)
-	set(INSTDAT err)
-	set(INSTDOC .)
-elseif(WIN32)
-	set(INSTBIN .)
-	set(INSTLIB .)
-	set(INSTINC include)
-	set(INSTSHR .)
-	set(INSTDAT .)
-	set(INSTDOC .)
-else()
-	include(GNUInstallDirs)
-	set(INSTBIN ${CMAKE_INSTALL_BINDIR})
-	set(INSTLIB ${CMAKE_INSTALL_LIBDIR})
-	set(INSTINC ${CMAKE_INSTALL_INCLUDEDIR})
-	set(INSTSHR ${CMAKE_INSTALL_DATADIR})
-	set(INSTDAT "${INSTSHR}/${PROJECT_NAME}")
-	set(INSTDOC ${CMAKE_INSTALL_DOCDIR})
 endif()
 
 
@@ -104,12 +77,8 @@ if(BUILD_GUI)
 	endif()
 endif()
 
-install(
-	FILES
-		Readme.md
-		License.txt
-		License.Gpl.txt
-	DESTINATION ${INSTDOC}
+install(FILES Readme.md License.txt License.Gpl.txt
+	DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/Siliko
 )
 
 
