@@ -1,9 +1,0 @@
-libdir=@CMAKE_INSTALL_FULL_LIBDIR@
-incdir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
-
-Name: @PROJECT_NAME@
-Description: @DESCRIPTION@
-Version: @PROJECT_VERSION@
-URL: @URL@
-Cflags: -I${incdir}
-Libs: -L${libdir} -lsiliko -lm
