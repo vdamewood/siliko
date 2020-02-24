@@ -42,6 +42,7 @@ set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood
 
 option(BUILD_CLI "Build command-line program" On)
 option(BUILD_GUI "Build GUI Program" On)
+option(BUILD_SHARED_LIBS "Build as a shared library" On)
 
 if(APPLE)
 	option(PACK_DND "Package as Drag-and-Drop disk image" On)
