@@ -222,7 +222,7 @@ SilikoValue SilikoFunction_power(int argc, SilikoValue *argv)
 	for (i = 1; i < argc; i++)
 	{
 		nextValue = (argv[i].Status == SILIKO_VAL_INTEGER)
-			? nextValue = (double) argv[i].Integer
+			? (double) argv[i].Integer
 			: argv[i].Float;
 
 		runningValue = pow(runningValue, nextValue);

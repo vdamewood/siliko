@@ -58,7 +58,7 @@ set_target_properties(SilikujoForMacOS
 )
 
 install(TARGETS SilikujoForMacOS
-	BUNDLE  DESTINATION 
+	BUNDLE  DESTINATION .
 )
 
 install(CODE "include(BundleUtilities)")
