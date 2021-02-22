@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood
+# Copyright 2012, 2014, 2015, 2016, 2019, 2021 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@ target_sources(Silikilo
 	PRIVATE
 		main.c
 )
-target_compile_features(Silikilo PRIVATE c_std_11)
-target_link_libraries(Silikilo PRIVATE Siliko::Siliko)
 set_target_properties(Silikilo PROPERTIES
 	OUTPUT_NAME silikilo
 )
+target_compile_features(Silikilo PRIVATE c_std_11)
+target_link_libraries(Silikilo PRIVATE Siliko::Siliko)
 
 if (UNIX)
 	target_compile_definitions(Silikilo PRIVATE USE_UNIX=1)

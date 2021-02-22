@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood
+# Copyright 2012, 2014, 2015, 2016, 2019, 2021 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ add_custom_command(OUTPUT MainMenu.nib
 	COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/MainMenu.xib"
 )
 set_source_files_properties(MainMenu.nib PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-set_source_files_properties(siliko.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+set_source_files_properties(silikujo.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 add_executable(SilikujoForMacOS MACOSX_BUNDLE)
 target_sources(SilikujoForMacOS
@@ -33,7 +33,17 @@ target_sources(SilikujoForMacOS
 		Delegate.m
 		Main.m
 		MainMenu.nib
-		siliko.icns
+		silikujo.icns
+)
+set_target_properties(SilikujoForMacOS PROPERTIES
+	OUTPUT_NAME                         Silikujo
+	MACOSX_BUNDLE_GUI_IDENTIFIER        "com.vdamewood.SilikujoForMacOS"
+	MACOSX_BUNDLE_BUNDLE_NAME           "Silikujo"
+	MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
+	MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
+	MACOSX_BUNDLE_COPYRIGHT             ${COPYRIGHT_STATEMENT}
+	MACOSX_BUNDLE_ICON_FILE             silikujo.icns
+	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 )
 target_compile_options(SilikujoForMacOS
 	PRIVATE
@@ -44,17 +54,6 @@ target_link_libraries(SilikujoForMacOS
 	PRIVATE
 		Siliko::Siliko
 		"-framework Cocoa"
-)
-set_target_properties(SilikujoForMacOS
-	PROPERTIES
-		OUTPUT_NAME                         Silikujo
-		MACOSX_BUNDLE_GUI_IDENTIFIER        "com.vdamewood.SilikujoForMacOS"
-		MACOSX_BUNDLE_BUNDLE_NAME           "Silikujo"
-		MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
-		MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
-		MACOSX_BUNDLE_COPYRIGHT             ${COPYRIGHT_STATEMENT}
-		MACOSX_BUNDLE_ICON_FILE             siliko.icns
-		MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 )
 
 install(TARGETS SilikujoForMacOS

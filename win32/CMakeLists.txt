@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood
+# Copyright 2012, 2014, 2015, 2016, 2019, 2021 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 add_executable(SilikujoForWindows WIN32)
-target_Sources(SilikujoForWindows
+target_sources(SilikujoForWindows
 	PRIVATE
 		EvalWindow.h
 		About.h
@@ -28,7 +28,8 @@ target_Sources(SilikujoForWindows
 		Icon.rc
 )
 set_target_properties(SilikujoForWindows PROPERTIES
-	OUTPUT_NAME Silikujo)
+	OUTPUT_NAME Silikujo
+)
 target_compile_features(SilikujoForWindows PRIVATE c_std_11)
 target_link_libraries(SilikujoForWindows PRIVATE Siliko::Siliko)
 

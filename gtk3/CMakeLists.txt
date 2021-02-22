@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012, 2014, 2015, 2016, 2017, 2018, 2019 Vincent Damewood
+# Copyright 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2021 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(Gtk3 REQUIRED gtk+-3.0 IMPORTED_TARGET)
 
 find_program(GRESOURCE glib-compile-resources)
-message("Resource compiler: ${GRESOURCE}")
 if(NOT GRESOURCE)
 	message(FATAL_ERROR "Can't find glib-compile-resources.")
 endif()
@@ -51,7 +50,8 @@ target_sources(SilikujoForUnix
 		gresource.h
 )
 set_target_properties(SilikujoForUnix PROPERTIES
-	OUTPUT_NAME Silikujo)
+	OUTPUT_NAME Silikujo
+)
 target_compile_features(SilikujoForUnix PRIVATE c_std_11)
 target_link_libraries(SilikujoForUnix PRIVATE Siliko::Siliko PkgConfig::Gtk3)
 
@@ -59,7 +59,7 @@ install(TARGETS SilikujoForUnix
 	RUNTIME    DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(FILES siliko.desktop
+install(FILES silikujo.desktop
 	DESTINATION "${CMAKE_INSTALL_DATADIR}/applications"
 )
 
