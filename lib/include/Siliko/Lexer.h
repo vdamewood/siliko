@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-struct SILIKO_API SilikoLexer
+struct SilikoLexer
 {
 	SilikoDataSource *Source;
 	SilikoToken Token;

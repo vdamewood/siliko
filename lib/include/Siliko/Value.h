@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-enum SILIKO_API SilikoValueStatus
+enum SilikoValueStatus
 {
 	SILIKO_VAL_INTEGER,       /* Success: The value is an integer. */
 	SILIKO_VAL_FLOAT,         /* Success: The valis is a float. */
@@ -46,7 +46,7 @@ enum SILIKO_API SilikoValueStatus
 };
 typedef enum SilikoValueStatus SilikoValueStatus;
 
-struct SILIKO_API SilikoValue
+struct SilikoValue
 {
 	SilikoValueStatus Status;
 	union

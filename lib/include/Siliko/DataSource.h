@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-struct SILIKO_API SilikoDataSource
+struct SilikoDataSource
 {
 	void *State;
 	int (*AdvanceFunction)(void *State);

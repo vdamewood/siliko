@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-enum SILIKO_API SilikoTokenType
+enum SilikoTokenType
 {
 	SILIKO_TOK_ERROR = -1,
 	SILIKO_TOK_UNSET = 0,
@@ -44,7 +44,7 @@ enum SILIKO_API SilikoTokenType
 };
 typedef enum SilikoTokenType SilikoTokenType;
 
-struct SILIKO_API SilikoToken
+struct SilikoToken
 {
 	SilikoTokenType Type;
 	union

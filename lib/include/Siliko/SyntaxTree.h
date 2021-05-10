@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-enum SILIKO_API SilikoSyntaxTreeNodeType
+enum SilikoSyntaxTreeNodeType
 {
 	SILIKO_AST_NOTHING = 0,
 	SILIKO_AST_BRANCH,
@@ -36,7 +36,7 @@ typedef enum SilikoSyntaxTreeNodeType SilikoSyntaxTreeNodeType;
 struct SilikoSyntaxTreeNode;
 typedef struct SilikoSyntaxTreeNode SilikoSyntaxTreeNode;
 
-struct SILIKO_API SilikoSyntaxTreeBranch
+struct SilikoSyntaxTreeBranch
 {
 	char *Id;
 	int Count;
@@ -46,7 +46,7 @@ struct SILIKO_API SilikoSyntaxTreeBranch
 };
 typedef struct SilikoSyntaxTreeBranch SilikoSyntaxTreeBranch;
 
-struct SILIKO_API SilikoSyntaxTreeNode
+struct SilikoSyntaxTreeNode
 {
 	SilikoSyntaxTreeNodeType Type;
 	union
