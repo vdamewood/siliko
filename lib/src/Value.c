@@ -25,9 +25,8 @@
 
 #include <Siliko/Value.h>
 
-#if defined _WIN32 && defined _MSC_VER
+#if defined _WIN32
 #define strdup _strdup
-#define snprintf _snprintf
 #endif
 
 char *SilikoValueToString(SilikoValue InputValue)
