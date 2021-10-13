@@ -15,6 +15,8 @@
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 add_library(Siliko)
+add_library(Siliko::Siliko ALIAS Siliko)
+
 set(PUBLIC_HEADERS
 	include/Siliko/Value.h
 	include/Siliko/FunctionCaller.h
@@ -40,20 +42,29 @@ target_sources(Siliko
 		src/StringSource.c
 		src/Lexer.c
 		src/InfixParser.c
-		SilikoConfig.cmake
 )
-add_library(Siliko::Siliko ALIAS Siliko)
+
+find_library(LIBM m)
+if(LIBM)
+	target_link_libraries(Siliko PUBLIC m)
+endif()
+
 target_include_directories(Siliko
 	PUBLIC
-		"${CMAKE_CURRENT_BINARY_DIR}/include"
-		"${CMAKE_CURRENT_SOURCE_DIR}/include"
+		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+		"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
 )
+if (NOT APPLE)
+	target_include_directories(Siliko
+		INTERFACE
+			"$<INSTALL_INTERFACE:include>"
+	)
+endif()
 target_compile_features(Siliko PRIVATE c_std_11)
 set_target_properties(Siliko PROPERTIES
 	PUBLIC_HEADER             "${PUBLIC_HEADERS}"
 	C_VISIBILITY_PRESET       hidden
 	VISIBILITY_INLINES_HIDDEN On
-	RESOURCE                  SilikoConfig.cmake
 	FRAMEWORK                 TRUE
 	FRAMEWORK_VERSION         ${PROJECT_VERSION}
 	VERSION                   ${PROJECT_VERSION}
@@ -66,16 +77,33 @@ generate_export_header(Siliko
 	EXPORT_MACRO_NAME SILIKO_API
 )
 
-find_library(LIBM m)
-if(LIBM)
-	target_link_libraries(Siliko PUBLIC m)
-endif()
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+	SilikoConfigVersion.cmake
+	VERSION ${Siliko_VERSION}
+	COMPATIBILITY SameMajorVersion
+)
 
-install(TARGETS Siliko
+install(TARGETS Siliko EXPORT Siliko
 	RUNTIME       DESTINATION ${CMAKE_INSTALL_BINDIR}
 	ARCHIVE       DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	LIBRARY       DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	FRAMEWORK     DESTINATION .
 	RESOURCE      DESTINATION ${CMAKE_INSTALL_DATADIR}/Siliko
 	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Siliko
+)
+
+if(APPLE)
+	set(CONFIG_DESTINATION Siliko.framework/Resources)
+else()
+	set(CONFIG_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Siliko)
+endif()
+
+install(EXPORT Siliko
+      DESTINATION ${CONFIG_DESTINATION}
+      NAMESPACE Siliko::
+      FILE SilikoConfig.cmake
+)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SilikoConfigVersion.cmake
+	DESTINATION ${CONFIG_DESTINATION}
 )
