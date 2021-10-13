@@ -28,7 +28,11 @@ target_sources(SilikujoForWindows
 		Icon.rc
 )
 set_target_properties(SilikujoForWindows PROPERTIES
-	OUTPUT_NAME Silikujo
+	OUTPUT_NAME               Silikujo
+	RUNTIME_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
+	LIBRARY_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
+	ARCHIVE_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
+	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
 target_compile_features(SilikujoForWindows PRIVATE c_std_11)
 target_link_libraries(SilikujoForWindows PRIVATE Siliko::Siliko)

@@ -44,6 +44,10 @@ set_target_properties(SilikujoForMacOS PROPERTIES
 	MACOSX_BUNDLE_COPYRIGHT             ${COPYRIGHT_STATEMENT}
 	MACOSX_BUNDLE_ICON_FILE             silikujo.icns
 	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
+	RUNTIME_OUTPUT_DIRECTORY            "${PROJECT_BINARY_DIR}/products"
+	LIBRARY_OUTPUT_DIRECTORY            "${PROJECT_BINARY_DIR}/products"
+	ARCHIVE_OUTPUT_DIRECTORY            "${PROJECT_BINARY_DIR}/products"
+	PDB_OUTPUT_DIRECTORY                "${PROJECT_BINARY_DIR}/products"
 )
 target_compile_options(SilikujoForMacOS
 	PRIVATE

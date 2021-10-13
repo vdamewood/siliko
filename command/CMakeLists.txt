@@ -22,7 +22,11 @@ target_sources(Silikilo
 		main.c
 )
 set_target_properties(Silikilo PROPERTIES
-	OUTPUT_NAME silikilo
+	OUTPUT_NAME               silikilo
+	RUNTIME_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
+	LIBRARY_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
+	ARCHIVE_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
+	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
 target_compile_features(Silikilo PRIVATE c_std_11)
 target_link_libraries(Silikilo PRIVATE Siliko::Siliko)
