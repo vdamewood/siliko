@@ -45,8 +45,8 @@ target_sources(Siliko
 add_library(Siliko::Siliko ALIAS Siliko)
 target_include_directories(Siliko
 	PUBLIC
-		"${CMAKE_CURRENT_SOURCE_DIR}/include"
 		"${CMAKE_CURRENT_BINARY_DIR}/include"
+		"${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 target_compile_features(Siliko PRIVATE c_std_11)
 set_target_properties(Siliko PROPERTIES
