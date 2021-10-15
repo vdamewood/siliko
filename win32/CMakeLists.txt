@@ -38,5 +38,7 @@ target_compile_features(SilikujoForWindows PRIVATE c_std_11)
 target_link_libraries(SilikujoForWindows PRIVATE Siliko::Siliko)
 
 install(TARGETS SilikujoForWindows
-	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+RUNTIME
+	DESTINATION  ${CMAKE_INSTALL_BINDIR}
+	COMPONENT    Silikujo
 )

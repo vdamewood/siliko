@@ -60,7 +60,9 @@ target_compile_features(SilikujoForUnix PRIVATE c_std_11)
 target_link_libraries(SilikujoForUnix PRIVATE Siliko::Siliko PkgConfig::Gtk3)
 
 install(TARGETS SilikujoForUnix
-	RUNTIME    DESTINATION ${CMAKE_INSTALL_BINDIR}
+RUNTIME
+	DESTINATION  ${CMAKE_INSTALL_BINDIR}
+	COMPONENT    Silikujo
 )
 
 install(FILES silikujo.desktop

@@ -14,6 +14,18 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
+if(APPLE)
+	set(SILIKO_INSTALL_FRAMEWORKDIR Frameworks
+		CACHE STRING "Locaton to install framework bundles (relative to install prefix)"
+	)
+	set(SILIKO_INSTALL_CMAKEDIR "${SILIKO_INSTALL_FRAMEWORKDIR}/Siliko.framework/Resources")
+else()
+	set(SILIKO_INSTALL_FRAMEWORKDIR Frameworks)
+	set(SILIKO_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Siliko
+		CACHE STRING "Locaton to install CMake package files (relative to install prefix)"
+	)
+endif()
+
 add_library(Siliko)
 add_library(Siliko::Siliko ALIAS Siliko)
 
@@ -56,9 +68,8 @@ target_include_directories(Siliko
 )
 if (NOT APPLE)
 	target_include_directories(Siliko
-		INTERFACE
-			"$<INSTALL_INTERFACE:include>"
-	)
+	INTERFACE
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 endif()
 target_compile_features(Siliko PRIVATE c_std_11)
 set_target_properties(Siliko PROPERTIES
@@ -88,26 +99,32 @@ write_basic_package_version_file(
 	COMPATIBILITY SameMajorVersion
 )
 
-install(TARGETS Siliko EXPORT Siliko
-	RUNTIME       DESTINATION ${CMAKE_INSTALL_BINDIR}
-	ARCHIVE       DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	LIBRARY       DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	FRAMEWORK     DESTINATION .
-	RESOURCE      DESTINATION ${CMAKE_INSTALL_DATADIR}/Siliko
-	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Siliko
+install(TARGETS Siliko
+	EXPORT Siliko
+RUNTIME
+	DESTINATION           ${CMAKE_INSTALL_BINDIR}
+	COMPONENT             Siliko_Runtime
+ARCHIVE
+	DESTINATION           ${CMAKE_INSTALL_LIBDIR}
+	COMPONENT             Siliko_Development
+LIBRARY
+	DESTINATION           ${CMAKE_INSTALL_LIBDIR}
+	COMPONENT             Siliko_Runtime
+	NAMELINK_COMPONENT    Siliko_Development
+FRAMEWORK
+	DESTINATION           ${SILIKO_INSTALL_FRAMEWORKDIR}
+	COMPONENT             Siliko_Development
+PUBLIC_HEADER
+	DESTINATION           ${CMAKE_INSTALL_INCLUDEDIR}/Siliko
+	COMPONENT             Siliko_Development
 )
-
-if(APPLE)
-	set(CONFIG_DESTINATION Siliko.framework/Resources)
-else()
-	set(CONFIG_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Siliko)
-endif()
-
 install(EXPORT Siliko
-      DESTINATION ${CONFIG_DESTINATION}
-      NAMESPACE Siliko::
-      FILE SilikoConfig.cmake
+	NAMESPACE             Siliko::
+	FILE                  SilikoConfig.cmake
+	DESTINATION           ${SILIKO_INSTALL_CMAKEDIR}
+	COMPONENT             Siliko_Development
 )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SilikoConfigVersion.cmake
-	DESTINATION ${CONFIG_DESTINATION}
+	DESTINATION           ${SILIKO_INSTALL_CMAKEDIR}
+	COMPONENT             Siliko_Development
 )

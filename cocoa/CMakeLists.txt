@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+set(SILIKO_INSTALL_APPDIR Applications CACHE STRING
+	"Locaton to install application bundles (relative to install prefix)"
+)
+
 find_program(IBTOOL ibtool)
 if (NOT IBTOOL)
 	message(FATAL_ERROR "Command ibtool not found. Can't build GUI. Quitting.")
@@ -61,7 +65,9 @@ target_link_libraries(SilikujoForMacOS
 )
 
 install(TARGETS SilikujoForMacOS
-	BUNDLE  DESTINATION .
+BUNDLE
+	DESTINATION  ${SILIKO_INSTALL_APPDIR}
+	COMPONENT    Silikujo
 )
 
 install(CODE "include(BundleUtilities)")
