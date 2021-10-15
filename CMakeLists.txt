@@ -79,6 +79,7 @@ endif()
 
 install(FILES Readme.md License.txt License.Gpl.txt
 	DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/Siliko
+	COMPONENT Siliko_Runtime
 )
 
 

@@ -66,9 +66,11 @@ RUNTIME
 )
 
 install(FILES silikujo.desktop
-	DESTINATION "${CMAKE_INSTALL_DATADIR}/applications"
+	DESTINATION  "${CMAKE_INSTALL_DATADIR}/applications"
+	COMPONENT    Silikujo
 )
 
 install(FILES siliko.png
-	DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/48x48/apps"
+	DESTINATION  "${CMAKE_INSTALL_DATADIR}/icons/hicolor/48x48/apps"
+	COMPONENT    Silikujo
 )
