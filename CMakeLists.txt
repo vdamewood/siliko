@@ -16,24 +16,12 @@
 
 cmake_minimum_required(VERSION 3.14)
 
-
-##########################
-# Project Identification #
-##########################
-
 project(Siliko
 	VERSION       0.0.0
 	DESCRIPTION   "Mathematical expression parser written in C"
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
-
-set(VENDOR              "Vincent Damewood")
-set(UPGRADE_GUID        "9A29ACC2-5BDB-407C-AAFB-56897BABD10A")
-set(COPYRIGHT_STATEMENT "Copyright 2012, 2014, 2015, 2016, 2019 Vincent Damewood.\
- Siliko library licensed under the terms of the GNU Lesser General Public\
- License, version 3 or later. Siliko interface programs licensed under the\
- terms of the GNU General Public License, version 3 or later.")
 
 
 #########################
@@ -46,14 +34,18 @@ option(BUILD_CLI "Build command-line program" On)
 option(BUILD_GUI "Build GUI Program" On)
 option(BUILD_SHARED_LIBS "Build as a shared library" On)
 
+set(VENDOR ""
+	CACHE STRING "The name of the package vendor when packaging")
+
 if(APPLE)
 	option(PACK_DND "Package as Drag-and-Drop disk image" On)
 endif()
 
 if(WIN32)
 	option(PACK_MSI "Package as MSI Installer" On)
+	set(UPGRADE_GUID ""
+		CACHE STRING "THE Upgrade GUI used for MSI Installers")
 endif()
-
 
 ###########
 # Targets #
