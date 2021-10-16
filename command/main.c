@@ -1,5 +1,5 @@
-/* Siliko.c: Command-line interface for Siliko
- * Copyright 2012, 2014, 2015, 2016 Vincent Damewood
+/* main.c: Entry point for Silikilo
+ * Copyright 2012-2021 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
