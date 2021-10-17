@@ -30,22 +30,41 @@ project(Siliko
 
 include(GNUInstallDirs)
 
-option(BUILD_CLI "Build command-line program" On)
-option(BUILD_GUI "Build GUI Program" On)
-option(BUILD_SHARED_LIBS "Build as a shared library" On)
+option(SILIKO_BUILD_SHARED_LIBRARY  "Build Siliko as a shared library (build as a static library is off)" On)
+option(SILIKO_BUILD_CLI             "Build Silikilo, a command-line interface for Siliko" On)
+option(SILIKO_BUILD_GUI             "Build Silikujo, a GUI interface for Siliko" On)
+option(SILIKO_PACKAGE               "Add 'package' and 'package_source' build targets for packages" On)
+option(SILIKO_PACKAGE_ZIP           "Package as zip file (ignored if SILIKO_PACKAGE is off)" On)
+option(SILIKO_PACKAGE_7ZIP          "Package as 7zip file (ignored if SILIKO_PACKAGE is off)" On)
+option(SILIKO_PACKAGE_TXZ           "Package as XZ-compressed tar file (ignored if SILIKO_PACKAGE is off)" On)
 
-set(VENDOR ""
-	CACHE STRING "The name of the package vendor when packaging")
+set(SILIKO_PACKAGE_VENDOR  "Unknown Vendor"  CACHE STRING
+	"The name of the vendor when generating packages (ignored if SILIKO_PACKAGE is off)"
+)
 
 if(APPLE)
-	option(PACK_DND "Package as Drag-and-Drop disk image" On)
+	option(SILIKO_PACKAGE_DMG       "Package as DMG file (ignored if SILIKO_PACKAGE is off)" On)
+
+	set(SILIKO_INSTALL_APPDIR Applications  CACHE STRING
+		"Locaton to install application bundles"
+	)
+	set(SILIKO_INSTALL_FRAMEWORKDIR  Frameworks  CACHE STRING
+		"Locaton to install framework (ignored if SILIKO_BUILD_FRAMEWORK is off)"
+	)
+else()
+	set(SILIKO_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Siliko
+		CACHE STRING "Locaton to install CMake files"
+	)
 endif()
 
 if(WIN32)
-	option(PACK_MSI "Package as MSI Installer" On)
-	set(UPGRADE_GUID ""
-		CACHE STRING "THE Upgrade GUI used for MSI Installers")
+	option(SILIKO_PACKAGE_MSI       "Package as MSI Installer  (Ignored if SILIKO_PACKAGE is false)" On)
+
+	set(SILIKO_MSI_GUID  "00000000-0000-0000-0000-000000000000"  CACHE STRING
+		"The Upgrade GUID used for MSI Installers (Ignored if SILIKO_PACKAGE or SILIKO_PACKAGE_MSI is false)"
+	)
 endif()
+
 
 ###########
 # Targets #
@@ -54,10 +73,10 @@ endif()
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 add_subdirectory(lib)
-if(BUILD_CLI)
+if(SILIKO_BUILD_CLI)
 	add_subdirectory(command)
 endif()
-if(BUILD_GUI)
+if(SILIKO_BUILD_GUI)
 	if(APPLE)
 		add_subdirectory(cocoa)
 	elseif(UNIX)
@@ -79,45 +98,57 @@ install(FILES Readme.md License.txt License.Gpl.txt
 # Package-creation Settings #
 #############################
 
-set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
-set(CPACK_PACKAGE_VENDOR "${VENDOR}")
-set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}")
+if (SILIKO_PACKAGE)
+	set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+	set(CPACK_PACKAGE_VENDOR "${SILIKO_PACKAGE_VENDOR}")
+	set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+	set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+	set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+	set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}")
 
-set(CPACK_STRIP_FILES On)
-set(CPACK_GENERATOR 7Z TXZ ZIP)
-set(CPACK_VERBATIM_VARIABLES Off)
+	set(CPACK_STRIP_FILES On)
+	set(CPACK_SOURCE_STRIP_FILES Off)
+	set(CPACK_VERBATIM_VARIABLES Off)
+	set(CPACK_SOURCE_IGNORE_FILES "/\.git/" "/\.gitignore" "/[Bb]uild/")
 
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
-set(CPACK_SOURCE_STRIP_FILES Off)
-set(CPACK_SOURCE_GENERATOR 7Z TXZ ZIP)
-set(CPACK_SOURCE_IGNORE_FILES "/\.git/" "/\.gitignore" "/[Bb]uild/")
+	if(SILIKO_PACKAGE_7ZIP)
+		list(APPEND CPACK_GENERATOR 7Z)
+		list(APPEND CPACK_SOURCE_GENERATOR 7Z)
+	endif()
+	if(SILIKO_PACKAGE_TXZ)
+		list(APPEND CPACK_GENERATOR TXZ)
+		list(APPEND CPACK_SOURCE_GENERATOR TXZ)
+	endif()
+	if(SILIKO_PACKAGE_ZIP)
+		list(APPEND CPACK_GENERATOR ZIP)
+		list(APPEND CPACK_SOURCE_GENERATOR ZIP)
+	endif()
 
-if(APPLE)
-	set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-macOS")
-elseif(WIN32)
-	set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-Windows")
-else()
-	set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CMAKE_SYSTEM_NAME}")
+	set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
+	if(APPLE)
+		set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-macOS")
+	elseif(WIN32)
+		set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-Windows")
+	else()
+		set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-${CMAKE_SYSTEM_NAME}")
+	endif()
+
+	if(SILIKO_BUILD_GUI)
+		list(APPEND CPACK_PACKAGE_EXECUTABLES Silikujo Silikujo)
+	endif()
+
+	if(SILIKO_PACKAGE_DMG)
+		list(APPEND CPACK_GENERATOR DragNDrop)
+		set(CPACK_DMG_VOLUME_NAME "${PROJECT_NAME}")
+		set(CPACK_DMG_FORMAT UDZO)
+		set(CPACK_DMG_DISABLE_APPLICATIONS_SYMLINK On)
+	endif()
+
+	if(SILIKO_PACKAGE_MSI)
+		list(APPEND CPACK_GENERATOR WIX)
+		set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/cpack/WixLicense.txt")
+		set(CPACK_WIX_UPGRADE_GUID "${SILIKO_MSI_GUID}")
+	endif()
+
+	include(CPack)
 endif()
-
-if(BUILD_GUI)
-	list(APPEND CPACK_PACKAGE_EXECUTABLES Silikujo Silikujo)
-endif()
-
-if(PACK_DND)
-	list(APPEND CPACK_GENERATOR DragNDrop)
-	set(CPACK_DMG_VOLUME_NAME "${PROJECT_NAME}")
-	set(CPACK_DMG_FORMAT UDZO)
-	set(CPACK_DMG_DISABLE_APPLICATIONS_SYMLINK On)
-endif()
-
-if(PACK_MSI)
-	list(APPEND CPACK_GENERATOR WIX)
-	set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/cpack/WixLicense.txt")
-	set(CPACK_WIX_UPGRADE_GUID ${UPGRADE_GUID})
-endif()
-
-include(CPack)

@@ -15,18 +15,18 @@
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 if(APPLE)
-	set(SILIKO_INSTALL_FRAMEWORKDIR Frameworks
-		CACHE STRING "Locaton to install framework bundles (relative to install prefix)"
-	)
-	set(SILIKO_INSTALL_CMAKEDIR "${SILIKO_INSTALL_FRAMEWORKDIR}/Siliko.framework/Resources")
+	set(FRAMEWORKDIR "${SILIKO_INSTALL_FRAMEWORKDIR}")
+	set(CMAKEDIR "${SILIKO_INSTALL_FRAMEWORKDIR}/Siliko.framework/Resources")
 else()
-	set(SILIKO_INSTALL_FRAMEWORKDIR Frameworks)
-	set(SILIKO_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Siliko
-		CACHE STRING "Locaton to install CMake package files (relative to install prefix)"
-	)
+	set(FRAMEWORKDIR "Frameworks")
+	set(CMAKEDIR "${SILIKO_INSTALL_CMAKEDIR}")
 endif()
 
-add_library(Siliko)
+if(SILIKO_BUILD_SHARED_LIBRARY)
+	add_library(Siliko SHARED)
+else()
+	add_library(Siliko STATIC)
+endif()
 add_library(Siliko::Siliko ALIAS Siliko)
 
 set(PUBLIC_HEADERS
@@ -102,29 +102,29 @@ write_basic_package_version_file(
 install(TARGETS Siliko
 	EXPORT Siliko
 RUNTIME
-	DESTINATION           ${CMAKE_INSTALL_BINDIR}
+	DESTINATION           "${CMAKE_INSTALL_BINDIR}"
 	COMPONENT             Siliko_Runtime
 ARCHIVE
-	DESTINATION           ${CMAKE_INSTALL_LIBDIR}
+	DESTINATION           "${CMAKE_INSTALL_LIBDIR}"
 	COMPONENT             Siliko_Development
 LIBRARY
-	DESTINATION           ${CMAKE_INSTALL_LIBDIR}
+	DESTINATION           "${CMAKE_INSTALL_LIBDIR}"
 	COMPONENT             Siliko_Runtime
 	NAMELINK_COMPONENT    Siliko_Development
 FRAMEWORK
-	DESTINATION           ${SILIKO_INSTALL_FRAMEWORKDIR}
+	DESTINATION           "${FRAMEWORKDIR}"
 	COMPONENT             Siliko_Development
 PUBLIC_HEADER
-	DESTINATION           ${CMAKE_INSTALL_INCLUDEDIR}/Siliko
+	DESTINATION           "${CMAKE_INSTALL_INCLUDEDIR}/Siliko"
 	COMPONENT             Siliko_Development
 )
 install(EXPORT Siliko
 	NAMESPACE             Siliko::
 	FILE                  SilikoConfig.cmake
-	DESTINATION           ${SILIKO_INSTALL_CMAKEDIR}
+	DESTINATION           "${CMAKEDIR}"
 	COMPONENT             Siliko_Development
 )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SilikoConfigVersion.cmake
-	DESTINATION           ${SILIKO_INSTALL_CMAKEDIR}
+	DESTINATION           "${CMAKEDIR}"
 	COMPONENT             Siliko_Development
 )
