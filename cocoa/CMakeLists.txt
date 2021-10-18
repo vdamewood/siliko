@@ -60,11 +60,17 @@ target_link_libraries(SilikujoForMacOS
 		"-framework Cocoa"
 )
 
+
+install(CODE
+	"include(BundleUtilities)"
+	COMPONENT    Silikujo
+)
+install(CODE
+	"fixup_bundle(\"$<TARGET_FILE:SilikujoForMacOS>\" \"\" \"$<TARGET_FILE_DIR:Siliko::Siliko>\")"
+	COMPONENT    Silikujo
+)
 install(TARGETS SilikujoForMacOS
 BUNDLE
 	DESTINATION  ${SILIKO_INSTALL_APPDIR}
 	COMPONENT    Silikujo
 )
-
-install(CODE "include(BundleUtilities)")
-install(CODE "fixup_bundle(\"$<TARGET_FILE:SilikujoForMacOS>\" \"\" \"$<TARGET_FILE_DIR:Siliko::Siliko>\")")
