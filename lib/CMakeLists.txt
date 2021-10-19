@@ -14,12 +14,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-if(APPLE)
-	set(FRAMEWORKDIR "${SILIKO_INSTALL_FRAMEWORKDIR}")
+if(SILIKO_BUILD_FRAMEWORK)
 	set(CMAKEDIR "${SILIKO_INSTALL_FRAMEWORKDIR}/Siliko.framework/Resources")
+	set(RUNTIME_COMPONENT "Siliko")
+	set(DEVELOPMENT_COMPONENT "Siliko")
 else()
-	set(FRAMEWORKDIR "Frameworks")
 	set(CMAKEDIR "${SILIKO_INSTALL_CMAKEDIR}")
+	set(RUNTIME_COMPONENT "Siliko_Runtime")
+	set(DEVELOPMENT_COMPONENT "Siliko_Development")
 endif()
 
 if(SILIKO_BUILD_SHARED_LIBRARY)
@@ -66,7 +68,7 @@ target_include_directories(Siliko
 		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
 		"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
 )
-if (NOT APPLE)
+if (NOT SILIKO_BUILD_FRAMEWORK)
 	target_include_directories(Siliko
 	INTERFACE
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
@@ -76,7 +78,7 @@ set_target_properties(Siliko PROPERTIES
 	PUBLIC_HEADER             "${PUBLIC_HEADERS}"
 	C_VISIBILITY_PRESET       hidden
 	VISIBILITY_INLINES_HIDDEN On
-	FRAMEWORK                 TRUE
+	FRAMEWORK                 ${SILIKO_BUILD_FRAMEWORK}
 	FRAMEWORK_VERSION         ${PROJECT_VERSION}
 	VERSION                   ${PROJECT_VERSION}
 	SOVERSION                 ${PROJECT_VERSION_MAJOR}
@@ -103,28 +105,40 @@ install(TARGETS Siliko
 	EXPORT Siliko
 RUNTIME
 	DESTINATION           "${CMAKE_INSTALL_BINDIR}"
-	COMPONENT             Siliko_Runtime
+	COMPONENT             "${RUNTIME_COMPONENT}"
 ARCHIVE
 	DESTINATION           "${CMAKE_INSTALL_LIBDIR}"
-	COMPONENT             Siliko_Development
+	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 LIBRARY
 	DESTINATION           "${CMAKE_INSTALL_LIBDIR}"
-	COMPONENT             Siliko_Runtime
-	NAMELINK_COMPONENT    Siliko_Development
+	COMPONENT             "${RUNTIME_COMPONENT}"
+	NAMELINK_COMPONENT    "${DEVELOPMENT_COMPONENT}"
 FRAMEWORK
-	DESTINATION           "${FRAMEWORKDIR}"
-	COMPONENT             Siliko_Development
+	DESTINATION           "${SILIKO_INSTALL_FRAMEWORKDIR}"
+	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 PUBLIC_HEADER
 	DESTINATION           "${CMAKE_INSTALL_INCLUDEDIR}/Siliko"
-	COMPONENT             Siliko_Development
+	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 )
 install(EXPORT Siliko
 	NAMESPACE             Siliko::
 	FILE                  SilikoConfig.cmake
 	DESTINATION           "${CMAKEDIR}"
-	COMPONENT             Siliko_Development
+	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SilikoConfigVersion.cmake
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/SilikoConfigVersion.cmake"
 	DESTINATION           "${CMAKEDIR}"
-	COMPONENT             Siliko_Development
+	COMPONENT             "${DEVELOPMENT_COMPONENT}"
+)
+install(FILES
+		"${PROJECT_SOURCE_DIR}/Readme.md"
+	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/Siliko"
+	COMPONENT "${RUNTIME_COMPONENT}"
+)
+
+install(FILES
+		"${PROJECT_SOURCE_DIR}/License.txt"
+		"${PROJECT_SOURCE_DIR}/License.Gpl.txt"
+	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/Siliko"
+	COMPONENT "${RUNTIME_COMPONENT}"
 )

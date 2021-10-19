@@ -42,7 +42,12 @@ set(SILIKO_PACKAGE_VENDOR  "Unknown Vendor"  CACHE STRING
 	"The name of the vendor when generating packages (ignored if SILIKO_PACKAGE is off)"
 )
 
+set(SILIKO_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Siliko CACHE STRING
+	"Locaton to install CMake files (ignored if SILIKO_BUILD_FRAMEWORK is on)"
+)
+
 if(APPLE)
+	option(SILIKO_BUILD_FRAMEWORK   "Build Siliko as a framework." On)
 	option(SILIKO_PACKAGE_DMG       "Package as DMG file (ignored if SILIKO_PACKAGE is off)" On)
 
 	set(SILIKO_INSTALL_APPDIR Applications  CACHE STRING
@@ -50,10 +55,6 @@ if(APPLE)
 	)
 	set(SILIKO_INSTALL_FRAMEWORKDIR  Frameworks  CACHE STRING
 		"Locaton to install framework (ignored if SILIKO_BUILD_FRAMEWORK is off)"
-	)
-else()
-	set(SILIKO_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Siliko
-		CACHE STRING "Locaton to install CMake files"
 	)
 endif()
 
@@ -87,11 +88,6 @@ if(SILIKO_BUILD_GUI)
 		message(FATAL_ERROR "A GUI program is not available for this system.")
 	endif()
 endif()
-
-install(FILES Readme.md License.txt License.Gpl.txt
-	DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/Siliko
-	COMPONENT Siliko_Runtime
-)
 
 
 #############################
