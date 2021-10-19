@@ -60,7 +60,7 @@ target_sources(Siliko
 
 find_library(LIBM m)
 if(LIBM)
-	target_link_libraries(Siliko PUBLIC m)
+	target_link_libraries(Siliko PRIVATE m)
 endif()
 
 target_include_directories(Siliko
