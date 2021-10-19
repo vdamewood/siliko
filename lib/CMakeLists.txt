@@ -97,7 +97,7 @@ generate_export_header(Siliko
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
 	SilikoConfigVersion.cmake
-	VERSION ${Siliko_VERSION}
+	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY SameMajorVersion
 )
 
