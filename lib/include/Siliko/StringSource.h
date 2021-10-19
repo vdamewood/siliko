@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-SILIKO_API SilikoDataSource *SilikoStringSourceNew(const char *InputString);
+SILIKO_EXPORT SilikoDataSource *SilikoStringSourceNew(const char *InputString);
 
 #if defined __cplusplus
 }

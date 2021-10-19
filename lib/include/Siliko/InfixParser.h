@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-SILIKO_API SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *input);
+SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *input);
 
 #if defined __cplusplus
 }

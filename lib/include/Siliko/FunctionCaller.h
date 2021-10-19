@@ -27,10 +27,10 @@ extern "C" {
 
 typedef SilikoValue (*SilikoFunctionPointer)(int, SilikoValue *);
 
-SILIKO_API int SilikoFunctionCallerSetUp(void);
-SILIKO_API void SilikoFunctionCallerTearDown(void);
-SILIKO_API SilikoValue SilikoFunctionCallerCall(const char *FunctionName, int ArgumentCount, SilikoValue *Arguments);
-SILIKO_API int SilikoFunctionCallerInstall(const char *FunctionName, SilikoFunctionPointer Function);
+SILIKO_EXPORT int SilikoFunctionCallerSetUp(void);
+SILIKO_EXPORT void SilikoFunctionCallerTearDown(void);
+SILIKO_EXPORT SilikoValue SilikoFunctionCallerCall(const char *FunctionName, int ArgumentCount, SilikoValue *Arguments);
+SILIKO_EXPORT int SilikoFunctionCallerInstall(const char *FunctionName, SilikoFunctionPointer Function);
 
 #if defined __cplusplus
 }

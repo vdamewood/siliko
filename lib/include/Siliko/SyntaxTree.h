@@ -56,20 +56,20 @@ struct SilikoSyntaxTreeNode
 	};
 };
 
-SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int IntegerValue);
-SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(double FloatValue);
-SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *Id);
-SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void);
-SILIKO_API SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void);
-SILIKO_API void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *SyntaxTree);
+SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int IntegerValue);
+SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(double FloatValue);
+SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *Id);
+SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void);
+SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void);
+SILIKO_EXPORT void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *SyntaxTree);
 
-SILIKO_API SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree);
-SILIKO_API int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *SyntaxTree);
+SILIKO_EXPORT SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree);
+SILIKO_EXPORT int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *SyntaxTree);
 
-SILIKO_API int SilikoSyntaxTreePushLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
-SILIKO_API int SilikoSyntaxTreePushRight(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
-SILIKO_API int SilikoSyntaxTreeGraftLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
-SILIKO_API int SilikoSyntaxTreeGraftRight(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
+SILIKO_EXPORT int SilikoSyntaxTreePushLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
+SILIKO_EXPORT int SilikoSyntaxTreePushRight(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
+SILIKO_EXPORT int SilikoSyntaxTreeGraftLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
+SILIKO_EXPORT int SilikoSyntaxTreeGraftRight(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
 
 #if defined __cplusplus
 }

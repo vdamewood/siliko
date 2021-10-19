@@ -91,7 +91,6 @@ set_target_properties(Siliko PROPERTIES
 include(GenerateExportHeader)
 generate_export_header(Siliko
 	EXPORT_FILE_NAME include/Siliko/Api.h
-	EXPORT_MACRO_NAME SILIKO_API
 )
 
 include(CMakePackageConfigHelpers)

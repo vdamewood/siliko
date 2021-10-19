@@ -33,10 +33,10 @@ struct SilikoLexer
 };
 typedef struct SilikoLexer SilikoLexer;
 
-SILIKO_API SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource);
-SILIKO_API void SilikoLexerDelete(SilikoLexer *Lexer);
+SILIKO_EXPORT SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource);
+SILIKO_EXPORT void SilikoLexerDelete(SilikoLexer *Lexer);
 
-SILIKO_API void SilikoLexerNext(SilikoLexer *Lexer);
+SILIKO_EXPORT void SilikoLexerNext(SilikoLexer *Lexer);
 
 #if defined __cplusplus
 }

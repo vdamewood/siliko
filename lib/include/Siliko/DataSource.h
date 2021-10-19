@@ -33,9 +33,9 @@ struct SilikoDataSource
 };
 typedef struct SilikoDataSource SilikoDataSource;
 
-SILIKO_API int SilikoDataSourceAdvance(SilikoDataSource *Source);
-SILIKO_API char SilikoDataSourceGet(SilikoDataSource *Source);
-SILIKO_API void SilikoDataSourceDelete(SilikoDataSource *Source);
+SILIKO_EXPORT int SilikoDataSourceAdvance(SilikoDataSource *Source);
+SILIKO_EXPORT char SilikoDataSourceGet(SilikoDataSource *Source);
+SILIKO_EXPORT void SilikoDataSourceDelete(SilikoDataSource *Source);
 
 #if defined __cplusplus
 }
