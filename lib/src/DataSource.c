@@ -31,6 +31,5 @@ char SilikoDataSourceGet(SilikoDataSource *Source)
 
 void SilikoDataSourceDelete(SilikoDataSource *Source)
 {
-	Source->DeleteFunction(Source->State);
-	free(Source);
+	Source->DeleteFunction(Source);
 }
