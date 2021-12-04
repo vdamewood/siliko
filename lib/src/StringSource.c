@@ -50,16 +50,11 @@ static char SilikoStringSourceGet(void *State)
 	return *((SilikoStringSourceState *)State)->current;
 }
 
-static void SilikoStringSourceDelete(void *RawSource)
+static void SilikoStringSourceDelete(void *State)
 {
-	SilikoDataSource *Source = RawSource;
-	if (Source)
-	{
-		if (Source->State)
-			free(((SilikoStringSourceState *)Source->State)->string);
-		free(Source->State);
-	}
-	free(Source);
+	if (State)
+		free(((SilikoStringSourceState *)State)->string);
+	free(State);
 }
 
 SilikoDataSource *SilikoStringSourceNew(const char *NewInput)
