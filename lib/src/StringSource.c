@@ -73,13 +73,14 @@ SilikoDataSource *SilikoStringSourceNew(const char *NewInput)
 
 	state->current = state->string;
 
-	if (!(source = malloc(sizeof(SilikoDataSource))))
+	source = SilikoDataSourceNew(
+		state,
+		SilikoStringSourceAdvance,
+		SilikoStringSourceGet,
+		SilikoStringSourceDelete
+	);
+	if (!source)
 		goto memerr;
-
-	source->State = state;
-	source->AdvanceFunction = SilikoStringSourceAdvance;
-	source->GetFunction = SilikoStringSourceGet;
-	source->DeleteFunction = SilikoStringSourceDelete;
 
 	return source;
 memerr:

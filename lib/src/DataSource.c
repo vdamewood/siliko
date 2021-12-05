@@ -19,6 +19,24 @@
 
 #include <Siliko/DataSource.h>
 
+SilikoDataSource *SilikoDataSourceNew(
+	void *NewState,
+	int (*NewAdvanceFunction)(void *),
+	char (*NewGetFunction)(void *),
+	void (*NewDeleteFunction)(void *)
+)
+{
+	SilikoDataSource *rVal = malloc(sizeof(*rVal));
+	if (rVal)
+	{
+		rVal->State = NewState;
+		rVal->AdvanceFunction = NewAdvanceFunction;
+		rVal->GetFunction = NewGetFunction;
+		rVal->DeleteFunction = NewDeleteFunction;
+	}
+	return rVal;
+}
+
 int SilikoDataSourceAdvance(SilikoDataSource *Source)
 {
 	return Source->AdvanceFunction(Source->State);

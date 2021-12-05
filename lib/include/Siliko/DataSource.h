@@ -33,6 +33,12 @@ struct SilikoDataSource
 };
 typedef struct SilikoDataSource SilikoDataSource;
 
+SILIKO_EXPORT SilikoDataSource *SilikoDataSourceNew(
+	void *NewState,
+	int (*NewAdvanceFunction)(void *),
+	char (*NewGetFunction)(void *),
+	void (*NewDeleteFunction)(void *)
+);
 SILIKO_EXPORT int SilikoDataSourceAdvance(SilikoDataSource *Source);
 SILIKO_EXPORT char SilikoDataSourceGet(SilikoDataSource *Source);
 SILIKO_EXPORT void SilikoDataSourceDelete(SilikoDataSource *Source);
