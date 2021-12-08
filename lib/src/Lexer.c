@@ -22,6 +22,14 @@
 #include <Siliko/DataSource.h>
 #include <Siliko/Lexer.h>
 
+struct SilikoLexer
+{
+	SilikoDataSource *Source;
+	SilikoToken Token;
+};
+typedef struct SilikoLexer SilikoLexer;
+
+
 /* Values taken from Google Calculator 2011-07-06 */
 #define EULER 2.71828183
 #define PI    3.14159265
@@ -340,4 +348,9 @@ void SilikoLexerDelete(SilikoLexer *Lexer)
 		SilikoDataSourceDelete(Lexer->Source);
 		free(Lexer);
 	}
+}
+
+SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer)
+{
+	return Lexer->Token;
 }

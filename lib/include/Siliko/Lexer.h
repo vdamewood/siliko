@@ -26,17 +26,15 @@
 extern "C" {
 #endif
 
-struct SilikoLexer
-{
-	SilikoDataSource *Source;
-	SilikoToken Token;
-};
+struct SilikoLexer;
 typedef struct SilikoLexer SilikoLexer;
 
 SILIKO_EXPORT SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource);
 SILIKO_EXPORT void SilikoLexerDelete(SilikoLexer *Lexer);
 
 SILIKO_EXPORT void SilikoLexerNext(SilikoLexer *Lexer);
+
+SILIKO_EXPORT SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer);
 
 #if defined __cplusplus
 }

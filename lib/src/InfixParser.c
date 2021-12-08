@@ -72,7 +72,7 @@ static SilikoSyntaxTreeNode *GetExprAddSubRest(SilikoLexer *lexer)
 	SilikoSyntaxTreeNode *rest = NULL;
 	SilikoSyntaxTreeNode *branchNode = NULL;
 
-	switch (lexer->Token.Type)
+	switch (SilikoLexerGetToken(lexer).Type)
 	{
 	case '+':
 		operation = "add";
@@ -148,7 +148,7 @@ static SilikoSyntaxTreeNode *GetExprMulDivRest(SilikoLexer *lexer)
 	SilikoSyntaxTreeNode *rest = NULL;
 	SilikoSyntaxTreeNode *branchNode = NULL;
 
-	switch (lexer->Token.Type)
+	switch (SilikoLexerGetToken(lexer).Type)
 	{
 		case '*':
 			operation = "multiply";
@@ -219,11 +219,11 @@ memerr:
 
 static SilikoSyntaxTreeNode *GetExprExpLeftFactor(SilikoLexer *lexer)
 {
-	if (lexer->Token.Type == '^')
+	if (SilikoLexerGetToken(lexer).Type == '^')
 	{
 		SilikoLexerNext(lexer);
 
-		switch (lexer->Token.Type)
+		switch (SilikoLexerGetToken(lexer).Type)
 		{
 		case SILIKO_TOK_INTEGER:
 		case SILIKO_TOK_FLOAT:
@@ -275,13 +275,13 @@ static SilikoSyntaxTreeNode *GetExprRollLeftFactor(SilikoLexer *lexer)
 {
 	long long int value;
 
-	if(lexer->Token.Type == 'd')
+	if(SilikoLexerGetToken(lexer).Type == 'd')
 	{
 		SilikoLexerNext(lexer);
-		if (lexer->Token.Type != SILIKO_TOK_INTEGER)
+		if (SilikoLexerGetToken(lexer).Type != SILIKO_TOK_INTEGER)
 			return SilikoSyntaxTreeNewError();
 
-		value = lexer->Token.Integer;
+		value = SilikoLexerGetToken(lexer).Integer;
 		SilikoLexerNext(lexer);
 		return SilikoSyntaxTreeNewInteger(value);
 	}
@@ -295,7 +295,7 @@ static SilikoSyntaxTreeNode *GetAtom(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *value;
 
-	switch(lexer->Token.Type)
+	switch(SilikoLexerGetToken(lexer).Type)
 	{
 	case '-':
 	case SILIKO_TOK_INTEGER:
@@ -306,7 +306,7 @@ static SilikoSyntaxTreeNode *GetAtom(SilikoLexer *lexer)
 		if (!(value = GetExprAddSub(lexer)))
 			return NULL;
 
-		if (lexer->Token.Type != ')')
+		if (SilikoLexerGetToken(lexer).Type != ')')
 		{
 			SilikoSyntaxTreeDelete(value);
 			return SilikoSyntaxTreeNewError();
@@ -324,7 +324,7 @@ static SilikoSyntaxTreeNode *GetNumber(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode * uNumber = NULL;
 
-	switch (lexer->Token.Type)
+	switch (SilikoLexerGetToken(lexer).Type)
 	{
 	case SILIKO_TOK_INTEGER:
 	case SILIKO_TOK_FLOAT:
@@ -350,14 +350,14 @@ static SilikoSyntaxTreeNode *GetUNumber(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 
-	switch (lexer->Token.Type)
+	switch (SilikoLexerGetToken(lexer).Type)
 	{
 	case SILIKO_TOK_INTEGER:
-		rVal = SilikoSyntaxTreeNewInteger(lexer->Token.Integer);
+		rVal = SilikoSyntaxTreeNewInteger(SilikoLexerGetToken(lexer).Integer);
 		SilikoLexerNext(lexer);
 		break;
 	case SILIKO_TOK_FLOAT:
-		rVal = SilikoSyntaxTreeNewFloat(lexer->Token.Float);
+		rVal = SilikoSyntaxTreeNewFloat(SilikoLexerGetToken(lexer).Float);
 		SilikoLexerNext(lexer);
 		break;
 	default:
@@ -371,13 +371,13 @@ SilikoSyntaxTreeNode *GetFCall(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 
-	if (lexer->Token.Type != SILIKO_TOK_ID)
+	if (SilikoLexerGetToken(lexer).Type != SILIKO_TOK_ID)
 		return SilikoSyntaxTreeNewError();
 
-	rVal = SilikoSyntaxTreeNewBranch(lexer->Token.Id);
+	rVal = SilikoSyntaxTreeNewBranch(SilikoLexerGetToken(lexer).Id);
 	SilikoLexerNext(lexer);
 
-	if (lexer->Token.Type != '(')
+	if (SilikoLexerGetToken(lexer).Type != '(')
 	{
 		SilikoSyntaxTreePushRight(rVal, SilikoSyntaxTreeNewError());
 		return rVal;
@@ -386,7 +386,7 @@ SilikoSyntaxTreeNode *GetFCall(SilikoLexer *lexer)
 
 	GetArguments(lexer, rVal);
 
-	if (lexer->Token.Type != ')')
+	if (SilikoLexerGetToken(lexer).Type != ')')
 	{
 		SilikoSyntaxTreePushRight(rVal, SilikoSyntaxTreeNewError());
 		return rVal;
@@ -403,11 +403,11 @@ static void GetArguments(SilikoLexer *lexer, SilikoSyntaxTreeNode *rVal)
 		SilikoSyntaxTreeNode *Expression = GetExprAddSub(lexer);
 		SilikoSyntaxTreePushRight(rVal, Expression);
 
-		if (SilikoSyntaxTreeIsError(Expression) || lexer->Token.Type == ')')
+		if (SilikoSyntaxTreeIsError(Expression) || SilikoLexerGetToken(lexer).Type == ')')
 		{
 			break;
 		}
-		else if (lexer->Token.Type != ',')
+		else if (SilikoLexerGetToken(lexer).Type != ',')
 		{
 			SilikoSyntaxTreePushRight(rVal, SilikoSyntaxTreeNewError());
 			break;
@@ -425,11 +425,11 @@ SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *Input)
 	if (!(lexer = SilikoLexerNew(Input)))
 		return NULL;
 
-	rVal = (lexer->Token.Type == SILIKO_TOK_EOL)
+	rVal = (SilikoLexerGetToken(lexer).Type == SILIKO_TOK_EOL)
 		? SilikoSyntaxTreeNewInteger(0)
 		: GetExprAddSub(lexer);
 
-	if (lexer->Token.Type != SILIKO_TOK_EOL)
+	if (SilikoLexerGetToken(lexer).Type != SILIKO_TOK_EOL)
 	{
 		SilikoSyntaxTreeDelete(rVal);
 		rVal = SilikoSyntaxTreeNewError();
