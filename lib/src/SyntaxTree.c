@@ -25,6 +25,26 @@
 #define strdup _strdup
 #endif
 
+struct SilikoSyntaxTreeBranch
+{
+	char *Id;
+	int Count;
+	int Capacity;
+	int IsNegated;
+	SilikoSyntaxTreeNode **Children;
+};
+typedef struct SilikoSyntaxTreeBranch SilikoSyntaxTreeBranch;
+
+struct SilikoSyntaxTreeNode
+{
+	SilikoSyntaxTreeNodeType Type;
+	union
+	{
+		SilikoValue Leaf;
+		SilikoSyntaxTreeBranch *Branch;
+	};
+};
+
 SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
@@ -198,6 +218,18 @@ int SilikoSyntaxTreeGraftRight(SilikoSyntaxTreeNode *Tree, SilikoSyntaxTreeNode 
 	{
 		return 0;
 	}
+}
+
+SilikoSyntaxTreeNodeType SilikoSyntaxTreeGetType(SilikoSyntaxTreeNode *SyntaxTree)
+{
+	return SyntaxTree->Type;
+}
+
+int SilikoSyntaxTreeIsError(SilikoSyntaxTreeNode *SyntaxTree)
+{
+	return
+		SyntaxTree->Type == SILIKO_AST_LEAF
+		&& SyntaxTree->Leaf.Status == SILIKO_VAL_SYNTAX_ERR;
 }
 
 int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *Tree)

@@ -51,7 +51,7 @@ static SilikoSyntaxTreeNode *GetExprAddSub(SilikoLexer *lexer)
 		return NULL;
 	}
 
-	if (rest->Type == SILIKO_AST_NOTHING)
+	if (SilikoSyntaxTreeGetType(rest) == SILIKO_AST_NOTHING)
 	{
 		SilikoSyntaxTreeDelete(rest);
 		return leftValue;
@@ -97,7 +97,7 @@ static SilikoSyntaxTreeNode *GetExprAddSubRest(SilikoLexer *lexer)
 	SilikoSyntaxTreePushRight(branchNode, NULL);
 	SilikoSyntaxTreePushRight(branchNode, leftValue);
 
-	if (rest->Type != SILIKO_AST_NOTHING)
+	if (SilikoSyntaxTreeGetType(rest) != SILIKO_AST_NOTHING)
 	{
 		SilikoSyntaxTreeGraftLeft(rest, branchNode);
 		return rest;
@@ -127,7 +127,7 @@ static SilikoSyntaxTreeNode *GetExprMulDiv(SilikoLexer *lexer)
 		return NULL;
 	}
 
-	if (rest->Type == SILIKO_AST_NOTHING)
+	if (SilikoSyntaxTreeGetType(rest) == SILIKO_AST_NOTHING)
 	{
 		SilikoSyntaxTreeDelete(rest);
 		return leftValue;
@@ -173,7 +173,7 @@ static SilikoSyntaxTreeNode *GetExprMulDivRest(SilikoLexer *lexer)
 	SilikoSyntaxTreePushRight(branchNode, NULL);
 	SilikoSyntaxTreePushRight(branchNode, leftValue);
 
-	if (rest->Type != SILIKO_AST_NOTHING)
+	if (SilikoSyntaxTreeGetType(rest) != SILIKO_AST_NOTHING)
 	{
 		SilikoSyntaxTreeGraftLeft(rest, branchNode);
 		return rest;
@@ -199,7 +199,7 @@ static SilikoSyntaxTreeNode *GetExprExp(SilikoLexer *lexer)
 	if (!(rest = GetExprExpLeftFactor(lexer)))
 		goto memerr;
 
-	if (rest->Type == SILIKO_AST_NOTHING)
+	if (SilikoSyntaxTreeGetType(rest) == SILIKO_AST_NOTHING)
 	{
 		SilikoSyntaxTreeDelete(rest);
 		return leftValue;
@@ -253,7 +253,7 @@ static SilikoSyntaxTreeNode *GetExprRoll(SilikoLexer *lexer)
 	if (!(rest = GetExprRollLeftFactor(lexer)))
 		goto memerr;
 
-	if (rest->Type == SILIKO_AST_NOTHING)
+	if (SilikoSyntaxTreeGetType(rest) == SILIKO_AST_NOTHING)
 	{
 		SilikoSyntaxTreeDelete(rest);
 		return leftValue;
@@ -403,10 +403,7 @@ static void GetArguments(SilikoLexer *lexer, SilikoSyntaxTreeNode *rVal)
 		SilikoSyntaxTreeNode *Expression = GetExprAddSub(lexer);
 		SilikoSyntaxTreePushRight(rVal, Expression);
 
-		if (
-			(Expression->Type == SILIKO_AST_LEAF
-				&& Expression->Leaf.Status == SILIKO_VAL_SYNTAX_ERR)
-			|| lexer->Token.Type == ')')
+		if (SilikoSyntaxTreeIsError(Expression) || lexer->Token.Type == ')')
 		{
 			break;
 		}

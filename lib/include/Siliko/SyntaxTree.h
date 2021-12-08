@@ -24,7 +24,6 @@
 #if defined __cplusplus
 extern "C" {
 #endif
-
 enum SilikoSyntaxTreeNodeType
 {
 	SILIKO_AST_NOTHING = 0,
@@ -36,32 +35,15 @@ typedef enum SilikoSyntaxTreeNodeType SilikoSyntaxTreeNodeType;
 struct SilikoSyntaxTreeNode;
 typedef struct SilikoSyntaxTreeNode SilikoSyntaxTreeNode;
 
-struct SilikoSyntaxTreeBranch
-{
-	char *Id;
-	int Count;
-	int Capacity;
-	int IsNegated;
-	SilikoSyntaxTreeNode **Children;
-};
-typedef struct SilikoSyntaxTreeBranch SilikoSyntaxTreeBranch;
-
-struct SilikoSyntaxTreeNode
-{
-	SilikoSyntaxTreeNodeType Type;
-	union
-	{
-		SilikoValue Leaf;
-		SilikoSyntaxTreeBranch *Branch;
-	};
-};
-
 SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int IntegerValue);
 SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(double FloatValue);
 SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *Id);
 SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void);
 SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void);
 SILIKO_EXPORT void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *SyntaxTree);
+
+SILIKO_EXPORT SilikoSyntaxTreeNodeType SilikoSyntaxTreeGetType(SilikoSyntaxTreeNode *SyntaxTree);
+SILIKO_EXPORT int SilikoSyntaxTreeIsError(SilikoSyntaxTreeNode *SyntaxTree);
 
 SILIKO_EXPORT SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree);
 SILIKO_EXPORT int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *SyntaxTree);
