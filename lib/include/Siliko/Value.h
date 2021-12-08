@@ -58,6 +58,7 @@ struct SilikoValue
 typedef struct SilikoValue SilikoValue;
 
 SILIKO_EXPORT char *SilikoValueToString(SilikoValue InputValue);
+SILIKO_EXPORT void SilikoValueDeleteString(char *string);
 
 #if defined __cplusplus
 }

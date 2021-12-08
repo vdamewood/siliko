@@ -68,3 +68,8 @@ char *SilikoValueToString(SilikoValue InputValue)
 	}
 	return rValue;
 }
+
+void SilikoValueDeleteString(char *string)
+{
+	free(string);
+}

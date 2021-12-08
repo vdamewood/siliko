@@ -150,7 +150,7 @@ int SilikoSyntaxTreePushLeft(SilikoSyntaxTreeNode *Tree, SilikoSyntaxTreeNode *N
 		if (!ExpandChildren(Tree))
 			return 0;
 
-	for (int i = Tree->Branch->Count; i < 0; i--)
+	for (int i = Tree->Branch->Count; i >= 1; i--)
 		Tree->Branch->Children[i] = Tree->Branch->Children[i-1];
 
 	Tree->Branch->Children[0] = NewChild;
