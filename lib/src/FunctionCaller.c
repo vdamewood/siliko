@@ -39,7 +39,7 @@ struct SilikoFunctionChain
 };
 typedef struct SilikoFunctionChain SilikoFunctionChain;
 
-static SilikoFunctionChain **functionTable;
+static SilikoFunctionChain *functionTable[256];
 
 int SilikoFunctionCallerInstall(const char *name, SilikoFunctionPointer function)
 {
@@ -70,9 +70,6 @@ int SilikoFunctionCallerInstall(const char *name, SilikoFunctionPointer function
 
 int SilikoFunctionCallerSetUp()
 {
-	if (!(functionTable = calloc(256, sizeof(SilikoFunctionChain*))))
-		goto memerr;
-
 	SilikoFunctionCallerInstall("add", SilikoFunction_add);
 	SilikoFunctionCallerInstall("subtract", SilikoFunction_subtract);
 	SilikoFunctionCallerInstall("multiply", SilikoFunction_multiply);
@@ -95,39 +92,26 @@ int SilikoFunctionCallerSetUp()
 	SilikoFunctionCallerInstall("sqrt", SilikoFunction_sqrt);
 	SilikoFunctionCallerInstall("tan", SilikoFunction_tan);
 	SilikoFunctionCallerInstall("tanh", SilikoFunction_tanh);
-
 	return -1;
-memerr:
-	SilikoFunctionCallerTearDown();
-	return 0;
 }
 
 void SilikoFunctionCallerTearDown(void)
 {
-	int i;
-	SilikoFunctionChain * current;
-	SilikoFunctionChain * next;
-
-	if (functionTable)
+	for (int i = 0; i <= sizeof(functionTable)/sizeof(functionTable[0]); i++)
 	{
-		for (i = 0; i <= 255; i++)
+		if (functionTable[i])
 		{
-			if (functionTable[i])
+			SilikoFunctionChain *current = functionTable[i];
+			while (current)
 			{
-				current = functionTable[i];
-				while (current)
-				{
-					next = current->next;
-					free(current->id);
-					free(current);
-					current = next;
-				}
+				SilikoFunctionChain *next = current->next;
+				free(current->id);
+				free(current);
+				current = next;
 			}
 		}
-
-		free(functionTable);
-		functionTable = NULL;
 	}
+	memset(functionTable, 0, sizeof(functionTable));
 }
 
 static SilikoFunctionPointer GetFunction(const char *name)
