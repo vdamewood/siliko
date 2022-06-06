@@ -97,7 +97,7 @@ int SilikoFunctionCallerSetUp()
 
 void SilikoFunctionCallerTearDown(void)
 {
-	for (int i = 0; i <= sizeof(functionTable)/sizeof(functionTable[0]); i++)
+	for (int i = 0; i < sizeof(functionTable)/sizeof(functionTable[0]); i++)
 	{
 		if (functionTable[i])
 		{
