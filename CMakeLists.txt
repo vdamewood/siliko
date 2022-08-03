@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2021 Vincent Damewood
+# Copyright 2012-2022 Vincent Damewood
 #
 # This library is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -81,7 +81,7 @@ if(SILIKO_BUILD_GUI)
 	if(APPLE)
 		add_subdirectory(cocoa)
 	elseif(UNIX)
-		add_subdirectory(gtk3)
+		add_subdirectory(gtk4)
 	elseif(WIN32)
 		add_subdirectory(win32)
 	else()

@@ -1,5 +1,5 @@
 /* Main.c: Entry point for GUI program
- * Copyright 2012-2021 Vincent Damewood
+ * Copyright 2012-2022 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,13 +21,24 @@
 
 #include "EvalWindow.h"
 
+static void activate(GtkApplication *app, gpointer user_data)
+{
+	GtkBuilder *Builder = EvalWindowNewBuilder();
+	GObject *MainWindow = gtk_builder_get_object(Builder, "EvalWindow");
+	gtk_window_set_application(GTK_WINDOW(MainWindow), app);
+	gtk_window_present(GTK_WINDOW(MainWindow));
+}
+
 int main(int argc, char *argv[])
 {
-	gtk_init(&argc, &argv);
+	GtkApplication *app = gtk_application_new("com.vdamewood.SilikujoForUnix", G_APPLICATION_FLAGS_NONE);
 	SilikoFunctionCallerSetUp();
-	GtkBuilder *MainWindow = EvalWindowNew();
-	gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(MainWindow, "EvalWindow")));
-	gtk_main();
+
+	g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
+	int status = g_application_run(G_APPLICATION (app), argc, argv);
+
 	SilikoFunctionCallerTearDown();
-	return 0;
+	g_object_unref(app);
+
+	return status;
 }

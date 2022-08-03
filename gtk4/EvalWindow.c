@@ -1,5 +1,5 @@
 /* EvalWindow.c: Expression evaluation window
- * Copyright 2012-2021 Vincent Damewood
+ * Copyright 2012-2022 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,15 +24,15 @@
 #include <Siliko/InfixParser.h>
 #include <Siliko/Value.h>
 
-static const char GladeFile[] = "/com/vdamewood/SilikujoForUnix/EvalWindow.glade";
+static const char GladeFile[] = "/com/vdamewood/SilikujoForUnix/EvalWindow.ui";
 
 static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 {
 	SilikoSyntaxTreeNode *ResultTree =
 		SilikoParseInfix(
 		SilikoStringSourceNew(
-		gtk_entry_get_text(
-		GTK_ENTRY(
+		gtk_editable_get_text(
+		GTK_EDITABLE(
 		gtk_builder_get_object(GTK_BUILDER(EvalWindow), "Input")))));
 	SilikoValue Value = SilikoSyntaxTreeEvaluate(ResultTree);
 	SilikoSyntaxTreeDelete(ResultTree);
@@ -46,25 +46,32 @@ static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 	free(ResultString);
 }
 
-GtkBuilder *EvalWindowNew(void)
+static void Cleanup(GtkWidget *Widget, gpointer EvalWindow)
+{
+	g_object_unref(EvalWindow);
+}
+
+GtkBuilder *EvalWindowNewBuilder(void)
 {
 	GtkBuilder *EvalWindow = gtk_builder_new_from_resource(GladeFile);
 
-	g_signal_connect(
-		gtk_builder_get_object(EvalWindow, "EvalWindow"),
-		"delete_event",
-		G_CALLBACK(gtk_main_quit),
-		NULL);
 	g_signal_connect(
 		gtk_builder_get_object(EvalWindow, "CalculateButton"),
 		"clicked",
 		G_CALLBACK(Calculate),
 		EvalWindow);
+	gtk_window_set_default_widget(
+		GTK_WINDOW(gtk_builder_get_object(EvalWindow, "EvalWindow")),
+		GTK_WIDGET(gtk_builder_get_object(EvalWindow, "CalculateButton"))
+	);
+	gtk_entry_set_activates_default(
+		GTK_ENTRY(gtk_builder_get_object(EvalWindow, "Input")),
+		TRUE
+	);
 	g_signal_connect(
-		gtk_builder_get_object(EvalWindow, "Input"),
-		"activate",
-		G_CALLBACK(Calculate),
+		gtk_builder_get_object(EvalWindow, "EvalWindow"),
+		"close-request",
+		G_CALLBACK(Cleanup),
 		EvalWindow);
-
 	return EvalWindow;
 }

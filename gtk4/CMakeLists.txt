@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2021 Vincent Damewood
+# Copyright 2012-2022 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(Gtk3 REQUIRED gtk+-3.0 IMPORTED_TARGET)
+pkg_check_modules(Gtk REQUIRED gtk4 IMPORTED_TARGET)
 
 find_program(GRESOURCE glib-compile-resources)
 if(NOT GRESOURCE)
@@ -28,7 +28,7 @@ add_custom_command(
 		--generate-header
 		--target=${CMAKE_CURRENT_BINARY_DIR}/gresource.h
 		gresource.xml
-	DEPENDS gresource.xml
+	DEPENDS gresource.xml EvalWindow.ui
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_custom_command(
@@ -37,7 +37,7 @@ add_custom_command(
 		--generate-source
 		--target=${CMAKE_CURRENT_BINARY_DIR}/gresource.c
 		gresource.xml
-	DEPENDS gresource.xml
+	DEPENDS gresource.xml EvalWindow.ui
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(SilikujoForUnix)
@@ -57,7 +57,7 @@ set_target_properties(SilikujoForUnix PROPERTIES
 	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
 target_compile_features(SilikujoForUnix PRIVATE c_std_11)
-target_link_libraries(SilikujoForUnix PRIVATE Siliko::Siliko PkgConfig::Gtk3)
+target_link_libraries(SilikujoForUnix PRIVATE Siliko::Siliko PkgConfig::Gtk)
 
 install(TARGETS SilikujoForUnix
 RUNTIME
