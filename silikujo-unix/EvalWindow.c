@@ -46,9 +46,10 @@ static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 	free(ResultString);
 }
 
-static void Cleanup(GtkWidget *Widget, gpointer EvalWindow)
+static gboolean Cleanup(GtkWidget *Widget, gpointer EvalWindow)
 {
 	g_object_unref(EvalWindow);
+	return FALSE;
 }
 
 GtkBuilder *EvalWindowNewBuilder(void)
