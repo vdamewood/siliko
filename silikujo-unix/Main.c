@@ -31,7 +31,7 @@ static void activate(GtkApplication *app, gpointer user_data)
 
 int main(int argc, char *argv[])
 {
-	GtkApplication *app = gtk_application_new("com.vdamewood.SilikujoForUnix", G_APPLICATION_FLAGS_NONE);
+	GtkApplication *app = gtk_application_new("com.vdamewood.SilikujoForUnix", G_APPLICATION_DEFAULT_FLAGS);
 	SilikoFunctionCallerSetUp();
 
 	g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
