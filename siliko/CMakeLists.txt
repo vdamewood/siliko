@@ -121,11 +121,12 @@ PUBLIC_HEADER
 )
 install(EXPORT Siliko
 	NAMESPACE             Siliko::
-	FILE                  SilikoConfig.cmake
+	FILE                  SilikoTarget.cmake
 	DESTINATION           "${CMAKEDIR}"
 	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 )
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/SilikoConfigVersion.cmake"
+		"SilikoConfig.cmake"
 	DESTINATION           "${CMAKEDIR}"
 	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 )

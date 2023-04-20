@@ -42,10 +42,6 @@ set(SILIKO_PACKAGE_VENDOR  "Unknown Vendor"  CACHE STRING
 	"The name of the vendor when generating packages (ignored if SILIKO_PACKAGE is off)"
 )
 
-set(SILIKO_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Siliko CACHE STRING
-	"Locaton to install CMake files (ignored if SILIKO_BUILD_FRAMEWORK is on)"
-)
-
 if(APPLE)
 	option(SILIKO_BUILD_FRAMEWORK   "Build Siliko as a framework." On)
 	option(SILIKO_PACKAGE_DMG       "Package as DMG file (ignored if SILIKO_PACKAGE is off)" On)
@@ -64,7 +60,16 @@ if(WIN32)
 	set(SILIKO_MSI_GUID  "00000000-0000-0000-0000-000000000000"  CACHE STRING
 		"The Upgrade GUID used for MSI Installers (Ignored if SILIKO_PACKAGE or SILIKO_PACKAGE_MSI is false)"
 	)
+	set(TMP_INSTALL_CMAKEDIR "cmake")
+else()
+	set(TMP_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/Siliko")
 endif()
+
+# We use TMP_INSTALL_CMAKEDIR here to avoid a duplicate call to set()
+# so there's a single place to edit the docstring.
+set(SILIKO_INSTALL_CMAKEDIR "${TMP_INSTALL_CMAKEDIR}" CACHE STRING
+		"Locaton to install CMake files (ignored if SILIKO_BUILD_FRAMEWORK is on)"
+)
 
 
 ###########
