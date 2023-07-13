@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2022 Vincent Damewood
+# Copyright 2012-2023 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,6 +34,23 @@ set_target_properties(SilikujoForWindows PROPERTIES
 	ARCHIVE_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
 	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
+set(VSV_DEBUG_FLAG 0)
+set(VSV_FILENAME "Silikujo.exe")
+configure_file(
+	Version.rc.in
+	${CMAKE_CURRENT_BINARY_DIR}/Version.Release.rc
+	@ONLY
+)
+target_sources(SilikujoForWindows PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/Version.Release.rc>)
+
+set(VSV_DEBUG_FLAG VS_FF_DEBUG)
+set(VSV_FILENAME "Silikujo.exe")
+configure_file(
+	Version.rc.in
+	${CMAKE_CURRENT_BINARY_DIR}/Version.Debug.rc
+	@ONLY
+)
+target_sources(SilikujoForWindows PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/Version.Debug.rc>)
 target_compile_features(SilikujoForWindows PRIVATE c_std_11)
 target_link_libraries(SilikujoForWindows PRIVATE Siliko::Siliko)
 

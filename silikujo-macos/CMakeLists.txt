@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2022 Vincent Damewood
+# Copyright 2012-2023 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ set_target_properties(SilikujoForMacOS PROPERTIES
 	MACOSX_BUNDLE_BUNDLE_NAME           "Silikujo"
 	MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
 	MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
-	MACOSX_BUNDLE_COPYRIGHT             "Copyright 2012-2022 Vincent Damewood"
+	MACOSX_BUNDLE_COPYRIGHT             "${SILIKO_COPYRIGHT}"
 	MACOSX_BUNDLE_ICON_FILE             silikujo.icns
 	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 	RUNTIME_OUTPUT_DIRECTORY            "${PROJECT_BINARY_DIR}/products"

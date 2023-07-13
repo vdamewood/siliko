@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2022 Vincent Damewood
+# Copyright 2012-2023 Vincent Damewood
 #
 # This library is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -87,6 +87,25 @@ set_target_properties(Siliko PROPERTIES
 	ARCHIVE_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
 	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
+if(WIN32)
+	set(VSV_DEBUG_FLAG 0)
+	set(VSV_FILENAME "Siliko.dll")
+	configure_file(
+		src/version.rc.in
+		${CMAKE_CURRENT_BINARY_DIR}/version-release.rc
+		@ONLY
+  	)
+	target_sources(Siliko PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/version-release.rc>)
+
+	set(VSV_DEBUG_FLAG VS_FF_DEBUG)
+	set(VSV_FILENAME "Siliko.dll")
+	configure_file(
+		src/version.rc.in
+		${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc
+		@ONLY
+  	)
+	target_sources(Siliko PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc>)
+endif()
 
 include(GenerateExportHeader)
 generate_export_header(Siliko

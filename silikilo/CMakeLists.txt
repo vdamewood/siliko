@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2022 Vincent Damewood
+# Copyright 2012-2023 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,6 +54,27 @@ if(APPLE AND SILIKO_BUILD_SHARED_LIBRARY)
 		)
 	endif()
 endif()
+
+if(WIN32)
+	set(VSV_DEBUG_FLAG 0)
+	set(VSV_FILENAME "silikilo.exe")
+	configure_file(
+		version.rc.in
+		${CMAKE_CURRENT_BINARY_DIR}/version-release.rc
+		@ONLY
+	)
+	target_sources(Silikilo PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/version-release.rc>)
+
+	set(VSV_DEBUG_FLAG VS_FF_DEBUG)
+	set(VSV_FILENAME "silikilo.exe")
+	configure_file(
+		version.rc.in
+		${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc
+		@ONLY
+  	)
+	target_sources(Silikilo PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc>)
+endif()
+
 
 install(TARGETS Silikilo
 RUNTIME
