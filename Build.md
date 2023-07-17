@@ -154,8 +154,6 @@ all systems:
   set to `Release` for a release build, or to `Debug` for a debug build.
   Leave this unset if you are using a Multi-Config build tool, including
   Xcode and Visual Studio.
-* `SILIKO_BUILD_SHARED_LIBRARY` (`BOOL`): Build Siliko as a shared
-  library. Default: `On`
 * `SILIKO_BUILD_CLI` (`BOOL`): Build Silikilo, a command-line
   interface for Siliko. Default: `On`
 * `SILIKO_BUILD_GUI` (`BOOL`): Build Silikujo, a GUI interface for

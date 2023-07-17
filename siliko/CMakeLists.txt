@@ -24,11 +24,7 @@ else()
 	set(DEVELOPMENT_COMPONENT "Siliko_Development")
 endif()
 
-if(SILIKO_BUILD_SHARED_LIBRARY)
-	add_library(Siliko SHARED)
-else()
-	add_library(Siliko STATIC)
-endif()
+add_library(Siliko)
 add_library(Siliko::Siliko ALIAS Siliko)
 
 set(PUBLIC_HEADERS
