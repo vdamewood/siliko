@@ -236,36 +236,32 @@ struct SilikoValue SilikoFunction_power(int argc, struct SilikoValue *argv)
 
 struct SilikoValue SilikoFunction_dice(int argc, struct SilikoValue *argv)
 {
-	/* TODO: Make this function handle fractional dice. */
-	static int hasSeeded = 0;
-	long long int runningTotal = 0;
-	struct SilikoValue rVal;
-	long long int count;
-	long long int faces;
-	int i;
-
 	if(argc != 2)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return {SILIKO_VAL_BAD_ARGUMENTS};
 
-	count = (argv[0].Status == SILIKO_VAL_INTEGER)
+	long long int count = (argv[0].Status == SILIKO_VAL_INTEGER)
 		? argv[0].Integer
 		: (long long int) argv[0].Float;
 
-	faces = (argv[1].Status == SILIKO_VAL_INTEGER)
+	long long int faces = (argv[1].Status == SILIKO_VAL_INTEGER)
 		? argv[1].Integer
 		: (long long int) argv[1].Float;
 
+	if (faces == 0)
+		return 0;
+
+	static int hasSeeded = 0;
 	if (!hasSeeded)
 	{
 		hasSeeded = 1;
 		srand((unsigned int)time(NULL));
 	}
 
-	for (i = 1; i <= count; i++) runningTotal += (rand() % faces) + 1;
-	rVal.Status = SILIKO_VAL_INTEGER;
+	long long int runningTotal = 0;
+	for (int i = 1; i <= count; i++)
+		runningTotal += (rand() % faces) + 1;
+
+	struct SilikoValue rVal = {SILIKO_VAL_INTEGER};
 	rVal.Integer = runningTotal;
 	return rVal;
 }
