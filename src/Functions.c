@@ -237,7 +237,11 @@ struct SilikoValue SilikoFunction_power(int argc, struct SilikoValue *argv)
 struct SilikoValue SilikoFunction_dice(int argc, struct SilikoValue *argv)
 {
 	if(argc != 2)
-		return {SILIKO_VAL_BAD_ARGUMENTS};
+	{
+		struct SilikoValue rVal = {SILIKO_VAL_BAD_ARGUMENTS};
+		rVal.Integer = 0;
+		return rVal;
+	}
 
 	long long int count = (argv[0].Status == SILIKO_VAL_INTEGER)
 		? argv[0].Integer
@@ -248,7 +252,11 @@ struct SilikoValue SilikoFunction_dice(int argc, struct SilikoValue *argv)
 		: (long long int) argv[1].Float;
 
 	if (faces == 0)
-		return 0;
+	{
+		struct SilikoValue rVal = {SILIKO_VAL_INTEGER};
+		rVal.Integer = 0;
+		return rVal;
+	}
 
 	static int hasSeeded = 0;
 	if (!hasSeeded)
