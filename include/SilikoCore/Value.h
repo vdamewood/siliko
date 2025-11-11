@@ -55,6 +55,19 @@ struct SilikoValue
 	};
 };
 
+#define SILIKO_VALUE(V) _Generic((V), \
+    enum SilikoValueStatus: \
+        (struct SilikoValue){V, {.Integer=0}}, \
+    long long int: \
+        (struct SilikoValue){SILIKO_VAL_INTEGER, .Integer=(V)}, \
+    default: \
+        (struct SilikoValue){SILIKO_VAL_INTEGER, .Integer=(long long int)(V)}, \
+    float: \
+        (struct SilikoValue){SILIKO_VAL_FLOAT, .Float=(double)(V)}, \
+    double: \
+        (struct SilikoValue){SILIKO_VAL_FLOAT, .Float=(V)} \
+)
+
 #if defined __cplusplus
 }
 #endif
