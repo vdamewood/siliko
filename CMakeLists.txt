@@ -289,3 +289,11 @@ function(siliko_core_fixup_bundle TGT)
 		endif()
 	endif()
 endfunction()
+
+if(PROJECT_IS_TOP_LEVEL)
+  include(CTest)
+endif()
+
+if(BUILD_TESTING)
+	add_subdirectory(test)
+endif()
