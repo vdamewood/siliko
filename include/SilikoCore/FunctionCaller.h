@@ -36,6 +36,7 @@ SILIKOCORE_EXPORT void SilikoFunctionCallerDelete(SilikoFunctionCaller *);
 SILIKOCORE_EXPORT int SilikoFunctionCallerInstallOperators(SilikoFunctionCaller *Caller);
 SILIKOCORE_EXPORT int SilikoFunctionCallerInstallFunctions(SilikoFunctionCaller *Caller);
 SILIKOCORE_EXPORT struct SilikoValue SilikoFunctionCallerCall(SilikoFunctionCaller *Caller, const char *FunctionName, int ArgumentCount, struct SilikoValue *Arguments);
+SILIKOCORE_EXPORT SilikoFunctionPointer SilikoFunctionCallerGetFunction(SilikoFunctionCaller *Caller, const char *name);
 SILIKOCORE_EXPORT int SilikoFunctionCallerInstall(SilikoFunctionCaller *Caller, const char *FunctionName, SilikoFunctionPointer Function);
 
 #if defined __cplusplus

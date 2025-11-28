@@ -21,6 +21,24 @@ Test(FunctionCallerTests, NewCaller) {
     SilikoFunctionCallerDelete(Caller);
 }
 
+Test(FunctionCallerTests, GetIntFunction) {
+    SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
+    cr_assert(Caller != NULL);
+    SilikoFunctionCallerInstall(Caller, "gfti", GetFortyTwoInt);
+    SilikoFunctionPointer TestValue = SilikoFunctionCallerGetFunction(Caller, "gfti");
+    SilikoFunctionCallerDelete(Caller);
+    cr_assert(TestValue == GetFortyTwoInt);
+}
+
+Test(FunctionCallerTests, GetFloatFunction) {
+    SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
+    cr_assert(Caller != NULL);
+    SilikoFunctionCallerInstall(Caller, "gftf", GetFortyTwoFloat);
+    SilikoFunctionPointer TestValue = SilikoFunctionCallerGetFunction(Caller, "gftf");
+    SilikoFunctionCallerDelete(Caller);
+    cr_assert(TestValue == GetFortyTwoFloat);
+}
+
 Test(FunctionCallerTests, UseIntFunction) {
     SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
     cr_assert(Caller != NULL);

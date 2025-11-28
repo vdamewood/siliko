@@ -138,7 +138,7 @@ int SilikoFunctionCallerInstallFunctions(SilikoFunctionCaller *Caller)
 		&& SilikoFunctionCallerInstall(Caller, "tanh", SilikoFunction_tanh);
 }
 
-static SilikoFunctionPointer GetFunction(SilikoFunctionCaller *Caller, const char *name)
+SilikoFunctionPointer SilikoFunctionCallerGetFunction(SilikoFunctionCaller *Caller, const char *name)
 {
 	uint8_t index = hash(name);
 	struct SilikoFunctionChain *current = Caller->table[index];
@@ -164,7 +164,7 @@ struct SilikoValue SilikoFunctionCallerCall(
 	SilikoFunctionPointer f;
 	struct SilikoValue rVal;
 
-	f = GetFunction(Caller, name);
+	f = SilikoFunctionCallerGetFunction(Caller, name);
 
 	if (!f)
 		rVal.Status = SILIKO_VAL_BAD_FUNCTION;
