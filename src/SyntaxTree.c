@@ -310,3 +310,63 @@ struct SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node, SilikoFu
 		return rVal;
 	}
 }
+
+SilikoSyntaxTreeNode *SilikoSyntaxTreeCollapse(SilikoSyntaxTreeNode *node, SilikoFunctionCaller *caller)
+{
+	return SilikoSyntaxTreeNewLeaf(
+		SilikoSyntaxTreeEvaluate(node, caller));
+}
+
+static inline int checkBounds(SilikoSyntaxTreeNode *parent, int child_index)
+{
+	if (parent->Type != SILIKO_AST_BRANCH
+			|| child_index >= parent->Branch->Count
+			|| child_index < -parent->Branch->Count)
+		return -1;
+
+	if (child_index < 0)
+		return child_index + parent->Branch->Count;
+
+	return child_index;
+
+}
+
+SilikoSyntaxTreeNode *SilikoSyntaxTreeGetChild(SilikoSyntaxTreeNode *parent, int child_index)
+{
+	if ((child_index = checkBounds(parent, child_index)) < 0)
+		return NULL;
+
+	return parent->Branch->Children[child_index];
+}
+
+SilikoSyntaxTreeNode *SilikoSyntaxTreePruneChild(SilikoSyntaxTreeNode *parent, int child_index)
+{
+	if ((child_index = checkBounds(parent, child_index)) < 0)
+		return NULL;
+
+	SilikoSyntaxTreeNode *child = parent->Branch->Children[child_index];
+	if (!child)
+		return NULL;
+
+	parent->Branch->Count--;
+	for (int i = child_index; i < parent->Branch->Count; i++)
+		parent->Branch->Children[i] = parent->Branch->Children[i+1];
+
+	parent->Branch->Children[parent->Branch->Count] = NULL;
+
+	return child;
+}
+
+int SilikoSyntaxTreeCollapseChild(SilikoSyntaxTreeNode *parent, int child_index, SilikoFunctionCaller *caller)
+{
+	if ((child_index = checkBounds(parent, child_index)) < 0)
+		return 0;
+
+	SilikoSyntaxTreeNode *new_child
+		= SilikoSyntaxTreeCollapse(parent->Branch->Children[child_index], caller);
+
+	SilikoSyntaxTreeDelete(parent->Branch->Children[child_index]);
+	parent->Branch->Children[child_index] = new_child;
+
+	return -1;
+}
