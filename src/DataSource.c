@@ -23,14 +23,14 @@ struct SilikoDataSource
 {
 	void *State;
 	int (*AdvanceFunction)(void *State);
-	char (*GetFunction)(void *State);
+	char (*GetCurrentFunction)(void *State);
 	void (*DeleteFunction)(void *State);
 };
 
 SilikoDataSource *SilikoDataSourceNew(
 	void *NewState,
 	int (*NewAdvanceFunction)(void *),
-	char (*NewGetFunction)(void *),
+	char (*NewGetCurrentFunction)(void *),
 	void (*NewDeleteFunction)(void *)
 )
 {
@@ -39,7 +39,7 @@ SilikoDataSource *SilikoDataSourceNew(
 	{
 		rVal->State = NewState;
 		rVal->AdvanceFunction = NewAdvanceFunction;
-		rVal->GetFunction = NewGetFunction;
+		rVal->GetCurrentFunction = NewGetCurrentFunction;
 		rVal->DeleteFunction = NewDeleteFunction;
 	}
 	return rVal;
@@ -50,9 +50,9 @@ int SilikoDataSourceAdvance(SilikoDataSource *Source)
 	return Source->AdvanceFunction(Source->State);
 }
 
-char SilikoDataSourceGet(SilikoDataSource *Source)
+char SilikoDataSourceGetCurrent(SilikoDataSource *Source)
 {
-	return Source->GetFunction(Source->State);
+	return Source->GetCurrentFunction(Source->State);
 }
 
 void SilikoDataSourceDelete(SilikoDataSource *Source)

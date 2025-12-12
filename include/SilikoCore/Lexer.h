@@ -32,9 +32,8 @@ typedef struct SilikoLexer SilikoLexer;
 SILIKOCORE_EXPORT SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource);
 SILIKOCORE_EXPORT void SilikoLexerDelete(SilikoLexer *Lexer);
 
-SILIKOCORE_EXPORT void SilikoLexerNext(SilikoLexer *Lexer);
-
-SILIKOCORE_EXPORT struct SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer);
+SILIKOCORE_EXPORT void SilikoLexerAdvance(SilikoLexer *Lexer);
+SILIKOCORE_EXPORT struct SilikoToken SilikoLexerGetCurrent(SilikoLexer *Lexer);
 
 #if defined __cplusplus
 }

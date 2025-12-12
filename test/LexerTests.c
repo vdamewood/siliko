@@ -13,7 +13,7 @@ Test(LexerTests, NAME) \
     SilikoLexer *lex = SilikoLexerNew(src); \
     for (int i = 0; i < sizeof tokens/sizeof(struct SilikoToken); i++) \
     { \
-        struct SilikoToken current = SilikoLexerGetToken(lex); \
+        struct SilikoToken current = SilikoLexerGetCurrent(lex); \
         cr_assert(current.Type == tokens[i].Type, \
             "Types[%i]: %i/%c %i/%c", \
             i, \
@@ -33,7 +33,7 @@ Test(LexerTests, NAME) \
         default: \
             break; \
         } \
-        SilikoLexerNext(lex); \
+        SilikoLexerAdvance(lex); \
     } \
 }
 

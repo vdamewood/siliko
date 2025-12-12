@@ -45,7 +45,7 @@ static int SilikoStringSourceAdvance(void *State)
 	}
 }
 
-static char SilikoStringSourceGet(void *State)
+static char SilikoStringSourceGetCurrent(void *State)
 {
 	return *((SilikoStringSourceState *)State)->current;
 }
@@ -75,7 +75,7 @@ SilikoDataSource *SilikoStringSourceNew(const char *NewInput)
 	if (!(source = SilikoDataSourceNew(
 		state,
 		SilikoStringSourceAdvance,
-		SilikoStringSourceGet,
+		SilikoStringSourceGetCurrent,
 		SilikoStringSourceDelete)))
 	{
 		free(state->string);

@@ -100,7 +100,7 @@ static int Append(Lexeme *Lex, char NewChar)
 	return -1;
 }
 
-void SilikoLexerNext(SilikoLexer *Lexer)
+void SilikoLexerAdvance(SilikoLexer *Lexer)
 {
 	SilikoDfaState dfaState = DFA_START;
 	Lexeme Lex = {NULL, 0, 4};
@@ -124,48 +124,48 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 	case DFA_END:
 		break;
 	case DFA_START:
-		if (isOperator(SilikoDataSourceGet(Lexer->Source)))
+		if (isOperator(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			Append(&Lex, '\0');
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_TERM_CHAR;
 		}
-		else if (SilikoDataSourceGet(Lexer->Source) == 'd')
+		else if (SilikoDataSourceGetCurrent(Lexer->Source) == 'd')
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_DICE;
 		}
-		else if (SilikoDataSourceGet(Lexer->Source) == 'e')
+		else if (SilikoDataSourceGetCurrent(Lexer->Source) == 'e')
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_E;
 		}
-		else if (SilikoDataSourceGet(Lexer->Source) == 'p')
+		else if (SilikoDataSourceGetCurrent(Lexer->Source) == 'p')
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_PI_1;
 		}
-		else if (isdigit(SilikoDataSourceGet(Lexer->Source)))
+		else if (isdigit(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_INTEGER;
 		}
-		else if (isalpha(SilikoDataSourceGet(Lexer->Source)))
+		else if (isalpha(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
-		else if (isspace(SilikoDataSourceGet(Lexer->Source)))
+		else if (isspace(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
 			SilikoDataSourceAdvance(Lexer->Source);
 		}
-		else if (SilikoDataSourceGet(Lexer->Source) == '\0')
+		else if (SilikoDataSourceGetCurrent(Lexer->Source) == '\0')
 		{
 			dfaState = DFA_TERM_EOL;
 		}
@@ -175,9 +175,9 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		}
 		break;
 	case DFA_DICE:
-		if (isalpha(SilikoDataSourceGet(Lexer->Source)))
+		if (isalpha(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
@@ -188,9 +188,9 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		}
 		break;
 	case DFA_E:
-		if (isalnum(SilikoDataSourceGet(Lexer->Source)))
+		if (isalnum(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
@@ -201,15 +201,16 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		}
 		break;
 	case DFA_PI_1:
-		if (SilikoDataSourceGet(Lexer->Source) == 'i')
+		if (SilikoDataSourceGetCurrent(Lexer->Source) == 'i')
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_PI_2;
 		}
-		else if (isIdCharacter(SilikoDataSourceGet(Lexer->Source)))
+		else if (isIdCharacter(
+				SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
@@ -220,9 +221,9 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		}
 		break;
 	case DFA_PI_2:
-		if (isIdCharacter(SilikoDataSourceGet(Lexer->Source)))
+		if (isIdCharacter(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_ID;
 		}
@@ -233,9 +234,9 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		}
 		break;
 	case DFA_ID:
-		if (isalnum(SilikoDataSourceGet(Lexer->Source)))
+		if (isalnum(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 		}
 		else
@@ -245,15 +246,15 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		}
 		break;
 	case DFA_INTEGER:
-		if (SilikoDataSourceGet(Lexer->Source) == '.')
+		if (SilikoDataSourceGetCurrent(Lexer->Source) == '.')
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 			dfaState = DFA_FLOAT;
 		}
-		else if (isdigit(SilikoDataSourceGet(Lexer->Source)))
+		else if (isdigit(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 		}
 		else
@@ -263,9 +264,9 @@ void SilikoLexerNext(SilikoLexer *Lexer)
 		}
 		break;
 	case DFA_FLOAT:
-		if (isdigit(SilikoDataSourceGet(Lexer->Source)))
+		if (isdigit(SilikoDataSourceGetCurrent(Lexer->Source)))
 		{
-			Append(&Lex, SilikoDataSourceGet(Lexer->Source));
+			Append(&Lex, SilikoDataSourceGetCurrent(Lexer->Source));
 			SilikoDataSourceAdvance(Lexer->Source);
 		}
 		else
@@ -334,7 +335,7 @@ SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource)
 	rVal->Source = InputSource;
 	rVal->Token.Type = SILIKO_TOK_UNSET;
 	rVal->Token.Integer = 0;
-	SilikoLexerNext(rVal);
+	SilikoLexerAdvance(rVal);
 
 	return rVal;
 }
@@ -350,7 +351,7 @@ void SilikoLexerDelete(SilikoLexer *Lexer)
 	}
 }
 
-struct SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer)
+struct SilikoToken SilikoLexerGetCurrent(SilikoLexer *Lexer)
 {
 	return Lexer->Token;
 }
