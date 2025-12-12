@@ -339,7 +339,7 @@ static inline int checkBounds(SilikoSyntaxTreeNode *parent, int child_index)
 
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeGetChild(SilikoSyntaxTreeNode *parent, int child_index)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeFetchChild(SilikoSyntaxTreeNode *parent, int child_index)
 {
 	if ((child_index = checkBounds(parent, child_index)) < 0)
 		return NULL;
