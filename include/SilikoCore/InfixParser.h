@@ -15,8 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_INFIX_PARSER_H
-#define SILIKO_INFIX_PARSER_H
+#if !defined SILIKO_CORE_INFIX_PARSER_H
+#define SILIKO_CORE_INFIX_PARSER_H
 
 #include <SilikoCore/Api.h>
 #include <SilikoCore/DataSource.h>
@@ -26,10 +26,11 @@
 extern "C" {
 #endif
 
-SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *input);
+SILIKOCORE_EXPORT
+    SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *input);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif /* SILIKO_INFIX_PARSER_H */
+#endif // SILIKO_CORE_INFIX_PARSER_H

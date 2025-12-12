@@ -15,8 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_SYNTAX_TREE_H
-#define SILIKO_SYNTAX_TREE_H
+#if !defined SILIKO_CORE_SYNTAX_TREE_H
+#define SILIKO_CORE_SYNTAX_TREE_H
 
 #include <SilikoCore/Api.h>
 #include <SilikoCore/FunctionCaller.h>
@@ -61,4 +61,4 @@ SILIKOCORE_EXPORT int SilikoSyntaxTreeCollapse(SilikoSyntaxTreeNode *node, Silik
 }
 #endif
 
-#endif // SILIKO_SYNTAX_TREE_H
+#endif // SILIKO_CORE_SYNTAX_TREE_H

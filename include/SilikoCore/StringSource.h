@@ -15,8 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_STRING_SOURCE
-#define SILIKO_STRING_SOURCE
+#if !defined SILIKO_CORE_STRING_SOURCE_H
+#define SILIKO_CORE_STRING_SOURCE_H
 
 #include <SilikoCore/DataSource.h>
 
@@ -24,10 +24,11 @@
 extern "C" {
 #endif
 
-SILIKOCORE_EXPORT SilikoDataSource *SilikoStringSourceNew(const char *InputString);
+SILIKOCORE_EXPORT
+    SilikoDataSource *SilikoStringSourceNew(const char *input_string);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif /* SILIKO_STRING_SOURCE */
+#endif // SILIKO_CORE_STRING_SOURCE_H

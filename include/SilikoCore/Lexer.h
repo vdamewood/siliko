@@ -15,8 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_LEXER_H
-#define SILIKO_LEXER_H
+#if !defined SILIKO_CORE_LEXER_H
+#define SILIKO_CORE_LEXER_H
 
 #include <SilikoCore/Api.h>
 #include <SilikoCore/DataSource.h>
@@ -29,14 +29,18 @@ extern "C" {
 struct SilikoLexer;
 typedef struct SilikoLexer SilikoLexer;
 
-SILIKOCORE_EXPORT SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource);
-SILIKOCORE_EXPORT void SilikoLexerDelete(SilikoLexer *Lexer);
+SILIKOCORE_EXPORT
+    SilikoLexer *SilikoLexerNew(SilikoDataSource *input);
+SILIKOCORE_EXPORT
+    void SilikoLexerDelete(SilikoLexer*);
 
-SILIKOCORE_EXPORT void SilikoLexerAdvance(SilikoLexer *Lexer);
-SILIKOCORE_EXPORT struct SilikoToken SilikoLexerGetCurrent(SilikoLexer *Lexer);
+SILIKOCORE_EXPORT
+    void SilikoLexerAdvance(SilikoLexer*);
+SILIKOCORE_EXPORT
+    struct SilikoToken SilikoLexerGetCurrent(SilikoLexer*);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif /* SILIKO_LEXER_H */
+#endif // SILIKO_CORE_LEXER_H

@@ -15,8 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_DATA_SOURCE
-#define SILIKO_DATA_SOURCE
+#if !defined SILIKO_CORE_DATA_SOURCE_H
+#define SILIKO_CORE_DATA_SOURCE_H
 
 #include <SilikoCore/Api.h>
 
@@ -33,12 +33,12 @@ SILIKOCORE_EXPORT SilikoDataSource *SilikoDataSourceNew(
 	char (*NewGetCurrentFunction)(void *),
 	void (*NewDeleteFunction)(void *)
 );
-SILIKOCORE_EXPORT int SilikoDataSourceAdvance(SilikoDataSource *Source);
-SILIKOCORE_EXPORT char SilikoDataSourceGetCurrent(SilikoDataSource *Source);
-SILIKOCORE_EXPORT void SilikoDataSourceDelete(SilikoDataSource *Source);
+SILIKOCORE_EXPORT int SilikoDataSourceAdvance(SilikoDataSource *);
+SILIKOCORE_EXPORT char SilikoDataSourceGetCurrent(SilikoDataSource *);
+SILIKOCORE_EXPORT void SilikoDataSourceDelete(SilikoDataSource *);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif /* SILIKO_DATA_SOURCE */
+#endif // SILIKO_CORE_DATA_SOURCE_H

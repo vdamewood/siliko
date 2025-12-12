@@ -15,8 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_VALUE_H
-#define SILIKO_VALUE_H
+#if !defined SILIKO_CORE_VALUE_H
+#define SILIKO_CORE_VALUE_H
 
 #include <SilikoCore/Api.h>
 
@@ -72,4 +72,4 @@ struct SilikoValue
 }
 #endif
 
-#endif /* SILIKO_VALUE_H */
+#endif // SILIKO_CORE_VALUE_H

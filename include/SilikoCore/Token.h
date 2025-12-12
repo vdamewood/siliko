@@ -15,8 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_TOKEN_H
-#define SILIKO_TOKEN_H
+#if !defined SILIKO_CORE_TOKEN_H
+#define SILIKO_CORE_TOKEN_H
 
 #include <SilikoCore/Api.h>
 
@@ -58,4 +58,4 @@ struct SilikoToken
 }
 #endif
 
-#endif /* SILIKO_TOKEN_H */
+#endif // SILIKO_CORE_TOKEN_H

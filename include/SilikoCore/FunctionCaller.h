@@ -15,8 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_FUNCTION_CALLER_H
-#define SILIKO_FUNCTION_CALLER_H
+#if !defined SILIKO_CORE_FUNCTION_CALLER_H
+#define SILIKO_CORE_FUNCTION_CALLER_H
 
 #include <SilikoCore/Api.h>
 #include <SilikoCore/Value.h>
@@ -30,17 +30,33 @@ typedef struct SilikoFunctionCaller SilikoFunctionCaller;
 
 typedef struct SilikoValue (*SilikoFunctionPointer)(int, struct SilikoValue *);
 
-SILIKOCORE_EXPORT SilikoFunctionCaller *SilikoFunctionCallerNew();
-SILIKOCORE_EXPORT void SilikoFunctionCallerDelete(SilikoFunctionCaller *);
+SILIKOCORE_EXPORT
+    SilikoFunctionCaller *SilikoFunctionCallerNew();
+SILIKOCORE_EXPORT
+    void SilikoFunctionCallerDelete(SilikoFunctionCaller *);
 
-SILIKOCORE_EXPORT int SilikoFunctionCallerInstallOperators(SilikoFunctionCaller *Caller);
-SILIKOCORE_EXPORT int SilikoFunctionCallerInstallFunctions(SilikoFunctionCaller *Caller);
-SILIKOCORE_EXPORT struct SilikoValue SilikoFunctionCallerCall(SilikoFunctionCaller *Caller, const char *FunctionName, int ArgumentCount, struct SilikoValue *Arguments);
-SILIKOCORE_EXPORT SilikoFunctionPointer SilikoFunctionCallerGetFunction(SilikoFunctionCaller *Caller, const char *name);
-SILIKOCORE_EXPORT int SilikoFunctionCallerInstall(SilikoFunctionCaller *Caller, const char *FunctionName, SilikoFunctionPointer Function);
+SILIKOCORE_EXPORT
+    int SilikoFunctionCallerInstallOperators(SilikoFunctionCaller *);
+SILIKOCORE_EXPORT
+    int SilikoFunctionCallerInstallFunctions(SilikoFunctionCaller *);
+SILIKOCORE_EXPORT
+    struct SilikoValue SilikoFunctionCallerCall(
+        SilikoFunctionCaller*,
+        const char *function_name,
+        int argument_count,
+        struct SilikoValue *arguments);
+SILIKOCORE_EXPORT
+    SilikoFunctionPointer SilikoFunctionCallerGetFunction(
+        SilikoFunctionCaller*,
+        const char *function_name);
+SILIKOCORE_EXPORT
+    int SilikoFunctionCallerInstall(
+        SilikoFunctionCaller*,
+        const char *function_name,
+        SilikoFunctionPointer function_pointer);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif // SILIKO_FUNCTION_CALLER_H
+#endif // SILIKO_CORE_FUNCTION_CALLER_H
