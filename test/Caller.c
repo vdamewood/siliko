@@ -1,18 +1,18 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/FunctionCaller.h>
 
-struct SilikoValue GetFortyTwoInt(int ArgC, struct SilikoValue *ArgV)
+SilikoValue *GetFortyTwoInt(int ArgC, SilikoValue **ArgV)
 {
     (void)ArgC;
     (void)ArgV;
-    return SILIKO_VALUE(42LL);
+    return SilikoValueNewInteger(42LL);
 }
 
-struct SilikoValue GetFortyTwoFloat(int ArgC, struct SilikoValue *ArgV)
+SilikoValue *GetFortyTwoFloat(int ArgC, SilikoValue **ArgV)
 {
     (void)ArgC;
     (void)ArgV;
-    return SILIKO_VALUE(42.0);
+    return SilikoValueNewReal(42.0);
 }
 
 Test(FunctionCallerTests, NewCaller) {
@@ -43,29 +43,33 @@ Test(FunctionCallerTests, UseIntFunction) {
     SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
     cr_assert(Caller != NULL);
     SilikoFunctionCallerInstall(Caller, "gfti", GetFortyTwoInt);
-    struct SilikoValue TestValue = SilikoFunctionCallerCall(Caller, "gfti", 0, NULL);
+    SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "gfti", 0, NULL);
     SilikoFunctionCallerDelete(Caller);
-    cr_assert(TestValue.Status == SILIKO_VAL_INTEGER);
-    cr_assert(TestValue.Integer == 42);
+    cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueInteger);
+    cr_assert(SilikoValueToInteger(TestValue) == 42);
+    SilikoValueDelete(TestValue);
 }
 
 Test(FunctionCallerTests, UseFloatFunction) {
     SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
     cr_assert(Caller != NULL);
     SilikoFunctionCallerInstall(Caller, "gft", GetFortyTwoFloat);
-    struct SilikoValue TestValue = SilikoFunctionCallerCall(Caller, "gft", 0, NULL);
+    SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "gft", 0, NULL);
     SilikoFunctionCallerDelete(Caller);
-    cr_assert(TestValue.Status == SILIKO_VAL_FLOAT);
-    cr_assert(TestValue.Float == 42.0);
+    cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueReal);
+    cr_assert(SilikoValueToReal(TestValue) == 42.0);
+    SilikoValueDelete(TestValue);
 }
 
 Test(FunctionCallerTests, HandleBadFunction)
 {
     SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
     cr_assert(Caller != NULL);
-    struct SilikoValue TestValue = SilikoFunctionCallerCall(Caller, "bogus", 0, NULL);
+    SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "bogus", 0, NULL);
     SilikoFunctionCallerDelete(Caller);
-    cr_assert(TestValue.Status == SILIKO_VAL_BAD_FUNCTION);
+    cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueError);
+    cr_assert(SilikoValueToError(TestValue) == SilikoErrorFunctionName);
+    SilikoValueDelete(TestValue);
 }
 
 Test(FunctionCallerTests, FunctionsInstall)

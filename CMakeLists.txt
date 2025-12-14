@@ -61,6 +61,7 @@ target_sources(SilikoCore
 		src/StringSource.c
 		src/Lexer.c
 		src/InfixParser.c
+		src/Value.c
 )
 target_compile_features(SilikoCore PRIVATE c_std_17)
 set_target_properties(SilikoCore PROPERTIES

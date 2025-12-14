@@ -23,631 +23,404 @@
 
 #include "Functions.h"
 
-struct SilikoValue SilikoFunction_add(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_add(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	int i;
+	if (argc < 1)
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (!argc)
+	SilikoValue *result = SilikoValueNewCopy(argv[0]);
+	if(SilikoValueGetStatus(result) == SilikoValueError)
+		return result;
+	for(int i = 1; i < argc; i++)
 	{
-		rVal.Status = SILIKO_VAL_INTEGER;
-		rVal.Integer = 0;
-		return rVal;
-	}
-
-	rVal = argv[0];
-
-	for(i = 1; i < argc; i++)
-	{
-		if (rVal.Status == SILIKO_VAL_FLOAT)
+		if(SilikoValueGetStatus(argv[i]) == SilikoValueError)
 		{
-			if (argv[i].Status == SILIKO_VAL_FLOAT)
-			{
-				rVal.Float += argv[i].Float;
-			}
-			else
-			{
-				rVal.Float += (double)argv[i].Integer;
-			}
+			SilikoValueAssignCopy(result, argv[i]);
+			return result;
+		}
+
+		if (SilikoValueGetStatus(result) == SilikoValueInteger
+			&& SilikoValueGetStatus(argv[i]) == SilikoValueInteger)
+		{
+			SilikoValueAssignInteger(result,
+				SilikoValueToInteger(result)
+				+ SilikoValueToInteger(argv[i]));
 		}
 		else
 		{
-			if (argv[i].Status == SILIKO_VAL_FLOAT)
-			{
-				rVal.Float = (double)rVal.Integer + argv[i].Float;
-				rVal.Status = SILIKO_VAL_FLOAT;
-			}
-			else
-			{
-				rVal.Integer += argv[i].Integer;
-			}
+			SilikoValueAssignReal(result,
+				SilikoValueToReal(result)
+				+ SilikoValueToReal(argv[i]));
 		}
 	}
-
-	return rVal;
+	return result;
 }
 
-struct SilikoValue SilikoFunction_subtract(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_subtract(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	int i;
+	if (argc < 1)
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (!argc)
+	SilikoValue *result = SilikoValueNewCopy(argv[0]);
+	if(SilikoValueGetStatus(result) == SilikoValueError)
+		return result;
+	for(int i = 1; i < argc; i++)
 	{
-		rVal.Status = SILIKO_VAL_INTEGER;
-		rVal.Integer = 0;
-		return rVal;
-	}
-
-	rVal = argv[0];
-
-	for(i = 1; i < argc; i++)
-	{
-		if (rVal.Status == SILIKO_VAL_FLOAT)
+		if(SilikoValueGetStatus(argv[i]) == SilikoValueError)
 		{
-			if (argv[i].Status == SILIKO_VAL_FLOAT)
-			{
-				rVal.Float -= argv[i].Float;
-			}
-			else
-			{
-				rVal.Float -= (double)argv[i].Integer;
-			}
+			SilikoValueAssignCopy(result, argv[i]);
+			return result;
+		}
+
+		if (SilikoValueGetStatus(result) == SilikoValueInteger
+			&& SilikoValueGetStatus(argv[i]) == SilikoValueInteger)
+		{
+			SilikoValueAssignInteger(result,
+				SilikoValueToInteger(result)
+				- SilikoValueToInteger(argv[i]));
 		}
 		else
 		{
-			if (argv[i].Status == SILIKO_VAL_FLOAT)
-			{
-				rVal.Float = (double)rVal.Integer - argv[i].Float;
-				rVal.Status = SILIKO_VAL_FLOAT;
-			}
-			else
-			{
-				rVal.Integer -= argv[i].Integer;
-			}
+			SilikoValueAssignReal(result,
+				SilikoValueToReal(result)
+				- SilikoValueToReal(argv[i]));
 		}
 	}
-
-	return rVal;
+	return result;
 }
 
-struct SilikoValue SilikoFunction_multiply(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_multiply(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	int i;
+	if (argc < 1)
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (!argc)
+	SilikoValue *result = SilikoValueNewCopy(argv[0]);
+	if(SilikoValueGetStatus(result) == SilikoValueError)
+		return result;
+	for(int i = 1; i < argc; i++)
 	{
-		rVal.Status = SILIKO_VAL_INTEGER;
-		rVal.Integer = 0;
-		return rVal;
-	}
-
-	rVal = argv[0];
-
-	for(i = 1; i < argc; i++)
-	{
-		if (rVal.Status == SILIKO_VAL_FLOAT)
+		if(SilikoValueGetStatus(argv[i]) == SilikoValueError)
 		{
-			if (argv[i].Status == SILIKO_VAL_FLOAT)
-			{
-				rVal.Float *= argv[i].Float;
-			}
-			else
-			{
-				rVal.Float *= (double)argv[i].Integer;
-			}
+			SilikoValueAssignCopy(result, argv[i]);
+			return result;
 		}
-		else {
-			if (argv[i].Status == SILIKO_VAL_FLOAT)
-			{
-				rVal.Float = (double)rVal.Integer * argv[i].Float;
-				rVal.Status = SILIKO_VAL_FLOAT;
-			}
-			else
-			{
-				rVal.Integer *= argv[i].Integer;
-			}
-		}
-	}
 
-	return rVal;
-}
-
-struct SilikoValue SilikoFunction_divide(int argc, struct SilikoValue *argv)
-{
-	struct SilikoValue rVal;
-	int i;
-
-	if (argc < 2)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
-
-	rVal = argv[0];
-
-	for (i = 1; i < argc; i++)
-	{
-		/* Division-by-Zero Error */
-		if ((argv[i].Status == SILIKO_VAL_FLOAT && argv[i].Float == 0.0)
-			|| (argv[i].Status == SILIKO_VAL_INTEGER && argv[i].Integer == 0))
+		if (SilikoValueGetStatus(result) == SilikoValueInteger
+			&& SilikoValueGetStatus(argv[i]) == SilikoValueInteger)
 		{
-			rVal.Status = SILIKO_VAL_ZERO_DIV_ERR;
-			return rVal;
+			SilikoValueAssignInteger(result,
+				SilikoValueToInteger(result)
+				* SilikoValueToInteger(argv[i]));
 		}
-
-		if (rVal.Status == SILIKO_VAL_FLOAT)
+		else
 		{
-			if (argv[i].Status == SILIKO_VAL_FLOAT)
-			{
-				rVal.Float /= argv[i].Float;
-			}
-			else
-			{
-				rVal.Float /= (double) argv[i].Integer;
-			}
-		}
-		else {
-			if (argv[i].Status == SILIKO_VAL_FLOAT)
-			{
-				rVal.Status = SILIKO_VAL_FLOAT;
-				rVal.Float = (double) rVal.Integer / argv[i].Float;
-			}
-			else if (rVal.Integer % argv[i].Integer == 0)
-			{
-				rVal.Integer /= argv[i].Integer;
-			}
-			else
-			{
-				rVal.Status = SILIKO_VAL_FLOAT;
-				rVal.Float = (double) rVal.Integer / (double) argv[i].Integer;
-			}
+			SilikoValueAssignReal(result,
+				SilikoValueToReal(result)
+				* SilikoValueToReal(argv[i]));
 		}
 	}
-	return rVal;
+	return result;
 }
 
-struct SilikoValue SilikoFunction_power(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_divide(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double runningValue;
-	double nextValue;
-	int i;
+	if (argc < 1)
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	runningValue = (argv[0].Status == SILIKO_VAL_INTEGER)
-		? (double) argv[0].Integer
-		: argv[0].Float;
-
-	for (i = 1; i < argc; i++)
+	SilikoValue *result = SilikoValueNewCopy(argv[0]);
+	if(SilikoValueGetStatus(result) == SilikoValueError)
+		return result;
+	for(int i = 1; i < argc; i++)
 	{
-		nextValue = (argv[i].Status == SILIKO_VAL_INTEGER)
-			? (double) argv[i].Integer
-			: argv[i].Float;
+		if(SilikoValueGetStatus(argv[i]) == SilikoValueError)
+		{
+			SilikoValueAssignCopy(result, argv[i]);
+			return result;
+		}
 
-		runningValue = pow(runningValue, nextValue);
+		if(SilikoValueToReal(argv[1]) == 0.0)
+		{
+			SilikoValueAssignError(result, SilikoErrorZeroDivision);
+			return result;
+		}
+
+		if (SilikoValueGetStatus(result) == SilikoValueInteger
+			&& SilikoValueGetStatus(argv[i]) == SilikoValueInteger
+			&& SilikoValueToInteger(result)
+				% SilikoValueToInteger(argv[i])
+				== 0)
+		{
+			SilikoValueAssignInteger(result,
+				SilikoValueToInteger(result)
+				/ SilikoValueToInteger(argv[i]));
+		}
+		else
+		{
+			SilikoValueAssignReal(result,
+				SilikoValueToReal(result)
+				/ SilikoValueToReal(argv[i]));
+		}
 	}
-
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = runningValue;
-	return rVal;
+	return result;
 }
 
-
-struct SilikoValue SilikoFunction_dice(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_power(int argc, SilikoValue **argv)
 {
-	if(argc != 2)
+	if (argc < 1)
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
+
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
+
+	double result = SilikoValueToReal(argv[0]);
+	for (int i = 1; i < argc; i++)
 	{
-		struct SilikoValue rVal = {SILIKO_VAL_BAD_ARGUMENTS};
-		rVal.Integer = 0;
-		return rVal;
+		if(SilikoValueGetStatus(argv[i]) == SilikoValueError)
+			return SilikoValueNewCopy(argv[i]);
+		result = pow(result, SilikoValueToReal(argv[i]));
 	}
+	return SilikoValueNewReal(result);
+}
 
-	long long int count = (argv[0].Status == SILIKO_VAL_INTEGER)
-		? argv[0].Integer
-		: (long long int) argv[0].Float;
+SilikoValue *SilikoFunction_dice(int argc, SilikoValue **argv)
+{
+	if (argc != 2)
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	long long int faces = (argv[1].Status == SILIKO_VAL_INTEGER)
-		? argv[1].Integer
-		: (long long int) argv[1].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
+
+	if (SilikoValueGetStatus(argv[1]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[1]);
+
+	long long int count = SilikoValueToInteger(argv[0]);
+	long long int faces = SilikoValueToInteger(argv[1]);
 
 	if (faces == 0)
-	{
-		struct SilikoValue rVal = {SILIKO_VAL_INTEGER};
-		rVal.Integer = 0;
-		return rVal;
-	}
+		return SilikoValueNewInteger(0);
 
-	static int hasSeeded = 0;
-	if (!hasSeeded)
+	static int has_seeded = 0;
+	if (!has_seeded)
 	{
-		hasSeeded = 1;
+		has_seeded = 1;
 		srand((unsigned int)time(NULL));
 	}
 
-	long long int runningTotal = 0;
+	long long int result = 0;
 	for (int i = 1; i <= count; i++)
-		runningTotal += (rand() % faces) + 1;
-
-	struct SilikoValue rVal = {SILIKO_VAL_INTEGER};
-	rVal.Integer = runningTotal;
-	return rVal;
+		result += (rand() % faces) + 1;
+	return SilikoValueNewInteger(result);
 }
 
-struct SilikoValue SilikoFunction_abs(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_abs(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	rVal = argv[0];
-	if (rVal.Status == SILIKO_VAL_FLOAT)
-		rVal.Float = fabs(rVal.Float);
-	else if (rVal.Status == SILIKO_VAL_INTEGER)
-		rVal.Integer = llabs(rVal.Integer);
-	return rVal;
+	switch(SilikoValueGetStatus(argv[0]))
+	{
+	case SilikoValueInteger:
+		return SilikoValueNewInteger(
+			llabs(SilikoValueToInteger(argv[0])));
+	case SilikoValueReal:
+		return SilikoValueNewReal(fabs(SilikoValueToReal(argv[0])));
+	default:
+		return SilikoValueNewCopy(argv[0]);
+	}
 }
 
-struct SilikoValue SilikoFunction_acos(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_acos(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double) argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	if (input < -1 || input > 1)
-	{
-		rVal.Status = SILIKO_VAL_DOMAIN_ERR;
-		return rVal;
-	}
+	double input = SilikoValueToReal(argv[0]);
+	if (input < -1.0 || input > 1.0)
+		return SilikoValueNewError(SilikoErrorDomain);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = acos(input);
-	return rVal;
+	return SilikoValueNewReal(acos(input));
 }
 
-struct SilikoValue SilikoFunction_asin(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_asin(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double) argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	if (input < -1 || input > 1)
-	{
-		rVal.Status = SILIKO_VAL_DOMAIN_ERR;
-		return rVal;
-	}
+	float input = SilikoValueToReal(argv[0]);
+	if (input < -1.0 || input > 1.0)
+		return SilikoValueNewError(SilikoErrorDomain);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = asin(input);
-	return rVal;
+	return SilikoValueNewReal(asin(input));
 }
 
-struct SilikoValue SilikoFunction_atan(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_atan(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double) argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = atan(input);
-	return rVal;
+	return SilikoValueNewReal(atan(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_ceil(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_ceil(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-	double result;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
-
-	result = ceil(input);
-	if (result <= LLONG_MAX && result >= LLONG_MIN)
+	switch(SilikoValueGetStatus(argv[0]))
 	{
-		rVal.Status = SILIKO_VAL_INTEGER;
-		rVal.Integer = (long long int)result;
-	}
-	else
+	case SilikoValueError:
+	case SilikoValueInteger:
+		return SilikoValueNewCopy(argv[0]);
+	case SilikoValueReal:
 	{
-		rVal.Status = SILIKO_VAL_FLOAT;
-		rVal.Float = result;
+		double result = ceil(SilikoValueToReal(argv[0]));
+		if (result <= LLONG_MAX && result >= LLONG_MIN)
+			return SilikoValueNewInteger((long long int) result);
+		else
+			return SilikoValueNewReal(result);
 	}
-	return rVal;
+	}
 }
 
-struct SilikoValue SilikoFunction_cos(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_cos(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = cos(input);
-	return rVal;
+	return SilikoValueNewReal(cos(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_cosh(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_cosh(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = cosh(input);
-	return rVal;
+	return SilikoValueNewReal(cosh(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_exp(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_exp(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = exp(input);
-	return rVal;
+	return SilikoValueNewReal(exp(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_floor(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_floor(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-	double result;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
-
-	result = floor(input);
-	if (result <= LLONG_MAX && result >= LLONG_MIN)
+	switch(SilikoValueGetStatus(argv[0]))
 	{
-		rVal.Status = SILIKO_VAL_INTEGER;
-		rVal.Integer = (long long int)result;
-	}
-	else
+	case SilikoValueError:
+	case SilikoValueInteger:
+		return SilikoValueNewCopy(argv[0]);
+	case SilikoValueReal:
 	{
-		rVal.Status = SILIKO_VAL_FLOAT;
-		rVal.Float = result;
+		double result = floor(SilikoValueToReal(argv[0]));
+		if (result <= LLONG_MAX && result >= LLONG_MIN)
+			return SilikoValueNewInteger((long long int) result);
+		else
+			return SilikoValueNewReal(result);
 	}
-	return rVal;
+	}
 }
 
-struct SilikoValue SilikoFunction_log(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_log(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = log(input);
-	return rVal;
+	return SilikoValueNewReal(log(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_log10(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_log10(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = (double) log10(input);
-	return rVal;
+	return SilikoValueNewReal(log10(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_sin(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_sin(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = sin(input);
-	return rVal;
+	return SilikoValueNewReal(sin(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_sinh(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_sinh(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = sinh(input);
-	return rVal;
+	return SilikoValueNewReal(sinh(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_sqrt(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_sqrt(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double inVal;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if ((argv[0].Status == SILIKO_VAL_INTEGER && argv[0].Integer < 0)
-		|| (argv[0].Status == SILIKO_VAL_FLOAT && argv[0].Float < 0.0))
-	{
-			rVal.Status = SILIKO_VAL_DOMAIN_ERR;
-			return rVal;
-	}
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	if (argv[0].Status == SILIKO_VAL_FLOAT)
-	{
-		inVal = argv[0].Float;
-	}
-	else
-	{
-		inVal = (double) argv[0].Integer;
-	}
+	if (signbit(SilikoValueToReal(argv[0])))
+		return SilikoValueNewError(SilikoErrorDomain);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = sqrt(inVal);
-
-	return rVal;
+	return SilikoValueNewReal(sqrt(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_tan(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_tan(int argc, SilikoValue **argv)
 {
-	// For some reason the C version of tan() doesn't throw an error for
-	// input of pi/2 or 3*pi/2. Probably due to the imprecision of
-	// floating point numbers.
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER) input = (double)argv[0].Integer;
-	else input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = tan(input);
-	return rVal;
+	return SilikoValueNewReal(tan(SilikoValueToReal(argv[0])));
 }
 
-struct SilikoValue SilikoFunction_tanh(int argc, struct SilikoValue *argv)
+SilikoValue *SilikoFunction_tanh(int argc, SilikoValue **argv)
 {
-	struct SilikoValue rVal;
-	double input;
-
 	if (argc != 1)
-	{
-		rVal.Status = SILIKO_VAL_BAD_ARGUMENTS;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorFunctionArguments);
 
-	if (argv[0].Status == SILIKO_VAL_INTEGER)
-		input = (double)argv[0].Integer;
-	else
-		input = argv[0].Float;
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueNewCopy(argv[0]);
 
-	rVal.Status = SILIKO_VAL_FLOAT;
-	rVal.Float = tanh(input);
-	return rVal;
+	return SilikoValueNewReal(tanh(SilikoValueToReal(argv[0])));
 }

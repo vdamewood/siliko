@@ -40,22 +40,26 @@ struct SilikoSyntaxTreeNode
 	SilikoSyntaxTreeNodeType Type;
 	union
 	{
-		struct SilikoValue Leaf;
+		SilikoValue *Leaf;
 		SilikoSyntaxTreeBranch *Branch;
 	};
 };
 
 SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void)
 {
-	SilikoSyntaxTreeNode *rVal = NULL;
+	SilikoSyntaxTreeNode *object = malloc(sizeof(SilikoSyntaxTreeNode));
+	if (!object)
+		return NULL;
 
-	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
+	object->Type = SILIKO_AST_LEAF;
+	object->Leaf = SilikoValueNewError(SilikoErrorSyntax);
+	if(!object->Leaf)
 	{
-		rVal->Type = SILIKO_AST_LEAF;
-		rVal->Leaf.Status = SILIKO_VAL_SYNTAX_ERR;
+		free (object);
+		return NULL;
 	}
 
-	return rVal;
+	return object;
 }
 
 SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void)
@@ -68,54 +72,61 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void)
 	return rVal;
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeNewLeaf(struct SilikoValue NewValue)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewLeaf(SilikoValue *source)
 {
-	SilikoSyntaxTreeNode *rVal = NULL;
+	SilikoSyntaxTreeNode *object
+		= malloc(sizeof(*object));
 
-	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
+	if (!object)
+		return NULL;
+
+	object->Type = SILIKO_AST_LEAF;
+	object->Leaf = SilikoValueNewCopy(source);
+	if(!object->Leaf)
 	{
-		rVal->Type = SILIKO_AST_LEAF;
-		rVal->Leaf.Status = NewValue.Status;
-		switch (rVal->Leaf.Status)
-		{
-		case SILIKO_VAL_INTEGER:
-			rVal->Leaf.Integer = NewValue.Integer;
-			break;
-		case SILIKO_VAL_FLOAT:
-			rVal->Leaf.Float = NewValue.Float;
-			break;
-		default:
-			rVal->Leaf.Integer = NewValue.Integer;
-			break;
-		}
+		free(object);
+		return NULL;
 	}
-	return rVal;
+
+	return object;
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromInteger(long long int NewValue)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromInteger(long long int source)
 {
-	SilikoSyntaxTreeNode *rVal = NULL;
+	SilikoSyntaxTreeNode *object
+		= malloc(sizeof(*object));
 
-	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
+	if (!object)
+		return NULL;
+
+	object->Type = SILIKO_AST_LEAF;
+	object->Leaf = SilikoValueNewInteger(source);
+	if(!object->Leaf)
 	{
-		rVal->Type = SILIKO_AST_LEAF;
-		rVal->Leaf.Status = SILIKO_VAL_INTEGER;
-		rVal->Leaf.Integer = NewValue;
+		free(object);
+		return NULL;
 	}
-	return rVal;
+
+	return object;
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double NewValue)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double source)
 {
-	SilikoSyntaxTreeNode *rVal = NULL;
+	SilikoSyntaxTreeNode *object
+		= malloc(sizeof(*object));
 
-	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
+	if (!object)
+		return NULL;
+
+	object->Type = SILIKO_AST_LEAF;
+	object->Leaf = SilikoValueNewReal(source);
+	if(!object->Leaf)
 	{
-		rVal->Type = SILIKO_AST_LEAF;
-		rVal->Leaf.Status = SILIKO_VAL_FLOAT;
-		rVal->Leaf.Float = NewValue;
+		free(object);
+		return NULL;
 	}
-	return rVal;
+
+	return object;
 }
 
 SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *NewId)
@@ -200,7 +211,7 @@ int SilikoSyntaxTreeIsError(SilikoSyntaxTreeNode *SyntaxTree)
 {
 	return
 		SyntaxTree->Type == SILIKO_AST_LEAF
-		&& SyntaxTree->Leaf.Status == SILIKO_VAL_SYNTAX_ERR;
+		&& SilikoValueGetStatus(SyntaxTree->Leaf) == SilikoValueError;
 }
 
 int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *Tree)
@@ -211,17 +222,8 @@ int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *Tree)
 	switch (Tree->Type)
 	{
 	case SILIKO_AST_LEAF:
-		switch(Tree->Leaf.Status)
-		{
-		case SILIKO_VAL_INTEGER:
-			Tree->Leaf.Integer *= -1;
-			return -1;
-		case SILIKO_VAL_FLOAT:
-			Tree->Leaf.Float *= -1.0;
-			return -1;
-		default:
-			return 0;
-		}
+		SilikoValueNegate(Tree->Leaf);
+		return -1;
 	case SILIKO_AST_BRANCH:
 		Tree->Branch->IsNegated = !Tree->Branch->IsNegated;
 		return -1;
@@ -246,70 +248,52 @@ void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *Node)
 	free(Node);
 }
 
-static int IsNumber(struct SilikoValue n)
+static SilikoValue *EvaluateBranch(SilikoSyntaxTreeBranch *Branch, SilikoFunctionCaller *Caller)
 {
-	return n.Status == SILIKO_VAL_INTEGER || n.Status == SILIKO_VAL_FLOAT;
-}
-
-static struct SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch, SilikoFunctionCaller *Caller)
-{
-	struct SilikoValue rVal;
-	struct SilikoValue *Arguments = NULL;
-
+	SilikoValue **Arguments = NULL;
 	if (Branch->Count)
 	{
-		if (!(Arguments =
-			calloc(Branch->Count, sizeof(struct SilikoValue))))
-		{
-			rVal.Status = SILIKO_VAL_MEMORY_ERR;
-			return rVal;
-		}
+		if (!(Arguments = calloc(Branch->Count, sizeof(*Arguments))))
+			return NULL;
 
 		for(int i = 0; i < Branch->Count; i++)
 		{
 			Arguments[i] = SilikoSyntaxTreeEvaluate(Branch->Children[i], Caller);
-			if(!IsNumber(Arguments[i]))
+			if(SilikoValueGetStatus(Arguments[i]) == SilikoValueError)
 			{
-				rVal = Arguments[i];
+				SilikoValue *error = Arguments[i];
+				Arguments[i] = NULL;
+				for (int j = 0; j < i; j++)
+					SilikoValueDelete(Arguments[j]);
 				free(Arguments);
-				return rVal;
+				return error;
 			}
 		}
 	}
 
-	rVal = SilikoFunctionCallerCall(Caller, Branch->Id, Branch->Count, Arguments);
+	SilikoValue *result
+		= SilikoFunctionCallerCall(
+			Caller, Branch->Id, Branch->Count, Arguments);
 	free(Arguments);
 
 	if (Branch->IsNegated)
-	{
-		if (rVal.Status == SILIKO_VAL_INTEGER)
-			rVal.Integer *= -1;
-		else if (rVal.Status == SILIKO_VAL_FLOAT)
-			rVal.Float *= -1.0;
-	}
-
-	return rVal;
+		SilikoValueNegate(result);
+	return result;
 }
 
-struct SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node, SilikoFunctionCaller *Caller)
+SilikoValue *SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node, SilikoFunctionCaller *Caller)
 {
-	struct SilikoValue rVal;
-
 	if (!Node)
-	{
-		rVal.Status = SILIKO_VAL_SYNTAX_ERR;
-		return rVal;
-	}
+		return SilikoValueNewError(SilikoErrorSyntax);
 
 	switch (Node->Type)
 	{
 	case SILIKO_AST_LEAF:
-		return Node->Leaf;
+		return SilikoValueNewCopy(Node->Leaf);
 	case SILIKO_AST_BRANCH:
 		return EvaluateBranch(Node->Branch, Caller);
 	default: // Shouldn't happen, but just in case.
-		rVal.Status = SILIKO_VAL_SYNTAX_ERR;
-		return rVal;
+		return SilikoValueNewError(SilikoErrorSyntax);
 	}
 }
 
@@ -318,7 +302,7 @@ int SilikoSyntaxTreeCollapse(SilikoSyntaxTreeNode *node, SilikoFunctionCaller *c
 	if (node->Type != SILIKO_AST_BRANCH)
 		return 0;
 
-	struct SilikoValue new_value = SilikoSyntaxTreeEvaluate(node, caller);
+	SilikoValue *new_value = SilikoSyntaxTreeEvaluate(node, caller);
 	DeleteBranch(node->Branch);
 	node->Type = SILIKO_AST_LEAF;
 	node->Leaf = new_value;

@@ -1,20 +1,24 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/SyntaxTree.h>
 
-Test(SyntaxTreeTests, NewIntZero) {
+Test(SyntaxTreeTests, NewIntZero)
+{
     SilikoSyntaxTreeNode *Node = SilikoSyntaxTreeNewFromInteger(0);
     cr_assert(SilikoSyntaxTreeGetType(Node) == SILIKO_AST_LEAF);
 
-    struct SilikoValue Value = SilikoSyntaxTreeEvaluate(Node, NULL);
-    cr_assert(Value.Status == SILIKO_VAL_INTEGER);
-    cr_assert(Value.Integer == 0L);
+    SilikoValue *test_value = SilikoSyntaxTreeEvaluate(Node, NULL);
+    cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger);
+    cr_assert(SilikoValueToInteger(test_value) == 0LL);
+    SilikoValueDelete(test_value);
 }
 
-Test(SyntaxTreeTests, NewFloatZero) {
+Test(SyntaxTreeTests, NewFloatZero)
+{
     SilikoSyntaxTreeNode *Node = SilikoSyntaxTreeNewFromFloat(0.0);
     cr_assert(SilikoSyntaxTreeGetType(Node) == SILIKO_AST_LEAF);
 
-    struct SilikoValue Value = SilikoSyntaxTreeEvaluate(Node, NULL);
-    cr_assert(Value.Status == SILIKO_VAL_FLOAT);
-    cr_assert(Value.Integer == 0.0);
+    SilikoValue *test_value = SilikoSyntaxTreeEvaluate(Node, NULL);
+    cr_assert(SilikoValueGetStatus(test_value) == SilikoValueReal);
+    cr_assert(SilikoValueToInteger(test_value) == 0.0);
+    SilikoValueDelete(test_value);
 }

@@ -155,21 +155,17 @@ SilikoFunctionPointer SilikoFunctionCallerGetFunction(SilikoFunctionCaller *Call
 		return NULL;
 }
 
-struct SilikoValue SilikoFunctionCallerCall(
-	SilikoFunctionCaller *Caller,
+SilikoValue *SilikoFunctionCallerCall(
+	SilikoFunctionCaller *caller,
 	const char *name,
 	int argc,
-	struct SilikoValue *argv)
+	SilikoValue **argv)
 {
-	SilikoFunctionPointer f;
-	struct SilikoValue rVal;
+	SilikoFunctionPointer function
+		= SilikoFunctionCallerGetFunction(caller, name);
 
-	f = SilikoFunctionCallerGetFunction(Caller, name);
-
-	if (!f)
-		rVal.Status = SILIKO_VAL_BAD_FUNCTION;
-	else
-		rVal = f(argc, argv);
-
-	return rVal;
+	if (!function)
+		return SilikoValueNewError(SilikoErrorFunctionName);
+	
+	return function(argc, argv);
 }

@@ -3,6 +3,8 @@
 #include <SilikoCore/StringSource.h>
 #include <SilikoCore/SyntaxTree.h>
 
+#include "Macros.h"
+
 #define InitValue(VALUE) _Generic((VALUE), \
     signed char:            SilikoValueInitInteger, \
     short int:              SilikoValueInitInteger, \
@@ -11,7 +13,6 @@
     long long int:          SilikoValueInitInteger, \
     float:                  SilikoValueInitFloat,   \
     double:                 SilikoValueInitFloat,   \
-    enum SilikoValueStatus: SilikoValueInitStatus,  \
     default:                SilikoValueInitInteger  \
 )(VALUE)
 
@@ -27,16 +28,17 @@ Test(ParserTests, NAME) \
 	SilikoFunctionCallerInstallFunctions(caller); \
 \
 	SilikoSyntaxTreeNode *tree = SilikoParseInfix(src); \
-    struct SilikoValue target = SILIKO_VALUE(TARGET); \
-	struct SilikoValue result = SilikoSyntaxTreeEvaluate(tree, caller); \
-    cr_assert(target.Status == result.Status); \
-    switch(result.Status) \
+    SilikoValue *target = SilikoValueNew(TARGET); \
+	SilikoValue *result = SilikoSyntaxTreeEvaluate(tree, caller); \
+    cr_assert(SilikoValueGetStatus(target) \
+        == SilikoValueGetStatus(result)); \
+    switch(SilikoValueGetStatus(result)) \
     { \
-    case SILIKO_VAL_INTEGER: \
-        cr_assert(target.Integer == result.Integer); \
+    case SilikoValueInteger: \
+        cr_assert(SilikoValueToInteger(target) == SilikoValueToInteger(result)); \
         break; \
-    case SILIKO_VAL_FLOAT: \
-        cr_assert(target.Float == result.Float); \
+    case SilikoValueReal: \
+        cr_assert(SilikoValueToReal(target) == SilikoValueToReal(result)); \
         break; \
     default: \
         break; \

@@ -36,18 +36,18 @@ typedef enum SilikoSyntaxTreeNodeType SilikoSyntaxTreeNodeType;
 struct SilikoSyntaxTreeNode;
 typedef struct SilikoSyntaxTreeNode SilikoSyntaxTreeNode;
 
-SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewLeaf(struct SilikoValue);
-SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromInteger(long long int IntegerValue);
-SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double FloatValue);
-SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *Id);
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewLeaf(SilikoValue *source);
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromInteger(long long int source);
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double source);
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *function_Name);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void);
-SILIKOCORE_EXPORT void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *SyntaxTree);
+SILIKOCORE_EXPORT void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *object);
 
 SILIKOCORE_EXPORT SilikoSyntaxTreeNodeType SilikoSyntaxTreeGetType(SilikoSyntaxTreeNode *SyntaxTree);
 SILIKOCORE_EXPORT int SilikoSyntaxTreeIsError(SilikoSyntaxTreeNode *SyntaxTree);
 
-SILIKOCORE_EXPORT struct SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree, SilikoFunctionCaller *Caller);
+SILIKOCORE_EXPORT SilikoValue *SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree, SilikoFunctionCaller *Caller);
 SILIKOCORE_EXPORT int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *SyntaxTree);
 
 SILIKOCORE_EXPORT int SilikoSyntaxTreePushLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);

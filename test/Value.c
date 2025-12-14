@@ -1,86 +1,48 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/Value.h>
 
-Test(ValueTests, NewIntZero) {
-    struct SilikoValue Value = SILIKO_VALUE(0LL);
-    cr_assert(Value.Status == SILIKO_VAL_INTEGER);
-    cr_assert(Value.Integer == 0LL);
+#include "Macros.h"
+
+#define VALUE_TEST(TEST_NAME, VALUE) \
+Test(ValueTests, TEST_NAME) \
+{ \
+    SilikoValue *test_value = SilikoValueNew(VALUE); \
+    cr_assert(test_value); \
+    cr_assert(SilikoValueGetStatus(test_value) == _Generic((VALUE), \
+        int:            SilikoValueInteger, \
+        long long int:  SilikoValueInteger, \
+        double:         SilikoValueReal \
+    )); \
+    cr_assert(_Generic((VALUE), \
+        int:            SilikoValueToInteger, \
+        long long int:  SilikoValueToInteger, \
+        double:         SilikoValueToReal \
+    )(test_value) == VALUE); \
+    SilikoValueDelete(test_value); \
 }
 
-Test(ValueTests, NewIntFortyTwo) {
-    struct SilikoValue Value = SILIKO_VALUE(42LL);
-    cr_assert(Value.Status == SILIKO_VAL_INTEGER);
-    cr_assert(Value.Integer == 42LL);
+// Errors require a separate macro because `enum`s
+// look like `int`s to the preprocessor.
+#define VALUE_ERROR_TEST(TEST_NAME, VALUE) \
+Test(ValueTests, TEST_NAME) \
+{ \
+    SilikoValue *test_value = SilikoValueNewError(VALUE); \
+    cr_assert(SilikoValueGetStatus(test_value) == SilikoValueError); \
+    cr_assert(SilikoValueToError(test_value) == VALUE); \
+    SilikoValueDelete(test_value); \
 }
 
-Test(ValueTests, NewIntNegativeOne) {
-    struct SilikoValue Value = SILIKO_VALUE(-1LL);
-    cr_assert(Value.Status == SILIKO_VAL_INTEGER);
-    cr_assert(Value.Integer == -1LL);
-}
+VALUE_TEST(NewIntZero, 0LL)
+VALUE_TEST(NewIntFortyTwo, 42LL)
+VALUE_TEST(NewIntNegativeOne, -1LL)
+VALUE_TEST(NewRealZero, 0.0)
+VALUE_TEST(NewRealOneeighth, 0.125)
+VALUE_TEST(NewRealNegativeZero, -0.0)
+VALUE_TEST(NewRealFortyTwo, 42.0)
+VALUE_TEST(NewRealNegativeOne, -1.0)
 
-Test(ValueTests, NewFloatZero) {
-    struct SilikoValue Value = SILIKO_VALUE(0.0);
-    cr_assert(Value.Status == SILIKO_VAL_FLOAT);
-    cr_assert(Value.Integer == 0.0);
-}
-
-Test(ValueTests, NewFloatNegativeZero) {
-    struct SilikoValue Value = SILIKO_VALUE(-0.0);
-    cr_assert(Value.Status == SILIKO_VAL_FLOAT);
-    cr_assert(Value.Float == -0.0);
-}
-
-Test(ValueTests, NewFloatOneEighth) {
-    struct SilikoValue Value = SILIKO_VALUE(0.125);
-    cr_assert(Value.Status == SILIKO_VAL_FLOAT);
-    cr_assert(Value.Float == 0.125);
-}
-
-Test(ValueTests, NewFloatFortyTwo) {
-    struct SilikoValue Value = SILIKO_VALUE(42.0);
-    cr_assert(Value.Status == SILIKO_VAL_FLOAT);
-    cr_assert(Value.Float == 42.0);
-}
-
-Test(ValueTests, NewFloatNegativeOne) {
-    struct SilikoValue Value = SILIKO_VALUE(-1.0);
-    cr_assert(Value.Status == SILIKO_VAL_FLOAT);
-    cr_assert(Value.Float == -1.0);
-}
-
-Test(ValueTests, NewErrorMemory)
-{
-    struct SilikoValue Value = {SILIKO_VAL_MEMORY_ERR};
-	cr_assert(Value.Status == SILIKO_VAL_MEMORY_ERR, "should: %d; is: %d; int: %lld", SILIKO_VAL_MEMORY_ERR, Value.Status, Value.Integer);
-}
-
-Test(ValueTests, NewErrorSyntax)
-{
-    struct SilikoValue Value = {SILIKO_VAL_SYNTAX_ERR};
-	cr_assert(Value.Status == SILIKO_VAL_SYNTAX_ERR);
-}
-
-Test(ValueTests, NewErrorFunctionLookup)
-{
-    struct SilikoValue Value = {SILIKO_VAL_BAD_FUNCTION};
-	cr_assert(Value.Status == SILIKO_VAL_BAD_FUNCTION);
-}
-
-Test(ValueTests, NewErrorFunctionArguments)
-{
-    struct SilikoValue Value = {SILIKO_VAL_BAD_ARGUMENTS};
-	cr_assert(Value.Status == SILIKO_VAL_BAD_ARGUMENTS);
-}
-
-Test(ValueTests, NewErrorFunctionDomain)
-{
-    struct SilikoValue Value = {SILIKO_VAL_DOMAIN_ERR};
-	cr_assert(Value.Status == SILIKO_VAL_DOMAIN_ERR);
-}
-
-Test(ValueTests, NewErrorFunctionRange)
-{
-    struct SilikoValue Value = {SILIKO_VAL_RANGE_ERR};
-	cr_assert(Value.Status == SILIKO_VAL_RANGE_ERR);
-}
+VALUE_ERROR_TEST(NewSyntaxError, SilikoErrorSyntax)
+VALUE_ERROR_TEST(NewFunctionNameError, SilikoErrorFunctionName)
+VALUE_ERROR_TEST(NewFunctionArgumentsError, SilikoErrorFunctionArguments)
+VALUE_ERROR_TEST(NewDomainError, SilikoErrorDomain)
+VALUE_ERROR_TEST(NewRangeError, SilikoErrorRange)

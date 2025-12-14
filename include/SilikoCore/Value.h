@@ -1,4 +1,4 @@
-/* Value.c: Data structure to represent a single value
+/* Value.h: Data structure to represent a single value
  * Copyright 2012-2025 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -20,53 +20,74 @@
 
 #include <SilikoCore/Api.h>
 
+#include <stdlib.h>
+
 #if defined __cplusplus
 extern "C" {
 #endif
 
+enum SilikoError
+{
+	SilikoErrorNone,
+	SilikoErrorMemory,
+	SilikoErrorSyntax,
+	SilikoErrorZeroDivision,
+	SilikoErrorFunctionName,
+	SilikoErrorFunctionArguments,
+	SilikoErrorDomain,
+	SilikoErrorRange
+};
+
 enum SilikoValueStatus
 {
-	SILIKO_VAL_INTEGER,       /* Success: The value is an integer. */
-	SILIKO_VAL_FLOAT,         /* Success: The value is a float. */
-	SILIKO_VAL_MEMORY_ERR,    /* Error: An attempt to allocate memory
-				    failed. */
-	SILIKO_VAL_SYNTAX_ERR,    /* Error: A syntax error was
-				    encountered. */
-	SILIKO_VAL_ZERO_DIV_ERR,  /* Error: Division by zero was
-				    attempted. */
-	SILIKO_VAL_BAD_FUNCTION,  /* Error: A function call could not be
-				    resolved to a valid function. */
-	SILIKO_VAL_BAD_ARGUMENTS, /* Error: A function call was made with
-				    a number of arguments that the
-				    function can't accept. */
-	SILIKO_VAL_DOMAIN_ERR,    /* Error: A function call resulted in a
-				    domain error. */
-	SILIKO_VAL_RANGE_ERR      /* Error: A function call resulted in a
-				    range error. */
+	SilikoValueError,
+	SilikoValueInteger,
+	SilikoValueReal
 };
 
-struct SilikoValue
-{
-	enum SilikoValueStatus Status;
-	union
-	{
-		long long int Integer;
-		double Float;
-	};
-};
+struct SilikoValue;
+typedef struct SilikoValue SilikoValue;
 
-#define SILIKO_VALUE(V) _Generic((V), \
-    enum SilikoValueStatus: \
-        (struct SilikoValue){V, {.Integer=0}}, \
-    long long int: \
-        (struct SilikoValue){SILIKO_VAL_INTEGER, .Integer=(V)}, \
-    default: \
-        (struct SilikoValue){SILIKO_VAL_INTEGER, .Integer=(long long int)(V)}, \
-    float: \
-        (struct SilikoValue){SILIKO_VAL_FLOAT, .Float=(double)(V)}, \
-    double: \
-        (struct SilikoValue){SILIKO_VAL_FLOAT, .Float=(V)} \
-)
+SILIKOCORE_EXPORT
+	SilikoValue *SilikoValueNewError(enum SilikoError source);
+SILIKOCORE_EXPORT
+	SilikoValue *SilikoValueNewInteger(long long int source);
+SILIKOCORE_EXPORT
+	SilikoValue *SilikoValueNewReal(double source);
+SILIKOCORE_EXPORT
+	SilikoValue *SilikoValueNewCopy(SilikoValue *source);
+SILIKOCORE_EXPORT
+	void SilikoValueDelete(SilikoValue *object);
+
+SILIKOCORE_EXPORT
+	enum SilikoError SilikoValueToError(const SilikoValue *object);
+SILIKOCORE_EXPORT
+	long long int SilikoValueToInteger(const SilikoValue *object);
+SILIKOCORE_EXPORT
+	double SilikoValueToReal(const SilikoValue *object);
+
+SILIKOCORE_EXPORT
+	void SilikoValueAssignError(
+		SilikoValue *object,
+		enum SilikoError source);
+SILIKOCORE_EXPORT
+	void SilikoValueAssignInteger(
+		SilikoValue *object,
+		long long int source);
+SILIKOCORE_EXPORT
+	void SilikoValueAssignReal(
+		SilikoValue *object,
+		double source);
+SILIKOCORE_EXPORT
+	void SilikoValueAssignCopy(
+		SilikoValue *object,
+		const SilikoValue *source);
+
+SILIKOCORE_EXPORT
+	enum SilikoValueStatus SilikoValueGetStatus(
+		const SilikoValue *object);
+SILIKOCORE_EXPORT
+	void SilikoValueNegate(SilikoValue *object);
 
 #if defined __cplusplus
 }
