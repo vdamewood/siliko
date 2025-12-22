@@ -39,7 +39,7 @@ typedef struct SilikoSyntaxTreeNode SilikoSyntaxTreeNode;
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewLeaf(SilikoValue *source);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromInteger(long long int source);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double source);
-SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *function_Name);
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(const char *function_Name);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void);
 SILIKOCORE_EXPORT void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *object);

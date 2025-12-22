@@ -25,7 +25,8 @@
 struct SilikoLexer
 {
 	SilikoDataSource *Source;
-	struct SilikoToken Token;
+	SilikoToken *Token;
+	int error;
 };
 typedef struct SilikoLexer SilikoLexer;
 
@@ -102,22 +103,18 @@ static int Append(Lexeme *Lex, char NewChar)
 
 void SilikoLexerAdvance(SilikoLexer *Lexer)
 {
-	SilikoDfaState dfaState = DFA_START;
-	Lexeme Lex = {NULL, 0, 4};
-
-	if (Lexer->Token.Type == SILIKO_TOK_ID)
-		free(Lexer->Token.Id);
-
-	if (Lexer->Token.Type == SILIKO_TOK_EOL || Lexer->Token.Type == SILIKO_TOK_ERROR)
+	if (SilikoTokenGetStatus(Lexer->Token) == SilikoTokenEndOfInput
+			|| Lexer->error)
 		return;
 
-	if (!(Lex.Buffer = malloc(Lex.End)))
+	Lexeme Lex = {malloc(4), 0, 4};
+	if (!(Lex.Buffer))
 	{
-		Lexer->Token.Type = SILIKO_TOK_ERROR;
-		Lexer->Token.Integer = 0;
+		Lexer->error = -1;
 		return;
 	}
 
+	SilikoDfaState dfaState = DFA_START;
 	while (dfaState != DFA_END)
 	switch (dfaState)
 	{
@@ -276,65 +273,51 @@ void SilikoLexerAdvance(SilikoLexer *Lexer)
 		}
 		break;
 	case DFA_TERM_INTEGER:
-		Lexer->Token.Type = SILIKO_TOK_INTEGER;
-		Lexer->Token.Integer = strtoll(Lex.Buffer, NULL, 10);
-		free(Lex.Buffer);
+		SilikoTokenAssignInteger(Lexer->Token, strtoll(Lex.Buffer, NULL, 10));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_FLOAT:
-		Lexer->Token.Type = SILIKO_TOK_FLOAT;
-		Lexer->Token.Float = atof(Lex.Buffer);
-		free(Lex.Buffer);
+		SilikoTokenAssignReal(Lexer->Token, atof(Lex.Buffer));
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_E:
-		Lexer->Token.Type = SILIKO_TOK_FLOAT;
-		Lexer->Token.Float = EULER;
-		free(Lex.Buffer);
+		SilikoTokenAssignReal(Lexer->Token, EULER);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_PI:
-		Lexer->Token.Type = SILIKO_TOK_FLOAT;
-		Lexer->Token.Float = PI;
-		free(Lex.Buffer);
+		SilikoTokenAssignReal(Lexer->Token, PI);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_CHAR:
-		Lexer->Token.Type = Lex.Buffer[0];
-		Lexer->Token.Integer = 0;
-		free(Lex.Buffer);
+		SilikoTokenAssignCharacter(Lexer->Token, Lex.Buffer[0]);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_STRING:
-		Lexer->Token.Type = SILIKO_TOK_ID;
-		Lexer->Token.Id = Lex.Buffer;
+		SilikoTokenAssignId(Lexer->Token, Lex.Buffer);
 		dfaState = DFA_END;
 		break;
 	case DFA_TERM_EOL:
-		Lexer->Token.Type = SILIKO_TOK_EOL;
-		Lexer->Token.Integer = 0;
-		free(Lex.Buffer);
+		SilikoTokenAssignEndOfInput(Lexer->Token);
 		dfaState = DFA_END;
 		break;
 	case DFA_ERROR:
-		Lexer->Token.Type = SILIKO_TOK_ERROR;
-		Lexer->Token.Integer = 0;
-		free(Lex.Buffer);
+		Lexer->error = -1;
 		dfaState = DFA_END;
 		break;
 	}
+	free(Lex.Buffer);
 }
 
 SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource)
 {
-	SilikoLexer *rVal = NULL;
+	SilikoLexer *rVal = malloc(sizeof(SilikoLexer));
 
-	if (!(rVal = malloc(sizeof(SilikoLexer))))
+	if (!(rVal))
 		return NULL;
 
 	rVal->Source = InputSource;
-	rVal->Token.Type = SILIKO_TOK_UNSET;
-	rVal->Token.Integer = 0;
+	rVal->Token = SilikoTokenNew();
+	rVal->error = 0;
 	SilikoLexerAdvance(rVal);
 
 	return rVal;
@@ -344,14 +327,13 @@ void SilikoLexerDelete(SilikoLexer *Lexer)
 {
 	if (Lexer)
 	{
-		if (Lexer->Token.Type == SILIKO_TOK_ID)
-			free(Lexer->Token.Id);
 		SilikoDataSourceDelete(Lexer->Source);
+		SilikoTokenDelete(Lexer->Token);
 		free(Lexer);
 	}
 }
 
-struct SilikoToken SilikoLexerGetCurrent(SilikoLexer *Lexer)
+const SilikoToken *SilikoLexerGetCurrent(SilikoLexer *Lexer)
 {
 	return Lexer->Token;
 }

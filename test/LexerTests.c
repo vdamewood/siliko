@@ -6,86 +6,100 @@
 Test(LexerTests, NAME) \
 { \
     SilikoDataSource *src = SilikoStringSourceNew(INSTRING); \
-    struct SilikoToken tokens[] = \
+    SilikoToken *tokens[] = \
     { \
         __VA_ARGS__ \
     }; \
     SilikoLexer *lex = SilikoLexerNew(src); \
-    for (int i = 0; i < sizeof tokens/sizeof(struct SilikoToken); i++) \
+    for (int i = 0; i < sizeof tokens/sizeof(SilikoToken*); i++) \
     { \
-        struct SilikoToken current = SilikoLexerGetCurrent(lex); \
-        cr_assert(current.Type == tokens[i].Type, \
+        const SilikoToken *current = SilikoLexerGetCurrent(lex); \
+        cr_assert(SilikoTokenGetStatus(current) == SilikoTokenGetStatus(tokens[i]), \
             "Types[%i]: %i/%c %i/%c", \
             i, \
-            current.Type, \
-            current.Type, \
-            tokens[i].Type, \
-            tokens[i].Type \
+            SilikoTokenGetStatus(current), \
+            SilikoTokenGetStatus(current), \
+            SilikoTokenGetStatus(tokens[i]), \
+            SilikoTokenGetStatus(tokens[i]) \
         ); \
-        switch(current.Type) \
+        switch(SilikoTokenGetStatus(current)) \
         { \
-        case SILIKO_TOK_INTEGER: \
-            cr_assert(current.Integer == tokens[i].Integer); \
+        case SilikoTokenCharacter: \
+            cr_assert(SilikoTokenGetCharacter(current) == SilikoTokenGetCharacter(tokens[i])); \
             break; \
-        case SILIKO_TOK_FLOAT: \
-            cr_assert(current.Float == tokens[i].Float); \
+        case SilikoTokenInteger: \
+            cr_assert(SilikoTokenGetInteger(current) == SilikoTokenGetInteger(tokens[i])); \
             break; \
+        case SilikoTokenReal: \
+            cr_assert(SilikoTokenGetReal(current) == SilikoTokenGetReal(tokens[i])); \
+            break; \
+        case SilikoTokenId: \
+            cr_assert( \
+                strcmp( \
+                    SilikoTokenGetId(current), \
+                    SilikoTokenGetId(tokens[i])) \
+                == 0); \
         default: \
             break; \
         } \
         SilikoLexerAdvance(lex); \
+        SilikoTokenDelete(tokens[i]); \
+        tokens[i] = NULL; \
     } \
 }
 
 TestLexer(Nothing,
     "",
-    {SILIKO_TOK_EOL, {.Integer=0}}
+    SilikoTokenNewEndOfInput()
 )
 
 TestLexer(AnInteger,
     "42386",
-    {SILIKO_TOK_INTEGER, {.Integer=42386}}
+    SilikoTokenNewInteger(42386),
+    SilikoTokenNewEndOfInput()
 )
 
 TestLexer(AFloat,
     "32156.25",
-    {SILIKO_TOK_FLOAT, {.Float=32156.25}}
+    SilikoTokenNewReal(32156.25),
+    SilikoTokenNewEndOfInput()
 )
 
 TestLexer(AnId,
     "beep",
-    {SILIKO_TOK_ID, {.Id="beep"}}
+    SilikoTokenNewId("beep"),
+    SilikoTokenNewEndOfInput()
 )
 
 TestLexer(TwoPlusTwo,
     "2 + 2.0",
-    {SILIKO_TOK_INTEGER, {.Integer=2}},
-    {SILIKO_TOK_ADDITION, {.Integer=0}},
-    {SILIKO_TOK_FLOAT, {.Float=2.0}},
-    {SILIKO_TOK_EOL, {.Integer=0}}
+    SilikoTokenNewInteger(2),
+    SilikoTokenNewCharacter('+'),
+    SilikoTokenNewReal(2.0),
+    SilikoTokenNewEndOfInput()
 )
 
 TestLexer(SomethingComplex,
     "3d6 + -5 * (sin(3.25)/cos(5.125))",
-    {SILIKO_TOK_INTEGER, {.Integer=3}},
-    {SILIKO_TOK_DICE, {.Integer=0}},
-    {SILIKO_TOK_INTEGER, {.Integer=6}},
-    {SILIKO_TOK_ADDITION, {.Integer=0}},
-    {SILIKO_TOK_SUBTRACT, {.Integer=0}},
-    {SILIKO_TOK_INTEGER, {.Integer=5}},
-    {SILIKO_TOK_MULTIPLY, {.Integer=0}},
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_ID, {.Id="sin"}},
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_FLOAT, {.Float=3.25}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_DIVISION, {.Integer=0}},
-    {SILIKO_TOK_ID, {.Id="cos"}},
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_FLOAT, {.Float=5.125}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_EOL, {.Integer=0}}
+    SilikoTokenNewInteger(3),
+    SilikoTokenNewCharacter('d'),
+    SilikoTokenNewInteger(6),
+    SilikoTokenNewCharacter('+'),
+    SilikoTokenNewCharacter('-'),
+    SilikoTokenNewInteger(5),
+    SilikoTokenNewCharacter('*'),
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewId("sin"),
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewReal(3.25),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewCharacter('/'),
+    SilikoTokenNewId("cos"),
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewReal(5.125),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewEndOfInput()
 )
 
 // No, this won't parse using the existing parser, but you could write
@@ -95,29 +109,29 @@ TestLexer(SomethingComplexLispy,
     "\t(+ (d 3 6) -5)\n"
     "\t(/ (sin 3.25)\n"
     "\t\t(cos 5.125)))\n",
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_MULTIPLY, {.Integer=0}},
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_ADDITION, {.Integer=0}},
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_DICE, {.Integer=0}},
-    {SILIKO_TOK_INTEGER, {.Integer=3}},
-    {SILIKO_TOK_INTEGER, {.Integer=6}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_SUBTRACT, {.Integer=0}},
-    {SILIKO_TOK_INTEGER, {.Integer=5}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_DIVISION, {.Integer=0}},
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_ID, {.Id="sin"}},
-    {SILIKO_TOK_FLOAT, {.Float=3.25}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_LPAREN, {.Integer=0}},
-    {SILIKO_TOK_ID, {.Id="cos"}},
-    {SILIKO_TOK_FLOAT, {.Float=5.125}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_RPAREN, {.Integer=0}},
-    {SILIKO_TOK_EOL, {.Integer=0}}
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewCharacter('*'),
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewCharacter('+'),
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewCharacter('d'),
+    SilikoTokenNewInteger(3),
+    SilikoTokenNewInteger(6),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewCharacter('-'),
+    SilikoTokenNewInteger(5),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewCharacter('/'),
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewId("sin"),
+    SilikoTokenNewReal(3.25),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewCharacter('('),
+    SilikoTokenNewId("cos"),
+    SilikoTokenNewReal(5.125),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewCharacter(')'),
+    SilikoTokenNewEndOfInput()
 )

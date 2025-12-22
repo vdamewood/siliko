@@ -37,7 +37,7 @@ SILIKOCORE_EXPORT
 SILIKOCORE_EXPORT
     void SilikoLexerAdvance(SilikoLexer*);
 SILIKOCORE_EXPORT
-    struct SilikoToken SilikoLexerGetCurrent(SilikoLexer*);
+    const SilikoToken *SilikoLexerGetCurrent(SilikoLexer*);
 
 #if defined __cplusplus
 }

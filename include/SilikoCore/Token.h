@@ -24,35 +24,64 @@
 extern "C" {
 #endif
 
-enum SilikoTokenType
+enum SilikoTokenStatus
 {
-	SILIKO_TOK_ERROR = -1,
-	SILIKO_TOK_UNSET = 0,
-	SILIKO_TOK_LPAREN = '(',
-	SILIKO_TOK_RPAREN = ')',
-	SILIKO_TOK_MULTIPLY = '*',
-	SILIKO_TOK_ADDITION = '+',
-	SILIKO_TOK_COMMA = ',',
-	SILIKO_TOK_SUBTRACT = '-',
-	SILIKO_TOK_DIVISION = '/',
-	SILIKO_TOK_EXPONENT = '^',
-	SILIKO_TOK_DICE = 'd',
-	SILIKO_TOK_INTEGER = 256,
-	SILIKO_TOK_FLOAT,
-	SILIKO_TOK_ID,
-	SILIKO_TOK_EOL
+		SilikoTokenUnset,
+		SilikoTokenInteger,
+		SilikoTokenReal,
+		SilikoTokenCharacter,
+		SilikoTokenId,
+		SilikoTokenEndOfInput
 };
 
-struct SilikoToken
-{
-	enum SilikoTokenType Type;
-	union
-	{
-		char *Id;
-		long long int Integer;
-		double Float;
-	};
-};
+struct SilikoToken;
+typedef struct SilikoToken SilikoToken;
+
+SILIKOCORE_EXPORT
+	SilikoToken *SilikoTokenNew();
+SILIKOCORE_EXPORT
+	SilikoToken *SilikoTokenNewInteger(long long int source);
+SILIKOCORE_EXPORT
+	SilikoToken *SilikoTokenNewReal(double source);
+SILIKOCORE_EXPORT
+	SilikoToken *SilikoTokenNewCharacter(char source);
+SILIKOCORE_EXPORT
+	SilikoToken *SilikoTokenNewId(const char *source);
+SILIKOCORE_EXPORT
+	SilikoToken *SilikoTokenNewEndOfInput();
+SILIKOCORE_EXPORT
+	SilikoToken *SilikoTokenNewCopy(const SilikoToken *source);
+SILIKOCORE_EXPORT
+	void SilikoTokenDelete(SilikoToken *object);
+
+SILIKOCORE_EXPORT
+	void SilikoTokenAssignInteger(
+		SilikoToken *object,
+		long long int source);
+SILIKOCORE_EXPORT
+	void SilikoTokenAssignReal(SilikoToken *object, double source);
+SILIKOCORE_EXPORT
+	void SilikoTokenAssignCharacter(SilikoToken *object, char source);
+SILIKOCORE_EXPORT
+	void SilikoTokenAssignId(SilikoToken *object, const char *source);
+SILIKOCORE_EXPORT
+	void SilikoTokenAssignEndOfInput(SilikoToken *object);
+SILIKOCORE_EXPORT
+	void SilikoTokenAssignCopy(
+		SilikoToken *object,
+		const SilikoToken *source);
+
+SILIKOCORE_EXPORT
+	enum SilikoTokenStatus SilikoTokenGetStatus(
+		const SilikoToken *object);
+SILIKOCORE_EXPORT
+	long long int SilikoTokenGetInteger(const SilikoToken *object);
+SILIKOCORE_EXPORT
+	double SilikoTokenGetReal(const SilikoToken *object);
+SILIKOCORE_EXPORT
+	char SilikoTokenGetCharacter(const SilikoToken *object);
+SILIKOCORE_EXPORT
+	const char *SilikoTokenGetId(const SilikoToken *object);
 
 #if defined __cplusplus
 }

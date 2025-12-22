@@ -129,7 +129,7 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double source)
 	return object;
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *NewId)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(const char *NewId)
 {
 	const int DefaultSize = 4;
 	SilikoSyntaxTreeNode *rVal = NULL;
