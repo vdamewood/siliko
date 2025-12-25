@@ -29,6 +29,9 @@
 #define LIB_TYPE VFT_STATIC_LIB
 #endif
 
+#define STRINGIFY_TOKEN(X) #X
+#define STRINGIFY_MACRO(X) STRINGIFY_TOKEN(X)
+
 VS_VERSION_INFO  VERSIONINFO
 FILEVERSION      @SilikoCore_VERSION_MAJOR@,@SilikoCore_VERSION_MINOR@,@SilikoCore_VERSION_PATCH@,0
 PRODUCTVERSION   @SilikoCore_VERSION_MAJOR@,@SilikoCore_VERSION_MINOR@,@SilikoCore_VERSION_PATCH@,0
@@ -47,7 +50,7 @@ BEGIN
             VALUE "FileVersion",      "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@"
             VALUE "InternalName",     "Siliko Core"
             VALUE "LegalCopyright",   "@SILIKO_CORE_COPYRIGHT@"
-            VALUE "OriginalFilename", SILIKO_CORE_ORIGINAL_FILENAME
+            VALUE "OriginalFilename", STRINGIFY_MACRO(SILIKO_CORE_ORIGINAL_FILENAME)
             VALUE "ProductName",      "Siliko Core"
             VALUE "ProductVersion",   "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@"
         END

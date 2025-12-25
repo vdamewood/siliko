@@ -182,7 +182,7 @@ if(WIN32)
   	)
 	target_compile_definitions(SilikoCore
 		PRIVATE
-			"SILIKO_CORE_ORIGINAL_FILENAME=\"$<TARGET_FILE_NAME:SilikoCore>\""
+			"SILIKO_CORE_ORIGINAL_FILENAME=$<TARGET_FILE_NAME:SilikoCore>"
 	)
 	target_sources(SilikoCore
 		PRIVATE
