@@ -57,8 +57,8 @@ target_sources(SilikoCore
 		src/Functions.c
 		src/FunctionCaller.c
 		src/SyntaxTree.c
-		src/DataSource.c
-		src/StringSource.c
+		src/Input.c
+		src/StringInput.c
 		src/Lexer.c
 		src/InfixParser.c
 		src/Token.c
@@ -122,8 +122,8 @@ set(PUBLIC_HEADERS
 	include/SilikoCore/Value.h
 	include/SilikoCore/FunctionCaller.h
 	include/SilikoCore/SyntaxTree.h
-	include/SilikoCore/DataSource.h
-	include/SilikoCore/StringSource.h
+	include/SilikoCore/Input.h
+	include/SilikoCore/StringInput.h
 	include/SilikoCore/Token.h
 	include/SilikoCore/Lexer.h
 	include/SilikoCore/InfixParser.h

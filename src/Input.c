@@ -1,4 +1,4 @@
-/* InfixParser.h: Infix notation parser
+/* Input.c: Abstract interface for parser input stream
  * Copyright 2012-2025 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -15,22 +15,41 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_CORE_INFIX_PARSER_H
-#define SILIKO_CORE_INFIX_PARSER_H
+#include <stdlib.h>
 
-#include <SilikoCore/Api.h>
 #include <SilikoCore/Input.h>
-#include <SilikoCore/SyntaxTree.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
+struct SilikoInput
+{
+	const struct SilikoInputVTable *v_table;
+	void *state;
+};
 
-SILIKOCORE_EXPORT
-    SilikoSyntaxTreeNode *SilikoParseInfix(SilikoInput *input);
-
-#if defined __cplusplus
+SilikoInput *SilikoInputNew(
+	const struct SilikoInputVTable *source_table,
+	void *source_state)
+{
+	SilikoInput *object = malloc(sizeof(*object));
+	if (object)
+	{
+		object->v_table = source_table;
+		object->state = source_state;
+	}
+	return object;
 }
-#endif
 
-#endif // SILIKO_CORE_INFIX_PARSER_H
+int SilikoInputAdvance(SilikoInput *object)
+{
+	return object->v_table->advanceVirt(object->state);
+}
+
+char SilikoInputGetCharacter(SilikoInput *object)
+{
+	return object->v_table->getCharacterVirt(object->state);
+}
+
+void SilikoInputDelete(SilikoInput *object)
+{
+	object->v_table->deleteVirt(object->state);
+	free(object);
+}

@@ -1,6 +1,6 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/InfixParser.h>
-#include <SilikoCore/StringSource.h>
+#include <SilikoCore/StringInput.h>
 #include <SilikoCore/SyntaxTree.h>
 
 #include "Macros.h"
@@ -20,7 +20,7 @@
 Test(ParserTests, NAME) \
 { \
 	const char Input[] = INPUT; \
-	SilikoDataSource * src = SilikoStringSourceNew(Input); \
+	SilikoInput * src = SilikoStringInputNew(Input); \
 	cr_assert(src != NULL); \
 	SilikoFunctionCaller *caller = SilikoFunctionCallerNew(); \
 	cr_assert(caller != NULL); \

@@ -1,4 +1,4 @@
-/* StringSource.c: Support for reading from a string
+/* StringInput.c: Implementation of string as parser input stream
  * Copyright 2012-2025 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -18,25 +18,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <SilikoCore/StringSource.h>
+#include <SilikoCore/StringInput.h>
 
 #if defined _WIN32
 #define strdup _strdup
 #endif
 
-struct SilikoStringSourceState
+struct StringInputState
 {
 	char *string;
 	char *current;
 };
 
-typedef struct SilikoStringSourceState SilikoStringSourceState;
-
-static int SilikoStringSourceAdvance(void *State)
+static int advance(void *void_state)
 {
-	if (((SilikoStringSourceState *)State)->current)
+	struct StringInputState *state = void_state;
+
+	if (state->current)
 	{
-		((SilikoStringSourceState *)State)->current++;
+		state->current++;
 		return -1;
 	}
 	else
@@ -45,43 +45,48 @@ static int SilikoStringSourceAdvance(void *State)
 	}
 }
 
-static char SilikoStringSourceGetCurrent(void *State)
+static char getCharacter(void *void_state)
 {
-	return *((SilikoStringSourceState *)State)->current;
+	struct StringInputState *state = void_state;
+
+	return *state->current;
 }
 
-static void SilikoStringSourceDelete(void *State)
+static void delete(void *void_state)
 {
-	if (State)
-		free(((SilikoStringSourceState *)State)->string);
-	free(State);
+	struct StringInputState *state = void_state;
+
+	if (state)
+		free(state->string);
+	free(state);
 }
 
-SilikoDataSource *SilikoStringSourceNew(const char *NewInput)
-{
-	SilikoStringSourceState *state = NULL;
-	SilikoDataSource *source = NULL;
+static const struct SilikoInputVTable vTable = {
+	.advanceVirt = advance,
+	.getCharacterVirt = getCharacter,
+	.deleteVirt = delete
+};
 
-	if (!(state = malloc(sizeof(SilikoStringSourceState))))
+SilikoInput *SilikoStringInputNew(const char *source)
+{
+	struct StringInputState *state = malloc(sizeof(*state));
+	if (!state)
 		return NULL;
 
-	if (!(state->string = strdup(NewInput)))
+	if (!(state->string = strdup(source)))
 	{
 		free(state);
 		return NULL;
 	}
 	state->current = state->string;
 
-	if (!(source = SilikoDataSourceNew(
-		state,
-		SilikoStringSourceAdvance,
-		SilikoStringSourceGetCurrent,
-		SilikoStringSourceDelete)))
+	SilikoInput *object = SilikoInputNew(&vTable, state);
+	if (!object)
 	{
 		free(state->string);
 		free(state);
 		return NULL;
 	}
-	
-	return source;
+
+	return object;
 }

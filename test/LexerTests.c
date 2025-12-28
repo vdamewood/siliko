@@ -1,11 +1,12 @@
 #include <criterion/criterion.h>
-#include <SilikoCore/StringSource.h>
+#include <SilikoCore/Input.h>
+#include <SilikoCore/StringInput.h>
 #include <SilikoCore/Lexer.h>
 
 #define TestLexer(NAME, INSTRING, ...) \
 Test(LexerTests, NAME) \
 { \
-    SilikoDataSource *src = SilikoStringSourceNew(INSTRING); \
+    SilikoInput *src = SilikoStringInputNew(INSTRING); \
     SilikoToken *tokens[] = \
     { \
         __VA_ARGS__ \

@@ -1,23 +1,23 @@
 #include <criterion/criterion.h>
-#include <SilikoCore/DataSource.h>
-#include <SilikoCore/StringSource.h>
+#include <SilikoCore/Input.h>
+#include <SilikoCore/StringInput.h>
 
 #define SourceTest(NAME, STRING) \
 Test(StringSourceTests, NAME) \
 { \
     char input[] = STRING; \
-    SilikoDataSource *source = SilikoStringSourceNew(input); \
+    SilikoInput *source = SilikoStringInputNew(input); \
 \
     for (int i = 0; i < sizeof input; i++) \
     { \
-        cr_assert(SilikoDataSourceGetCurrent(source) == input[i]); \
-        SilikoDataSourceAdvance(source); \
+        cr_assert(SilikoInputGetCharacter(source) == input[i]); \
+        SilikoInputAdvance(source); \
     } \
     cr_assert( \
-        SilikoDataSourceGetCurrent(source) == '\0' \
+        SilikoInputGetCharacter(source) == '\0' \
         && input[sizeof input - 1] == '\0' \
     ); \
-    SilikoDataSourceDelete(source); \
+    SilikoInputDelete(source); \
 }
 
 SourceTest(EmptryString, "")

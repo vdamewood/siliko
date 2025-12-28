@@ -19,7 +19,7 @@
 #define SILIKO_CORE_LEXER_H
 
 #include <SilikoCore/Api.h>
-#include <SilikoCore/DataSource.h>
+#include <SilikoCore/Input.h>
 #include <SilikoCore/Token.h>
 
 #if defined __cplusplus
@@ -29,15 +29,11 @@ extern "C" {
 struct SilikoLexer;
 typedef struct SilikoLexer SilikoLexer;
 
+SILIKOCORE_EXPORT SilikoLexer *SilikoLexerNew(SilikoInput *input);
+SILIKOCORE_EXPORT void SilikoLexerDelete(SilikoLexer *object);
+SILIKOCORE_EXPORT void SilikoLexerAdvance(SilikoLexer *object);
 SILIKOCORE_EXPORT
-    SilikoLexer *SilikoLexerNew(SilikoDataSource *input);
-SILIKOCORE_EXPORT
-    void SilikoLexerDelete(SilikoLexer*);
-
-SILIKOCORE_EXPORT
-    void SilikoLexerAdvance(SilikoLexer*);
-SILIKOCORE_EXPORT
-    const SilikoToken *SilikoLexerGetCurrent(SilikoLexer*);
+    const SilikoToken *SilikoLexerGetCurrent(SilikoLexer *object);
 
 #if defined __cplusplus
 }

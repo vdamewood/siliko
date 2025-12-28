@@ -412,7 +412,7 @@ static void GetArguments(SilikoLexer *lexer, SilikoSyntaxTreeNode *rVal)
 }
 
 
-SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *Input)
+SilikoSyntaxTreeNode *SilikoParseInfix(SilikoInput *Input)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 	SilikoLexer *lexer = NULL;
