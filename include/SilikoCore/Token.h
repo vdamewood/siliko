@@ -40,13 +40,13 @@ typedef struct SilikoToken SilikoToken;
 SILIKOCORE_EXPORT
 	SilikoToken *SilikoTokenNew();
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewInteger(long long int source);
+	SilikoToken *SilikoTokenNewFromInteger(long long int source);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewReal(double source);
+	SilikoToken *SilikoTokenNewFromReal(double source);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewCharacter(char source);
+	SilikoToken *SilikoTokenNewFromCharacter(char source);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewId(const char *source);
+	SilikoToken *SilikoTokenNewFromId(const char *source);
 SILIKOCORE_EXPORT
 	SilikoToken *SilikoTokenNewEndOfInput();
 SILIKOCORE_EXPORT
@@ -67,7 +67,7 @@ SILIKOCORE_EXPORT
 SILIKOCORE_EXPORT
 	void SilikoTokenAssignEndOfInput(SilikoToken *object);
 SILIKOCORE_EXPORT
-	void SilikoTokenAssignCopy(
+	void SilikoTokenCopy(
 		SilikoToken *object,
 		const SilikoToken *source);
 

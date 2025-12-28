@@ -9,7 +9,7 @@ Test(SyntaxTreeTests, NewIntZero)
 
     SilikoValue *test_value = SilikoSyntaxTreeEvaluate(Node, NULL);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger);
-    cr_assert(SilikoValueToInteger(test_value) == 0LL);
+    cr_assert(SilikoValueGetInteger(test_value) == 0LL);
     SilikoValueDelete(test_value);
 }
 
@@ -20,7 +20,7 @@ Test(SyntaxTreeTests, NewFloatZero)
 
     SilikoValue *test_value = SilikoSyntaxTreeEvaluate(Node, NULL);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueReal);
-    cr_assert(SilikoValueToInteger(test_value) == 0.0);
+    cr_assert(SilikoValueGetInteger(test_value) == 0.0);
     SilikoValueDelete(test_value);
 }
 
@@ -50,6 +50,6 @@ Test(SyntaxTreeTests, TwoPlusThreeIsFive)
         "Evalutes to the wrong type. Should be: %d  Is: %d",
             SilikoValueInteger,
             SilikoValueGetStatus(test_value));
-    cr_assert(SilikoValueToInteger(test_value) == 5);
+    cr_assert(SilikoValueGetInteger(test_value) == 5);
     SilikoValueDelete(test_value);
 }

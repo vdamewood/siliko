@@ -49,45 +49,47 @@ struct SilikoValue;
 typedef struct SilikoValue SilikoValue;
 
 SILIKOCORE_EXPORT
-	SilikoValue *SilikoValueNewError(enum SilikoError source);
+SilikoValue *SilikoValueNew(void);
 SILIKOCORE_EXPORT
-	SilikoValue *SilikoValueNewInteger(long long int source);
+SilikoValue *SilikoValueNewFromError(enum SilikoError source);
 SILIKOCORE_EXPORT
-	SilikoValue *SilikoValueNewReal(double source);
+SilikoValue *SilikoValueNewFromInteger(long long int source);
 SILIKOCORE_EXPORT
-	SilikoValue *SilikoValueNewCopy(SilikoValue *source);
+SilikoValue *SilikoValueNewFromReal(double source);
 SILIKOCORE_EXPORT
-	void SilikoValueDelete(SilikoValue *object);
+SilikoValue *SilikoValueNewCopy(const SilikoValue *source);
+SILIKOCORE_EXPORT
+void SilikoValueDelete(SilikoValue *object);
 
 SILIKOCORE_EXPORT
-	enum SilikoError SilikoValueToError(const SilikoValue *object);
+void SilikoValueAssignError(
+	SilikoValue *object,
+	enum SilikoError source);
 SILIKOCORE_EXPORT
-	long long int SilikoValueToInteger(const SilikoValue *object);
+void SilikoValueAssignInteger(
+	SilikoValue *object,
+	long long int source);
 SILIKOCORE_EXPORT
-	double SilikoValueToReal(const SilikoValue *object);
+void SilikoValueAssignReal(
+	SilikoValue *object,
+	double source);
+SILIKOCORE_EXPORT
+void SilikoValueCopy(
+	SilikoValue *object,
+	const SilikoValue *source);
 
 SILIKOCORE_EXPORT
-	void SilikoValueAssignError(
-		SilikoValue *object,
-		enum SilikoError source);
+enum SilikoValueStatus SilikoValueGetStatus(
+	const SilikoValue *object);
 SILIKOCORE_EXPORT
-	void SilikoValueAssignInteger(
-		SilikoValue *object,
-		long long int source);
+enum SilikoError SilikoValueGetError(const SilikoValue *object);
 SILIKOCORE_EXPORT
-	void SilikoValueAssignReal(
-		SilikoValue *object,
-		double source);
+long long int SilikoValueGetInteger(const SilikoValue *object);
 SILIKOCORE_EXPORT
-	void SilikoValueAssignCopy(
-		SilikoValue *object,
-		const SilikoValue *source);
+double SilikoValueGetReal(const SilikoValue *object);
 
 SILIKOCORE_EXPORT
-	enum SilikoValueStatus SilikoValueGetStatus(
-		const SilikoValue *object);
-SILIKOCORE_EXPORT
-	void SilikoValueNegate(SilikoValue *object);
+void SilikoValueNegate(SilikoValue *object);
 
 #if defined __cplusplus
 }

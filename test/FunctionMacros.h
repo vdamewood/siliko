@@ -37,7 +37,7 @@ Test(SUITE, NAME) \
 #define TestFunctionForEpsilon(NAME, FUNCTION, RESULT, EPSILON, ...) \
     TestFunction(NAME, FUNCTION, \
         SilikoValueReal, \
-        (fabs(SilikoValueToReal(result) - RESULT) <= EPSILON), \
+        (fabs(SilikoValueGetReal(result) - RESULT) <= EPSILON), \
         __VA_ARGS__ \
 )
 
@@ -54,14 +54,14 @@ Test(SUITE, NAME) \
             default:                SilikoValueInteger  \
         ), \
         (_Generic((RESULT), \
-            signed char:            SilikoValueToInteger(result), \
-            short int:              SilikoValueToInteger(result), \
-            int:                    SilikoValueToInteger(result), \
-            long int:               SilikoValueToInteger(result), \
-            long long int:          SilikoValueToInteger(result), \
-            float:                  SilikoValueToReal(result),   \
-            double:                 SilikoValueToReal(result),   \
-            default:                SilikoValueToInteger(result)  \
+            signed char:            SilikoValueGetInteger(result), \
+            short int:              SilikoValueGetInteger(result), \
+            int:                    SilikoValueGetInteger(result), \
+            long int:               SilikoValueGetInteger(result), \
+            long long int:          SilikoValueGetInteger(result), \
+            float:                  SilikoValueGetReal(result),   \
+            double:                 SilikoValueGetReal(result),   \
+            default:                SilikoValueGetInteger(result)  \
         ) == RESULT), \
         __VA_ARGS__ \
 )

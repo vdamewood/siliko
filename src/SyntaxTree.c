@@ -52,7 +52,7 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void)
 		return NULL;
 
 	object->Type = SILIKO_AST_LEAF;
-	object->Leaf = SilikoValueNewError(SilikoErrorSyntax);
+	object->Leaf = SilikoValueNewFromError(SilikoErrorSyntax);
 	if(!object->Leaf)
 	{
 		free (object);
@@ -100,7 +100,7 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromInteger(long long int source)
 		return NULL;
 
 	object->Type = SILIKO_AST_LEAF;
-	object->Leaf = SilikoValueNewInteger(source);
+	object->Leaf = SilikoValueNewFromInteger(source);
 	if(!object->Leaf)
 	{
 		free(object);
@@ -119,7 +119,7 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double source)
 		return NULL;
 
 	object->Type = SILIKO_AST_LEAF;
-	object->Leaf = SilikoValueNewReal(source);
+	object->Leaf = SilikoValueNewFromReal(source);
 	if(!object->Leaf)
 	{
 		free(object);
@@ -284,7 +284,7 @@ static SilikoValue *EvaluateBranch(SilikoSyntaxTreeBranch *Branch, SilikoFunctio
 SilikoValue *SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node, SilikoFunctionCaller *Caller)
 {
 	if (!Node)
-		return SilikoValueNewError(SilikoErrorSyntax);
+		return SilikoValueNewFromError(SilikoErrorSyntax);
 
 	switch (Node->Type)
 	{
@@ -293,7 +293,7 @@ SilikoValue *SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node, SilikoFunction
 	case SILIKO_AST_BRANCH:
 		return EvaluateBranch(Node->Branch, Caller);
 	default: // Shouldn't happen, but just in case.
-		return SilikoValueNewError(SilikoErrorSyntax);
+		return SilikoValueNewFromError(SilikoErrorSyntax);
 	}
 }
 

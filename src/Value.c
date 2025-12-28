@@ -30,7 +30,7 @@ struct SilikoValue
 	};
 };
 
-SilikoValue *SilikoValueNewError(enum SilikoError source)
+SilikoValue *SilikoValueNewFromError(enum SilikoError source)
 {
     SilikoValue *object = malloc(sizeof (*object));
     if(!object)
@@ -40,7 +40,7 @@ SilikoValue *SilikoValueNewError(enum SilikoError source)
     return object;
 }
 
-SilikoValue *SilikoValueNewInteger(long long int source)
+SilikoValue *SilikoValueNewFromInteger(long long int source)
 {
     SilikoValue *object = malloc(sizeof (*object));
     if(!object)
@@ -50,7 +50,7 @@ SilikoValue *SilikoValueNewInteger(long long int source)
     return object;
 }
 
-SilikoValue *SilikoValueNewReal(double source)
+SilikoValue *SilikoValueNewFromReal(double source)
 {
     SilikoValue *object = malloc(sizeof (*object));
     if(!object)
@@ -60,13 +60,13 @@ SilikoValue *SilikoValueNewReal(double source)
     return object;
 }
 
-SilikoValue *SilikoValueNewCopy(SilikoValue *other)
+SilikoValue *SilikoValueNewCopy(const SilikoValue *other)
 {
     SilikoValue *object = malloc(sizeof (*object));
     if(!object)
         return NULL;
 
-    SilikoValueAssignCopy(object, other);
+    SilikoValueCopy(object, other);
     return object;
 }
 
@@ -75,7 +75,7 @@ void SilikoValueDelete(SilikoValue *object)
     free(object);
 }
 
-enum SilikoError SilikoValueToError(const SilikoValue *object)
+enum SilikoError SilikoValueGetError(const SilikoValue *object)
 {
     switch (object->status)
     {
@@ -87,7 +87,7 @@ enum SilikoError SilikoValueToError(const SilikoValue *object)
     }
 }
 
-long long int SilikoValueToInteger(const SilikoValue *object)
+long long int SilikoValueGetInteger(const SilikoValue *object)
 {
     switch (object->status)
     {
@@ -100,7 +100,7 @@ long long int SilikoValueToInteger(const SilikoValue *object)
     }
 }
 
-double SilikoValueToReal(const SilikoValue *object)
+double SilikoValueGetReal(const SilikoValue *object)
 {
     switch (object->status)
     {
@@ -137,7 +137,7 @@ void SilikoValueAssignReal(
     object->real= source;
 }
 
-void SilikoValueAssignCopy(
+void SilikoValueCopy(
     SilikoValue *object,
     const SilikoValue *other)
 {

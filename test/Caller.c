@@ -1,18 +1,14 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/FunctionCaller.h>
 
-SilikoValue *GetFortyTwoInt(int ArgC, SilikoValue **ArgV)
+SilikoValue *GetFortyTwoInt(int argc, SilikoValue **argv)
 {
-    (void)ArgC;
-    (void)ArgV;
-    return SilikoValueNewInteger(42LL);
+    return SilikoValueNewFromInteger(42LL);
 }
 
-SilikoValue *GetFortyTwoFloat(int ArgC, SilikoValue **ArgV)
+SilikoValue *GetFortyTwoFloat(int argc, SilikoValue **argv)
 {
-    (void)ArgC;
-    (void)ArgV;
-    return SilikoValueNewReal(42.0);
+    return SilikoValueNewFromReal(42.0);
 }
 
 Test(FunctionCallerTests, NewCaller) {
@@ -46,7 +42,7 @@ Test(FunctionCallerTests, UseIntFunction) {
     SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "gfti", 0, NULL);
     SilikoFunctionCallerDelete(Caller);
     cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueInteger);
-    cr_assert(SilikoValueToInteger(TestValue) == 42);
+    cr_assert(SilikoValueGetInteger(TestValue) == 42);
     SilikoValueDelete(TestValue);
 }
 
@@ -57,7 +53,7 @@ Test(FunctionCallerTests, UseFloatFunction) {
     SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "gft", 0, NULL);
     SilikoFunctionCallerDelete(Caller);
     cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueReal);
-    cr_assert(SilikoValueToReal(TestValue) == 42.0);
+    cr_assert(SilikoValueGetReal(TestValue) == 42.0);
     SilikoValueDelete(TestValue);
 }
 
@@ -68,7 +64,7 @@ Test(FunctionCallerTests, HandleBadFunction)
     SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "bogus", 0, NULL);
     SilikoFunctionCallerDelete(Caller);
     cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueError);
-    cr_assert(SilikoValueToError(TestValue) == SilikoErrorFunctionName);
+    cr_assert(SilikoValueGetError(TestValue) == SilikoErrorFunctionName);
     SilikoValueDelete(TestValue);
 }
 

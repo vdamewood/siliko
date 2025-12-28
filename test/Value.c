@@ -14,9 +14,9 @@ Test(ValueTests, TEST_NAME) \
         double:         SilikoValueReal \
     )); \
     cr_assert(_Generic((VALUE), \
-        int:            SilikoValueToInteger, \
-        long long int:  SilikoValueToInteger, \
-        double:         SilikoValueToReal \
+        int:            SilikoValueGetInteger, \
+        long long int:  SilikoValueGetInteger, \
+        double:         SilikoValueGetReal \
     )(test_value) == VALUE); \
     SilikoValueDelete(test_value); \
 }
@@ -26,9 +26,9 @@ Test(ValueTests, TEST_NAME) \
 #define VALUE_ERROR_TEST(TEST_NAME, VALUE) \
 Test(ValueTests, TEST_NAME) \
 { \
-    SilikoValue *test_value = SilikoValueNewError(VALUE); \
+    SilikoValue *test_value = SilikoValueNewFromError(VALUE); \
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueError); \
-    cr_assert(SilikoValueToError(test_value) == VALUE); \
+    cr_assert(SilikoValueGetError(test_value) == VALUE); \
     SilikoValueDelete(test_value); \
 }
 

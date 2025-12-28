@@ -165,7 +165,7 @@ SilikoValue *SilikoFunctionCallerCall(
 		= SilikoFunctionCallerGetFunction(caller, name);
 
 	if (!function)
-		return SilikoValueNewError(SilikoErrorFunctionName);
+		return SilikoValueNewFromError(SilikoErrorFunctionName);
 	
 	return function(argc, argv);
 }

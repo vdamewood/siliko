@@ -35,20 +35,20 @@ Test(ParserTests, NAME) \
         "Value status shoule Be: %d Is: %d: %d", \
             SilikoValueGetStatus(target), \
             SilikoValueGetStatus(result), \
-            SilikoValueToError(result)); \
+            SilikoValueGetError(result)); \
     switch(SilikoValueGetStatus(result)) \
     { \
     case SilikoValueInteger: \
-        cr_assert(SilikoValueToInteger(target) == SilikoValueToInteger(result), \
+        cr_assert(SilikoValueGetInteger(target) == SilikoValueGetInteger(result), \
             "Integer mismatch: should be: %lld is: %lld", \
-            SilikoValueToInteger(target), \
-            SilikoValueToInteger(result)); \
+            SilikoValueGetInteger(target), \
+            SilikoValueGetInteger(result)); \
         break; \
     case SilikoValueReal: \
-        cr_assert(SilikoValueToReal(target) == SilikoValueToReal(result), \
+        cr_assert(SilikoValueGetReal(target) == SilikoValueGetReal(result), \
             "Real mismatch: should be: %f is: %f", \
-            SilikoValueToReal(target), \
-            SilikoValueToReal(result)); \
+            SilikoValueGetReal(target), \
+            SilikoValueGetReal(result)); \
         break; \
     default: \
         break; \

@@ -47,7 +47,7 @@ SilikoToken *SilikoTokenNew()
     return object;
 }
 
-SilikoToken *SilikoTokenNewInteger(long long int source)
+SilikoToken *SilikoTokenNewFromInteger(long long int source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -57,7 +57,7 @@ SilikoToken *SilikoTokenNewInteger(long long int source)
     return object;
 }
 
-SilikoToken *SilikoTokenNewReal(double source)
+SilikoToken *SilikoTokenNewFromReal(double source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -67,7 +67,7 @@ SilikoToken *SilikoTokenNewReal(double source)
     return object;
 }
 
-SilikoToken *SilikoTokenNewCharacter(char source)
+SilikoToken *SilikoTokenNewFromCharacter(char source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -77,7 +77,7 @@ SilikoToken *SilikoTokenNewCharacter(char source)
     return object;
 }
 
-SilikoToken *SilikoTokenNewId(const char *source)
+SilikoToken *SilikoTokenNewFromId(const char *source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -182,7 +182,7 @@ void SilikoTokenAssignEndOfInput(SilikoToken *object)
     object->integer = 0;
 }
 
-void SilikoTokenAssignCopy(SilikoToken *object, const SilikoToken *source)
+void SilikoTokenCopy(SilikoToken *object, const SilikoToken *source)
 {
     if (object->status == SilikoTokenId)
         free(object->id);
@@ -248,4 +248,3 @@ const char *SilikoTokenGetId(const SilikoToken *object)
     return object->id;
 
 }
-
