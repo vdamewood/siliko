@@ -1,4 +1,4 @@
-/* InfixParser.h: Infix notation parser
+/* Evaluate.h: Functions to evaluate syntax trees with an engine
  * Copyright 2012-2025 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -15,22 +15,8 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_CORE_INFIX_PARSER_H
-#define SILIKO_CORE_INFIX_PARSER_H
-
 #include <SilikoCore/Api.h>
-#include <SilikoCore/Input.h>
+#include <SilikoCore/FunctionCaller.h>
 #include <SilikoCore/Node.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
-
-SILIKOCORE_EXPORT
-    SilikoNode *SilikoParseInfix(SilikoInput *input);
-
-#if defined __cplusplus
-}
-#endif
-
-#endif // SILIKO_CORE_INFIX_PARSER_H
+SILIKOCORE_EXPORT SilikoValue *SilikoEvaluateNode(const SilikoNode *SyntaxTree, SilikoFunctionCaller *Caller);

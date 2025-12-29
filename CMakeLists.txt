@@ -56,13 +56,14 @@ target_sources(SilikoCore
 		src/Functions.h
 		src/Functions.c
 		src/FunctionCaller.c
-		src/SyntaxTree.c
+		src/Node.c
 		src/Input.c
 		src/StringInput.c
 		src/Lexer.c
 		src/InfixParser.c
 		src/Token.c
 		src/Value.c
+		src/Evaluate.c
 )
 target_compile_features(SilikoCore PRIVATE c_std_17)
 set_target_properties(SilikoCore PROPERTIES
@@ -121,12 +122,13 @@ generate_export_header(SilikoCore
 set(PUBLIC_HEADERS
 	include/SilikoCore/Value.h
 	include/SilikoCore/FunctionCaller.h
-	include/SilikoCore/SyntaxTree.h
+	include/SilikoCore/Node.h
 	include/SilikoCore/Input.h
 	include/SilikoCore/StringInput.h
 	include/SilikoCore/Token.h
 	include/SilikoCore/Lexer.h
 	include/SilikoCore/InfixParser.h
+	include/SilikoCore/Evaluate.h
 	include/SilikoCore/Version.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
 )

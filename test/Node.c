@@ -1,13 +1,14 @@
 #include <criterion/criterion.h>
-#include <SilikoCore/SyntaxTree.h>
+#include <SilikoCore/Node.h>
 #include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Evaluate.h>
 
 Test(SyntaxTreeTests, NewIntZero)
 {
-    SilikoSyntaxTreeNode *Node = SilikoSyntaxTreeNewFromInteger(0);
-    cr_assert(SilikoSyntaxTreeGetType(Node) == SILIKO_AST_LEAF);
+    SilikoNode *Node = SilikoNodeNewFromInteger(0);
+    cr_assert(SilikoNodeGetStatus(Node) == SilikoNodeLeaf);
 
-    SilikoValue *test_value = SilikoSyntaxTreeEvaluate(Node, NULL);
+    SilikoValue *test_value = SilikoEvaluateNode(Node, NULL);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger);
     cr_assert(SilikoValueGetInteger(test_value) == 0LL);
     SilikoValueDelete(test_value);
@@ -15,10 +16,10 @@ Test(SyntaxTreeTests, NewIntZero)
 
 Test(SyntaxTreeTests, NewFloatZero)
 {
-    SilikoSyntaxTreeNode *Node = SilikoSyntaxTreeNewFromFloat(0.0);
-    cr_assert(SilikoSyntaxTreeGetType(Node) == SILIKO_AST_LEAF);
+    SilikoNode *Node = SilikoNodeNewFromReal(0.0);
+    cr_assert(SilikoNodeGetStatus(Node) == SilikoNodeLeaf);
 
-    SilikoValue *test_value = SilikoSyntaxTreeEvaluate(Node, NULL);
+    SilikoValue *test_value = SilikoEvaluateNode(Node, NULL);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueReal);
     cr_assert(SilikoValueGetInteger(test_value) == 0.0);
     SilikoValueDelete(test_value);
@@ -26,26 +27,26 @@ Test(SyntaxTreeTests, NewFloatZero)
 
 Test(SyntaxTreeTests, TwoPlusThreeIsFive)
 {
-    SilikoSyntaxTreeNode *left_node = SilikoSyntaxTreeNewFromInteger(2);
-    cr_assert(SilikoSyntaxTreeGetType(left_node) == SILIKO_AST_LEAF);
+    SilikoNode *left_node = SilikoNodeNewFromInteger(2);
+    cr_assert(SilikoNodeGetStatus(left_node) == SilikoNodeLeaf);
 
-    SilikoSyntaxTreeNode *right_node = SilikoSyntaxTreeNewFromInteger(3);
-    cr_assert(SilikoSyntaxTreeGetType(right_node) == SILIKO_AST_LEAF);
+    SilikoNode *right_node = SilikoNodeNewFromInteger(3);
+    cr_assert(SilikoNodeGetStatus(right_node) == SilikoNodeLeaf);
 
-    SilikoSyntaxTreeNode *branch = SilikoSyntaxTreeNewBranch("add");
-    cr_assert(SilikoSyntaxTreeGetType(branch) == SILIKO_AST_BRANCH);
+    SilikoNode *branch = SilikoNodeNewBranch("add");
+    cr_assert(SilikoNodeGetStatus(branch) == SilikoNodeBranch);
 
-    SilikoSyntaxTreePushRight(branch, left_node);
-    cr_assert(SilikoSyntaxTreeFetchChild(branch, 0) == left_node);
+    SilikoNodePushRight(branch, left_node);
+    cr_assert(SilikoNodeFetchChild(branch, 0) == left_node);
 
-    SilikoSyntaxTreePushRight(branch, right_node);
-    cr_assert(SilikoSyntaxTreeFetchChild(branch, 0) == left_node);
-    cr_assert(SilikoSyntaxTreeFetchChild(branch, 1) == right_node);
+    SilikoNodePushRight(branch, right_node);
+    cr_assert(SilikoNodeFetchChild(branch, 0) == left_node);
+    cr_assert(SilikoNodeFetchChild(branch, 1) == right_node);
 
     SilikoFunctionCaller *engine = SilikoFunctionCallerNew();
     SilikoFunctionCallerInstallOperators(engine);
 
-    SilikoValue *test_value = SilikoSyntaxTreeEvaluate(branch, engine);
+    SilikoValue *test_value = SilikoEvaluateNode(branch, engine);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger,
         "Evalutes to the wrong type. Should be: %d  Is: %d",
             SilikoValueInteger,

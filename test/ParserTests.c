@@ -1,7 +1,8 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/InfixParser.h>
 #include <SilikoCore/StringInput.h>
-#include <SilikoCore/SyntaxTree.h>
+#include <SilikoCore/Node.h>
+#include <SilikoCore/Evaluate.h>
 
 #include "Macros.h"
 
@@ -27,9 +28,9 @@ Test(ParserTests, NAME) \
 	SilikoFunctionCallerInstallOperators(caller); \
 	SilikoFunctionCallerInstallFunctions(caller); \
 \
-	SilikoSyntaxTreeNode *tree = SilikoParseInfix(src); \
+	SilikoNode *tree = SilikoParseInfix(src); \
     SilikoValue *target = SilikoValueNew(TARGET); \
-	SilikoValue *result = SilikoSyntaxTreeEvaluate(tree, caller); \
+	SilikoValue *result = SilikoEvaluateNode(tree, caller); \
     cr_assert(SilikoValueGetStatus(target) \
         == SilikoValueGetStatus(result), \
         "Value status shoule Be: %d Is: %d: %d", \
@@ -53,7 +54,7 @@ Test(ParserTests, NAME) \
     default: \
         break; \
     } \
-	SilikoSyntaxTreeDelete(tree); \
+	SilikoNodeDelete(tree); \
 }
 
 ParserTest(Test0000_AnInteger, "42", 42)
