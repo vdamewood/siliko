@@ -14,7 +14,7 @@ Test(LexerTests, NAME) \
     SilikoLexer *lex = SilikoLexerNew(src); \
     for (int i = 0; i < sizeof tokens/sizeof(SilikoToken*); i++) \
     { \
-        const SilikoToken *current = SilikoLexerGetCurrent(lex); \
+        const SilikoToken *current = SilikoLexerGetToken(lex); \
         cr_assert(SilikoTokenGetStatus(current) == SilikoTokenGetStatus(tokens[i]), \
             "Types[%i]: %i/%c %i/%c", \
             i, \
