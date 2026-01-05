@@ -20,25 +20,28 @@ Test(FunctionCallerTests, NewCaller) {
 Test(FunctionCallerTests, GetIntFunction) {
     SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
     cr_assert(Caller != NULL);
-    SilikoFunctionCallerInstall(Caller, "gfti", GetFortyTwoInt);
-    SilikoFunctionPointer TestValue = SilikoFunctionCallerGetFunction(Caller, "gfti");
+    SilikoFunction *TestFunction = SilikoPureFunctionNew(GetFortyTwoInt);
+    SilikoFunctionCallerInstall(Caller, "gfti", TestFunction);
+    SilikoFunction *ResultFunction = SilikoFunctionCallerGetFunction(Caller, "gfti");
+    cr_assert(TestFunction == ResultFunction);
     SilikoFunctionCallerDelete(Caller);
-    cr_assert(TestValue == GetFortyTwoInt);
 }
 
 Test(FunctionCallerTests, GetFloatFunction) {
     SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
     cr_assert(Caller != NULL);
-    SilikoFunctionCallerInstall(Caller, "gftf", GetFortyTwoFloat);
-    SilikoFunctionPointer TestValue = SilikoFunctionCallerGetFunction(Caller, "gftf");
+    SilikoFunction *TestFunction = SilikoPureFunctionNew(GetFortyTwoFloat);
+    SilikoFunctionCallerInstall(Caller, "gftf", TestFunction);
+    SilikoFunction *ResultFunction = SilikoFunctionCallerGetFunction(Caller, "gftf");
+    cr_assert(TestFunction == ResultFunction);
     SilikoFunctionCallerDelete(Caller);
-    cr_assert(TestValue == GetFortyTwoFloat);
 }
 
 Test(FunctionCallerTests, UseIntFunction) {
     SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
     cr_assert(Caller != NULL);
-    SilikoFunctionCallerInstall(Caller, "gfti", GetFortyTwoInt);
+    SilikoFunction *TestFunction = SilikoPureFunctionNew(GetFortyTwoInt);
+    SilikoFunctionCallerInstall(Caller, "gfti", TestFunction);
     SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "gfti", 0, NULL);
     SilikoFunctionCallerDelete(Caller);
     cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueInteger);
@@ -49,8 +52,9 @@ Test(FunctionCallerTests, UseIntFunction) {
 Test(FunctionCallerTests, UseFloatFunction) {
     SilikoFunctionCaller *Caller = SilikoFunctionCallerNew();
     cr_assert(Caller != NULL);
-    SilikoFunctionCallerInstall(Caller, "gft", GetFortyTwoFloat);
-    SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "gft", 0, NULL);
+    SilikoFunction *TestFunction = SilikoPureFunctionNew(GetFortyTwoFloat);
+    SilikoFunctionCallerInstall(Caller, "gftf", TestFunction);
+    SilikoValue *TestValue = SilikoFunctionCallerCall(Caller, "gftf", 0, NULL);
     SilikoFunctionCallerDelete(Caller);
     cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueReal);
     cr_assert(SilikoValueGetReal(TestValue) == 42.0);

@@ -1,0 +1,57 @@
+// Copyright 2012-2026 Vincent Damewood
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+// This file is part of Siliko.
+
+// Siliko is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as published 
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// Siliko is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// Lesser General Public License for more details.
+
+// You should have received a copy of the GNU Lesser General Public
+// License along with Siliko. If not, see
+// <http://www.gnu.org/licenses/>.
+
+#include <SilikoCore/Function.h>
+
+struct SilikoFunction
+{
+    const struct SilikoFunctionVTable *v_table;
+    void *state;
+};
+
+SilikoFunction *SilikoFunctionNew(
+	const struct SilikoFunctionVTable *source_table,
+	void *source_state)
+{
+    SilikoFunction *object = malloc(sizeof(*object));
+    if (!object)
+        return NULL;
+    
+    object->v_table = source_table;
+    object->state = source_state;
+    return object;
+}
+
+SilikoValue *SilikoFunctionCall(
+    SilikoFunction *object,
+    int argc,
+    SilikoValue **argv)
+{
+    return object->v_table->callVirt(object->state, argc, argv);
+}
+
+SilikoFunction *SilikoFunctionClone(SilikoFunction *object)
+{
+    return object->v_table->cloneVirt(object->state);
+}
+
+void SilikoFunctionDelete(SilikoFunction *object)
+{
+    object->v_table->deleteVirt(object->state);
+}
