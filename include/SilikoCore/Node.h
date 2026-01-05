@@ -22,7 +22,7 @@
 #define SILIKO_CORE_NODE_H
 
 #include <SilikoCore/Api.h>
-#include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Engine.h>
 #include <SilikoCore/Value.h>
 
 #if defined __cplusplus

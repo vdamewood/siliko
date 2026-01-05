@@ -1,6 +1,6 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/Node.h>
-#include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Engine.h>
 #include <SilikoCore/Evaluate.h>
 
 Test(SyntaxTreeTests, NewIntZero)
@@ -43,8 +43,8 @@ Test(SyntaxTreeTests, TwoPlusThreeIsFive)
     cr_assert(SilikoNodeFetchChild(branch, 0) == left_node);
     cr_assert(SilikoNodeFetchChild(branch, 1) == right_node);
 
-    SilikoFunctionCaller *engine = SilikoFunctionCallerNew();
-    SilikoFunctionCallerInstallOperators(engine);
+    SilikoEngine *engine = SilikoEngineNew();
+    SilikoInstallOperators(engine);
 
     SilikoValue *test_value = SilikoEvaluateNode(branch, engine);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger,

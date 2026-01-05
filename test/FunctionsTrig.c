@@ -1,10 +1,10 @@
 #include <criterion/criterion.h>
-#include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Engine.h>
 #include <math.h>
 #include <float.h>
 
 #define SUITE FunctionsTrigonometric
-#define INSTALL_FUNCTION SilikoFunctionCallerInstallFunctions
+#define INSTALL_FUNCTION SilikoInstallMathFunctions
 
 #include "Macros.h"
 #include "FunctionMacros.h"

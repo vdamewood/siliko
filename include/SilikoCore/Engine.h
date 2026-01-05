@@ -18,8 +18,8 @@
 // <http://www.gnu.org/licenses/>.
 
 
-#if !defined SILIKO_CORE_FUNCTION_CALLER_H
-#define SILIKO_CORE_FUNCTION_CALLER_H
+#if !defined SILIKO_CORE_ENGINE_H
+#define SILIKO_CORE_ENGINE_H
 
 #include <SilikoCore/Api.h>
 #include <SilikoCore/Function.h>
@@ -29,38 +29,39 @@
 extern "C" {
 #endif
 
-struct SilikoFunctionCaller;
-typedef struct SilikoFunctionCaller SilikoFunctionCaller;
-
-//typedef SilikoValue *(*SilikoFunctionPointer)(int, SilikoValue **);
+struct SilikoEngine;
+typedef struct SilikoEngine SilikoEngine;
 
 SILIKOCORE_EXPORT
-    SilikoFunctionCaller *SilikoFunctionCallerNew();
+SilikoEngine *SilikoEngineNew();
 SILIKOCORE_EXPORT
-    void SilikoFunctionCallerDelete(SilikoFunctionCaller *);
+void SilikoEngineDelete(SilikoEngine *object);
+
+
 
 SILIKOCORE_EXPORT
-    int SilikoFunctionCallerInstallOperators(SilikoFunctionCaller *);
+int SilikoInstallOperators(SilikoEngine *object);
 SILIKOCORE_EXPORT
-    int SilikoFunctionCallerInstallFunctions(SilikoFunctionCaller *);
+int SilikoInstallMathFunctions(SilikoEngine *object);
+
 SILIKOCORE_EXPORT
-    SilikoValue *SilikoFunctionCallerCall(
-        SilikoFunctionCaller*,
-        const char *function_name,
-        int argument_count,
-        SilikoValue **arguments);
+SilikoValue *SilikoEngineCallFunction(
+    SilikoEngine* object,
+    const char *function_name,
+    int argument_count,
+    SilikoValue **arguments);
 SILIKOCORE_EXPORT
-    SilikoFunction *SilikoFunctionCallerGetFunction(
-        SilikoFunctionCaller* object,
-        const char *function_name);
+SilikoFunction *SilikoEngineFetchFunction(
+    SilikoEngine* object,
+    const char *function_name);
 SILIKOCORE_EXPORT
-    int SilikoFunctionCallerInstall(
-        SilikoFunctionCaller* object,
-        const char *function_name,
-        SilikoFunction *function);
+int SilikoEngineInstallFunction(
+    SilikoEngine* object,
+    const char *function_name,
+    SilikoFunction *function);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif // SILIKO_CORE_FUNCTION_CALLER_H
+#endif // SILIKO_CORE_ENGINE_H

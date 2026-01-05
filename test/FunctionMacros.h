@@ -9,19 +9,19 @@
 #define TestFunction(NAME, FUNCTION, STATUS, RESULT_EXPRESSION, ...) \
 Test(SUITE, NAME) \
 { \
-    SilikoFunctionCaller *caller = SilikoFunctionCallerNew(); \
+    SilikoEngine *caller = SilikoEngineNew(); \
     cr_assert(caller != NULL); \
     INSTALL_FUNCTION(caller); \
     SilikoValue *input[] = \
     { \
         __VA_ARGS__ \
     }; \
-    SilikoValue *result = SilikoFunctionCallerCall( \
+    SilikoValue *result = SilikoEngineCallFunction( \
         caller, \
         FUNCTION, \
         (sizeof input)/sizeof(input[0]), \
         input); \
-    SilikoFunctionCallerDelete(caller); \
+    SilikoEngineDelete(caller); \
     cr_assert(SilikoValueGetStatus(result) == STATUS, \
         "Status: Expected: %d; Got %d;", STATUS, SilikoValueGetStatus(result)); \
     cr_assert(RESULT_EXPRESSION); \

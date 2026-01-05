@@ -23,10 +23,10 @@ Test(ParserTests, NAME) \
 	const char Input[] = INPUT; \
 	SilikoInput * src = SilikoStringInputNew(Input); \
 	cr_assert(src != NULL); \
-	SilikoFunctionCaller *caller = SilikoFunctionCallerNew(); \
+	SilikoEngine *caller = SilikoEngineNew(); \
 	cr_assert(caller != NULL); \
-	SilikoFunctionCallerInstallOperators(caller); \
-	SilikoFunctionCallerInstallFunctions(caller); \
+	SilikoInstallOperators(caller); \
+	SilikoInstallMathFunctions(caller); \
 \
 	SilikoNode *tree = SilikoParseInfix(src); \
     SilikoValue *target = SilikoValueNew(TARGET); \

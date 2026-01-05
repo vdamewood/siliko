@@ -1,8 +1,8 @@
 #include <criterion/criterion.h>
-#include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Engine.h>
 
 #define SUITE FunctionOperatorTests
-#define INSTALL_FUNCTION SilikoFunctionCallerInstallOperators
+#define INSTALL_FUNCTION SilikoInstallOperators
 
 #include "Macros.h"
 #include "FunctionMacros.h"

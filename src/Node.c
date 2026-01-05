@@ -22,7 +22,7 @@
 #include <string.h>
 
 #include <SilikoCore/Node.h>
-#include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Engine.h>
 
 #if defined _WIN32
 #define strdup _strdup

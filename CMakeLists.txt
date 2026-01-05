@@ -61,7 +61,7 @@ target_sources(SilikoCore
 		src/Functions.c
 		src/Function.c
 		src/PureFunction.c
-		src/FunctionCaller.c
+		src/Engine.c
 		src/Node.c
 		src/Input.c
 		src/StringInput.c
@@ -128,7 +128,7 @@ generate_export_header(SilikoCore
 set(PUBLIC_HEADERS
 	include/SilikoCore/Value.h
 	include/SilikoCore/Function.h
-	include/SilikoCore/FunctionCaller.h
+	include/SilikoCore/Engine.h
 	include/SilikoCore/Node.h
 	include/SilikoCore/Input.h
 	include/SilikoCore/StringInput.h

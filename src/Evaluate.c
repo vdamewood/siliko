@@ -21,7 +21,7 @@
 #include <SilikoCore/Evaluate.h>
 #include <SilikoCore/Value.h>
 
-SilikoValue *SilikoEvaluateNode(const SilikoNode *node, SilikoFunctionCaller *engine)
+SilikoValue *SilikoEvaluateNode(const SilikoNode *node, SilikoEngine *engine)
 {
 	if (!node)
 		return SilikoValueNewFromError(SilikoErrorSyntax);
@@ -58,7 +58,7 @@ SilikoValue *SilikoEvaluateNode(const SilikoNode *node, SilikoFunctionCaller *en
         }
 
         SilikoValue *result
-            = SilikoFunctionCallerCall(
+            = SilikoEngineCallFunction(
                 engine, SilikoNodeGetId(node), child_count, Arguments);
         free(Arguments);
 

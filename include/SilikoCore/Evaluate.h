@@ -18,8 +18,16 @@
 // <http://www.gnu.org/licenses/>.
 
 
+#if !defined SILIKO_CORE_EVALUATE_H
+#define SILIKO_CORE_EVALUATE_H
+
 #include <SilikoCore/Api.h>
-#include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Engine.h>
 #include <SilikoCore/Node.h>
 
-SILIKOCORE_EXPORT SilikoValue *SilikoEvaluateNode(const SilikoNode *SyntaxTree, SilikoFunctionCaller *Caller);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoEvaluateNode(
+    const SilikoNode *node,
+    SilikoEngine *engine);
+
+#endif // SILIKO_CORE_EVALUATE_H
