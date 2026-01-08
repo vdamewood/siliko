@@ -24,10 +24,11 @@
 #include <SilikoCore/Api.h>
 #include <SilikoCore/Engine.h>
 #include <SilikoCore/Node.h>
+#include <SilikoCore/Value.h>
 
 SILIKOCORE_EXPORT
-SilikoValue *SilikoEvaluateNode(
-    const SilikoNode *node,
-    SilikoEngine *engine);
+SilikoValue *SilikoEvaluate(
+    SilikoEngine *engine,
+    const SilikoNode *node);
 
 #endif // SILIKO_CORE_EVALUATE_H

@@ -21,7 +21,7 @@
 #include <SilikoCore/Evaluate.h>
 #include <SilikoCore/Value.h>
 
-SilikoValue *SilikoEvaluateNode(const SilikoNode *node, SilikoEngine *engine)
+SilikoValue *SilikoEvaluate( SilikoEngine *engine, const SilikoNode *node)
 {
 	if (!node)
 		return SilikoValueNewFromError(SilikoErrorSyntax);
@@ -42,8 +42,9 @@ SilikoValue *SilikoEvaluateNode(const SilikoNode *node, SilikoEngine *engine)
 
             for(int i = 0; i < child_count; i++)
             {
-                Arguments[i] = SilikoEvaluateNode(
-                    SilikoNodeFetchChild(node, i), engine);
+                Arguments[i] = SilikoEvaluate(
+                    engine,
+                    SilikoNodeFetchChild(node, i));
                 if(SilikoValueGetStatus(Arguments[i])
                     == SilikoValueError)
                 {

@@ -30,7 +30,7 @@ Test(ParserTests, NAME) \
 \
 	SilikoNode *tree = SilikoParseInfix(src); \
     SilikoValue *target = SilikoValueNew(TARGET); \
-	SilikoValue *result = SilikoEvaluateNode(tree, caller); \
+	SilikoValue *result = SilikoEvaluate(caller, tree); \
     cr_assert(SilikoValueGetStatus(target) \
         == SilikoValueGetStatus(result), \
         "Value status shoule Be: %d Is: %d: %d", \

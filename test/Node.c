@@ -8,7 +8,7 @@ Test(SyntaxTreeTests, NewIntZero)
     SilikoNode *Node = SilikoNodeNewFromInteger(0);
     cr_assert(SilikoNodeGetStatus(Node) == SilikoNodeLeaf);
 
-    SilikoValue *test_value = SilikoEvaluateNode(Node, NULL);
+    SilikoValue *test_value = SilikoEvaluate(NULL, Node);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger);
     cr_assert(SilikoValueGetInteger(test_value) == 0LL);
     SilikoValueDelete(test_value);
@@ -19,7 +19,7 @@ Test(SyntaxTreeTests, NewFloatZero)
     SilikoNode *Node = SilikoNodeNewFromReal(0.0);
     cr_assert(SilikoNodeGetStatus(Node) == SilikoNodeLeaf);
 
-    SilikoValue *test_value = SilikoEvaluateNode(Node, NULL);
+    SilikoValue *test_value = SilikoEvaluate(NULL, Node);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueReal);
     cr_assert(SilikoValueGetInteger(test_value) == 0.0);
     SilikoValueDelete(test_value);
@@ -46,7 +46,7 @@ Test(SyntaxTreeTests, TwoPlusThreeIsFive)
     SilikoEngine *engine = SilikoEngineNew();
     SilikoInstallOperators(engine);
 
-    SilikoValue *test_value = SilikoEvaluateNode(branch, engine);
+    SilikoValue *test_value = SilikoEvaluate(engine, branch);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger,
         "Evalutes to the wrong type. Should be: %d  Is: %d",
             SilikoValueInteger,
