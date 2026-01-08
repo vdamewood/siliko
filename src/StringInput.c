@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <SilikoCore/Input.h>
 #include <SilikoCore/StringInput.h>
 
 #if defined _WIN32

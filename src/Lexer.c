@@ -20,10 +20,10 @@
 
 #include <ctype.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include <SilikoCore/Input.h>
 #include <SilikoCore/Lexer.h>
+#include <SilikoCore/Token.h>
 
 struct SilikoLexer
 {

@@ -23,6 +23,10 @@
 
 #include <SilikoCore/Api.h>
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 SILIKOCORE_EXPORT extern const unsigned int SilikoVersionMajor;
 SILIKOCORE_EXPORT extern const unsigned int SilikoVersionMinor;
 SILIKOCORE_EXPORT extern const unsigned int SilikoVersionPatch;
@@ -31,5 +35,9 @@ SILIKOCORE_EXPORT extern const char *SilikoVersionPackageSuffix;
 SILIKOCORE_EXPORT extern const char *SilikoVersionString;
 SILIKOCORE_EXPORT extern const char *SilikoVersionStringWithPackage;
 SILIKOCORE_EXPORT extern const char *SilikoVersionCopyright;
+
+#if defined __cplusplus
+}
+#endif
 
 #endif /* SILIKO_CORE_VERSION_H */

@@ -17,8 +17,11 @@
 // License along with Siliko. If not, see
 // <http://www.gnu.org/licenses/>.
 
+#include <stdlib.h>
 
+#include <SilikoCore/Engine.h>
 #include <SilikoCore/Evaluate.h>
+#include <SilikoCore/Node.h>
 #include <SilikoCore/Value.h>
 
 SilikoValue *SilikoEvaluate( SilikoEngine *engine, const SilikoNode *node)

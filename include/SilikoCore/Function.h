@@ -24,8 +24,11 @@
 #include <SilikoCore/Api.h>
 #include <SilikoCore/Value.h>
 
-struct SilikoFunction;
 typedef struct SilikoFunction SilikoFunction;
+
+#if defined __cplusplus
+extern "C" {
+#endif
 
 struct SILIKOCORE_EXPORT SilikoFunctionVTable
 {
@@ -50,8 +53,14 @@ SilikoValue *SilikoFunctionCall(
     int argc,
     SilikoValue **argv);
 SILIKOCORE_EXPORT
-SilikoFunction *SilikoFunctionClone(SilikoFunction *object);
+SilikoFunction *SilikoFunctionClone(
+    SilikoFunction *object);
 SILIKOCORE_EXPORT
-void SilikoFunctionDelete(SilikoFunction *object);
+void SilikoFunctionDelete(
+    SilikoFunction *object);
+
+#if defined __cplusplus
+}
+#endif
 
 #endif // SILIKO_CORE_FUNCTION_H

@@ -17,10 +17,14 @@
 // License along with Siliko. If not, see
 // <http://www.gnu.org/licenses/>.
 
+#include <stdlib.h>
 
-#include <SilikoCore/ParseInfix.h>
-#include <SilikoCore/Node.h>
+#include <SilikoCore/Input.h>
 #include <SilikoCore/Lexer.h>
+#include <SilikoCore/Node.h>
+#include <SilikoCore/ParseInfix.h>
+#include <SilikoCore/Token.h>
+#include <SilikoCore/Value.h>
 
 static SilikoNode *GetExpression(SilikoLexer *lexer);
 static SilikoNode *GetExpressionRest(SilikoLexer *lexer, SilikoNode*);

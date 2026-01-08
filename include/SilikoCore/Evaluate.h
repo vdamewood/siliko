@@ -26,9 +26,17 @@
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Value.h>
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoEvaluate(
     SilikoEngine *engine,
     const SilikoNode *node);
+
+#if defined __cplusplus
+}
+#endif
 
 #endif // SILIKO_CORE_EVALUATE_H

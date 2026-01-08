@@ -23,12 +23,6 @@
 
 #include <SilikoCore/Api.h>
 
-#include <stdlib.h>
-
-#if defined __cplusplus
-extern "C" {
-#endif
-
 enum SilikoError
 {
 	SilikoErrorNone,
@@ -48,8 +42,11 @@ enum SilikoValueStatus
 	SilikoValueReal
 };
 
-struct SilikoValue;
 typedef struct SilikoValue SilikoValue;
+
+#if defined __cplusplus
+extern "C" {
+#endif
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoValueNew(void);
@@ -85,14 +82,17 @@ SILIKOCORE_EXPORT
 enum SilikoValueStatus SilikoValueGetStatus(
 	const SilikoValue *object);
 SILIKOCORE_EXPORT
-enum SilikoError SilikoValueGetError(const SilikoValue *object);
+enum SilikoError SilikoValueGetError(
+	const SilikoValue *object);
 SILIKOCORE_EXPORT
-long long int SilikoValueGetInteger(const SilikoValue *object);
+long long int SilikoValueGetInteger(
+	const SilikoValue *object);
 SILIKOCORE_EXPORT
-double SilikoValueGetReal(const SilikoValue *object);
-
+double SilikoValueGetReal(
+	const SilikoValue *object);
 SILIKOCORE_EXPORT
-void SilikoValueNegate(SilikoValue *object);
+void SilikoValueNegate(
+	SilikoValue *object);
 
 #if defined __cplusplus
 }

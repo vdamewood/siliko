@@ -25,6 +25,10 @@
 #include <SilikoCore/Engine.h>
 #include <SilikoCore/Value.h>
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathAbs(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
@@ -60,5 +64,9 @@ SilikoValue *SilikoMathTanh(int argc, SilikoValue **argv);
 
 SILIKOCORE_EXPORT
 int SilikoInstallMathFunctions(SilikoEngine *destination);
+
+#if defined __cplusplus
+}
+#endif
 
 #endif // SILIKO_CORE_MATH_H

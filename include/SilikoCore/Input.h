@@ -23,12 +23,11 @@
 
 #include <SilikoCore/Api.h>
 
+typedef struct SilikoInput SilikoInput;
+
 #if defined __cplusplus
 extern "C" {
 #endif
-
-struct SilikoInput;
-typedef struct SilikoInput SilikoInput;
 
 struct SILIKOCORE_EXPORT SilikoInputVTable
 {
@@ -41,9 +40,12 @@ SILIKOCORE_EXPORT SilikoInput *SilikoInputNew(
 	const struct SilikoInputVTable *source_table,
 	void *source_state);
 
-SILIKOCORE_EXPORT int SilikoInputAdvance(SilikoInput *object);
-SILIKOCORE_EXPORT char SilikoInputGetCharacter(SilikoInput *object);
-SILIKOCORE_EXPORT void SilikoInputDelete(SilikoInput *object);
+SILIKOCORE_EXPORT
+int SilikoInputAdvance(SilikoInput *object);
+SILIKOCORE_EXPORT
+char SilikoInputGetCharacter(SilikoInput *object);
+SILIKOCORE_EXPORT
+void SilikoInputDelete(SilikoInput *object);
 
 #if defined __cplusplus
 }

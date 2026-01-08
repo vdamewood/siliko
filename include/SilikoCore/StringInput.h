@@ -29,7 +29,7 @@ extern "C" {
 #endif
 
 SILIKOCORE_EXPORT
-    SilikoInput *SilikoStringInputNew(const char *input_string);
+SilikoInput *SilikoStringInputNew(const char *input_string);
 
 #if defined __cplusplus
 }

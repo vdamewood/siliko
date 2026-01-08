@@ -22,7 +22,7 @@
 #include <string.h>
 
 #include <SilikoCore/Node.h>
-#include <SilikoCore/Engine.h>
+#include <SilikoCore/Value.h>
 
 #if defined _WIN32
 #define strdup _strdup
@@ -178,7 +178,6 @@ static struct Branch *NewBranch(const char* source_id)
 
 SilikoNode *SilikoNodeNewBranch(const char *NewId)
 {
-	const int DefaultSize = 4;
 	SilikoNode *object = malloc(sizeof(SilikoNode));
 	if (!object)
 		return NULL;

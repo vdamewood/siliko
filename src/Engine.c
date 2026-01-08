@@ -18,14 +18,12 @@
 // <http://www.gnu.org/licenses/>.
 
 
-#include <limits.h>
-#include <math.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <time.h>
 
 #include <SilikoCore/Engine.h>
+#include <SilikoCore/Function.h>
 #include <SilikoCore/Value.h>
 
 #if defined _WIN32
@@ -54,7 +52,7 @@ struct SilikoEngine
 	struct SilikoFunctionChain *table[TableSize];
 };
 
-SilikoEngine *SilikoEngineNew()
+SilikoEngine *SilikoEngineNew(void)
 {
 	return calloc(1, sizeof(SilikoEngine));
 }

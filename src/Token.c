@@ -40,7 +40,7 @@ struct SilikoToken
     };
 };
 
-SilikoToken *SilikoTokenNew()
+SilikoToken *SilikoTokenNew(void)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -95,7 +95,7 @@ SilikoToken *SilikoTokenNewFromId(const char *source)
     return object;
 }
 
-SilikoToken *SilikoTokenNewEndOfInput()
+SilikoToken *SilikoTokenNewEndOfInput(void)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)

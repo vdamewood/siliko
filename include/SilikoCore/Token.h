@@ -23,9 +23,7 @@
 
 #include <SilikoCore/Api.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
+typedef struct SilikoToken SilikoToken;
 
 enum SilikoTokenStatus
 {
@@ -37,54 +35,55 @@ enum SilikoTokenStatus
 		SilikoTokenEndOfInput
 };
 
-struct SilikoToken;
-typedef struct SilikoToken SilikoToken;
+#if defined __cplusplus
+extern "C" {
+#endif
 
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNew();
+SilikoToken *SilikoTokenNew(void);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewFromInteger(long long int source);
+SilikoToken *SilikoTokenNewFromInteger(long long int source);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewFromReal(double source);
+SilikoToken *SilikoTokenNewFromReal(double source);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewFromCharacter(char source);
+SilikoToken *SilikoTokenNewFromCharacter(char source);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewFromId(const char *source);
+SilikoToken *SilikoTokenNewFromId(const char *source);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewEndOfInput();
+SilikoToken *SilikoTokenNewEndOfInput(void);
 SILIKOCORE_EXPORT
-	SilikoToken *SilikoTokenNewCopy(const SilikoToken *source);
+SilikoToken *SilikoTokenNewCopy(const SilikoToken *source);
 SILIKOCORE_EXPORT
-	void SilikoTokenDelete(SilikoToken *object);
+void SilikoTokenDelete(SilikoToken *object);
 
 SILIKOCORE_EXPORT
-	void SilikoTokenAssignInteger(
-		SilikoToken *object,
-		long long int source);
+void SilikoTokenAssignInteger(
+	SilikoToken *object,
+	long long int source);
 SILIKOCORE_EXPORT
-	void SilikoTokenAssignReal(SilikoToken *object, double source);
+void SilikoTokenAssignReal(SilikoToken *object, double source);
 SILIKOCORE_EXPORT
-	void SilikoTokenAssignCharacter(SilikoToken *object, char source);
+void SilikoTokenAssignCharacter(SilikoToken *object, char source);
 SILIKOCORE_EXPORT
-	void SilikoTokenAssignId(SilikoToken *object, const char *source);
+void SilikoTokenAssignId(SilikoToken *object, const char *source);
 SILIKOCORE_EXPORT
-	void SilikoTokenAssignEndOfInput(SilikoToken *object);
+void SilikoTokenAssignEndOfInput(SilikoToken *object);
 SILIKOCORE_EXPORT
-	void SilikoTokenCopy(
-		SilikoToken *object,
-		const SilikoToken *source);
+void SilikoTokenCopy(
+	SilikoToken *object,
+	const SilikoToken *source);
 
 SILIKOCORE_EXPORT
-	enum SilikoTokenStatus SilikoTokenGetStatus(
-		const SilikoToken *object);
+enum SilikoTokenStatus SilikoTokenGetStatus(
+	const SilikoToken *object);
 SILIKOCORE_EXPORT
-	long long int SilikoTokenGetInteger(const SilikoToken *object);
+long long int SilikoTokenGetInteger(const SilikoToken *object);
 SILIKOCORE_EXPORT
-	double SilikoTokenGetReal(const SilikoToken *object);
+double SilikoTokenGetReal(const SilikoToken *object);
 SILIKOCORE_EXPORT
-	char SilikoTokenGetCharacter(const SilikoToken *object);
+char SilikoTokenGetCharacter(const SilikoToken *object);
 SILIKOCORE_EXPORT
-	const char *SilikoTokenGetId(const SilikoToken *object);
+const char *SilikoTokenGetId(const SilikoToken *object);
 
 #if defined __cplusplus
 }

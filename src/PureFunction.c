@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <SilikoCore/Function.h>
+#include <SilikoCore/Value.h>
 
 struct State
 {

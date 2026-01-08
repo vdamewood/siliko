@@ -25,12 +25,11 @@
 #include <SilikoCore/Input.h>
 #include <SilikoCore/Token.h>
 
+typedef struct SilikoLexer SilikoLexer;
+
 #if defined __cplusplus
 extern "C" {
 #endif
-
-struct SilikoLexer;
-typedef struct SilikoLexer SilikoLexer;
 
 SILIKOCORE_EXPORT SilikoLexer *
 SilikoLexerNew(SilikoInput *source);

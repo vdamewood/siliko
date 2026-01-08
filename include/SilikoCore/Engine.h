@@ -25,15 +25,14 @@
 #include <SilikoCore/Function.h>
 #include <SilikoCore/Value.h>
 
+typedef struct SilikoEngine SilikoEngine;
+
 #if defined __cplusplus
 extern "C" {
 #endif
 
-struct SilikoEngine;
-typedef struct SilikoEngine SilikoEngine;
-
 SILIKOCORE_EXPORT
-SilikoEngine *SilikoEngineNew();
+SilikoEngine *SilikoEngineNew(void);
 SILIKOCORE_EXPORT
 void SilikoEngineDelete(SilikoEngine *object);
 
