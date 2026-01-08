@@ -57,7 +57,6 @@ add_library(SilikoCore)
 add_library(Siliko::SilikoCore ALIAS SilikoCore)
 target_sources(SilikoCore
 	PRIVATE
-		src/Functions.h
 		src/Functions.c
 		src/Function.c
 		src/PureFunction.c
@@ -137,6 +136,8 @@ set(PUBLIC_HEADERS
 	include/SilikoCore/ParseInfix.h
 	include/SilikoCore/Evaluate.h
 	include/SilikoCore/Version.h
+	include/SilikoCore/Operators.h
+	include/SilikoCore/Math.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
 )
 if (SILIKO_CORE_BUILD_FRAMEWORK)

@@ -26,10 +26,7 @@
 #include <time.h>
 
 #include <SilikoCore/Engine.h>
-#include <SilikoCore/Function.h>
 #include <SilikoCore/Value.h>
-
-#include "Functions.h"
 
 #if defined _WIN32
 #define strdup _strdup
@@ -110,58 +107,6 @@ int SilikoEngineInstallFunction(
 	}
 
 	return -1;
-}
-
-int SilikoInstallOperators(SilikoEngine *engine)
-{
-	return SilikoEngineInstallFunction(engine, "add",
-			SilikoPureFunctionNew(SilikoFunction_add))
-		&& SilikoEngineInstallFunction(engine, "subtract",
-			SilikoPureFunctionNew(SilikoFunction_subtract))
-		&& SilikoEngineInstallFunction(engine, "multiply",
-			SilikoPureFunctionNew(SilikoFunction_multiply))
-		&& SilikoEngineInstallFunction(engine, "divide",
-			SilikoPureFunctionNew(SilikoFunction_divide))
-		&& SilikoEngineInstallFunction(engine, "power",
-			SilikoPureFunctionNew(SilikoFunction_power))
-		&& SilikoEngineInstallFunction(engine, "dice",
-			SilikoPureFunctionNew(SilikoFunction_dice));
-}
-
-int SilikoInstallMathFunctions(SilikoEngine *engine)
-{
-	return SilikoEngineInstallFunction(engine, "abs",
-			SilikoPureFunctionNew(SilikoFunction_abs))
-		&& SilikoEngineInstallFunction(engine, "acos",
-			SilikoPureFunctionNew(SilikoFunction_acos))
-		&& SilikoEngineInstallFunction(engine, "asin",
-			SilikoPureFunctionNew(SilikoFunction_asin))
-		&& SilikoEngineInstallFunction(engine, "atan",
-			SilikoPureFunctionNew(SilikoFunction_atan))
-		&& SilikoEngineInstallFunction(engine, "ceil",
-			SilikoPureFunctionNew(SilikoFunction_ceil))
-		&& SilikoEngineInstallFunction(engine, "cos",
-			SilikoPureFunctionNew(SilikoFunction_cos))
-		&& SilikoEngineInstallFunction(engine, "cosh",
-			SilikoPureFunctionNew(SilikoFunction_cosh))
-		&& SilikoEngineInstallFunction(engine, "exp",
-			SilikoPureFunctionNew(SilikoFunction_exp))
-		&& SilikoEngineInstallFunction(engine, "floor",
-			SilikoPureFunctionNew(SilikoFunction_floor))
-		&& SilikoEngineInstallFunction(engine, "log",
-			SilikoPureFunctionNew(SilikoFunction_log))
-		&& SilikoEngineInstallFunction(engine, "log10",
-			SilikoPureFunctionNew(SilikoFunction_log10))
-		&& SilikoEngineInstallFunction(engine, "sin",
-			SilikoPureFunctionNew(SilikoFunction_sin))
-		&& SilikoEngineInstallFunction(engine, "sinh",
-			SilikoPureFunctionNew(SilikoFunction_sinh))
-		&& SilikoEngineInstallFunction(engine, "sqrt",
-			SilikoPureFunctionNew(SilikoFunction_sqrt))
-		&& SilikoEngineInstallFunction(engine, "tan",
-			SilikoPureFunctionNew(SilikoFunction_tan))
-		&& SilikoEngineInstallFunction(engine, "tanh",
-			SilikoPureFunctionNew(SilikoFunction_tanh));
 }
 
 SilikoFunction *SilikoEngineFetchFunction(SilikoEngine *object, const char *name)

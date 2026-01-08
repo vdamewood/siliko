@@ -3,6 +3,8 @@
 #include <SilikoCore/StringInput.h>
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Evaluate.h>
+#include <SilikoCore/Operator.h>
+#include <SilikoCore/Math.h>
 
 #include "Macros.h"
 

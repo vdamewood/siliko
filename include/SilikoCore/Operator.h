@@ -18,43 +18,27 @@
 // <http://www.gnu.org/licenses/>.
 
 
-#if !defined SILIKO_CORE_ENGINE_H
-#define SILIKO_CORE_ENGINE_H
+#if !defined SILIKO_OPERATORS_H
+#define SILIKO_OPERATORS_H
 
 #include <SilikoCore/Api.h>
-#include <SilikoCore/Function.h>
+#include <SilikoCore/Engine.h>
 #include <SilikoCore/Value.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
-
-struct SilikoEngine;
-typedef struct SilikoEngine SilikoEngine;
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperatorAdd(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperatorSubtract(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperatorMultiply(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperatorDivide(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperatorPower(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperatorDice(int argc, SilikoValue **argv);
 
 SILIKOCORE_EXPORT
-SilikoEngine *SilikoEngineNew();
-SILIKOCORE_EXPORT
-void SilikoEngineDelete(SilikoEngine *object);
+int SilikoInstallOperators(SilikoEngine *destination);
 
-SILIKOCORE_EXPORT
-SilikoValue *SilikoEngineCallFunction(
-    SilikoEngine* object,
-    const char *function_name,
-    int argument_count,
-    SilikoValue **arguments);
-SILIKOCORE_EXPORT
-SilikoFunction *SilikoEngineFetchFunction(
-    SilikoEngine* object,
-    const char *function_name);
-SILIKOCORE_EXPORT
-int SilikoEngineInstallFunction(
-    SilikoEngine* object,
-    const char *function_name,
-    SilikoFunction *function);
-
-#if defined __cplusplus
-}
-#endif
-
-#endif // SILIKO_CORE_ENGINE_H
+#endif // SILIKO_OPERATORS_H

@@ -1,5 +1,7 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/Engine.h>
+#include <SilikoCore/Operator.h>
+#include <SilikoCore/Math.h>
 
 SilikoValue *GetFortyTwoInt(int argc, SilikoValue **argv)
 {

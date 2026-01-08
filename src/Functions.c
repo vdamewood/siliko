@@ -24,9 +24,11 @@
 #include <string.h>
 #include <time.h>
 
-#include "Functions.h"
+#include <SilikoCore/Operator.h>
+#include <SilikoCore/Math.h>
+#include <SilikoCore/Value.h>
 
-SilikoValue *SilikoFunction_add(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperatorAdd(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -59,7 +61,7 @@ SilikoValue *SilikoFunction_add(int argc, SilikoValue **argv)
 	return result;
 }
 
-SilikoValue *SilikoFunction_subtract(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperatorSubtract(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -92,7 +94,7 @@ SilikoValue *SilikoFunction_subtract(int argc, SilikoValue **argv)
 	return result;
 }
 
-SilikoValue *SilikoFunction_multiply(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperatorMultiply(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -125,7 +127,7 @@ SilikoValue *SilikoFunction_multiply(int argc, SilikoValue **argv)
 	return result;
 }
 
-SilikoValue *SilikoFunction_divide(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperatorDivide(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -167,7 +169,7 @@ SilikoValue *SilikoFunction_divide(int argc, SilikoValue **argv)
 	return result;
 }
 
-SilikoValue *SilikoFunction_power(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperatorPower(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -185,7 +187,7 @@ SilikoValue *SilikoFunction_power(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(result);
 }
 
-SilikoValue *SilikoFunction_dice(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperatorDice(int argc, SilikoValue **argv)
 {
 	if (argc != 2)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -215,7 +217,7 @@ SilikoValue *SilikoFunction_dice(int argc, SilikoValue **argv)
 	return SilikoValueNewFromInteger(result);
 }
 
-SilikoValue *SilikoFunction_abs(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathAbs(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -233,7 +235,7 @@ SilikoValue *SilikoFunction_abs(int argc, SilikoValue **argv)
 	}
 }
 
-SilikoValue *SilikoFunction_acos(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathAcos(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -248,7 +250,7 @@ SilikoValue *SilikoFunction_acos(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(acos(input));
 }
 
-SilikoValue *SilikoFunction_asin(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathAsin(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -263,7 +265,7 @@ SilikoValue *SilikoFunction_asin(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(asin(input));
 }
 
-SilikoValue *SilikoFunction_atan(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathAtan(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -274,7 +276,7 @@ SilikoValue *SilikoFunction_atan(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(atan(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_ceil(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathCeil(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -295,7 +297,7 @@ SilikoValue *SilikoFunction_ceil(int argc, SilikoValue **argv)
 	}
 }
 
-SilikoValue *SilikoFunction_cos(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathCos(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -306,7 +308,7 @@ SilikoValue *SilikoFunction_cos(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(cos(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_cosh(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathCosh(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -317,7 +319,7 @@ SilikoValue *SilikoFunction_cosh(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(cosh(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_exp(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathExp(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -328,7 +330,7 @@ SilikoValue *SilikoFunction_exp(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(exp(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_floor(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathFloor(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -349,7 +351,7 @@ SilikoValue *SilikoFunction_floor(int argc, SilikoValue **argv)
 	}
 }
 
-SilikoValue *SilikoFunction_log(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathLog(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -360,7 +362,7 @@ SilikoValue *SilikoFunction_log(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(log(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_log10(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathLog10(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -371,7 +373,7 @@ SilikoValue *SilikoFunction_log10(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(log10(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_sin(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathSin(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -382,7 +384,7 @@ SilikoValue *SilikoFunction_sin(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(sin(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_sinh(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathSinh(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -393,7 +395,7 @@ SilikoValue *SilikoFunction_sinh(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(sinh(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_sqrt(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathSqrt(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -407,7 +409,7 @@ SilikoValue *SilikoFunction_sqrt(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(sqrt(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_tan(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathTan(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -418,7 +420,7 @@ SilikoValue *SilikoFunction_tan(int argc, SilikoValue **argv)
 	return SilikoValueNewFromReal(tan(SilikoValueGetReal(argv[0])));
 }
 
-SilikoValue *SilikoFunction_tanh(int argc, SilikoValue **argv)
+SilikoValue *SilikoMathTanh(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
 		return SilikoValueNewFromError(SilikoErrorFunctionArguments);
@@ -427,4 +429,56 @@ SilikoValue *SilikoFunction_tanh(int argc, SilikoValue **argv)
 		return SilikoValueNewCopy(argv[0]);
 
 	return SilikoValueNewFromReal(tanh(SilikoValueGetReal(argv[0])));
+}
+
+int SilikoInstallOperators(SilikoEngine *engine)
+{
+	return SilikoEngineInstallFunction(engine, "add",
+			SilikoPureFunctionNew(SilikoOperatorAdd))
+		&& SilikoEngineInstallFunction(engine, "subtract",
+			SilikoPureFunctionNew(SilikoOperatorSubtract))
+		&& SilikoEngineInstallFunction(engine, "multiply",
+			SilikoPureFunctionNew(SilikoOperatorMultiply))
+		&& SilikoEngineInstallFunction(engine, "divide",
+			SilikoPureFunctionNew(SilikoOperatorDivide))
+		&& SilikoEngineInstallFunction(engine, "power",
+			SilikoPureFunctionNew(SilikoOperatorPower))
+		&& SilikoEngineInstallFunction(engine, "dice",
+			SilikoPureFunctionNew(SilikoOperatorDice));
+}
+
+int SilikoInstallMathFunctions(SilikoEngine *engine)
+{
+	return SilikoEngineInstallFunction(engine, "abs",
+			SilikoPureFunctionNew(SilikoMathAbs))
+		&& SilikoEngineInstallFunction(engine, "acos",
+			SilikoPureFunctionNew(SilikoMathAcos))
+		&& SilikoEngineInstallFunction(engine, "asin",
+			SilikoPureFunctionNew(SilikoMathAsin))
+		&& SilikoEngineInstallFunction(engine, "atan",
+			SilikoPureFunctionNew(SilikoMathAtan))
+		&& SilikoEngineInstallFunction(engine, "ceil",
+			SilikoPureFunctionNew(SilikoMathCeil))
+		&& SilikoEngineInstallFunction(engine, "cos",
+			SilikoPureFunctionNew(SilikoMathCos))
+		&& SilikoEngineInstallFunction(engine, "cosh",
+			SilikoPureFunctionNew(SilikoMathCosh))
+		&& SilikoEngineInstallFunction(engine, "exp",
+			SilikoPureFunctionNew(SilikoMathExp))
+		&& SilikoEngineInstallFunction(engine, "floor",
+			SilikoPureFunctionNew(SilikoMathFloor))
+		&& SilikoEngineInstallFunction(engine, "log",
+			SilikoPureFunctionNew(SilikoMathLog))
+		&& SilikoEngineInstallFunction(engine, "log10",
+			SilikoPureFunctionNew(SilikoMathLog10))
+		&& SilikoEngineInstallFunction(engine, "sin",
+			SilikoPureFunctionNew(SilikoMathSin))
+		&& SilikoEngineInstallFunction(engine, "sinh",
+			SilikoPureFunctionNew(SilikoMathSinh))
+		&& SilikoEngineInstallFunction(engine, "sqrt",
+			SilikoPureFunctionNew(SilikoMathSqrt))
+		&& SilikoEngineInstallFunction(engine, "tan",
+			SilikoPureFunctionNew(SilikoMathTan))
+		&& SilikoEngineInstallFunction(engine, "tanh",
+			SilikoPureFunctionNew(SilikoMathTanh));
 }

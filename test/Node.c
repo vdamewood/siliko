@@ -2,6 +2,8 @@
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Engine.h>
 #include <SilikoCore/Evaluate.h>
+#include <SilikoCore/Operator.h>
+#include <SilikoCore/Math.h>
 
 Test(SyntaxTreeTests, NewIntZero)
 {
