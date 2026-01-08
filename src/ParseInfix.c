@@ -18,7 +18,7 @@
 // <http://www.gnu.org/licenses/>.
 
 
-#include <SilikoCore/InfixParser.h>
+#include <SilikoCore/ParseInfix.h>
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Lexer.h>
 

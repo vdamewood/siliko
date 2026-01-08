@@ -66,7 +66,7 @@ target_sources(SilikoCore
 		src/Input.c
 		src/StringInput.c
 		src/Lexer.c
-		src/InfixParser.c
+		src/ParseInfix.c
 		src/Token.c
 		src/Value.c
 		src/Evaluate.c
@@ -134,7 +134,7 @@ set(PUBLIC_HEADERS
 	include/SilikoCore/StringInput.h
 	include/SilikoCore/Token.h
 	include/SilikoCore/Lexer.h
-	include/SilikoCore/InfixParser.h
+	include/SilikoCore/ParseInfix.h
 	include/SilikoCore/Evaluate.h
 	include/SilikoCore/Version.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h

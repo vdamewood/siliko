@@ -1,5 +1,5 @@
 #include <criterion/criterion.h>
-#include <SilikoCore/InfixParser.h>
+#include <SilikoCore/ParseInfix.h>
 #include <SilikoCore/StringInput.h>
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Evaluate.h>

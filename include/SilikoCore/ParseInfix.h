@@ -18,8 +18,8 @@
 // <http://www.gnu.org/licenses/>.
 
 
-#if !defined SILIKO_CORE_INFIX_PARSER_H
-#define SILIKO_CORE_INFIX_PARSER_H
+#if !defined SILIKO_CORE_PARSE_INFIX_H
+#define SILIKO_CORE_PARSE_INFIX_H
 
 #include <SilikoCore/Api.h>
 #include <SilikoCore/Input.h>
@@ -36,4 +36,4 @@ SILIKOCORE_EXPORT
 }
 #endif
 
-#endif // SILIKO_CORE_INFIX_PARSER_H
+#endif // SILIKO_CORE_PARSE_INFIX_H
