@@ -136,7 +136,7 @@ set(PUBLIC_HEADERS
 	include/SilikoCore/ParseInfix.h
 	include/SilikoCore/Evaluate.h
 	include/SilikoCore/Version.h
-	include/SilikoCore/Operators.h
+	include/SilikoCore/Operator.h
 	include/SilikoCore/Math.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
 )
