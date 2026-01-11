@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -40,26 +40,19 @@ extern "C" {
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeNewNothing(void);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewFromError(
-	enum SilikoError source);
+SilikoNode *SilikoNodeNewFromError(enum SilikoError source);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewFromInteger(
-	long long int source);
+SilikoNode *SilikoNodeNewFromInteger(long long int source);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewFromReal(
-	double source);
+SilikoNode *SilikoNodeNewFromReal(double source);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewFromValue(
-	SilikoValue *source);
+SilikoNode *SilikoNodeNewFromValue(SilikoValue *source);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewBranch(
-	const char *function_Name);
+SilikoNode *SilikoNodeNewBranch(const char *function_Name);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewCopy(
-	const SilikoNode *source);
+SilikoNode *SilikoNodeNewCopy(const SilikoNode *source);
 SILIKOCORE_EXPORT
-void SilikoNodeDelete(
-	SilikoNode *object);
+void SilikoNodeDelete(SilikoNode *object);
 
 SILIKOCORE_EXPORT
 void SilikoNodeAssignFromError(
@@ -87,57 +80,57 @@ void SilikoNodeCopy(
 	const SilikoNode *source);
 
 SILIKOCORE_EXPORT
-enum SilikoNodeStatus SilikoNodeGetStatus(
-	const SilikoNode *SyntaxTree);
-SILIKOCORE_EXPORT
-const SilikoValue *SilikoNodeGetValue(
+int SilikoNodeCountChildren(
 	const SilikoNode *object);
+SILIKOCORE_EXPORT
+const SilikoNode *SilikoNodeFetchChild(
+	const SilikoNode *object,
+	int child_index);
 SILIKOCORE_EXPORT
 const char *SilikoNodeGetId(
 	const SilikoNode *object);
+SILIKOCORE_EXPORT
+int SilikoNodeInsertCopy(
+	SilikoNode *object,
+	int position,
+	const SilikoNode *new_branch);
+SILIKOCORE_EXPORT
+int SilikoNodeInsert(
+	SilikoNode *object,
+	int position,
+	SilikoNode *new_branch);
 SILIKOCORE_EXPORT
 int SilikoNodeIsNegated(
 	const SilikoNode *object);
 SILIKOCORE_EXPORT
 int SilikoNodeNegate(
-	SilikoNode *SyntaxTree);
+	SilikoNode *object);
+SILIKOCORE_EXPORT
+SilikoNode *SilikoNodePruneChild(
+	SilikoNode *object,
+	int child_index);
 SILIKOCORE_EXPORT
 int SilikoNodePushCopyLeft(
-	SilikoNode *base_tree,
+	SilikoNode *object,
 	const SilikoNode *new_branch);
 SILIKOCORE_EXPORT
 int SilikoNodePushLeft(
-	SilikoNode *BaseTree,
-	SilikoNode *NewBranch);
+	SilikoNode *object,
+	SilikoNode *new_branch);
 SILIKOCORE_EXPORT
 int SilikoNodePushCopyRight(
-	SilikoNode *base_tree,
+	SilikoNode *object,
 	const SilikoNode *new_branch);
 SILIKOCORE_EXPORT
 int SilikoNodePushRight(
-	SilikoNode *BaseTree,
-	SilikoNode *NewBranch);
+	SilikoNode *object,
+	SilikoNode *new_branch);
 SILIKOCORE_EXPORT
-int SilikoNodeInsertCopy(
-	SilikoNode *base_tree,
-	int position,
-	const SilikoNode *new_branch);
-SILIKOCORE_EXPORT
-int SilikoNodeInsert(
-	SilikoNode *BaseTree,
-	int position,
-	SilikoNode *NewBranch);
-SILIKOCORE_EXPORT
-int SilikoNodeCountChildren(
+enum SilikoNodeStatus SilikoNodeGetStatus(
 	const SilikoNode *object);
 SILIKOCORE_EXPORT
-const SilikoNode *SilikoNodeFetchChild(
-	const SilikoNode *parent,
-	int childIndex);
-SILIKOCORE_EXPORT
-SilikoNode *SilikoNodePruneChild(
-	SilikoNode *parent,
-	int childIndex);
+const SilikoValue *SilikoNodeGetValue(
+	const SilikoNode *object);
 
 #if defined __cplusplus
 }

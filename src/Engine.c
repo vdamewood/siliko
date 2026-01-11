@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -107,7 +107,9 @@ int SilikoEngineInstallFunction(
 	return -1;
 }
 
-SilikoFunction *SilikoEngineFetchFunction(SilikoEngine *object, const char *name)
+SilikoFunction *SilikoEngineFetchFunction(
+	SilikoEngine *object,
+	const char *name)
 {
 	uint8_t index = hash(name);
 	struct SilikoFunctionChain *current = object->table[index];
@@ -135,6 +137,6 @@ SilikoValue *SilikoEngineCallFunction(
 
 	if (!function)
 		return SilikoValueNewFromError(SilikoErrorFunctionName);
-	
+
 	return SilikoFunctionCall(function, argc, argv);
 }

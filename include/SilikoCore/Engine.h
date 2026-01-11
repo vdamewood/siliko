@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -39,17 +39,17 @@ void SilikoEngineDelete(SilikoEngine *object);
 SILIKOCORE_EXPORT
 SilikoValue *SilikoEngineCallFunction(
     SilikoEngine* object,
-    const char *function_name,
-    int argument_count,
-    SilikoValue **arguments);
+    const char *name,
+    int argc,
+    SilikoValue **argv);
 SILIKOCORE_EXPORT
 SilikoFunction *SilikoEngineFetchFunction(
     SilikoEngine* object,
-    const char *function_name);
+    const char *name);
 SILIKOCORE_EXPORT
 int SilikoEngineInstallFunction(
     SilikoEngine* object,
-    const char *function_name,
+    const char *name,
     SilikoFunction *function);
 
 #if defined __cplusplus

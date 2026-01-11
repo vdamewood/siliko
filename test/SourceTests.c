@@ -1,6 +1,5 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/Input.h>
-#include <SilikoCore/StringInput.h>
 
 #define SourceTest(NAME, STRING) \
 Test(StringSourceTests, NAME) \

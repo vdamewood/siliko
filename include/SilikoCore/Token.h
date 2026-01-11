@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -61,13 +61,20 @@ void SilikoTokenAssignInteger(
 	SilikoToken *object,
 	long long int source);
 SILIKOCORE_EXPORT
-void SilikoTokenAssignReal(SilikoToken *object, double source);
+void SilikoTokenAssignReal(
+	SilikoToken *object,
+	double source);
 SILIKOCORE_EXPORT
-void SilikoTokenAssignCharacter(SilikoToken *object, char source);
+void SilikoTokenAssignCharacter(
+	SilikoToken *object,
+	char source);
 SILIKOCORE_EXPORT
-void SilikoTokenAssignId(SilikoToken *object, const char *source);
+void SilikoTokenAssignId(
+	SilikoToken *object,
+	const char *source);
 SILIKOCORE_EXPORT
-void SilikoTokenAssignEndOfInput(SilikoToken *object);
+void SilikoTokenAssignEndOfInput(
+	SilikoToken *object);
 SILIKOCORE_EXPORT
 void SilikoTokenCopy(
 	SilikoToken *object,

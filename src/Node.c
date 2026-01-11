@@ -59,13 +59,8 @@ struct SilikoNode
 static inline int checkBounds(const SilikoNode *parent, int child_index)
 {
 	if (parent->Type != SilikoNodeBranch
-			|| child_index >= parent->Branch->Count
-			|| child_index < -parent->Branch->Count)
+			|| child_index >= parent->Branch->Count)
 		return -1;
-
-	if (child_index < 0)
-		return child_index + parent->Branch->Count;
-
 	return child_index;
 }
 

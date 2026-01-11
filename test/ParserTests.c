@@ -1,6 +1,6 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/ParseInfix.h>
-#include <SilikoCore/StringInput.h>
+#include <SilikoCore/Input.h>
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Evaluate.h>
 #include <SilikoCore/Operator.h>

@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -36,9 +36,13 @@ struct SILIKOCORE_EXPORT SilikoInputVTable
 	void (*deleteVirt)(void *);
 };
 
-SILIKOCORE_EXPORT SilikoInput *SilikoInputNew(
+SILIKOCORE_EXPORT
+SilikoInput *SilikoInputNew(
 	const struct SilikoInputVTable *source_table,
 	void *source_state);
+
+SILIKOCORE_EXPORT
+SilikoInput *SilikoStringInputNew(const char *input_string);
 
 SILIKOCORE_EXPORT
 int SilikoInputAdvance(SilikoInput *object);
