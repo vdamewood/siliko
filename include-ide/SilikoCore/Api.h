@@ -11,3 +11,11 @@
 #define SILIKOCORE_DEPRECATED_EXPORT
 #define SILIKOCORE_DEPRECATED_NO_EXPORT
 #define SILIKOCORE_NO_DEPRECATED
+
+#if defined __cplusplus
+#  define SILIKO_EXPORT_C_API extern "C" {
+#  define SILIKO_END_C_API }
+#else
+#  define SILIKO_EXPORT_C_API
+#  define SILIKO_END_C_API
+#endif

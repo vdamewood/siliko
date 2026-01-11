@@ -27,9 +27,7 @@
 
 typedef struct SilikoLexer SilikoLexer;
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT SilikoLexer *
 SilikoLexerNew(SilikoInput *source);
@@ -41,8 +39,6 @@ SilikoLexerAdvance(SilikoLexer *object);
 SILIKOCORE_EXPORT const SilikoToken *
 SilikoLexerGetToken(SilikoLexer *object);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_CORE_LEXER_H

@@ -26,9 +26,7 @@
 
 typedef struct SilikoFunction SilikoFunction;
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 struct SILIKOCORE_EXPORT SilikoFunctionVTable
 {
@@ -59,8 +57,6 @@ SILIKOCORE_EXPORT
 void SilikoFunctionDelete(
     SilikoFunction *object);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_CORE_FUNCTION_H

@@ -33,9 +33,7 @@ enum SilikoNodeStatus
 
 typedef struct SilikoNode SilikoNode;
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeNewNothing(void);
@@ -132,8 +130,6 @@ SILIKOCORE_EXPORT
 const SilikoValue *SilikoNodeGetValue(
 	const SilikoNode *object);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_CORE_NODE_H

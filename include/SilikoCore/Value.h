@@ -44,9 +44,7 @@ enum SilikoValueStatus
 
 typedef struct SilikoValue SilikoValue;
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoValueNew(void);
@@ -94,8 +92,6 @@ SILIKOCORE_EXPORT
 void SilikoValueNegate(
 	SilikoValue *object);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_CORE_VALUE_H

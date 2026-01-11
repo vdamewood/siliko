@@ -25,15 +25,11 @@
 #include <SilikoCore/Input.h>
 #include <SilikoCore/Node.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoNode *SilikoParseInfix(SilikoInput *input);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_CORE_PARSE_INFIX_H

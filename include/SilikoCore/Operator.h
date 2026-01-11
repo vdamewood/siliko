@@ -25,9 +25,7 @@
 #include <SilikoCore/Engine.h>
 #include <SilikoCore/Value.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoOperatorAdd(int argc, SilikoValue **argv);
@@ -45,8 +43,6 @@ SilikoValue *SilikoOperatorDice(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
 int SilikoInstallOperators(SilikoEngine *destination);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_OPERATORS_H

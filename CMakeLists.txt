@@ -119,9 +119,20 @@ target_sources(SilikoCore
 		${CMAKE_CURRENT_BINARY_DIR}/Version.c
 )
 
+
+set(API_HEADER_CONTENT [[
+#if defined __cplusplus
+#  define SILIKO_EXPORT_C_API extern "C" {
+#  define SILIKO_END_C_API }
+#else
+#  define SILIKO_EXPORT_C_API
+#  define SILIKO_END_C_API
+#endif
+]])
 include(GenerateExportHeader)
 generate_export_header(SilikoCore
 	EXPORT_FILE_NAME include/SilikoCore/Api.h
+	CUSTOM_CONTENT_FROM_VARIABLE API_HEADER_CONTENT
 )
 
 set(PUBLIC_HEADERS

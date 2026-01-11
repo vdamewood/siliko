@@ -27,9 +27,7 @@
 
 typedef struct SilikoEngine SilikoEngine;
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoEngine *SilikoEngineNew(void);
@@ -52,8 +50,6 @@ int SilikoEngineInstallFunction(
     const char *name,
     SilikoFunction *function);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_CORE_ENGINE_H

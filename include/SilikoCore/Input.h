@@ -25,9 +25,7 @@
 
 typedef struct SilikoInput SilikoInput;
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 struct SILIKOCORE_EXPORT SilikoInputVTable
 {
@@ -51,8 +49,6 @@ char SilikoInputGetCharacter(SilikoInput *object);
 SILIKOCORE_EXPORT
 void SilikoInputDelete(SilikoInput *object);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_CORE_INPUT_H

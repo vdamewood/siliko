@@ -35,9 +35,7 @@ enum SilikoTokenStatus
 		SilikoTokenEndOfInput
 };
 
-#if defined __cplusplus
-extern "C" {
-#endif
+SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoToken *SilikoTokenNew(void);
@@ -92,8 +90,6 @@ char SilikoTokenGetCharacter(const SilikoToken *object);
 SILIKOCORE_EXPORT
 const char *SilikoTokenGetId(const SilikoToken *object);
 
-#if defined __cplusplus
-}
-#endif
+SILIKO_END_C_API
 
 #endif // SILIKO_CORE_TOKEN_H
