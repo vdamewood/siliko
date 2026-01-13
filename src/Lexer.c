@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -314,12 +314,12 @@ void SilikoLexerAdvance(SilikoLexer *Lexer)
 	free(Lex.Buffer);
 }
 
-SilikoLexer *SilikoLexerNew(SilikoInput *source)
+SilikoLexer *SilikoLexerCreate(SilikoInput *source)
 {
 	SilikoLexer *object = malloc(sizeof(SilikoLexer));
 	if (!object)
 		return NULL;
-	SilikoToken *new_token = SilikoTokenNew();
+	SilikoToken *new_token = SilikoTokenCreate();
 	if (!new_token)
 	{
 		free(object);
@@ -334,12 +334,12 @@ SilikoLexer *SilikoLexerNew(SilikoInput *source)
 	return object;
 }
 
-void SilikoLexerDelete(SilikoLexer *Lexer)
+void SilikoLexerDestroy(SilikoLexer *Lexer)
 {
 	if (Lexer)
 	{
 		SilikoInputDelete(Lexer->Source);
-		SilikoTokenDelete(Lexer->Token);
+		SilikoTokenDestroy(Lexer->Token);
 		free(Lexer);
 	}
 }

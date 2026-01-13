@@ -6,7 +6,7 @@
 #define VALUE_TEST(TEST_NAME, VALUE) \
 Test(ValueTests, TEST_NAME) \
 { \
-    SilikoValue *test_value = SilikoValueNew(VALUE); \
+    SilikoValue *test_value = SilikoValueCreate(VALUE); \
     cr_assert(test_value); \
     cr_assert(SilikoValueGetStatus(test_value) == _Generic((VALUE), \
         int:            SilikoValueInteger, \
@@ -18,7 +18,7 @@ Test(ValueTests, TEST_NAME) \
         long long int:  SilikoValueGetInteger, \
         double:         SilikoValueGetReal \
     )(test_value) == VALUE); \
-    SilikoValueDelete(test_value); \
+    SilikoValueDestroy(test_value); \
 }
 
 // Errors require a separate macro because `enum`s
@@ -26,10 +26,10 @@ Test(ValueTests, TEST_NAME) \
 #define VALUE_ERROR_TEST(TEST_NAME, VALUE) \
 Test(ValueTests, TEST_NAME) \
 { \
-    SilikoValue *test_value = SilikoValueNewFromError(VALUE); \
+    SilikoValue *test_value = SilikoValueCreateFromError(VALUE); \
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueError); \
     cr_assert(SilikoValueGetError(test_value) == VALUE); \
-    SilikoValueDelete(test_value); \
+    SilikoValueDestroy(test_value); \
 }
 
 VALUE_TEST(NewIntZero, 0LL)

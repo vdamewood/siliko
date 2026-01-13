@@ -30,9 +30,9 @@ typedef struct SilikoEngine SilikoEngine;
 SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
-SilikoEngine *SilikoEngineNew(void);
+SilikoEngine *SilikoEngineCreate(void);
 SILIKOCORE_EXPORT
-void SilikoEngineDelete(SilikoEngine *object);
+void SilikoEngineDestroy(SilikoEngine *object);
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoEngineCallFunction(

@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -40,7 +40,7 @@ struct SilikoToken
     };
 };
 
-SilikoToken *SilikoTokenNew(void)
+SilikoToken *SilikoTokenCreate(void)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -50,7 +50,7 @@ SilikoToken *SilikoTokenNew(void)
     return object;
 }
 
-SilikoToken *SilikoTokenNewFromInteger(long long int source)
+SilikoToken *SilikoTokenCreateFromInteger(long long int source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -60,7 +60,7 @@ SilikoToken *SilikoTokenNewFromInteger(long long int source)
     return object;
 }
 
-SilikoToken *SilikoTokenNewFromReal(double source)
+SilikoToken *SilikoTokenCreateFromReal(double source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -70,7 +70,7 @@ SilikoToken *SilikoTokenNewFromReal(double source)
     return object;
 }
 
-SilikoToken *SilikoTokenNewFromCharacter(char source)
+SilikoToken *SilikoTokenCreateFromCharacter(char source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -80,7 +80,7 @@ SilikoToken *SilikoTokenNewFromCharacter(char source)
     return object;
 }
 
-SilikoToken *SilikoTokenNewFromId(const char *source)
+SilikoToken *SilikoTokenCreateFromId(const char *source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -95,7 +95,7 @@ SilikoToken *SilikoTokenNewFromId(const char *source)
     return object;
 }
 
-SilikoToken *SilikoTokenNewEndOfInput(void)
+SilikoToken *SilikoTokenCreateEndOfInput(void)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -105,7 +105,7 @@ SilikoToken *SilikoTokenNewEndOfInput(void)
     return object;
 }
 
-SilikoToken *SilikoTokenNewCopy(const SilikoToken *source)
+SilikoToken *SilikoTokenCopy(const SilikoToken *source)
 {
     SilikoToken *object = malloc(sizeof(*object));
     if (!object)
@@ -135,7 +135,7 @@ SilikoToken *SilikoTokenNewCopy(const SilikoToken *source)
     return object;
 }
 
-void SilikoTokenDelete(SilikoToken *object)
+void SilikoTokenDestroy(SilikoToken *object)
 {
     if (object->status == SilikoTokenId)
         free(object->id);
@@ -185,7 +185,7 @@ void SilikoTokenAssignEndOfInput(SilikoToken *object)
     object->integer = 0;
 }
 
-void SilikoTokenCopy(SilikoToken *object, const SilikoToken *source)
+void SilikoTokenAssign(SilikoToken *object, const SilikoToken *source)
 {
     if (object->status == SilikoTokenId)
         free(object->id);
@@ -223,7 +223,7 @@ long long int SilikoTokenGetInteger(const SilikoToken *object)
 {
     if (object->status != SilikoTokenInteger)
         return 0LL;
-    
+
     return object->integer;
 }
 
@@ -231,7 +231,7 @@ double SilikoTokenGetReal(const SilikoToken *object)
 {
     if (object->status != SilikoTokenReal)
         return NAN;
-    
+
     return object->real;
 }
 
@@ -239,7 +239,7 @@ char SilikoTokenGetCharacter(const SilikoToken *object)
 {
     if (object->status != SilikoTokenCharacter)
         return 0x7F;
-    
+
     return object->character;
 }
 
@@ -247,7 +247,7 @@ const char *SilikoTokenGetId(const SilikoToken *object)
 {
     if (object->status != SilikoTokenId)
         return NULL;
-    
+
     return object->id;
 
 }

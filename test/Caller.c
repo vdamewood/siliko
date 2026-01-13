@@ -5,89 +5,89 @@
 
 SilikoValue *GetFortyTwoInt(int argc, SilikoValue **argv)
 {
-    return SilikoValueNewFromInteger(42LL);
+    return SilikoValueCreateFromInteger(42LL);
 }
 
 SilikoValue *GetFortyTwoFloat(int argc, SilikoValue **argv)
 {
-    return SilikoValueNewFromReal(42.0);
+    return SilikoValueCreateFromReal(42.0);
 }
 
 Test(EngineTests, NewCaller) {
-    SilikoEngine *Caller = SilikoEngineNew();
+    SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
-    SilikoEngineDelete(Caller);
+    SilikoEngineDestroy(Caller);
 }
 
 Test(EngineTests, GetIntFunction) {
-    SilikoEngine *Caller = SilikoEngineNew();
+    SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
-    SilikoFunction *TestFunction = SilikoPureFunctionNew(GetFortyTwoInt);
+    SilikoFunction *TestFunction = SilikoPureFunctionCreate(GetFortyTwoInt);
     SilikoEngineInstallFunction(Caller, "gfti", TestFunction);
     SilikoFunction *ResultFunction = SilikoEngineFetchFunction(Caller, "gfti");
     cr_assert(TestFunction == ResultFunction);
-    SilikoEngineDelete(Caller);
+    SilikoEngineDestroy(Caller);
 }
 
 Test(EngineTests, GetFloatFunction) {
-    SilikoEngine *Caller = SilikoEngineNew();
+    SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
-    SilikoFunction *TestFunction = SilikoPureFunctionNew(GetFortyTwoFloat);
+    SilikoFunction *TestFunction = SilikoPureFunctionCreate(GetFortyTwoFloat);
     SilikoEngineInstallFunction(Caller, "gftf", TestFunction);
     SilikoFunction *ResultFunction = SilikoEngineFetchFunction(Caller, "gftf");
     cr_assert(TestFunction == ResultFunction);
-    SilikoEngineDelete(Caller);
+    SilikoEngineDestroy(Caller);
 }
 
 Test(EngineTests, UseIntFunction) {
-    SilikoEngine *Caller = SilikoEngineNew();
+    SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
-    SilikoFunction *TestFunction = SilikoPureFunctionNew(GetFortyTwoInt);
+    SilikoFunction *TestFunction = SilikoPureFunctionCreate(GetFortyTwoInt);
     SilikoEngineInstallFunction(Caller, "gfti", TestFunction);
     SilikoValue *TestValue = SilikoEngineCallFunction(Caller, "gfti", 0, NULL);
-    SilikoEngineDelete(Caller);
+    SilikoEngineDestroy(Caller);
     cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueInteger);
     cr_assert(SilikoValueGetInteger(TestValue) == 42);
-    SilikoValueDelete(TestValue);
+    SilikoValueDestroy(TestValue);
 }
 
 Test(EngineTests, UseFloatFunction) {
-    SilikoEngine *Caller = SilikoEngineNew();
+    SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
-    SilikoFunction *TestFunction = SilikoPureFunctionNew(GetFortyTwoFloat);
+    SilikoFunction *TestFunction = SilikoPureFunctionCreate(GetFortyTwoFloat);
     SilikoEngineInstallFunction(Caller, "gftf", TestFunction);
     SilikoValue *TestValue = SilikoEngineCallFunction(Caller, "gftf", 0, NULL);
-    SilikoEngineDelete(Caller);
+    SilikoEngineDestroy(Caller);
     cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueReal);
     cr_assert(SilikoValueGetReal(TestValue) == 42.0);
-    SilikoValueDelete(TestValue);
+    SilikoValueDestroy(TestValue);
 }
 
 Test(EngineTests, HandleBadFunction)
 {
-    SilikoEngine *Caller = SilikoEngineNew();
+    SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
     SilikoValue *TestValue = SilikoEngineCallFunction(Caller, "bogus", 0, NULL);
-    SilikoEngineDelete(Caller);
+    SilikoEngineDestroy(Caller);
     cr_assert(SilikoValueGetStatus(TestValue) == SilikoValueError);
     cr_assert(SilikoValueGetError(TestValue) == SilikoErrorFunctionName);
-    SilikoValueDelete(TestValue);
+    SilikoValueDestroy(TestValue);
 }
 
 Test(EngineTests, FunctionsInstall)
 {
-    SilikoEngine *Caller = SilikoEngineNew();
+    SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
     int Result = SilikoInstallMathFunctions(Caller);
-    SilikoEngineDelete(Caller);
+    SilikoEngineDestroy(Caller);
     cr_assert(Result);
 }
 
 Test(EngineTests, OperatorsInstall)
 {
-    SilikoEngine *Caller = SilikoEngineNew();
+    SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
     int Result = SilikoInstallOperators(Caller);
-    SilikoEngineDelete(Caller);
+    SilikoEngineDestroy(Caller);
     cr_assert(Result);
 }

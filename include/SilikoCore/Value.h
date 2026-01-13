@@ -47,17 +47,17 @@ typedef struct SilikoValue SilikoValue;
 SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
-SilikoValue *SilikoValueNew(void);
+SilikoValue *SilikoValueCreate(void);
 SILIKOCORE_EXPORT
-SilikoValue *SilikoValueNewFromError(enum SilikoError source);
+SilikoValue *SilikoValueCreateFromError(enum SilikoError source);
 SILIKOCORE_EXPORT
-SilikoValue *SilikoValueNewFromInteger(long long int source);
+SilikoValue *SilikoValueCreateFromInteger(long long int source);
 SILIKOCORE_EXPORT
-SilikoValue *SilikoValueNewFromReal(double source);
+SilikoValue *SilikoValueCreateFromReal(double source);
 SILIKOCORE_EXPORT
-SilikoValue *SilikoValueNewCopy(const SilikoValue *source);
+SilikoValue *SilikoValueCopy(const SilikoValue *source);
 SILIKOCORE_EXPORT
-void SilikoValueDelete(SilikoValue *object);
+void SilikoValueDestroy(SilikoValue *object);
 
 SILIKOCORE_EXPORT
 void SilikoValueAssignError(
@@ -72,7 +72,7 @@ void SilikoValueAssignReal(
 	SilikoValue *object,
 	double source);
 SILIKOCORE_EXPORT
-void SilikoValueCopy(
+void SilikoValueAssign(
 	SilikoValue *object,
 	const SilikoValue *source);
 

@@ -52,12 +52,12 @@ struct SilikoEngine
 	struct SilikoFunctionChain *table[TableSize];
 };
 
-SilikoEngine *SilikoEngineNew(void)
+SilikoEngine *SilikoEngineCreate(void)
 {
 	return calloc(1, sizeof(SilikoEngine));
 }
 
-void SilikoEngineDelete(SilikoEngine *object)
+void SilikoEngineDestroy(SilikoEngine *object)
 {
 	for (size_t i = 0; i < sizeof(object->table)/sizeof(object->table[0]); i++)
 	{
@@ -136,7 +136,7 @@ SilikoValue *SilikoEngineCallFunction(
 		= SilikoEngineFetchFunction(object, name);
 
 	if (!function)
-		return SilikoValueNewFromError(SilikoErrorFunctionName);
+		return SilikoValueCreateFromError(SilikoErrorFunctionName);
 
 	return SilikoFunctionCall(function, argc, argv);
 }

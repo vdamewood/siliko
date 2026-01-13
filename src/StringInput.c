@@ -70,7 +70,7 @@ static const struct SilikoInputVTable vTable = {
 	.deleteVirt = delete
 };
 
-SilikoInput *SilikoStringInputNew(const char *source)
+SilikoInput *SilikoStringInputCreate(const char *source)
 {
 	struct StringInputState *state = malloc(sizeof(*state));
 	if (!state)
@@ -83,7 +83,7 @@ SilikoInput *SilikoStringInputNew(const char *source)
 	}
 	state->current = state->string;
 
-	SilikoInput *object = SilikoInputNew(&vTable, state);
+	SilikoInput *object = SilikoInputCreate(&vTable, state);
 	if (!object)
 	{
 		free(state->string);

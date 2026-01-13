@@ -5,7 +5,7 @@
 Test(StringSourceTests, NAME) \
 { \
     char input[] = STRING; \
-    SilikoInput *source = SilikoStringInputNew(input); \
+    SilikoInput *source = SilikoStringInputCreate(input); \
 \
     for (int i = 0; i < sizeof input; i++) \
     { \

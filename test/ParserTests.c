@@ -23,15 +23,15 @@
 Test(ParserTests, NAME) \
 { \
 	const char Input[] = INPUT; \
-	SilikoInput * src = SilikoStringInputNew(Input); \
+	SilikoInput * src = SilikoStringInputCreate(Input); \
 	cr_assert(src != NULL); \
-	SilikoEngine *caller = SilikoEngineNew(); \
+	SilikoEngine *caller = SilikoEngineCreate(); \
 	cr_assert(caller != NULL); \
 	SilikoInstallOperators(caller); \
 	SilikoInstallMathFunctions(caller); \
 \
 	SilikoNode *tree = SilikoParseInfix(src); \
-    SilikoValue *target = SilikoValueNew(TARGET); \
+    SilikoValue *target = SilikoValueCreate(TARGET); \
 	SilikoValue *result = SilikoEvaluate(caller, tree); \
     cr_assert(SilikoValueGetStatus(target) \
         == SilikoValueGetStatus(result), \
@@ -56,7 +56,7 @@ Test(ParserTests, NAME) \
     default: \
         break; \
     } \
-	SilikoNodeDelete(tree); \
+	SilikoNodeDestroy(tree); \
 }
 
 ParserTest(Test0000_AnInteger, "42", 42)

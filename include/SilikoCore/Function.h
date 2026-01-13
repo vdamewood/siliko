@@ -36,12 +36,12 @@ struct SILIKOCORE_EXPORT SilikoFunctionVTable
 };
 
 SILIKOCORE_EXPORT
-SilikoFunction *SilikoFunctionNew(
+SilikoFunction *SilikoFunctionCreate(
 	const struct SilikoFunctionVTable *source_table,
 	void *source_state);
 
 SILIKOCORE_EXPORT
-SilikoFunction *SilikoPureFunctionNew(
+SilikoFunction *SilikoPureFunctionCreate(
     SilikoValue *(*function)(int argc, SilikoValue **argv)
 );
 
@@ -54,7 +54,7 @@ SILIKOCORE_EXPORT
 SilikoFunction *SilikoFunctionClone(
     SilikoFunction *object);
 SILIKOCORE_EXPORT
-void SilikoFunctionDelete(
+void SilikoFunctionDestroy(
     SilikoFunction *object);
 
 SILIKO_END_C_API

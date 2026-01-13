@@ -38,21 +38,21 @@ enum SilikoTokenStatus
 SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
-SilikoToken *SilikoTokenNew(void);
+SilikoToken *SilikoTokenCreate(void);
 SILIKOCORE_EXPORT
-SilikoToken *SilikoTokenNewFromInteger(long long int source);
+SilikoToken *SilikoTokenCreateFromInteger(long long int source);
 SILIKOCORE_EXPORT
-SilikoToken *SilikoTokenNewFromReal(double source);
+SilikoToken *SilikoTokenCreateFromReal(double source);
 SILIKOCORE_EXPORT
-SilikoToken *SilikoTokenNewFromCharacter(char source);
+SilikoToken *SilikoTokenCreateFromCharacter(char source);
 SILIKOCORE_EXPORT
-SilikoToken *SilikoTokenNewFromId(const char *source);
+SilikoToken *SilikoTokenCreateFromId(const char *source);
 SILIKOCORE_EXPORT
-SilikoToken *SilikoTokenNewEndOfInput(void);
+SilikoToken *SilikoTokenCreateEndOfInput(void);
 SILIKOCORE_EXPORT
-SilikoToken *SilikoTokenNewCopy(const SilikoToken *source);
+SilikoToken *SilikoTokenCopy(const SilikoToken *source);
 SILIKOCORE_EXPORT
-void SilikoTokenDelete(SilikoToken *object);
+void SilikoTokenDestroy(SilikoToken *object);
 
 SILIKOCORE_EXPORT
 void SilikoTokenAssignInteger(
@@ -74,7 +74,7 @@ SILIKOCORE_EXPORT
 void SilikoTokenAssignEndOfInput(
 	SilikoToken *object);
 SILIKOCORE_EXPORT
-void SilikoTokenCopy(
+void SilikoTokenAssign(
 	SilikoToken *object,
 	const SilikoToken *source);
 

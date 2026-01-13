@@ -14,60 +14,60 @@
 
 TestFunctionForEquality(SinZeroIsZero,
     "sin", 0.0,
-    SilikoValueNew(0.0)
+    SilikoValueCreate(0.0)
 )
 
 TestFunctionForEpsilon(SinNintyIsAbouOne,
     "sin", 1.0, DBL_EPSILON,
-    SilikoValueNew(M_PI*0.5)
+    SilikoValueCreate(M_PI*0.5)
 )
 
 TestFunctionForEpsilon(SinOneEightyIsAbouZero,
     "sin", 0.0, DBL_EPSILON,
-    SilikoValueNew(M_PI)
+    SilikoValueCreate(M_PI)
 )
 
 TestFunctionForEpsilon(SinTwoSeventyIsAboutNegativeOne,
     "sin", -1.0, DBL_EPSILON,
-    SilikoValueNew(M_PI*1.5)
+    SilikoValueCreate(M_PI*1.5)
 )
 
 TestFunctionForEquality(CosZeroIsOne,
     "cos", 1.0,
-    SilikoValueNew(0.0)
+    SilikoValueCreate(0.0)
 )
 
 TestFunctionForEpsilon(CosNintyIsAboutZero,
     "cos", 0.0, DBL_EPSILON,
-    SilikoValueNew(M_PI*0.5)
+    SilikoValueCreate(M_PI*0.5)
 )
 
 TestFunctionForEpsilon(CosOneEightyIsAboutNegativeOne,
     "cos", -1.0, DBL_EPSILON,
-    SilikoValueNew(M_PI)
+    SilikoValueCreate(M_PI)
 )
 
 TestFunctionForEpsilon(CosTwoSeventyIsAboutZero,
     "cos", 0.0, DBL_EPSILON,
-    SilikoValueNew(M_PI*1.5)
+    SilikoValueCreate(M_PI*1.5)
 )
 
 TestFunctionForEquality(TanZeroIsZero,
     "tan", 0.0,
-    SilikoValueNew(0.0)
+    SilikoValueCreate(0.0)
 )
 
 TestFunctionForEpsilon(TanFortyFiveIsAbouOne,
     "tan", 1.0, DBL_EPSILON,
-    SilikoValueNew(M_PI*0.25)
+    SilikoValueCreate(M_PI*0.25)
 )
 
 TestFunctionForEpsilon(TanOneThirtyFiveIsAbouNegativeOne,
     "tan", -1.0, DBL_EPSILON,
-    SilikoValueNew(M_PI*0.75)
+    SilikoValueCreate(M_PI*0.75)
 )
 
 TestFunctionForEpsilon(TanOneEightyIsAbouZero,
     "tan", 0.0, DBL_EPSILON,
-    SilikoValueNew(M_PI)
+    SilikoValueCreate(M_PI)
 )

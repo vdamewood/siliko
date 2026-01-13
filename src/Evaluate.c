@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -27,12 +27,12 @@
 SilikoValue *SilikoEvaluate( SilikoEngine *engine, const SilikoNode *node)
 {
 	if (!node)
-		return SilikoValueNewFromError(SilikoErrorSyntax);
+		return SilikoValueCreateFromError(SilikoErrorSyntax);
 
 	switch (SilikoNodeGetStatus(node))
 	{
 	case SilikoNodeLeaf:
-		return SilikoValueNewCopy(SilikoNodeGetValue(node));
+		return SilikoValueCopy(SilikoNodeGetValue(node));
 	case SilikoNodeBranch:
     {
         SilikoValue **Arguments = NULL;
@@ -54,7 +54,7 @@ SilikoValue *SilikoEvaluate( SilikoEngine *engine, const SilikoNode *node)
                     SilikoValue *error = Arguments[i];
                     Arguments[i] = NULL;
                     for (int j = 0; j < i; j++)
-                        SilikoValueDelete(Arguments[j]);
+                        SilikoValueDestroy(Arguments[j]);
                     free(Arguments);
                     return error;
                 }
@@ -70,6 +70,6 @@ SilikoValue *SilikoEvaluate( SilikoEngine *engine, const SilikoNode *node)
             SilikoValueNegate(result);
         return result;    }
         default: // Shouldn't happen, but just in case.
-            return SilikoValueNewFromError(SilikoErrorSyntax);
+            return SilikoValueCreateFromError(SilikoErrorSyntax);
 	}
 }

@@ -36,21 +36,21 @@ typedef struct SilikoNode SilikoNode;
 SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewNothing(void);
+SilikoNode *SilikoNodeCreateNothing(void);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewFromError(enum SilikoError source);
+SilikoNode *SilikoNodeCreateFromError(enum SilikoError source);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewFromInteger(long long int source);
+SilikoNode *SilikoNodeCreateFromInteger(long long int source);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewFromReal(double source);
+SilikoNode *SilikoNodeCreateFromReal(double source);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewFromValue(SilikoValue *source);
+SilikoNode *SilikoNodeCreateFromValue(SilikoValue *source);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewBranch(const char *function_Name);
+SilikoNode *SilikoNodeCreateBranch(const char *function_Name);
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeNewCopy(const SilikoNode *source);
+SilikoNode *SilikoNodeCopy(const SilikoNode *source);
 SILIKOCORE_EXPORT
-void SilikoNodeDelete(SilikoNode *object);
+void SilikoNodeDestroy(SilikoNode *object);
 
 SILIKOCORE_EXPORT
 void SilikoNodeAssignFromError(
@@ -73,7 +73,7 @@ void SilikoNodeAssignBranch(
 	SilikoNode *object,
 	const char *source);
 SILIKOCORE_EXPORT
-void SilikoNodeCopy(
+void SilikoNodeAssign(
 	SilikoNode *object,
 	const SilikoNode *source);
 

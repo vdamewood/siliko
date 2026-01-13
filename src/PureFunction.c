@@ -4,7 +4,7 @@
 // This file is part of Siliko.
 
 // Siliko is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published 
+// under the terms of the GNU Lesser General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 
@@ -50,7 +50,7 @@ static SilikoFunction *Clone(void *void_state)
         return NULL;
     clone_state->function = source_state->function;
 
-    SilikoFunction *clone = SilikoFunctionNew(&VTable, clone_state);
+    SilikoFunction *clone = SilikoFunctionCreate(&VTable, clone_state);
     if (!clone)
     {
         free(clone_state);
@@ -65,7 +65,7 @@ static void Delete(void *state)
     free(state);
 }
 
-SilikoFunction *SilikoPureFunctionNew(
+SilikoFunction *SilikoPureFunctionCreate(
     SilikoValue *(*source_function)(int argc, SilikoValue **argv))
 {
     struct State *object_state = malloc(sizeof(*object_state));
@@ -73,7 +73,7 @@ SilikoFunction *SilikoPureFunctionNew(
         return NULL;
     object_state->function = source_function;
 
-    SilikoFunction *object = SilikoFunctionNew(&VTable, object_state);
+    SilikoFunction *object = SilikoFunctionCreate(&VTable, object_state);
     if (!object)
     {
         free(object_state);

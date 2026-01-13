@@ -35,12 +35,12 @@ struct SILIKOCORE_EXPORT SilikoInputVTable
 };
 
 SILIKOCORE_EXPORT
-SilikoInput *SilikoInputNew(
+SilikoInput *SilikoInputCreate(
 	const struct SilikoInputVTable *source_table,
 	void *source_state);
 
 SILIKOCORE_EXPORT
-SilikoInput *SilikoStringInputNew(const char *input_string);
+SilikoInput *SilikoStringInputCreate(const char *input_string);
 
 SILIKOCORE_EXPORT
 int SilikoInputAdvance(SilikoInput *object);

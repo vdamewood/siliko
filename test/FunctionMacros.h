@@ -9,7 +9,7 @@
 #define TestFunction(NAME, FUNCTION, STATUS, RESULT_EXPRESSION, ...) \
 Test(SUITE, NAME) \
 { \
-    SilikoEngine *caller = SilikoEngineNew(); \
+    SilikoEngine *caller = SilikoEngineCreate(); \
     cr_assert(caller != NULL); \
     INSTALL_FUNCTION(caller); \
     SilikoValue *input[] = \
@@ -21,7 +21,7 @@ Test(SUITE, NAME) \
         FUNCTION, \
         (sizeof input)/sizeof(input[0]), \
         input); \
-    SilikoEngineDelete(caller); \
+    SilikoEngineDestroy(caller); \
     cr_assert(SilikoValueGetStatus(result) == STATUS, \
         "Status: Expected: %d; Got %d;", STATUS, SilikoValueGetStatus(result)); \
     cr_assert(RESULT_EXPRESSION); \
