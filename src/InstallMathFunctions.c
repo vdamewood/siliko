@@ -32,6 +32,8 @@ int SilikoInstallMathFunctions(SilikoEngine *engine)
 			SilikoPureFunctionCreate(SilikoMathAsin))
 		&& SilikoEngineInstallFunction(engine, "atan",
 			SilikoPureFunctionCreate(SilikoMathAtan))
+		&& SilikoEngineInstallFunction(engine, "cbrt",
+			SilikoPureFunctionCreate(SilikoMathCbrt))
 		&& SilikoEngineInstallFunction(engine, "ceil",
 			SilikoPureFunctionCreate(SilikoMathCeil))
 		&& SilikoEngineInstallFunction(engine, "cos",
@@ -42,8 +44,12 @@ int SilikoInstallMathFunctions(SilikoEngine *engine)
 			SilikoPureFunctionCreate(SilikoMathExp))
 		&& SilikoEngineInstallFunction(engine, "floor",
 			SilikoPureFunctionCreate(SilikoMathFloor))
+		&& SilikoEngineInstallFunction(engine, "hypot",
+			SilikoPureFunctionCreate(SilikoMathHypot))
 		&& SilikoEngineInstallFunction(engine, "log",
 			SilikoPureFunctionCreate(SilikoMathLog))
+		&& SilikoEngineInstallFunction(engine, "log2",
+			SilikoPureFunctionCreate(SilikoMathLog2))
 		&& SilikoEngineInstallFunction(engine, "log10",
 			SilikoPureFunctionCreate(SilikoMathLog10))
 		&& SilikoEngineInstallFunction(engine, "round",

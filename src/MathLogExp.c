@@ -23,6 +23,19 @@
 #include <SilikoCore/Math.h>
 #include <SilikoCore/Value.h>
 
+SilikoValue *SilikoMathCbrt(int argc, SilikoValue **argv)
+{
+	if (argc != 1)
+		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
+
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueCopy(argv[0]);
+
+	if (signbit(SilikoValueGetReal(argv[0])))
+		return SilikoValueCreateFromError(SilikoErrorDomain);
+
+	return SilikoValueCreateFromReal(cbrt(SilikoValueGetReal(argv[0])));
+}
 
 SilikoValue *SilikoMathExp(int argc, SilikoValue **argv)
 {
@@ -35,6 +48,22 @@ SilikoValue *SilikoMathExp(int argc, SilikoValue **argv)
 	return SilikoValueCreateFromReal(exp(SilikoValueGetReal(argv[0])));
 }
 
+SilikoValue *SilikoMathHypot(int argc, SilikoValue **argv)
+{
+	if (argc != 2)
+		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
+
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueCopy(argv[0]);
+
+	if (SilikoValueGetStatus(argv[1]) == SilikoValueError)
+		return SilikoValueCopy(argv[1]);
+
+	return SilikoValueCreateFromReal(hypot(
+		SilikoValueGetReal(argv[0]),
+		SilikoValueGetReal(argv[1])));
+}
+
 SilikoValue *SilikoMathLog(int argc, SilikoValue **argv)
 {
 	if (argc != 1)
@@ -44,6 +73,17 @@ SilikoValue *SilikoMathLog(int argc, SilikoValue **argv)
 		return SilikoValueCopy(argv[0]);
 
 	return SilikoValueCreateFromReal(log(SilikoValueGetReal(argv[0])));
+}
+
+SilikoValue *SilikoMathLog2(int argc, SilikoValue **argv)
+{
+	if (argc != 1)
+		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
+
+	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
+		return SilikoValueCopy(argv[0]);
+
+	return SilikoValueCreateFromReal(log2(SilikoValueGetReal(argv[0])));
 }
 
 SilikoValue *SilikoMathLog10(int argc, SilikoValue **argv)
