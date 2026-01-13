@@ -57,7 +57,14 @@ add_library(SilikoCore)
 add_library(Siliko::SilikoCore ALIAS SilikoCore)
 target_sources(SilikoCore
 	PRIVATE
-		src/Functions.c
+		src/MathBasic.c
+		src/MathHyp.c
+		src/MathLogExp.c
+		src/MathRounding.c
+		src/MathTrig.c
+		src/InstallMathFunctions.c
+		src/Operator.c
+		src/InstallOperators.c
 		src/Function.c
 		src/PureFunction.c
 		src/Engine.c
