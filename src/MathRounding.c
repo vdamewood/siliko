@@ -70,3 +70,45 @@ SilikoValue *SilikoMathFloor(int argc, SilikoValue **argv)
 	}
 	}
 }
+
+SilikoValue *SilikoMathRound(int argc, SilikoValue **argv)
+{
+	if (argc != 1)
+		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
+
+	switch(SilikoValueGetStatus(argv[0]))
+	{
+	case SilikoValueError:
+	case SilikoValueInteger:
+		return SilikoValueCopy(argv[0]);
+	case SilikoValueReal:
+	{
+		double result = round(SilikoValueGetReal(argv[0]));
+		if (result <= CommonMax && result >= -CommonMax)
+			return SilikoValueCreateFromInteger((long long int) result);
+		else
+			return SilikoValueCreateFromReal(result);
+	}
+	}
+}
+
+SilikoValue *SilikoMathTrunc(int argc, SilikoValue **argv)
+{
+	if (argc != 1)
+		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
+
+	switch(SilikoValueGetStatus(argv[0]))
+	{
+	case SilikoValueError:
+	case SilikoValueInteger:
+		return SilikoValueCopy(argv[0]);
+	case SilikoValueReal:
+	{
+		double result = trunc(SilikoValueGetReal(argv[0]));
+		if (result <= CommonMax && result >= -CommonMax)
+			return SilikoValueCreateFromInteger((long long int) result);
+		else
+			return SilikoValueCreateFromReal(result);
+	}
+	}
+}

@@ -50,6 +50,8 @@ SilikoValue *SilikoMathLog(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathLog10(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
+SilikoValue *SilikoMathRound(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
 SilikoValue *SilikoMathSin(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathSinh(int argc, SilikoValue **argv);
@@ -59,6 +61,8 @@ SILIKOCORE_EXPORT
 SilikoValue *SilikoMathTan(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathTanh(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoMathTrunc(int argc, SilikoValue **argv);
 
 SILIKOCORE_EXPORT
 int SilikoInstallMathFunctions(SilikoEngine *destination);

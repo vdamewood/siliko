@@ -46,6 +46,8 @@ int SilikoInstallMathFunctions(SilikoEngine *engine)
 			SilikoPureFunctionCreate(SilikoMathLog))
 		&& SilikoEngineInstallFunction(engine, "log10",
 			SilikoPureFunctionCreate(SilikoMathLog10))
+		&& SilikoEngineInstallFunction(engine, "round",
+			SilikoPureFunctionCreate(SilikoMathRound))
 		&& SilikoEngineInstallFunction(engine, "sin",
 			SilikoPureFunctionCreate(SilikoMathSin))
 		&& SilikoEngineInstallFunction(engine, "sinh",
@@ -55,5 +57,8 @@ int SilikoInstallMathFunctions(SilikoEngine *engine)
 		&& SilikoEngineInstallFunction(engine, "tan",
 			SilikoPureFunctionCreate(SilikoMathTan))
 		&& SilikoEngineInstallFunction(engine, "tanh",
-			SilikoPureFunctionCreate(SilikoMathTanh));
+			SilikoPureFunctionCreate(SilikoMathTanh))
+		&& SilikoEngineInstallFunction(engine, "trunc",
+			SilikoPureFunctionCreate(SilikoMathTrunc))
+;
 }
