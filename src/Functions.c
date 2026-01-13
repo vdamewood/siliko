@@ -28,6 +28,12 @@
 #include <SilikoCore/Math.h>
 #include <SilikoCore/Value.h>
 
+// This is the largest value that can be represented by both a
+// double and a long long int, assuming the long long int is a
+// 64-bit, signed integer, and the double is an IEEE 754-compliant
+// binary double-precision floating-point number.
+static const double CommonMax = 9223372036854774784.0;
+
 SilikoValue *SilikoOperatorAdd(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
@@ -289,7 +295,7 @@ SilikoValue *SilikoMathCeil(int argc, SilikoValue **argv)
 	case SilikoValueReal:
 	{
 		double result = ceil(SilikoValueGetReal(argv[0]));
-		if (result <= LLONG_MAX && result >= LLONG_MIN)
+		if (result <= CommonMax && result >= -CommonMax)
 			return SilikoValueCreateFromInteger((long long int) result);
 		else
 			return SilikoValueCreateFromReal(result);
@@ -343,7 +349,7 @@ SilikoValue *SilikoMathFloor(int argc, SilikoValue **argv)
 	case SilikoValueReal:
 	{
 		double result = floor(SilikoValueGetReal(argv[0]));
-		if (result <= LLONG_MAX && result >= LLONG_MIN)
+		if (result <= CommonMax && result >= -CommonMax)
 			return SilikoValueCreateFromInteger((long long int) result);
 		else
 			return SilikoValueCreateFromReal(result);
