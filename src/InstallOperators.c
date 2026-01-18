@@ -35,5 +35,5 @@ int SilikoInstallOperators(SilikoEngine *engine)
 		&& SilikoEngineInstallFunction(engine, "power",
 			SilikoPureFunctionCreate(SilikoOperatorPower))
 		&& SilikoEngineInstallFunction(engine, "dice",
-			SilikoPureFunctionCreate(SilikoOperatorDice));
+			SilikoOperatorDiceCreate(0));
 }

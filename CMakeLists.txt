@@ -64,6 +64,7 @@ target_sources(SilikoCore
 		src/MathTrig.c
 		src/InstallMathFunctions.c
 		src/Operator.c
+		src/OperatorDice.c
 		src/InstallOperators.c
 		src/Function.c
 		src/PureFunction.c

@@ -183,33 +183,3 @@ SilikoValue *SilikoOperatorPower(int argc, SilikoValue **argv)
 	}
 	return SilikoValueCreateFromReal(result);
 }
-
-SilikoValue *SilikoOperatorDice(int argc, SilikoValue **argv)
-{
-	if (argc != 2)
-		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
-
-	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
-		return SilikoValueCopy(argv[0]);
-
-	if (SilikoValueGetStatus(argv[1]) == SilikoValueError)
-		return SilikoValueCopy(argv[1]);
-
-	long long int count = SilikoValueGetInteger(argv[0]);
-	long long int faces = SilikoValueGetInteger(argv[1]);
-
-	if (faces == 0)
-		return SilikoValueCreateFromInteger(0);
-
-	static int has_seeded = 0;
-	if (!has_seeded)
-	{
-		has_seeded = 1;
-		srand((unsigned int)time(NULL));
-	}
-
-	long long int result = 0;
-	for (int i = 1; i <= count; i++)
-		result += (rand() % faces) + 1;
-	return SilikoValueCreateFromInteger(result);
-}

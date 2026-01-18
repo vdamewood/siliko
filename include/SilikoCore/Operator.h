@@ -38,7 +38,7 @@ SilikoValue *SilikoOperatorDivide(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
 SilikoValue *SilikoOperatorPower(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
-SilikoValue *SilikoOperatorDice(int argc, SilikoValue **argv);
+SilikoFunction *SilikoOperatorDiceCreate(unsigned long long int seed);
 
 SILIKOCORE_EXPORT
 int SilikoInstallOperators(SilikoEngine *destination);
