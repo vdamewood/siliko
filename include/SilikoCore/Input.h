@@ -27,7 +27,7 @@ typedef struct SilikoInput SilikoInput;
 
 SILIKO_EXPORT_C_API
 
-struct SILIKOCORE_EXPORT SilikoInputVTable
+struct SilikoInputVTable
 {
 	int (*advanceVirt)(void *);
 	char (*getCharacterVirt)(void *);

@@ -28,7 +28,7 @@ typedef struct SilikoFunction SilikoFunction;
 
 SILIKO_EXPORT_C_API
 
-struct SILIKOCORE_EXPORT SilikoFunctionVTable
+struct SilikoFunctionVTable
 {
 	SilikoValue *(*callVirt)(void *state, int argc, SilikoValue **argv);
     SilikoFunction *(*cloneVirt)(void *state);
