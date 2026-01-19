@@ -156,6 +156,7 @@ set(PUBLIC_HEADERS
 	include/SilikoCore/Version.h
 	include/SilikoCore/Operator.h
 	include/SilikoCore/Math.h
+	include/SilikoCore/SilikoCore.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
 )
 if (SILIKO_CORE_BUILD_FRAMEWORK)
