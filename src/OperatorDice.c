@@ -38,8 +38,7 @@ static const          long long int TableSize  = TABLE_SIZE;
 static const          long long int TableBreak = 156;
 static const unsigned long long int MatrixA    = 0xb5026f5aa96619e9ULL;
 static const unsigned long long int UpperMask  = 0xffffffff80000000ULL;
-static const unsigned long long int LowerMask  = ~UpperMask;
-static const unsigned long long int mag[2]     = {0ULL, MatrixA};
+static const unsigned long long int LowerMask  = 0x000000007fffffffULL;
 
 // Seeding parameters
 static const          long long int Multiplier = 6364136223846793005ULL;
@@ -60,7 +59,8 @@ static inline unsigned long long int Twist(
 	unsigned long long int u,
 	unsigned long long int v)
 {
-	return ((((u & UpperMask) | (v & LowerMask)) >> 1) ^ mag[v&1]);
+	return ((((u & UpperMask) | (v & LowerMask)) >> 1)
+		^ (v&1 ? MatrixA : 0));
 }
 
 static SilikoValue *call(void *void_state, int argc, SilikoValue **argv);
