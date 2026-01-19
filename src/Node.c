@@ -24,7 +24,7 @@
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Value.h>
 
-#if defined _WIN32
+#if defined _MSC_VER
 #define strdup _strdup
 #endif
 
