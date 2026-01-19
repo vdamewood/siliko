@@ -324,18 +324,21 @@ void SilikoNodeAssign(SilikoNode *object, const SilikoNode *source)
 
 static int ExpandChildren(SilikoNode *Tree)
 {
-	const int Increment = 2;
-	SilikoNode **NewChildren = NULL;
-	int NewCapacity = Tree->Branch->Capacity + Increment;
+	int new_capacity = Tree->Branch->Capacity * 2;
+	SilikoNode **new_children =
+		calloc(new_capacity, sizeof *new_children);
 
-	if (!(NewChildren = calloc(NewCapacity, sizeof(SilikoNode*))))
+	if (!new_children)
 		return 0;
 
-	memcpy(NewChildren, Tree->Branch->Children, Tree->Branch->Capacity * sizeof(SilikoNode*));
+	memcpy(
+		new_children,
+		Tree->Branch->Children,
+		Tree->Branch->Capacity * sizeof *new_children);
 	free(Tree->Branch->Children);
 
-	Tree->Branch->Children = NewChildren;
-	Tree->Branch->Capacity = NewCapacity;
+	Tree->Branch->Children = new_children;
+	Tree->Branch->Capacity = new_capacity;
 	return -1;
 }
 

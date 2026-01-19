@@ -94,12 +94,17 @@ static int Append(Lexeme *Lex, char NewChar)
 {
 	if (Lex->Current == Lex->End)
 	{
-		char *Temp;
-		Lex->End++;
-		if (!(Temp = realloc(Lex->Buffer, Lex->End)))
+		size_t new_end = Lex->End * 2;
+		char *new_buffer = realloc(Lex->Buffer, new_end);
+		if (!new_buffer)
+		{
 			return 0;
+		}
 		else
-			Lex->Buffer = Temp;
+		{
+			Lex->Buffer = new_buffer;
+			Lex->End = new_end;
+		}
 	}
 
 	Lex->Buffer[Lex->Current++] = NewChar;
