@@ -30,8 +30,8 @@ SILIKO_EXPORT_C_API
 
 struct SilikoFunctionVTable
 {
-	SilikoValue *(*call)(void *state, int argc, SilikoValue **argv);
 	void (*destroy)(void *state);
+	SilikoValue *(*call)(void *state, int argc, SilikoValue **argv);
 };
 
 SILIKOCORE_EXPORT
@@ -40,18 +40,21 @@ SilikoFunction *SilikoFunctionCreate(
 	void *source_state);
 
 SILIKOCORE_EXPORT
-SilikoFunction *SilikoPureFunctionCreate(
-    SilikoValue *(*function)(int argc, SilikoValue **argv)
-);
+void SilikoFunctionDestroy(
+    SilikoFunction *object);
+
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoFunctionCall(
     SilikoFunction *object,
     int argc,
     SilikoValue **argv);
+
+
 SILIKOCORE_EXPORT
-void SilikoFunctionDestroy(
-    SilikoFunction *object);
+SilikoFunction *SilikoPureFunctionCreate(
+    SilikoValue *(*function)(int argc, SilikoValue **argv));
+
 
 SILIKO_END_C_API
 

@@ -25,7 +25,7 @@
 
 enum SilikoError
 {
-	SilikoErrorNone,
+	SilikoErrorNone = 0,
 	SilikoErrorNullObject,
 	SilikoErrorSyntax,
 	SilikoErrorZeroDivision,
@@ -37,7 +37,7 @@ enum SilikoError
 
 enum SilikoValueStatus
 {
-	SilikoValueError,
+	SilikoValueError = 0,
 	SilikoValueInteger,
 	SilikoValueReal
 };
@@ -48,46 +48,58 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoValueCreate(void);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoValueCreateFromError(enum SilikoError source);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoValueCreateFromInteger(long long int source);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoValueCreateFromReal(double source);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoValueCopy(const SilikoValue *source);
+
 SILIKOCORE_EXPORT
 void SilikoValueDestroy(SilikoValue *object);
 
 SILIKOCORE_EXPORT
 void SilikoValueAssignFromError(
 	SilikoValue *object,
-	enum SilikoError source);
+	enum SilikoError right_side);
+
 SILIKOCORE_EXPORT
 void SilikoValueAssignFromInteger(
 	SilikoValue *object,
-	long long int source);
+	long long int right_side);
+
 SILIKOCORE_EXPORT
 void SilikoValueAssignFromReal(
 	SilikoValue *object,
-	double source);
+	double right_side);
+
 SILIKOCORE_EXPORT
 void SilikoValueAssign(
 	SilikoValue *object,
-	const SilikoValue *source);
+	const SilikoValue *sright_side);
 
 SILIKOCORE_EXPORT
 enum SilikoValueStatus SilikoValueGetStatus(
 	const SilikoValue *object);
+
 SILIKOCORE_EXPORT
 enum SilikoError SilikoValueGetError(
 	const SilikoValue *object);
+
 SILIKOCORE_EXPORT
 long long int SilikoValueGetInteger(
 	const SilikoValue *object);
+
 SILIKOCORE_EXPORT
 double SilikoValueGetReal(
 	const SilikoValue *object);
+
 SILIKOCORE_EXPORT
 void SilikoValueNegate(
 	SilikoValue *object);

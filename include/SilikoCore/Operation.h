@@ -29,14 +29,19 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoOperationAdd(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoOperationSubtract(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoOperationMultiply(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoOperationDivide(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoOperationPower(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoFunction *SilikoOperationDiceCreate(unsigned long long int seed);
 

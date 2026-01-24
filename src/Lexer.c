@@ -286,28 +286,28 @@ void SilikoLexerAdvance(SilikoLexer *Lexer)
 		}
 		break;
 	case DfaTerminateInteger:
-		SilikoTokenAssignInteger(
+		SilikoTokenAssignFromInteger(
 			Lexer->Token, strtoll(Lex.Buffer, NULL, 10));
 		dfaState = DfaFinish;
 		break;
 	case DfaTerminateReal:
-		SilikoTokenAssignReal(Lexer->Token, atof(Lex.Buffer));
+		SilikoTokenAssignFromReal(Lexer->Token, atof(Lex.Buffer));
 		dfaState = DfaFinish;
 		break;
 	case DfaTerminateEuler:
-		SilikoTokenAssignReal(Lexer->Token, EULER);
+		SilikoTokenAssignFromReal(Lexer->Token, EULER);
 		dfaState = DfaFinish;
 		break;
 	case DfaTerminatePi:
-		SilikoTokenAssignReal(Lexer->Token, PI);
+		SilikoTokenAssignFromReal(Lexer->Token, PI);
 		dfaState = DfaFinish;
 		break;
 	case DfaTerminateCharacter:
-		SilikoTokenAssignCharacter(Lexer->Token, Lex.Buffer[0]);
+		SilikoTokenAssignFromCharacter(Lexer->Token, Lex.Buffer[0]);
 		dfaState = DfaFinish;
 		break;
 	case DfaTerminateId:
-		SilikoTokenAssignId(Lexer->Token, Lex.Buffer);
+		SilikoTokenAssignFromId(Lexer->Token, Lex.Buffer);
 		dfaState = DfaFinish;
 		break;
 	case DfaTerminateEndOfInput:

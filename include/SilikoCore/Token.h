@@ -27,7 +27,7 @@ typedef struct SilikoToken SilikoToken;
 
 enum SilikoTokenStatus
 {
-		SilikoTokenUnset,
+		SilikoTokenUnset = 0,
 		SilikoTokenInteger,
 		SilikoTokenReal,
 		SilikoTokenCharacter,
@@ -39,54 +39,72 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoToken *SilikoTokenCreate(void);
+
 SILIKOCORE_EXPORT
 SilikoToken *SilikoTokenCreateFromInteger(long long int source);
+
 SILIKOCORE_EXPORT
 SilikoToken *SilikoTokenCreateFromReal(double source);
+
 SILIKOCORE_EXPORT
 SilikoToken *SilikoTokenCreateFromCharacter(char source);
+
 SILIKOCORE_EXPORT
 SilikoToken *SilikoTokenCreateFromId(const char *source);
+
 SILIKOCORE_EXPORT
 SilikoToken *SilikoTokenCreateEndOfInput(void);
+
 SILIKOCORE_EXPORT
 SilikoToken *SilikoTokenCopy(const SilikoToken *source);
+
 SILIKOCORE_EXPORT
 void SilikoTokenDestroy(SilikoToken *object);
 
+
 SILIKOCORE_EXPORT
-void SilikoTokenAssignInteger(
+void SilikoTokenAssignFromInteger(
 	SilikoToken *object,
-	long long int source);
+	long long int right_side);
+
 SILIKOCORE_EXPORT
-void SilikoTokenAssignReal(
+void SilikoTokenAssignFromReal(
 	SilikoToken *object,
-	double source);
+	double right_side);
+
 SILIKOCORE_EXPORT
-void SilikoTokenAssignCharacter(
+void SilikoTokenAssignFromCharacter(
 	SilikoToken *object,
-	char source);
+	char right_side);
+
 SILIKOCORE_EXPORT
-void SilikoTokenAssignId(
+void SilikoTokenAssignFromId(
 	SilikoToken *object,
-	const char *source);
+	const char *right_side);
+
 SILIKOCORE_EXPORT
 void SilikoTokenAssignEndOfInput(
 	SilikoToken *object);
+
 SILIKOCORE_EXPORT
 void SilikoTokenAssign(
 	SilikoToken *object,
-	const SilikoToken *source);
+	const SilikoToken *right_side);
+
 
 SILIKOCORE_EXPORT
 enum SilikoTokenStatus SilikoTokenGetStatus(
 	const SilikoToken *object);
+
 SILIKOCORE_EXPORT
 long long int SilikoTokenGetInteger(const SilikoToken *object);
+
 SILIKOCORE_EXPORT
 double SilikoTokenGetReal(const SilikoToken *object);
+
 SILIKOCORE_EXPORT
 char SilikoTokenGetCharacter(const SilikoToken *object);
+
 SILIKOCORE_EXPORT
 const char *SilikoTokenGetId(const SilikoToken *object);
 

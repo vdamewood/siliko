@@ -31,11 +31,14 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT SilikoLexer *
 SilikoLexerCreate(SilikoInput *source);
+
 SILIKOCORE_EXPORT void
 SilikoLexerDestroy(SilikoLexer *object);
 
+
 SILIKOCORE_EXPORT void
 SilikoLexerAdvance(SilikoLexer *object);
+
 SILIKOCORE_EXPORT const SilikoToken *
 SilikoLexerGetToken(SilikoLexer *object);
 

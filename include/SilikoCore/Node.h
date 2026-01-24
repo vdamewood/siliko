@@ -39,95 +39,122 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCreateNothing(void);
+
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCreateFromError(enum SilikoError source);
+
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCreateFromInteger(long long int source);
+
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCreateFromReal(double source);
+
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCreateFromValue(SilikoValue *source);
+
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCreateBranch(const char *function_Name);
+
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCopy(const SilikoNode *source);
+
 SILIKOCORE_EXPORT
 void SilikoNodeDestroy(SilikoNode *object);
+
 
 SILIKOCORE_EXPORT
 void SilikoNodeAssignFromError(
 	SilikoNode *object,
-	enum SilikoError source);
+	enum SilikoError right_side);
+
 SILIKOCORE_EXPORT
 void SilikoNodeAssignFromInteger(
 	SilikoNode *object,
-	long long int source);
+	long long int right_side);
+
 SILIKOCORE_EXPORT
 void SilikoNodeAssignFromReal(
 	SilikoNode *object,
-	double source);
+	double right_side);
+
 SILIKOCORE_EXPORT
 void SilikoNodeAssignFromValue(
 	SilikoNode *object,
-	const SilikoValue *source);
+	const SilikoValue *right_side);
+
 SILIKOCORE_EXPORT
 void SilikoNodeAssignBranch(
 	SilikoNode *object,
-	const char *source);
+	const char *right_side);
+
 SILIKOCORE_EXPORT
 void SilikoNodeAssign(
 	SilikoNode *object,
-	const SilikoNode *source);
+	const SilikoNode *sright_side);
+
 
 SILIKOCORE_EXPORT
 int SilikoNodeCountChildren(
 	const SilikoNode *object);
+
 SILIKOCORE_EXPORT
 const SilikoNode *SilikoNodeFetchChild(
 	const SilikoNode *object,
 	size_t child_index);
+
 SILIKOCORE_EXPORT
 const char *SilikoNodeGetId(
 	const SilikoNode *object);
+
 SILIKOCORE_EXPORT
 int SilikoNodeInsertCopy(
 	SilikoNode *object,
 	size_t position,
-	const SilikoNode *new_branch);
+	const SilikoNode *new_child);
+
 SILIKOCORE_EXPORT
 int SilikoNodeInsert(
 	SilikoNode *object,
 	size_t position,
-	SilikoNode *new_branch);
+	SilikoNode *new_child);
+
 SILIKOCORE_EXPORT
 int SilikoNodeIsNegated(
 	const SilikoNode *object);
+
 SILIKOCORE_EXPORT
 void SilikoNodeNegate(
 	SilikoNode *object);
+
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodePruneChild(
 	SilikoNode *object,
 	size_t child_index);
+
 SILIKOCORE_EXPORT
 int SilikoNodePushCopyLeft(
 	SilikoNode *object,
-	const SilikoNode *new_branch);
+	const SilikoNode *new_child);
+
 SILIKOCORE_EXPORT
 int SilikoNodePushLeft(
 	SilikoNode *object,
-	SilikoNode *new_branch);
+	SilikoNode *new_child);
+
 SILIKOCORE_EXPORT
 int SilikoNodePushCopyRight(
 	SilikoNode *object,
-	const SilikoNode *new_branch);
+	const SilikoNode *new_child);
+
 SILIKOCORE_EXPORT
 int SilikoNodePushRight(
 	SilikoNode *object,
-	SilikoNode *new_branch);
+	SilikoNode *new_child);
+
 SILIKOCORE_EXPORT
 enum SilikoNodeStatus SilikoNodeGetStatus(
 	const SilikoNode *object);
+
 SILIKOCORE_EXPORT
 const SilikoValue *SilikoNodeGetValue(
 	const SilikoNode *object);

@@ -145,7 +145,7 @@ void SilikoTokenDestroy(SilikoToken *object)
     }
 }
 
-void SilikoTokenAssignInteger(SilikoToken *object, long long int source)
+void SilikoTokenAssignFromInteger(SilikoToken *object, long long int source)
 {
     if (!object)
         return;
@@ -156,7 +156,7 @@ void SilikoTokenAssignInteger(SilikoToken *object, long long int source)
     object->integer = source;
 }
 
-void SilikoTokenAssignReal(SilikoToken *object, double source)
+void SilikoTokenAssignFromReal(SilikoToken *object, double source)
 {
     if (!object)
         return;
@@ -167,7 +167,7 @@ void SilikoTokenAssignReal(SilikoToken *object, double source)
     object->real = source;
 }
 
-void SilikoTokenAssignCharacter(SilikoToken *object, char source)
+void SilikoTokenAssignFromCharacter(SilikoToken *object, char source)
 {
     if (!object)
         return;
@@ -178,7 +178,7 @@ void SilikoTokenAssignCharacter(SilikoToken *object, char source)
     object->character = source;
 }
 
-void SilikoTokenAssignId(SilikoToken *object, const char *source)
+void SilikoTokenAssignFromId(SilikoToken *object, const char *source)
 {
     if (!object)
         return;

@@ -29,44 +29,64 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathAbs(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathAcos(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathAsin(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathAtan(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathCbrt(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathCeil(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathCos(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathCosh(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathExp(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathFloor(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathHypot(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathLog(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathLog2(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathLog10(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathRound(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathSin(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathSinh(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathSqrt(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathTan(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathTanh(int argc, SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathTrunc(int argc, SilikoValue **argv);
 

@@ -139,7 +139,7 @@ SilikoValue *SilikoEngineCallFunction(
 	SilikoEngine *object,
 	const char *name,
 	int argc,
-	SilikoValue **argv)
+	const SilikoValue **argv)
 {
 	if (!object)
 		return SilikoValueCreateFromError(SilikoErrorNullObject);

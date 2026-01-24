@@ -40,14 +40,18 @@ SilikoInput *SilikoInputCreate(
 	void *source_state);
 
 SILIKOCORE_EXPORT
-SilikoInput *SilikoStringInputCreate(const char *input_string);
+void SilikoInputDestroy(SilikoInput *object);
+
 
 SILIKOCORE_EXPORT
 int SilikoInputAdvance(SilikoInput *object);
+
 SILIKOCORE_EXPORT
 char SilikoInputGetCharacter(SilikoInput *object);
+
 SILIKOCORE_EXPORT
-void SilikoInputDestroy(SilikoInput *object);
+SilikoInput *SilikoStringInputCreate(const char *input_string);
+
 
 SILIKO_END_C_API
 

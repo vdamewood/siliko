@@ -31,24 +31,28 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoEngine *SilikoEngineCreate(void);
+
 SILIKOCORE_EXPORT
 void SilikoEngineDestroy(SilikoEngine *object);
+
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoEngineCallFunction(
     SilikoEngine* object,
-    const char *name,
+    const char *function_name,
     int argc,
-    SilikoValue **argv);
+    const SilikoValue **argv);
+
 SILIKOCORE_EXPORT
 SilikoFunction *SilikoEngineFetchFunction(
     SilikoEngine* object,
-    const char *name);
+    const char *function_name);
+
 SILIKOCORE_EXPORT
 int SilikoEngineInstallFunction(
     SilikoEngine* object,
-    const char *name,
-    SilikoFunction *function);
+    const char *function_name,
+    SilikoFunction *new_function);
 
 SILIKO_END_C_API
 

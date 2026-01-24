@@ -67,8 +67,8 @@ static SilikoValue *call(void *void_state, int argc, SilikoValue **argv);
 static void destroy(void *object);
 
 static const struct SilikoFunctionVTable OperationDiceVTable = {
-    call,
-    destroy
+    .destroy = destroy,
+    .call = call,
 };
 
 struct DiceState
