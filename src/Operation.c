@@ -22,10 +22,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include <SilikoCore/Operator.h>
+#include <SilikoCore/Operation.h>
 #include <SilikoCore/Value.h>
 
-SilikoValue *SilikoOperatorAdd(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperationAdd(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
@@ -58,7 +58,7 @@ SilikoValue *SilikoOperatorAdd(int argc, SilikoValue **argv)
 	return result;
 }
 
-SilikoValue *SilikoOperatorSubtract(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperationSubtract(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
@@ -91,7 +91,7 @@ SilikoValue *SilikoOperatorSubtract(int argc, SilikoValue **argv)
 	return result;
 }
 
-SilikoValue *SilikoOperatorMultiply(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperationMultiply(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
@@ -124,7 +124,7 @@ SilikoValue *SilikoOperatorMultiply(int argc, SilikoValue **argv)
 	return result;
 }
 
-SilikoValue *SilikoOperatorDivide(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperationDivide(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
@@ -166,7 +166,7 @@ SilikoValue *SilikoOperatorDivide(int argc, SilikoValue **argv)
 	return result;
 }
 
-SilikoValue *SilikoOperatorPower(int argc, SilikoValue **argv)
+SilikoValue *SilikoOperationPower(int argc, SilikoValue **argv)
 {
 	if (argc < 1)
 		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);

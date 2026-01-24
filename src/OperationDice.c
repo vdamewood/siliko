@@ -29,7 +29,7 @@
 #include <time.h>
 
 #include <SilikoCore/Function.h>
-#include <SilikoCore/Operator.h>
+#include <SilikoCore/Operation.h>
 
 // Mersenne twister parameters. Table size has to be a #define because
 // it's used in an array declaration.
@@ -66,7 +66,7 @@ static inline unsigned long long int Twist(
 static SilikoValue *call(void *void_state, int argc, SilikoValue **argv);
 static void destroy(void *object);
 
-static const struct SilikoFunctionVTable OperatorDiceVTable = {
+static const struct SilikoFunctionVTable OperationDiceVTable = {
     call,
     destroy
 };
@@ -126,7 +126,7 @@ static void destroy(void *object)
 	free(object);
 }
 
-SilikoFunction *SilikoOperatorDiceCreate(unsigned long long int seed)
+SilikoFunction *SilikoOperationDiceCreate(unsigned long long int seed)
 {
 	struct DiceState *state = malloc(sizeof *state);
 	if (!state)
@@ -144,7 +144,7 @@ SilikoFunction *SilikoOperatorDiceCreate(unsigned long long int seed)
 	state->Index = TableSize;
 
     SilikoFunction *object =
-        SilikoFunctionCreate(&OperatorDiceVTable, state);
+        SilikoFunctionCreate(&OperationDiceVTable, state);
     if (!object)
         destroy(state);
 	return object;

@@ -1,6 +1,6 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/Engine.h>
-#include <SilikoCore/Operator.h>
+#include <SilikoCore/Operation.h>
 #include <SilikoCore/Math.h>
 
 SilikoValue *GetFortyTwoInt(int argc, SilikoValue **argv)
@@ -83,11 +83,11 @@ Test(EngineTests, FunctionsInstall)
     cr_assert(Result);
 }
 
-Test(EngineTests, OperatorsInstall)
+Test(EngineTests, OperationsInstall)
 {
     SilikoEngine *Caller = SilikoEngineCreate();
     cr_assert(Caller != NULL);
-    int Result = SilikoInstallOperators(Caller);
+    int Result = SilikoInstallOperations(Caller);
     SilikoEngineDestroy(Caller);
     cr_assert(Result);
 }

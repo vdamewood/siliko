@@ -63,9 +63,9 @@ target_sources(SilikoCore
 		src/MathRounding.c
 		src/MathTrig.c
 		src/InstallMathFunctions.c
-		src/Operator.c
-		src/OperatorDice.c
-		src/InstallOperators.c
+		src/Operation.c
+		src/OperationDice.c
+		src/InstallOperations.c
 		src/Function.c
 		src/PureFunction.c
 		src/Engine.c
@@ -154,7 +154,7 @@ set(PUBLIC_HEADERS
 	include/SilikoCore/ParseInfix.h
 	include/SilikoCore/Evaluate.h
 	include/SilikoCore/Version.h
-	include/SilikoCore/Operator.h
+	include/SilikoCore/Operation.h
 	include/SilikoCore/Math.h
 	include/SilikoCore/SilikoCore.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h

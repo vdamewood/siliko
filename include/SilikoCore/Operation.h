@@ -18,25 +18,31 @@
 // <http://www.gnu.org/licenses/>.
 
 
+#if !defined SILIKO_OPERATION_H
+#define SILIKO_OPERATION_H
+
+#include <SilikoCore/Api.h>
 #include <SilikoCore/Engine.h>
-#include <SilikoCore/Function.h>
-#include <SilikoCore/Operator.h>
+#include <SilikoCore/Value.h>
 
-int SilikoInstallOperators(SilikoEngine *engine)
-{
-	if (!engine)
-		return 0;
+SILIKO_EXPORT_C_API
 
-	return SilikoEngineInstallFunction(engine, "add",
-			SilikoPureFunctionCreate(SilikoOperatorAdd))
-		&& SilikoEngineInstallFunction(engine, "subtract",
-			SilikoPureFunctionCreate(SilikoOperatorSubtract))
-		&& SilikoEngineInstallFunction(engine, "multiply",
-			SilikoPureFunctionCreate(SilikoOperatorMultiply))
-		&& SilikoEngineInstallFunction(engine, "divide",
-			SilikoPureFunctionCreate(SilikoOperatorDivide))
-		&& SilikoEngineInstallFunction(engine, "power",
-			SilikoPureFunctionCreate(SilikoOperatorPower))
-		&& SilikoEngineInstallFunction(engine, "dice",
-			SilikoOperatorDiceCreate(0));
-}
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperationAdd(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperationSubtract(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperationMultiply(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperationDivide(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoValue *SilikoOperationPower(int argc, SilikoValue **argv);
+SILIKOCORE_EXPORT
+SilikoFunction *SilikoOperationDiceCreate(unsigned long long int seed);
+
+SILIKOCORE_EXPORT
+int SilikoInstallOperations(SilikoEngine *destination);
+
+SILIKO_END_C_API
+
+#endif // SILIKO_OPERATION_H

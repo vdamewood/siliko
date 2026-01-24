@@ -2,7 +2,7 @@
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Engine.h>
 #include <SilikoCore/Evaluate.h>
-#include <SilikoCore/Operator.h>
+#include <SilikoCore/Operation.h>
 #include <SilikoCore/Math.h>
 
 Test(SyntaxTreeTests, NewIntZero)
@@ -50,7 +50,7 @@ Test(SyntaxTreeTests, TwoPlusThreeIsFive)
     cr_assert(SilikoNodeFetchChild(branch, 1) == right_node);
 
     SilikoEngine *engine = SilikoEngineCreate();
-    SilikoInstallOperators(engine);
+    SilikoInstallOperations(engine);
 
     SilikoValue *test_value = SilikoEvaluate(engine, branch);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger,

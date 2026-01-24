@@ -1,6 +1,6 @@
 #include <criterion/criterion.h>
 #include <SilikoCore/Engine.h>
-#include <SilikoCore/Operator.h>
+#include <SilikoCore/Operation.h>
 #include <SilikoCore/Math.h>
 
 #include <math.h>

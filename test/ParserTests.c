@@ -3,7 +3,7 @@
 #include <SilikoCore/Input.h>
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Evaluate.h>
-#include <SilikoCore/Operator.h>
+#include <SilikoCore/Operation.h>
 #include <SilikoCore/Math.h>
 
 #include "Macros.h"
@@ -27,7 +27,7 @@ Test(ParserTests, NAME) \
 	cr_assert(src != NULL); \
 	SilikoEngine *caller = SilikoEngineCreate(); \
 	cr_assert(caller != NULL); \
-	SilikoInstallOperators(caller); \
+	SilikoInstallOperations(caller); \
 	SilikoInstallMathFunctions(caller); \
 \
 	SilikoNode *tree = SilikoParseInfix(src); \
