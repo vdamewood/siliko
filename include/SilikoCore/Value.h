@@ -60,15 +60,15 @@ SILIKOCORE_EXPORT
 void SilikoValueDestroy(SilikoValue *object);
 
 SILIKOCORE_EXPORT
-void SilikoValueAssignError(
+void SilikoValueAssignFromError(
 	SilikoValue *object,
 	enum SilikoError source);
 SILIKOCORE_EXPORT
-void SilikoValueAssignInteger(
+void SilikoValueAssignFromInteger(
 	SilikoValue *object,
 	long long int source);
 SILIKOCORE_EXPORT
-void SilikoValueAssignReal(
+void SilikoValueAssignFromReal(
 	SilikoValue *object,
 	double source);
 SILIKOCORE_EXPORT

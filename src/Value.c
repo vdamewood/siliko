@@ -40,7 +40,7 @@ SilikoValue *SilikoValueCreateFromError(enum SilikoError source)
     if(!object)
         return NULL;
 
-    SilikoValueAssignError(object, source);
+    SilikoValueAssignFromError(object, source);
     return object;
 }
 
@@ -50,7 +50,7 @@ SilikoValue *SilikoValueCreateFromInteger(long long int source)
     if(!object)
         return NULL;
 
-    SilikoValueAssignInteger(object, source);
+    SilikoValueAssignFromInteger(object, source);
     return object;
 }
 
@@ -60,7 +60,7 @@ SilikoValue *SilikoValueCreateFromReal(double source)
     if(!object)
         return NULL;
 
-    SilikoValueAssignReal(object, source);
+    SilikoValueAssignFromReal(object, source);
     return object;
 }
 
@@ -126,7 +126,7 @@ double SilikoValueGetReal(const SilikoValue *object)
     }
 }
 
-void SilikoValueAssignError(
+void SilikoValueAssignFromError(
     SilikoValue *object,
     enum SilikoError source)
 {
@@ -137,7 +137,7 @@ void SilikoValueAssignError(
     object->error = source;
 }
 
-void SilikoValueAssignInteger(
+void SilikoValueAssignFromInteger(
     SilikoValue *object,
     long long int source)
 {
@@ -148,7 +148,7 @@ void SilikoValueAssignInteger(
     object->integer = source;
 }
 
-void SilikoValueAssignReal(
+void SilikoValueAssignFromReal(
     SilikoValue *object,
     double source)
 {

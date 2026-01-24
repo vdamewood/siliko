@@ -44,13 +44,13 @@ SilikoValue *SilikoOperatorAdd(int argc, SilikoValue **argv)
 		if (SilikoValueGetStatus(result) == SilikoValueInteger
 			&& SilikoValueGetStatus(argv[i]) == SilikoValueInteger)
 		{
-			SilikoValueAssignInteger(result,
+			SilikoValueAssignFromInteger(result,
 				SilikoValueGetInteger(result)
 				+ SilikoValueGetInteger(argv[i]));
 		}
 		else
 		{
-			SilikoValueAssignReal(result,
+			SilikoValueAssignFromReal(result,
 				SilikoValueGetReal(result)
 				+ SilikoValueGetReal(argv[i]));
 		}
@@ -77,13 +77,13 @@ SilikoValue *SilikoOperatorSubtract(int argc, SilikoValue **argv)
 		if (SilikoValueGetStatus(result) == SilikoValueInteger
 			&& SilikoValueGetStatus(argv[i]) == SilikoValueInteger)
 		{
-			SilikoValueAssignInteger(result,
+			SilikoValueAssignFromInteger(result,
 				SilikoValueGetInteger(result)
 				- SilikoValueGetInteger(argv[i]));
 		}
 		else
 		{
-			SilikoValueAssignReal(result,
+			SilikoValueAssignFromReal(result,
 				SilikoValueGetReal(result)
 				- SilikoValueGetReal(argv[i]));
 		}
@@ -110,13 +110,13 @@ SilikoValue *SilikoOperatorMultiply(int argc, SilikoValue **argv)
 		if (SilikoValueGetStatus(result) == SilikoValueInteger
 			&& SilikoValueGetStatus(argv[i]) == SilikoValueInteger)
 		{
-			SilikoValueAssignInteger(result,
+			SilikoValueAssignFromInteger(result,
 				SilikoValueGetInteger(result)
 				* SilikoValueGetInteger(argv[i]));
 		}
 		else
 		{
-			SilikoValueAssignReal(result,
+			SilikoValueAssignFromReal(result,
 				SilikoValueGetReal(result)
 				* SilikoValueGetReal(argv[i]));
 		}
@@ -142,7 +142,7 @@ SilikoValue *SilikoOperatorDivide(int argc, SilikoValue **argv)
 
 		if(SilikoValueGetReal(argv[1]) == 0.0)
 		{
-			SilikoValueAssignError(result, SilikoErrorZeroDivision);
+			SilikoValueAssignFromError(result, SilikoErrorZeroDivision);
 			return result;
 		}
 
@@ -152,13 +152,13 @@ SilikoValue *SilikoOperatorDivide(int argc, SilikoValue **argv)
 				% SilikoValueGetInteger(argv[i])
 				== 0)
 		{
-			SilikoValueAssignInteger(result,
+			SilikoValueAssignFromInteger(result,
 				SilikoValueGetInteger(result)
 				/ SilikoValueGetInteger(argv[i]));
 		}
 		else
 		{
-			SilikoValueAssignReal(result,
+			SilikoValueAssignFromReal(result,
 				SilikoValueGetReal(result)
 				/ SilikoValueGetReal(argv[i]));
 		}

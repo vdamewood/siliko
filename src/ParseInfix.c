@@ -312,12 +312,7 @@ static SilikoNode *GetNumber(SilikoLexer *lexer)
 			if (!number)
 				return NULL;
 
-			if (!SilikoNodeNegate(number))
-			{
-				SilikoNodeDestroy(number);
-				return SilikoNodeCreateFromError(SilikoErrorSyntax);
-			}
-
+			SilikoNodeNegate(number);
 			return number;
 		}
 		default:

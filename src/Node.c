@@ -513,21 +513,21 @@ int SilikoNodeIsNegated(const SilikoNode *object)
 	}
 }
 
-int SilikoNodeNegate(SilikoNode *Tree)
+void SilikoNodeNegate(SilikoNode *Tree)
 {
 	if (Tree == NULL)
-		return 0;
+		return;
 
 	switch (Tree->Type)
 	{
 	case SilikoNodeLeaf:
 		SilikoValueNegate(Tree->Leaf);
-		return -1;
+		break;
 	case SilikoNodeBranch:
 		Tree->Branch->IsNegated = !Tree->Branch->IsNegated;
-		return -1;
+		break;
 	default:
-		return 0;
+		; // Do nothing. Silence warning.
 	}
 }
 

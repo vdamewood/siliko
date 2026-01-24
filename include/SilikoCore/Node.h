@@ -67,7 +67,7 @@ void SilikoNodeAssignFromReal(
 	SilikoNode *object,
 	double source);
 SILIKOCORE_EXPORT
-void SilikoNodeAssignValue(
+void SilikoNodeAssignFromValue(
 	SilikoNode *object,
 	const SilikoValue *source);
 SILIKOCORE_EXPORT
@@ -103,7 +103,7 @@ SILIKOCORE_EXPORT
 int SilikoNodeIsNegated(
 	const SilikoNode *object);
 SILIKOCORE_EXPORT
-int SilikoNodeNegate(
+void SilikoNodeNegate(
 	SilikoNode *object);
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodePruneChild(
