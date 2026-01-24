@@ -29,10 +29,10 @@ struct State
 
 static SilikoValue *Call(void *object, int argc, SilikoValue **argv);
 static SilikoFunction *Clone(void *void_state);
-static void Delete(void *state);
+static void Destroy(void *state);
 static const struct SilikoFunctionVTable VTable = {
-	.callVirt = Call,
-	.deleteVirt = Delete
+	.call = Call,
+	.destroy = Destroy
 };
 
 static SilikoValue *Call(void *void_state, int argc, SilikoValue **argv)
@@ -59,7 +59,7 @@ static SilikoFunction *Clone(void *void_state)
     return clone;
 }
 
-static void Delete(void *state)
+static void Destroy(void *state)
 {
     free(state);
 }

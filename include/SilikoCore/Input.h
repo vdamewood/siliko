@@ -29,9 +29,9 @@ SILIKO_EXPORT_C_API
 
 struct SilikoInputVTable
 {
-	int (*advanceVirt)(void *);
-	char (*getCharacterVirt)(void *);
-	void (*deleteVirt)(void *);
+	int (*advance)(void *state);
+	char (*getCharacter)(void *state);
+	void (*destroy)(void *state);
 };
 
 SILIKOCORE_EXPORT
@@ -47,7 +47,7 @@ int SilikoInputAdvance(SilikoInput *object);
 SILIKOCORE_EXPORT
 char SilikoInputGetCharacter(SilikoInput *object);
 SILIKOCORE_EXPORT
-void SilikoInputDelete(SilikoInput *object);
+void SilikoInputDestroy(SilikoInput *object);
 
 SILIKO_END_C_API
 

@@ -33,7 +33,7 @@ struct StringInputState
 	char *current;
 };
 
-static int advance(void *void_state)
+static int Advance(void *void_state)
 {
 	struct StringInputState *state = void_state;
 
@@ -48,14 +48,14 @@ static int advance(void *void_state)
 	}
 }
 
-static char getCharacter(void *void_state)
+static char GetCharacter(void *void_state)
 {
 	struct StringInputState *state = void_state;
 
 	return *state->current;
 }
 
-static void delete(void *void_state)
+static void Destroy(void *void_state)
 {
 	struct StringInputState *state = void_state;
 
@@ -65,9 +65,9 @@ static void delete(void *void_state)
 }
 
 static const struct SilikoInputVTable vTable = {
-	.advanceVirt = advance,
-	.getCharacterVirt = getCharacter,
-	.deleteVirt = delete
+	.advance = Advance,
+	.getCharacter = GetCharacter,
+	.destroy = Destroy
 };
 
 SilikoInput *SilikoStringInputCreate(const char *source)

@@ -45,21 +45,21 @@ int SilikoInputAdvance(SilikoInput *object)
 {
 	if (!object)
 		return 0;
-	return object->v_table->advanceVirt(object->state);
+	return object->v_table->advance(object->state);
 }
 
 char SilikoInputGetCharacter(SilikoInput *object)
 {
 	if (!object)
 		return '\0';
-	return object->v_table->getCharacterVirt(object->state);
+	return object->v_table->getCharacter(object->state);
 }
 
-void SilikoInputDelete(SilikoInput *object)
+void SilikoInputDestroy(SilikoInput *object)
 {
 	if (object)
 	{
-		object->v_table->deleteVirt(object->state);
+		object->v_table->destroy(object->state);
 		free(object);
 	}
 }

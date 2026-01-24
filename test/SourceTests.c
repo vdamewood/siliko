@@ -16,7 +16,7 @@ Test(StringSourceTests, NAME) \
         SilikoInputGetCharacter(source) == '\0' \
         && input[sizeof input - 1] == '\0' \
     ); \
-    SilikoInputDelete(source); \
+    SilikoInputDestroy(source); \
 }
 
 SourceTest(EmptryString, "")

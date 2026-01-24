@@ -346,7 +346,7 @@ void SilikoLexerDestroy(SilikoLexer *Lexer)
 {
 	if (Lexer)
 	{
-		SilikoInputDelete(Lexer->Source);
+		SilikoInputDestroy(Lexer->Source);
 		SilikoTokenDestroy(Lexer->Token);
 		free(Lexer);
 	}
