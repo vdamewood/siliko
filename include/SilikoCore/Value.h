@@ -27,7 +27,6 @@ enum SilikoError
 {
 	SilikoErrorNone,
 	SilikoErrorNullObject,
-	SilikoErrorMemory,
 	SilikoErrorSyntax,
 	SilikoErrorZeroDivision,
 	SilikoErrorFunctionName,
