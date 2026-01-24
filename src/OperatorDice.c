@@ -64,12 +64,10 @@ static inline unsigned long long int Twist(
 }
 
 static SilikoValue *call(void *void_state, int argc, SilikoValue **argv);
-static SilikoFunction *clone(void *state);
 static void destroy(void *object);
 
 static const struct SilikoFunctionVTable OperatorDiceVTable = {
     call,
-    clone,
     destroy
 };
 
@@ -122,16 +120,6 @@ static SilikoValue *call(void *void_state, int argc, SilikoValue **argv)
 	return SilikoValueCreateFromInteger(result);
 }
 
-static SilikoFunction *clone(void *state)
-{
-	struct DiceState *clone = malloc(sizeof *clone);
-	memcpy(clone, state, sizeof *clone);
-	SilikoFunction *object =
-		SilikoFunctionCreate(&OperatorDiceVTable, clone);
-	if (!object)
-		free(clone);
-    return object;
-}
 
 static void destroy(void *object)
 {

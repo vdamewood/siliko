@@ -31,7 +31,6 @@ SILIKO_EXPORT_C_API
 struct SilikoFunctionVTable
 {
 	SilikoValue *(*callVirt)(void *state, int argc, SilikoValue **argv);
-    SilikoFunction *(*cloneVirt)(void *state);
 	void (*deleteVirt)(void *state);
 };
 
@@ -50,9 +49,6 @@ SilikoValue *SilikoFunctionCall(
     SilikoFunction *object,
     int argc,
     SilikoValue **argv);
-SILIKOCORE_EXPORT
-SilikoFunction *SilikoFunctionClone(
-    SilikoFunction *object);
 SILIKOCORE_EXPORT
 void SilikoFunctionDestroy(
     SilikoFunction *object);
