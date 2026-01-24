@@ -113,6 +113,9 @@ static int Append(Lexeme *Lex, char NewChar)
 
 void SilikoLexerAdvance(SilikoLexer *Lexer)
 {
+	if (!Lexer)
+		return;
+
 	if (SilikoTokenGetStatus(Lexer->Token) == SilikoTokenEndOfInput
 			|| Lexer->error)
 		return;
@@ -349,7 +352,10 @@ void SilikoLexerDestroy(SilikoLexer *Lexer)
 	}
 }
 
-const SilikoToken *SilikoLexerGetToken(SilikoLexer *Lexer)
+const SilikoToken *SilikoLexerGetToken(SilikoLexer *object)
 {
-	return Lexer->Token;
+	if (!object)
+		return NULL;
+
+	return object->Token;
 }

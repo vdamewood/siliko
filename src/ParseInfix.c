@@ -427,13 +427,15 @@ static void GetArguments(SilikoLexer *lexer, SilikoNode *rVal)
 
 SilikoNode *SilikoParseInfix(SilikoInput *Input)
 {
-	SilikoNode *rVal = NULL;
-	SilikoLexer *lexer = NULL;
-
-	if (!(lexer = SilikoLexerCreate(Input)))
+	if (!Input)
 		return NULL;
 
-	rVal = GetExpression(lexer);
+	SilikoLexer *lexer = SilikoLexerCreate(Input);
+
+	if (!lexer)
+		return NULL;
+
+	SilikoNode *rVal = GetExpression(lexer);
 
 	if (SilikoTokenGetStatus(SilikoLexerGetToken(lexer)) != SilikoTokenEndOfInput)
 	{

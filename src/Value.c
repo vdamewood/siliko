@@ -81,6 +81,9 @@ void SilikoValueDestroy(SilikoValue *object)
 
 enum SilikoError SilikoValueGetError(const SilikoValue *object)
 {
+    if (!object)
+        return SilikoErrorNullObject;
+
     switch (object->status)
     {
     case SilikoValueError:
@@ -93,6 +96,9 @@ enum SilikoError SilikoValueGetError(const SilikoValue *object)
 
 long long int SilikoValueGetInteger(const SilikoValue *object)
 {
+    if (!object)
+        return 0;
+
     switch (object->status)
     {
     case SilikoValueError:
@@ -106,6 +112,9 @@ long long int SilikoValueGetInteger(const SilikoValue *object)
 
 double SilikoValueGetReal(const SilikoValue *object)
 {
+    if (!object)
+        return NAN;
+
     switch (object->status)
     {
     case SilikoValueError:
@@ -121,6 +130,9 @@ void SilikoValueAssignError(
     SilikoValue *object,
     enum SilikoError source)
 {
+    if (!object)
+        return;
+
     object->status = SilikoValueError;
     object->error = source;
 }
@@ -129,6 +141,9 @@ void SilikoValueAssignInteger(
     SilikoValue *object,
     long long int source)
 {
+    if (!object)
+        return;
+
     object->status = SilikoValueInteger;
     object->integer = source;
 }
@@ -137,6 +152,9 @@ void SilikoValueAssignReal(
     SilikoValue *object,
     double source)
 {
+    if (!object)
+        return;
+
     object->status = SilikoValueReal;
     object->real= source;
 }
@@ -145,7 +163,7 @@ void SilikoValueAssign(
     SilikoValue *object,
     const SilikoValue *other)
 {
-    if (object == other)
+    if (!object || object == other)
         return;
 
     object->status = other->status;
@@ -165,6 +183,9 @@ void SilikoValueAssign(
 
 void SilikoValueNegate(SilikoValue *object)
 {
+    if (!object)
+        return;
+
     switch(object->status)
     {
     case SilikoValueInteger:
@@ -181,6 +202,9 @@ void SilikoValueNegate(SilikoValue *object)
 
 enum SilikoValueStatus SilikoValueGetStatus(const SilikoValue *object)
 {
+    if (!object)
+        return SilikoValueError;
+
     return object->status;
 }
 

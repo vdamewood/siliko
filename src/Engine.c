@@ -141,6 +141,9 @@ SilikoValue *SilikoEngineCallFunction(
 	int argc,
 	SilikoValue **argv)
 {
+	if (!object)
+		return SilikoValueCreateFromError(SilikoErrorNullObject);
+
 	SilikoFunction *function
 		= SilikoEngineFetchFunction(object, name);
 

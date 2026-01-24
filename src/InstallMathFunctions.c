@@ -24,6 +24,9 @@
 
 int SilikoInstallMathFunctions(SilikoEngine *engine)
 {
+	if (!engine)
+		return 0;
+
 	return SilikoEngineInstallFunction(engine, "abs",
 			SilikoPureFunctionCreate(SilikoMathAbs))
 		&& SilikoEngineInstallFunction(engine, "acos",

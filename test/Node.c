@@ -7,24 +7,28 @@
 
 Test(SyntaxTreeTests, NewIntZero)
 {
+    SilikoEngine *engine = SilikoEngineCreate();
     SilikoNode *Node = SilikoNodeCreateFromInteger(0);
     cr_assert(SilikoNodeGetStatus(Node) == SilikoNodeLeaf);
 
-    SilikoValue *test_value = SilikoEvaluate(NULL, Node);
+    SilikoValue *test_value = SilikoEvaluate(engine, Node);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueInteger);
     cr_assert(SilikoValueGetInteger(test_value) == 0LL);
     SilikoValueDestroy(test_value);
+    SilikoEngineDestroy(engine);
 }
 
 Test(SyntaxTreeTests, NewFloatZero)
 {
+    SilikoEngine *engine = SilikoEngineCreate();
     SilikoNode *Node = SilikoNodeCreateFromReal(0.0);
     cr_assert(SilikoNodeGetStatus(Node) == SilikoNodeLeaf);
 
-    SilikoValue *test_value = SilikoEvaluate(NULL, Node);
+    SilikoValue *test_value = SilikoEvaluate(engine, Node);
     cr_assert(SilikoValueGetStatus(test_value) == SilikoValueReal);
     cr_assert(SilikoValueGetInteger(test_value) == 0.0);
     SilikoValueDestroy(test_value);
+    SilikoEngineDestroy(engine);
 }
 
 Test(SyntaxTreeTests, TwoPlusThreeIsFive)

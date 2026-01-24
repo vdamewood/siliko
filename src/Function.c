@@ -46,15 +46,21 @@ SilikoValue *SilikoFunctionCall(
     int argc,
     SilikoValue **argv)
 {
+    if (!object)
+        return SilikoValueCreateFromError(SilikoErrorNullObject);
     return object->v_table->callVirt(object->state, argc, argv);
 }
 
 SilikoFunction *SilikoFunctionClone(SilikoFunction *object)
 {
+    if (!object)
+        return NULL;
+
     return object->v_table->cloneVirt(object->state);
 }
 
 void SilikoFunctionDestroy(SilikoFunction *object)
 {
-    object->v_table->deleteVirt(object->state);
+    if (object)
+        object->v_table->deleteVirt(object->state);
 }

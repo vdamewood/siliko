@@ -24,6 +24,9 @@
 
 int SilikoInstallOperators(SilikoEngine *engine)
 {
+	if (!engine)
+		return 0;
+
 	return SilikoEngineInstallFunction(engine, "add",
 			SilikoPureFunctionCreate(SilikoOperatorAdd))
 		&& SilikoEngineInstallFunction(engine, "subtract",

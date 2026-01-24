@@ -24,10 +24,10 @@
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Value.h>
 
-SilikoValue *SilikoEvaluate( SilikoEngine *engine, const SilikoNode *node)
+SilikoValue *SilikoEvaluate(SilikoEngine *engine, const SilikoNode *node)
 {
-	if (!node)
-		return SilikoValueCreateFromError(SilikoErrorSyntax);
+	if (!node || !engine)
+        return SilikoValueCreateFromError(SilikoErrorNullObject);
 
 	switch (SilikoNodeGetStatus(node))
 	{

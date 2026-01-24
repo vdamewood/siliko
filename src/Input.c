@@ -43,16 +43,23 @@ SilikoInput *SilikoInputCreate(
 
 int SilikoInputAdvance(SilikoInput *object)
 {
+	if (!object)
+		return 0;
 	return object->v_table->advanceVirt(object->state);
 }
 
 char SilikoInputGetCharacter(SilikoInput *object)
 {
+	if (!object)
+		return '\0';
 	return object->v_table->getCharacterVirt(object->state);
 }
 
 void SilikoInputDelete(SilikoInput *object)
 {
-	object->v_table->deleteVirt(object->state);
-	free(object);
+	if (object)
+	{
+		object->v_table->deleteVirt(object->state);
+		free(object);
+	}
 }
