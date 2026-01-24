@@ -21,6 +21,8 @@
 #if !defined SILIKO_CORE_NODE_H
 #define SILIKO_CORE_NODE_H
 
+#include <stddef.h>
+
 #include <SilikoCore/Api.h>
 #include <SilikoCore/Value.h>
 
@@ -83,19 +85,19 @@ int SilikoNodeCountChildren(
 SILIKOCORE_EXPORT
 const SilikoNode *SilikoNodeFetchChild(
 	const SilikoNode *object,
-	int child_index);
+	size_t child_index);
 SILIKOCORE_EXPORT
 const char *SilikoNodeGetId(
 	const SilikoNode *object);
 SILIKOCORE_EXPORT
 int SilikoNodeInsertCopy(
 	SilikoNode *object,
-	int position,
+	size_t position,
 	const SilikoNode *new_branch);
 SILIKOCORE_EXPORT
 int SilikoNodeInsert(
 	SilikoNode *object,
-	int position,
+	size_t position,
 	SilikoNode *new_branch);
 SILIKOCORE_EXPORT
 int SilikoNodeIsNegated(
@@ -106,7 +108,7 @@ int SilikoNodeNegate(
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodePruneChild(
 	SilikoNode *object,
-	int child_index);
+	size_t child_index);
 SILIKOCORE_EXPORT
 int SilikoNodePushCopyLeft(
 	SilikoNode *object,

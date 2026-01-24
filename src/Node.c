@@ -56,12 +56,10 @@ struct SilikoNode
 	};
 };
 
-static inline int checkBounds(const SilikoNode *parent, int child_index)
+static inline int OutOfBounds(const SilikoNode *parent, size_t child_index)
 {
-	if (parent->Type != SilikoNodeBranch
-			|| child_index >= parent->Branch->Count)
-		return -1;
-	return child_index;
+	return parent->Type != SilikoNodeBranch
+			|| child_index >= parent->Branch->Count;
 }
 
 SilikoNode *SilikoNodeCreateNothing(void)
@@ -427,7 +425,7 @@ int SilikoNodePushRight(SilikoNode *object, SilikoNode *new_child)
 	return -1;
 }
 
-int SilikoNodeInsertCopy(SilikoNode *object, int position, const SilikoNode *new_child)
+int SilikoNodeInsertCopy(SilikoNode *object, size_t position, const SilikoNode *new_child)
 {
 	if (!object || !new_child)
 		return 0;
@@ -445,18 +443,17 @@ int SilikoNodeInsertCopy(SilikoNode *object, int position, const SilikoNode *new
 	return -1;
 }
 
-int SilikoNodeInsert(SilikoNode *object, int position, SilikoNode *new_child)
+int SilikoNodeInsert(
+	SilikoNode *object,
+	size_t position,
+	SilikoNode *new_child)
 {
-	if (!object || !new_child)
+	if (!object || !new_child || OutOfBounds(object, position))
 		return 0;
 
 	if (object->Branch->Count == object->Branch->Capacity)
 		if (!ExpandChildren(object))
 			return 0;
-
-	position = checkBounds(object, position);
-	if (position < 0)
-		return 0;
 
 	for (int i = object->Branch->Count; i > position; i--)
 		object->Branch->Children[i] = object->Branch->Children[i-1];
@@ -552,23 +549,19 @@ int SilikoNodeCountChildren(const SilikoNode *object)
 	return object->Branch->Count;
 }
 
-const SilikoNode *SilikoNodeFetchChild(const SilikoNode *parent, int child_index)
+const SilikoNode *SilikoNodeFetchChild(
+	const SilikoNode *parent,
+	size_t child_index)
 {
-	if (!parent)
-		return NULL;
-
-	if ((child_index = checkBounds(parent, child_index)) < 0)
+	if (!parent || OutOfBounds(parent, child_index))
 		return NULL;
 
 	return parent->Branch->Children[child_index];
 }
 
-SilikoNode *SilikoNodePruneChild(SilikoNode *parent, int child_index)
+SilikoNode *SilikoNodePruneChild(SilikoNode *parent, size_t child_index)
 {
-	if (!parent)
-		return NULL;
-
-	if ((child_index = checkBounds(parent, child_index)) < 0)
+	if (!parent || OutOfBounds(parent, child_index))
 		return NULL;
 
 	SilikoNode *child = parent->Branch->Children[child_index];
