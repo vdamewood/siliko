@@ -59,6 +59,9 @@ SilikoEngine *SilikoEngineCreate(void)
 
 void SilikoEngineDestroy(SilikoEngine *object)
 {
+	if (!object)
+		return;
+
 	for (size_t i = 0; i < sizeof(object->table)/sizeof(object->table[0]); i++)
 	{
 		if (object->table[i])
@@ -82,6 +85,9 @@ int SilikoEngineInstallFunction(
 	const char *name,
 	SilikoFunction *function)
 {
+	if (!object)
+		return 0;
+
 	uint8_t bucket = hash(name);
 	struct SilikoFunctionChain  *newNode;
 
@@ -111,6 +117,9 @@ SilikoFunction *SilikoEngineFetchFunction(
 	SilikoEngine *object,
 	const char *name)
 {
+	if (!object)
+		return NULL;
+
 	uint8_t index = hash(name);
 	struct SilikoFunctionChain *current = object->table[index];
 

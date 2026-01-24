@@ -187,6 +187,9 @@ void SilikoTokenAssignEndOfInput(SilikoToken *object)
 
 void SilikoTokenAssign(SilikoToken *object, const SilikoToken *source)
 {
+    if (object == source)
+        return;
+
     if (object->status == SilikoTokenId)
         free(object->id);
     object->status = source->status;

@@ -264,6 +264,9 @@ void SilikoNodeAssignBranch(SilikoNode *object, const char *source)
 
 void SilikoNodeAssign(SilikoNode *object, const SilikoNode *source)
 {
+	if (object == source)
+		return;
+
 	if (object->Type == SilikoNodeBranch)
 		DeleteBranch(object->Branch);
 

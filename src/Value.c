@@ -145,6 +145,9 @@ void SilikoValueAssign(
     SilikoValue *object,
     const SilikoValue *other)
 {
+    if (object == other)
+        return;
+
     object->status = other->status;
     switch(object->status)
     {
