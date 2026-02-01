@@ -10,7 +10,7 @@ Test(LexerTests, NAME) \
     { \
         __VA_ARGS__ \
     }; \
-    SilikoLexer *lex = SilikoLexerCreate(src); \
+    SilikoLexer *lex = SilikoLexerCreate(src, -1); \
     for (int i = 0; i < sizeof tokens/sizeof(SilikoToken*); i++) \
     { \
         const SilikoToken *current = SilikoLexerGetToken(lex); \

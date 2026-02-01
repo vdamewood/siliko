@@ -425,7 +425,7 @@ SilikoNode *SilikoParseInfix(SilikoInput *Input)
 	if (!Input)
 		return NULL;
 
-	SilikoLexer *lexer = SilikoLexerCreate(Input);
+	SilikoLexer *lexer = SilikoLexerCreate(Input, -1);
 
 	if (!lexer)
 		return NULL;

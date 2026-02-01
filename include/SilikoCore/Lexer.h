@@ -30,7 +30,7 @@ typedef struct SilikoLexer SilikoLexer;
 SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT SilikoLexer *
-SilikoLexerCreate(SilikoInput *source);
+SilikoLexerCreate(SilikoInput *source, int support_dice);
 
 SILIKOCORE_EXPORT void
 SilikoLexerDestroy(SilikoLexer *object);

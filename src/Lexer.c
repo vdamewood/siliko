@@ -30,6 +30,7 @@ struct SilikoLexer
 	SilikoInput *Source;
 	SilikoToken *Token;
 	int error;
+	int supportDice;
 };
 typedef struct SilikoLexer SilikoLexer;
 
@@ -141,7 +142,7 @@ void SilikoLexerAdvance(SilikoLexer *Lexer)
 			SilikoInputAdvance(Lexer->Source);
 			dfaState = DfaTerminateCharacter;
 		}
-		else if (SilikoInputGetCharacter(Lexer->Source) == 'd')
+		else if (Lexer->supportDice && SilikoInputGetCharacter(Lexer->Source) == 'd')
 		{
 			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
 			SilikoInputAdvance(Lexer->Source);
@@ -322,7 +323,7 @@ void SilikoLexerAdvance(SilikoLexer *Lexer)
 	free(Lex.Buffer);
 }
 
-SilikoLexer *SilikoLexerCreate(SilikoInput *source)
+SilikoLexer *SilikoLexerCreate(SilikoInput *source, int support_dice)
 {
 	SilikoLexer *object = malloc(sizeof(SilikoLexer));
 	if (!object)
@@ -337,6 +338,7 @@ SilikoLexer *SilikoLexerCreate(SilikoInput *source)
 	object->Source = source;
 	object->Token = new_token;
 	object->error = 0;
+	object->supportDice = support_dice;
 	SilikoLexerAdvance(object);
 
 	return object;
