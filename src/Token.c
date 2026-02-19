@@ -42,9 +42,10 @@ struct SilikoToken
 
 SilikoToken *SilikoTokenCreate(void)
 {
-    SilikoToken *object = malloc(sizeof(*object));
+    SilikoToken *object = malloc(sizeof *object);
     if (!object)
         return NULL;
+
     object->status = SilikoTokenUnset;
     object->integer = 0LL;
     return object;
@@ -52,9 +53,10 @@ SilikoToken *SilikoTokenCreate(void)
 
 SilikoToken *SilikoTokenCreateFromInteger(long long int source)
 {
-    SilikoToken *object = malloc(sizeof(*object));
+    SilikoToken *object = malloc(sizeof *object);
     if (!object)
         return NULL;
+
     object->status = SilikoTokenInteger;
     object->integer = source;
     return object;
@@ -62,9 +64,10 @@ SilikoToken *SilikoTokenCreateFromInteger(long long int source)
 
 SilikoToken *SilikoTokenCreateFromReal(double source)
 {
-    SilikoToken *object = malloc(sizeof(*object));
+    SilikoToken *object = malloc(sizeof *object);
     if (!object)
         return NULL;
+
     object->status = SilikoTokenReal;
     object->real = source;
     return object;
@@ -72,9 +75,10 @@ SilikoToken *SilikoTokenCreateFromReal(double source)
 
 SilikoToken *SilikoTokenCreateFromCharacter(char source)
 {
-    SilikoToken *object = malloc(sizeof(*object));
+    SilikoToken *object = malloc(sizeof *object);
     if (!object)
         return NULL;
+
     object->status = SilikoTokenCharacter;
     object->character = source;
     return object;
@@ -82,9 +86,10 @@ SilikoToken *SilikoTokenCreateFromCharacter(char source)
 
 SilikoToken *SilikoTokenCreateFromId(const char *source)
 {
-    SilikoToken *object = malloc(sizeof(*object));
+    SilikoToken *object = malloc(sizeof *object);
     if (!object)
         return NULL;
+
     object->status = SilikoTokenId;
     object->id = strdup(source);
     if (!object->id)
@@ -97,9 +102,10 @@ SilikoToken *SilikoTokenCreateFromId(const char *source)
 
 SilikoToken *SilikoTokenCreateEndOfInput(void)
 {
-    SilikoToken *object = malloc(sizeof(*object));
+    SilikoToken *object = malloc(sizeof *object);
     if (!object)
         return NULL;
+
     object->status = SilikoTokenEndOfInput;
     object->integer = 0LL;
     return object;
@@ -107,9 +113,10 @@ SilikoToken *SilikoTokenCreateEndOfInput(void)
 
 SilikoToken *SilikoTokenCopy(const SilikoToken *source)
 {
-    SilikoToken *object = malloc(sizeof(*object));
+    SilikoToken *object = malloc(sizeof *object);
     if (!object)
         return NULL;
+
     object->status = source->status;
     switch (object->status)
     {
@@ -183,7 +190,7 @@ void SilikoTokenAssignFromId(SilikoToken *object, const char *source)
     if (!object)
         return;
 
-    char * id_copy = strdup(source);
+    char *id_copy = strdup(source);
     if (!id_copy)
         return;
     if (object->status == SilikoTokenId)
@@ -200,7 +207,7 @@ void SilikoTokenAssignEndOfInput(SilikoToken *object)
     if (object->status == SilikoTokenId)
         free(object->id);
     object->status = SilikoTokenEndOfInput;
-    object->integer = 0;
+    object->integer = 0LL;
 }
 
 void SilikoTokenAssign(SilikoToken *object, const SilikoToken *source)
@@ -273,5 +280,4 @@ const char *SilikoTokenGetId(const SilikoToken *object)
         return NULL;
 
     return object->id;
-
 }

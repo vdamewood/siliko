@@ -42,8 +42,10 @@ struct SilikoFunctionChain
 static uint8_t hash(const char *input)
 {
 	uint16_t remainder = 0;
+
 	for (const uint8_t *i = (const uint8_t *)input; *i; i++)
-        	remainder = ((remainder << 1) + *i) % TableSize;
+        remainder = ((remainder << 1) + *i) % TableSize;
+
 	return remainder;
 }
 
@@ -62,7 +64,10 @@ void SilikoEngineDestroy(SilikoEngine *object)
 	if (!object)
 		return;
 
-	for (size_t i = 0; i < sizeof(object->table)/sizeof(object->table[0]); i++)
+	for (
+		size_t i = 0;
+		i < sizeof(object->table)/sizeof(object->table[0]);
+		i++)
 	{
 		if (object->table[i])
 		{
@@ -88,26 +93,28 @@ int SilikoEngineInstallFunction(
 	if (!object)
 		return 0;
 
-	uint8_t bucket = hash(name);
-	struct SilikoFunctionChain  *newNode;
-
-	if (!(newNode = malloc(sizeof(struct SilikoFunctionChain))))
+	uint8_t index = hash(name);
+	struct SilikoFunctionChain  *new_node = malloc(sizeof *new_node);
+	if (!new_node)
 		return 0;
 
-	newNode->id = strdup(name);
-	newNode->function = function;
-	newNode->next = NULL;
+	new_node->id = strdup(name);
+	new_node->function = function;
+	new_node->next = NULL;
 
-	if (object->table[bucket])
+	if (object->table[index])
 	{
-		struct SilikoFunctionChain *currentNode = object->table[bucket];
-		while (currentNode->next)
-			currentNode = currentNode->next;
-		currentNode->next = newNode;
+		struct SilikoFunctionChain *current_node
+			= object->table[index];
+
+		while (current_node->next)
+			current_node = current_node->next;
+
+		current_node->next = new_node;
 	}
 	else
 	{
-		object->table[bucket] = newNode;
+		object->table[index] = new_node;
 	}
 
 	return -1;
@@ -139,7 +146,7 @@ SilikoValue *SilikoEngineCallFunction(
 	SilikoEngine *object,
 	const char *name,
 	int argc,
-	const SilikoValue **argv)
+	SilikoValue **argv)
 {
 	if (!object)
 		return SilikoValueCreateFromError(SilikoErrorNullObject);

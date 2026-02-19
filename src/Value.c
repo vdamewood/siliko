@@ -36,7 +36,7 @@ struct SilikoValue
 
 SilikoValue *SilikoValueCreateFromError(enum SilikoError source)
 {
-    SilikoValue *object = malloc(sizeof (*object));
+    SilikoValue *object = malloc(sizeof *object);
     if(!object)
         return NULL;
 
@@ -46,7 +46,7 @@ SilikoValue *SilikoValueCreateFromError(enum SilikoError source)
 
 SilikoValue *SilikoValueCreateFromInteger(long long int source)
 {
-    SilikoValue *object = malloc(sizeof (*object));
+    SilikoValue *object = malloc(sizeof *object);
     if(!object)
         return NULL;
 
@@ -56,7 +56,7 @@ SilikoValue *SilikoValueCreateFromInteger(long long int source)
 
 SilikoValue *SilikoValueCreateFromReal(double source)
 {
-    SilikoValue *object = malloc(sizeof (*object));
+    SilikoValue *object = malloc(sizeof *object);
     if(!object)
         return NULL;
 
@@ -66,7 +66,7 @@ SilikoValue *SilikoValueCreateFromReal(double source)
 
 SilikoValue *SilikoValueCopy(const SilikoValue *other)
 {
-    SilikoValue *object = malloc(sizeof (*object));
+    SilikoValue *object = malloc(sizeof *object);
     if(!object)
         return NULL;
 
@@ -207,4 +207,3 @@ enum SilikoValueStatus SilikoValueGetStatus(const SilikoValue *object)
 
     return object->status;
 }
-

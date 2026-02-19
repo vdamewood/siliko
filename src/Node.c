@@ -30,57 +30,59 @@
 
 struct Branch
 {
-	char *Id;
-	int Count;
-	int Capacity;
-	int IsNegated;
-	SilikoNode **Children;
+	char *id;
+	size_t count;
+	size_t capacity;
+	int isNegated;
+	SilikoNode **children;
 };
 
 static void DeleteBranch(struct Branch *branch)
 {
-	for (int i = 0; i < branch->Count; i++)
-		SilikoNodeDestroy(branch->Children[i]);
-	free(branch->Id);
-	free(branch->Children);
+	for (int i = 0; i < branch->count; i++)
+		SilikoNodeDestroy(branch->children[i]);
+	free(branch->id);
+	free(branch->children);
 	free(branch);
 }
 
 struct SilikoNode
 {
-	enum SilikoNodeStatus Type;
+	enum SilikoNodeStatus status;
 	union
 	{
-		SilikoValue *Leaf;
-		struct Branch *Branch;
+		SilikoValue *leaf;
+		struct Branch *branch;
 	};
 };
 
-static inline int OutOfBounds(const SilikoNode *parent, size_t child_index)
+static inline int OutOfBounds(
+	const SilikoNode *parent,
+	size_t child_index)
 {
-	return parent->Type != SilikoNodeBranch
-			|| child_index >= parent->Branch->Count;
+	return parent->status != SilikoNodeBranch
+			|| child_index >= parent->branch->count;
 }
 
 SilikoNode *SilikoNodeCreateNothing(void)
 {
-	SilikoNode *rVal = NULL;
+	SilikoNode *object = malloc(sizeof *object);
 
-	if ((rVal = malloc(sizeof(SilikoNode))))
-		rVal->Type = SilikoNodeNothing;
+	if (object)
+		object->status = SilikoNodeNothing;
 
-	return rVal;
+	return object;
 }
 
 SilikoNode *SilikoNodeCreateFromError(enum SilikoError source)
 {
-	SilikoNode *object = malloc(sizeof(SilikoNode));
+	SilikoNode *object = malloc(sizeof *object);
 	if (!object)
 		return NULL;
 
-	object->Type = SilikoNodeLeaf;
-	object->Leaf = SilikoValueCreateFromError(source);
-	if(!object->Leaf)
+	object->status = SilikoNodeLeaf;
+	object->leaf = SilikoValueCreateFromError(source);
+	if(!object->leaf)
 	{
 		free (object);
 		return NULL;
@@ -92,14 +94,13 @@ SilikoNode *SilikoNodeCreateFromError(enum SilikoError source)
 SilikoNode *SilikoNodeCreateFromInteger(long long int source)
 {
 	SilikoNode *object
-		= malloc(sizeof(*object));
-
+		= malloc(sizeof *object);
 	if (!object)
 		return NULL;
 
-	object->Type = SilikoNodeLeaf;
-	object->Leaf = SilikoValueCreateFromInteger(source);
-	if(!object->Leaf)
+	object->status = SilikoNodeLeaf;
+	object->leaf = SilikoValueCreateFromInteger(source);
+	if(!object->leaf)
 	{
 		free(object);
 		return NULL;
@@ -116,9 +117,9 @@ SilikoNode *SilikoNodeCreateFromReal(double source)
 	if (!object)
 		return NULL;
 
-	object->Type = SilikoNodeLeaf;
-	object->Leaf = SilikoValueCreateFromReal(source);
-	if(!object->Leaf)
+	object->status = SilikoNodeLeaf;
+	object->leaf = SilikoValueCreateFromReal(source);
+	if(!object->leaf)
 	{
 		free(object);
 		return NULL;
@@ -135,9 +136,9 @@ SilikoNode *SilikoNodeCreateFromValue(SilikoValue *source)
 	if (!object)
 		return NULL;
 
-	object->Type = SilikoNodeLeaf;
-	object->Leaf = SilikoValueCopy(source);
-	if(!object->Leaf)
+	object->status = SilikoNodeLeaf;
+	object->leaf = SilikoValueCopy(source);
+	if(!object->leaf)
 	{
 		free(object);
 		return NULL;
@@ -148,9 +149,9 @@ SilikoNode *SilikoNodeCreateFromValue(SilikoValue *source)
 
 static struct Branch *NewBranch(const char* source_id)
 {
-	const int DefaultSize = 4;
-	struct Branch *object = malloc(sizeof(*object));
-	SilikoNode **new_children = calloc(DefaultSize, sizeof(SilikoNode*));
+	const int default_size = 4;
+	struct Branch *object = malloc(sizeof *object);
+	SilikoNode **new_children = calloc(default_size, sizeof *new_children);
 	char *new_id = strdup(source_id);
 	if (!object || !new_children || !new_id)
 	{
@@ -160,30 +161,30 @@ static struct Branch *NewBranch(const char* source_id)
 		return NULL;
 	}
 
-	object->Id = new_id;
-	object->Count = 0;
-	object->IsNegated = 0;
-	object->Capacity = DefaultSize;
-	object->Children = new_children;
+	object->id = new_id;
+	object->count = 0;
+	object->isNegated = 0;
+	object->capacity = default_size;
+	object->children = new_children;
 
 	return object;
 }
 
-SilikoNode *SilikoNodeCreateBranch(const char *NewId)
+SilikoNode *SilikoNodeCreateBranch(const char *source_id)
 {
-	SilikoNode *object = malloc(sizeof(SilikoNode));
+	SilikoNode *object = malloc(sizeof *object);
 	if (!object)
 		return NULL;
 
-	struct Branch *new_branch = NewBranch(NewId);
+	struct Branch *new_branch = NewBranch(source_id);
 	if (!new_branch)
 	{
 		free(object);
 		return NULL;
 	}
 
-	object->Type = SilikoNodeBranch;
-	object->Branch = new_branch;
+	object->status = SilikoNodeBranch;
+	object->branch = new_branch;
 	return object;
 }
 
@@ -194,7 +195,9 @@ SilikoNode *SilikoNodeCopy(const SilikoNode *source)
 	return object;
 }
 
-void SilikoNodeAssignFromError(SilikoNode *object, enum SilikoError source)
+void SilikoNodeAssignFromError(
+	SilikoNode *object,
+	enum SilikoError source)
 {
 	if (!object)
 		return;
@@ -203,14 +206,16 @@ void SilikoNodeAssignFromError(SilikoNode *object, enum SilikoError source)
 	if (!new_leaf)
 		return;
 
-	if (object->Type == SilikoNodeBranch)
-		DeleteBranch(object->Branch);
+	if (object->status == SilikoNodeBranch)
+		DeleteBranch(object->branch);
 
-	object->Type = SilikoNodeLeaf;
-	object->Leaf = new_leaf;
+	object->status = SilikoNodeLeaf;
+	object->leaf = new_leaf;
 }
 
-void SilikoNodeAssignFromInteger(SilikoNode *object, long long int source)
+void SilikoNodeAssignFromInteger(
+	SilikoNode *object,
+	long long int source)
 {
 	if (!object)
 		return;
@@ -219,11 +224,11 @@ void SilikoNodeAssignFromInteger(SilikoNode *object, long long int source)
 	if (!new_leaf)
 		return;
 
-	if (object->Type == SilikoNodeBranch)
-		DeleteBranch(object->Branch);
+	if (object->status == SilikoNodeBranch)
+		DeleteBranch(object->branch);
 
-	object->Type = SilikoNodeLeaf;
-	object->Leaf = new_leaf;
+	object->status = SilikoNodeLeaf;
+	object->leaf = new_leaf;
 }
 
 void SilikoNodeAssignFromReal(SilikoNode *object, double source)
@@ -235,15 +240,17 @@ void SilikoNodeAssignFromReal(SilikoNode *object, double source)
 	if (!new_leaf)
 		return;
 
-	if (object->Type == SilikoNodeBranch)
-		DeleteBranch(object->Branch);
+	if (object->status == SilikoNodeBranch)
+		DeleteBranch(object->branch);
 
-	object->Type = SilikoNodeLeaf;
-	object->Leaf = new_leaf;
+	object->status = SilikoNodeLeaf;
+	object->leaf = new_leaf;
 }
 
 
-void SilikoNodeAssignValue(SilikoNode *object, const SilikoValue *source)
+void SilikoNodeAssignValue(
+	SilikoNode *object,
+	const SilikoValue *source)
 {
 	if (!object)
 		return;
@@ -252,11 +259,11 @@ void SilikoNodeAssignValue(SilikoNode *object, const SilikoValue *source)
 	if (!new_leaf)
 		return;
 
-	if (object->Type == SilikoNodeBranch)
-		DeleteBranch(object->Branch);
+	if (object->status == SilikoNodeBranch)
+		DeleteBranch(object->branch);
 
-	object->Type = SilikoNodeLeaf;
-	object->Leaf = new_leaf;
+	object->status = SilikoNodeLeaf;
+	object->leaf = new_leaf;
 }
 
 void SilikoNodeAssignBranch(SilikoNode *object, const char *source)
@@ -268,11 +275,11 @@ void SilikoNodeAssignBranch(SilikoNode *object, const char *source)
 	if (!new_branch)
 		return;
 
-	if (object->Type == SilikoNodeBranch)
-		DeleteBranch(object->Branch);
+	if (object->status == SilikoNodeBranch)
+		DeleteBranch(object->branch);
 
-	object->Type = SilikoNodeBranch;
-	object->Branch = new_branch;
+	object->status = SilikoNodeBranch;
+	object->branch = new_branch;
 }
 
 void SilikoNodeAssign(SilikoNode *object, const SilikoNode *source)
@@ -280,15 +287,15 @@ void SilikoNodeAssign(SilikoNode *object, const SilikoNode *source)
 	if (!object || object == source)
 		return;
 
-	if (object->Type == SilikoNodeBranch)
-		DeleteBranch(object->Branch);
+	if (object->status == SilikoNodeBranch)
+		DeleteBranch(object->branch);
 
-	object->Type = source->Type;
-	switch (object->Type)
+	object->status = source->status;
+	switch (object->status)
 	{
 	case SilikoNodeLeaf:
-		object->Leaf = SilikoValueCopy(source->Leaf);
-		if (!object->Leaf)
+		object->leaf = SilikoValueCopy(source->leaf);
+		if (!object->leaf)
 		{
 			free(object);
 			object = NULL;
@@ -297,50 +304,50 @@ void SilikoNodeAssign(SilikoNode *object, const SilikoNode *source)
 		break;
 	case SilikoNodeBranch:
 	{
-		object->Branch = malloc(sizeof(*object->Branch));
-		if (!object->Branch)
+		object->branch = malloc(sizeof(*object->branch));
+		if (!object->branch)
 		{
 			free(object);
 			object = NULL;
 			return;
 		}
-		object->Branch->Id = strdup(source->Branch->Id);
-		if (!object->Branch->Id)
+		object->branch->id = strdup(source->branch->id);
+		if (!object->branch->id)
 		{
-			free(object->Branch);
+			free(object->branch);
 			free(object);
 			object = NULL;
 			return;
 		}
-		object->Branch->Count = source->Branch->Count;
-		object->Branch->Capacity = source->Branch->Capacity;
-		object->Branch->IsNegated = source->Branch->IsNegated;
-		object->Branch->Children = calloc(
-			object->Branch->Capacity,
-			sizeof(*object->Branch->Children));
-		if (!object->Branch->Children)
+		object->branch->count = source->branch->count;
+		object->branch->capacity = source->branch->capacity;
+		object->branch->isNegated = source->branch->isNegated;
+		object->branch->children = calloc(
+			object->branch->capacity,
+			sizeof(*object->branch->children));
+		if (!object->branch->children)
 		{
-			free(object->Branch->Id);
-			free(object->Branch);
+			free(object->branch->id);
+			free(object->branch);
 			free(object);
 			object = NULL;
 			return;
 		}
-		for (int i = 0; i <= object->Branch->Count; i++)
+		for (int i = 0; i <= object->branch->count; i++)
 		{
-			object->Branch->Children[i]
-				= SilikoNodeCopy(source->Branch->Children[i]);
+			object->branch->children[i]
+				= SilikoNodeCopy(source->branch->children[i]);
 		}
 		break;
 	}
 	default:
-		;
+		; // Do nothing. Silence warning.
 	}
 }
 
-static int ExpandChildren(SilikoNode *Tree)
+static int ExpandChildren(SilikoNode *object)
 {
-	int new_capacity = Tree->Branch->Capacity * 2;
+	int new_capacity = object->branch->capacity * 2;
 	SilikoNode **new_children =
 		calloc(new_capacity, sizeof *new_children);
 
@@ -349,16 +356,18 @@ static int ExpandChildren(SilikoNode *Tree)
 
 	memcpy(
 		new_children,
-		Tree->Branch->Children,
-		Tree->Branch->Capacity * sizeof *new_children);
-	free(Tree->Branch->Children);
+		object->branch->children,
+		object->branch->capacity * sizeof *new_children);
+	free(object->branch->children);
 
-	Tree->Branch->Children = new_children;
-	Tree->Branch->Capacity = new_capacity;
+	object->branch->children = new_children;
+	object->branch->capacity = new_capacity;
 	return -1;
 }
 
-int SilikoNodePushCopyLeft(SilikoNode *object, const SilikoNode *new_child)
+int SilikoNodePushCopyLeft(
+	SilikoNode *object,
+	const SilikoNode *new_child)
 {
 	if (!object || !new_child)
 		return 0;
@@ -381,19 +390,21 @@ int SilikoNodePushLeft(SilikoNode *object, SilikoNode *new_child)
 	if (!object || !new_child)
 		return 0;
 
-	if (object->Branch->Count == object->Branch->Capacity)
+	if (object->branch->count == object->branch->capacity)
 		if (!ExpandChildren(object))
 			return 0;
 
-	for (int i = object->Branch->Count; i >= 1; i--)
-		object->Branch->Children[i] = object->Branch->Children[i-1];
+	for (int i = object->branch->count; i >= 1; i--)
+		object->branch->children[i] = object->branch->children[i-1];
 
-	object->Branch->Children[0] = new_child;
-	object->Branch->Count++;
+	object->branch->children[0] = new_child;
+	object->branch->count++;
 	return -1;
 }
 
-int SilikoNodePushCopyRight(SilikoNode *object, const SilikoNode *new_child)
+int SilikoNodePushCopyRight(
+	SilikoNode *object,
+	const SilikoNode *new_child)
 {
 	if (!object || !new_child)
 		return 0;
@@ -416,16 +427,19 @@ int SilikoNodePushRight(SilikoNode *object, SilikoNode *new_child)
 	if (!object || !new_child)
 		return 0;
 
-	if (object->Branch->Count == object->Branch->Capacity)
+	if (object->branch->count == object->branch->capacity)
 		if (!ExpandChildren(object))
 			return 0;
 
-	object->Branch->Children[object->Branch->Count] = new_child;
-	object->Branch->Count++;
+	object->branch->children[object->branch->count] = new_child;
+	object->branch->count++;
 	return -1;
 }
 
-int SilikoNodeInsertCopy(SilikoNode *object, size_t position, const SilikoNode *new_child)
+int SilikoNodeInsertCopy(
+	SilikoNode *object,
+	size_t position,
+	const SilikoNode *new_child)
 {
 	if (!object || !new_child)
 		return 0;
@@ -451,15 +465,15 @@ int SilikoNodeInsert(
 	if (!object || !new_child || OutOfBounds(object, position))
 		return 0;
 
-	if (object->Branch->Count == object->Branch->Capacity)
+	if (object->branch->count == object->branch->capacity)
 		if (!ExpandChildren(object))
 			return 0;
 
-	for (int i = object->Branch->Count; i > position; i--)
-		object->Branch->Children[i] = object->Branch->Children[i-1];
+	for (int i = object->branch->count; i > position; i--)
+		object->branch->children[i] = object->branch->children[i-1];
 
-	object->Branch->Children[position] = new_child;
-	object->Branch->Count++;
+	object->branch->children[position] = new_child;
+	object->branch->count++;
 	return -1;
 }
 
@@ -468,7 +482,7 @@ enum SilikoNodeStatus SilikoNodeGetStatus(const SilikoNode *object)
 	if (!object)
 		return SilikoNodeNothing;
 
-	return object->Type;
+	return object->status;
 }
 
 const SilikoValue *SilikoNodeGetValue(const SilikoNode *object)
@@ -476,17 +490,17 @@ const SilikoValue *SilikoNodeGetValue(const SilikoNode *object)
 	if (!object)
 		return SilikoValueCreateFromError(SilikoErrorNullObject);
 
-	return object->Type == SilikoNodeLeaf
-		? object->Leaf
+	return object->status == SilikoNodeLeaf
+		? object->leaf
 		: NULL;
 }
 
 const char *SilikoNodeGetId(const SilikoNode *object)
 {
-	if (!object || object->Type != SilikoNodeBranch)
+	if (!object || object->status != SilikoNodeBranch)
 		return NULL;
 
-	return object->Branch->Id;
+	return object->branch->id;
 }
 
 int SilikoNodeIsNegated(const SilikoNode *object)
@@ -494,59 +508,63 @@ int SilikoNodeIsNegated(const SilikoNode *object)
 	if (!object)
 		return 0;
 
-	switch (object->Type)
+	switch (object->status)
 	{
 	case SilikoNodeLeaf:
-		switch (SilikoValueGetStatus(object->Leaf))
+		switch (SilikoValueGetStatus(object->leaf))
 		{
 		case SilikoValueInteger:
-			return SilikoValueGetInteger(object->Leaf) < 0;
+			return SilikoValueGetInteger(object->leaf) < 0;
 		case SilikoValueReal:
-			return SilikoValueGetReal(object->Leaf) < 0.0;
+			return SilikoValueGetReal(object->leaf) < 0.0;
 		default:
 			return 0;
 		}
 	case SilikoNodeBranch:
-		return object->Branch->IsNegated;
+		return object->branch->isNegated;
 	default:
 		return 0;
 	}
 }
 
-void SilikoNodeNegate(SilikoNode *Tree)
+void SilikoNodeNegate(SilikoNode *object)
 {
-	if (Tree == NULL)
+	if (!object)
 		return;
 
-	switch (Tree->Type)
+	switch (object->status)
 	{
 	case SilikoNodeLeaf:
-		SilikoValueNegate(Tree->Leaf);
+		SilikoValueNegate(object->leaf);
 		break;
 	case SilikoNodeBranch:
-		Tree->Branch->IsNegated = !Tree->Branch->IsNegated;
+		object->branch->isNegated = !object->branch->isNegated;
 		break;
 	default:
 		; // Do nothing. Silence warning.
 	}
 }
 
-void SilikoNodeDestroy(SilikoNode *Node)
+void SilikoNodeDestroy(SilikoNode *object)
 {
-	if (Node)
+	if (object)
 	{
-		if (Node->Type == SilikoNodeBranch)
-		DeleteBranch(Node->Branch);
-		free(Node);
+		if (object->status == SilikoNodeLeaf)
+			SilikoValueDestroy(object->leaf);
+
+		if (object->status == SilikoNodeBranch)
+			DeleteBranch(object->branch);
+
+		free(object);
 	}
 }
 
-int SilikoNodeCountChildren(const SilikoNode *object)
+size_t SilikoNodeCountChildren(const SilikoNode *object)
 {
-	if (!object || object->Type != SilikoNodeBranch)
+	if (!object || object->status != SilikoNodeBranch)
 		return 0;
 
-	return object->Branch->Count;
+	return object->branch->count;
 }
 
 const SilikoNode *SilikoNodeFetchChild(
@@ -556,7 +574,7 @@ const SilikoNode *SilikoNodeFetchChild(
 	if (!parent || OutOfBounds(parent, child_index))
 		return NULL;
 
-	return parent->Branch->Children[child_index];
+	return parent->branch->children[child_index];
 }
 
 SilikoNode *SilikoNodePruneChild(SilikoNode *parent, size_t child_index)
@@ -564,15 +582,15 @@ SilikoNode *SilikoNodePruneChild(SilikoNode *parent, size_t child_index)
 	if (!parent || OutOfBounds(parent, child_index))
 		return NULL;
 
-	SilikoNode *child = parent->Branch->Children[child_index];
+	SilikoNode *child = parent->branch->children[child_index];
 	if (!child)
 		return NULL;
 
-	parent->Branch->Count--;
-	for (int i = child_index; i < parent->Branch->Count; i++)
-		parent->Branch->Children[i] = parent->Branch->Children[i+1];
+	parent->branch->count--;
+	for (int i = child_index; i < parent->branch->count; i++)
+		parent->branch->children[i] = parent->branch->children[i+1];
 
-	parent->Branch->Children[parent->Branch->Count] = NULL;
+	parent->branch->children[parent->branch->count] = NULL;
 
 	return child;
 }

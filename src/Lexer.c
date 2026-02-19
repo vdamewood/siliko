@@ -27,13 +27,11 @@
 
 struct SilikoLexer
 {
-	SilikoInput *Source;
-	SilikoToken *Token;
+	SilikoInput *input;
+	SilikoToken *token;
 	int error;
 	int supportDice;
 };
-typedef struct SilikoLexer SilikoLexer;
-
 
 /* Values taken from Google Calculator 2011-07-06 */
 #define EULER 2.71828183
@@ -85,249 +83,253 @@ typedef enum SilikoDfaState SilikoDfaState;
 
 struct Lexeme
 {
-	char *Buffer;
-	size_t Current;
-	size_t End;
+	char *buffer;
+	size_t current;
+	size_t end;
 };
 typedef struct Lexeme Lexeme;
 
-static int Append(Lexeme *Lex, char NewChar)
+static int Append(Lexeme *object, char new_character)
 {
-	if (Lex->Current == Lex->End)
+	if (object->current == object->end)
 	{
-		size_t new_end = Lex->End * 2;
-		char *new_buffer = realloc(Lex->Buffer, new_end);
+		size_t new_end = object->end * 2;
+		char *new_buffer = realloc(object->buffer, new_end);
 		if (!new_buffer)
 		{
 			return 0;
 		}
 		else
 		{
-			Lex->Buffer = new_buffer;
-			Lex->End = new_end;
+			object->buffer = new_buffer;
+			object->end = new_end;
 		}
 	}
 
-	Lex->Buffer[Lex->Current++] = NewChar;
+	object->buffer[object->current++] = new_character;
 	return -1;
 }
 
-void SilikoLexerAdvance(SilikoLexer *Lexer)
+void SilikoLexerAdvance(SilikoLexer *object)
 {
-	if (!Lexer)
+	if (!object)
 		return;
 
-	if (SilikoTokenGetStatus(Lexer->Token) == SilikoTokenEndOfInput
-			|| Lexer->error)
+	if (SilikoTokenGetStatus(object->token) == SilikoTokenEndOfInput
+			|| object->error)
 		return;
 
-	Lexeme Lex = {malloc(4), 0, 4};
-	if (!(Lex.Buffer))
+	Lexeme lexeme = {malloc(4), 0, 4};
+	if (!(lexeme.buffer))
 	{
-		Lexer->error = -1;
+		object->error = -1;
 		return;
 	}
 
-	SilikoDfaState dfaState = DfaStart;
-	while (dfaState != DfaFinish)
-	switch (dfaState)
+	SilikoDfaState dfa_state = DfaStart;
+	while (dfa_state != DfaFinish)
+	switch (dfa_state)
 	{
 	case DfaFinish:
 		break;
 	case DfaStart:
-		if (IsOperator(SilikoInputGetCharacter(Lexer->Source)))
+		if (IsOperator(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			Append(&Lex, '\0');
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaTerminateCharacter;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			Append(&lexeme, '\0');
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaTerminateCharacter;
 		}
-		else if (Lexer->supportDice && SilikoInputGetCharacter(Lexer->Source) == 'd')
+		else if (object->supportDice
+			&& SilikoInputGetCharacter(object->input) == 'd')
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaDice;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaDice;
 		}
-		else if (SilikoInputGetCharacter(Lexer->Source) == 'e')
+		else if (SilikoInputGetCharacter(object->input) == 'e')
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaEuler;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaEuler;
 		}
-		else if (SilikoInputGetCharacter(Lexer->Source) == 'p')
+		else if (SilikoInputGetCharacter(object->input) == 'p')
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaPiStart;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaPiStart;
 		}
-		else if (isdigit(SilikoInputGetCharacter(Lexer->Source)))
+		else if (isdigit(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaInteger;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaInteger;
 		}
-		else if (isalpha(SilikoInputGetCharacter(Lexer->Source)))
+		else if (isalpha(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaId;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaId;
 		}
-		else if (isspace(SilikoInputGetCharacter(Lexer->Source)))
+		else if (isspace(SilikoInputGetCharacter(object->input)))
 		{
-			SilikoInputAdvance(Lexer->Source);
+			SilikoInputAdvance(object->input);
 		}
-		else if (SilikoInputGetCharacter(Lexer->Source) == '\0')
+		else if (SilikoInputGetCharacter(object->input) == '\0')
 		{
-			dfaState = DfaTerminateEndOfInput;
+			dfa_state = DfaTerminateEndOfInput;
 		}
 		else
 		{
-			dfaState = DfaError;
+			dfa_state = DfaError;
 		}
 		break;
 	case DfaDice:
-		if (isalpha(SilikoInputGetCharacter(Lexer->Source)))
+		if (isalpha(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaId;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaId;
 		}
 		else
 		{
-			Append(&Lex, '\0');
-			dfaState = DfaTerminateCharacter;
+			Append(&lexeme, '\0');
+			dfa_state = DfaTerminateCharacter;
 		}
 		break;
 	case DfaEuler:
-		if (isalnum(SilikoInputGetCharacter(Lexer->Source)))
+		if (isalnum(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaId;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaId;
 		}
 		else
 		{
-			Append(&Lex, '\0');
-			dfaState = DfaTerminateEuler;
+			Append(&lexeme, '\0');
+			dfa_state = DfaTerminateEuler;
 		}
 		break;
 	case DfaPiStart:
-		if (SilikoInputGetCharacter(Lexer->Source) == 'i')
+		if (SilikoInputGetCharacter(object->input) == 'i')
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaPiFull;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaPiFull;
 		}
 		else if (IsIdCharacter(
-				SilikoInputGetCharacter(Lexer->Source)))
+				SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaId;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaId;
 		}
 		else
 		{
-			Append(&Lex, '\0');
-			dfaState = DfaTerminateId;
+			Append(&lexeme, '\0');
+			dfa_state = DfaTerminateId;
 		}
 		break;
 	case DfaPiFull:
-		if (IsIdCharacter(SilikoInputGetCharacter(Lexer->Source)))
+		if (IsIdCharacter(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaId;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaId;
 		}
 		else
 		{
-			Append(&Lex, '\0');
-			dfaState = DfaTerminatePi;
+			Append(&lexeme, '\0');
+			dfa_state = DfaTerminatePi;
 		}
 		break;
 	case DfaId:
-		if (isalnum(SilikoInputGetCharacter(Lexer->Source)))
+		if (isalnum(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
 		}
 		else
 		{
-			Append(&Lex, '\0');
-			dfaState = DfaTerminateId;
+			Append(&lexeme, '\0');
+			dfa_state = DfaTerminateId;
 		}
 		break;
 	case DfaInteger:
-		if (SilikoInputGetCharacter(Lexer->Source) == '.')
+		if (SilikoInputGetCharacter(object->input) == '.')
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
-			dfaState = DfaReal;
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
+			dfa_state = DfaReal;
 		}
-		else if (isdigit(SilikoInputGetCharacter(Lexer->Source)))
+		else if (isdigit(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
 		}
 		else
 		{
-			Append(&Lex, '\0');
-			dfaState = DfaTerminateInteger;
+			Append(&lexeme, '\0');
+			dfa_state = DfaTerminateInteger;
 		}
 		break;
 	case DfaReal:
-		if (isdigit(SilikoInputGetCharacter(Lexer->Source)))
+		if (isdigit(SilikoInputGetCharacter(object->input)))
 		{
-			Append(&Lex, SilikoInputGetCharacter(Lexer->Source));
-			SilikoInputAdvance(Lexer->Source);
+			Append(&lexeme, SilikoInputGetCharacter(object->input));
+			SilikoInputAdvance(object->input);
 		}
 		else
 		{
-			Append(&Lex, '\0');
-			dfaState = DfaTerminateReal;
+			Append(&lexeme, '\0');
+			dfa_state = DfaTerminateReal;
 		}
 		break;
 	case DfaTerminateInteger:
 		SilikoTokenAssignFromInteger(
-			Lexer->Token, strtoll(Lex.Buffer, NULL, 10));
-		dfaState = DfaFinish;
+			object->token, strtoll(lexeme.buffer, NULL, 10));
+		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateReal:
-		SilikoTokenAssignFromReal(Lexer->Token, atof(Lex.Buffer));
-		dfaState = DfaFinish;
+		SilikoTokenAssignFromReal(object->token, atof(lexeme.buffer));
+		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateEuler:
-		SilikoTokenAssignFromReal(Lexer->Token, EULER);
-		dfaState = DfaFinish;
+		SilikoTokenAssignFromReal(object->token, EULER);
+		dfa_state = DfaFinish;
 		break;
 	case DfaTerminatePi:
-		SilikoTokenAssignFromReal(Lexer->Token, PI);
-		dfaState = DfaFinish;
+		SilikoTokenAssignFromReal(object->token, PI);
+		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateCharacter:
-		SilikoTokenAssignFromCharacter(Lexer->Token, Lex.Buffer[0]);
-		dfaState = DfaFinish;
+		SilikoTokenAssignFromCharacter(object->token, lexeme.buffer[0]);
+		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateId:
-		SilikoTokenAssignFromId(Lexer->Token, Lex.Buffer);
-		dfaState = DfaFinish;
+		SilikoTokenAssignFromId(object->token, lexeme.buffer);
+		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateEndOfInput:
-		SilikoTokenAssignEndOfInput(Lexer->Token);
-		dfaState = DfaFinish;
+		SilikoTokenAssignEndOfInput(object->token);
+		dfa_state = DfaFinish;
 		break;
 	case DfaError:
-		Lexer->error = -1;
-		dfaState = DfaFinish;
+		object->error = -1;
+		dfa_state = DfaFinish;
 		break;
 	}
-	free(Lex.Buffer);
+	free(lexeme.buffer);
 }
 
-SilikoLexer *SilikoLexerCreate(SilikoInput *source, int support_dice)
+SilikoLexer *SilikoLexerCreate(
+	SilikoInput *source_input,
+	int support_dice)
 {
-	SilikoLexer *object = malloc(sizeof(SilikoLexer));
+	SilikoLexer *object = malloc(sizeof *object);
 	if (!object)
 		return NULL;
+
 	SilikoToken *new_token = SilikoTokenCreate();
 	if (!new_token)
 	{
@@ -335,8 +337,8 @@ SilikoLexer *SilikoLexerCreate(SilikoInput *source, int support_dice)
 		return NULL;
 	}
 
-	object->Source = source;
-	object->Token = new_token;
+	object->input = source_input;
+	object->token = new_token;
 	object->error = 0;
 	object->supportDice = support_dice;
 	SilikoLexerAdvance(object);
@@ -344,13 +346,13 @@ SilikoLexer *SilikoLexerCreate(SilikoInput *source, int support_dice)
 	return object;
 }
 
-void SilikoLexerDestroy(SilikoLexer *Lexer)
+void SilikoLexerDestroy(SilikoLexer *object)
 {
-	if (Lexer)
+	if (object)
 	{
-		SilikoInputDestroy(Lexer->Source);
-		SilikoTokenDestroy(Lexer->Token);
-		free(Lexer);
+		SilikoInputDestroy(object->input);
+		SilikoTokenDestroy(object->token);
+		free(object);
 	}
 }
 
@@ -359,5 +361,5 @@ const SilikoToken *SilikoLexerGetToken(SilikoLexer *object)
 	if (!object)
 		return NULL;
 
-	return object->Token;
+	return object->token;
 }

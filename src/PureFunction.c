@@ -17,46 +17,28 @@
 // License along with Siliko. If not, see
 // <http://www.gnu.org/licenses/>.
 
+
 #include <stdlib.h>
 
 #include <SilikoCore/Function.h>
 #include <SilikoCore/Value.h>
 
-struct State
+struct FunctionState
 {
     SilikoValue *(*function)(int argc, SilikoValue **argv);
 };
 
-static SilikoValue *Call(void *object, int argc, SilikoValue **argv);
-static SilikoFunction *Clone(void *void_state);
+static SilikoValue *Call(void *state, int argc, SilikoValue **argv);
 static void Destroy(void *state);
 static const struct SilikoFunctionVTable VTable = {
 	.call = Call,
 	.destroy = Destroy
 };
 
-static SilikoValue *Call(void *void_state, int argc, SilikoValue **argv)
+static SilikoValue *Call(void *state, int argc, SilikoValue **argv)
 {
-    struct State *state = void_state;
-    return state->function(argc, argv);
-}
-
-static SilikoFunction *Clone(void *void_state)
-{
-    struct State *source_state = void_state;
-    struct State *clone_state = malloc(sizeof *clone_state);
-    if (!clone_state)
-        return NULL;
-    clone_state->function = source_state->function;
-
-    SilikoFunction *clone = SilikoFunctionCreate(&VTable, clone_state);
-    if (!clone)
-    {
-        free(clone_state);
-        return NULL;
-    }
-
-    return clone;
+    struct FunctionState *typed_state = state;
+    return typed_state->function(argc, argv);
 }
 
 static void Destroy(void *state)
@@ -67,12 +49,13 @@ static void Destroy(void *state)
 SilikoFunction *SilikoPureFunctionCreate(
     SilikoValue *(*source_function)(int argc, SilikoValue **argv))
 {
-    struct State *object_state = malloc(sizeof(*object_state));
+    struct FunctionState *object_state = malloc(sizeof(*object_state));
     if (!object_state)
         return NULL;
     object_state->function = source_function;
 
-    SilikoFunction *object = SilikoFunctionCreate(&VTable, object_state);
+    SilikoFunction *object
+        = SilikoFunctionCreate(&VTable, object_state);
     if (!object)
     {
         free(object_state);

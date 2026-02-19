@@ -17,6 +17,7 @@
 // License along with Siliko. If not, see
 // <http://www.gnu.org/licenses/>.
 
+
 #include <stdlib.h>
 
 #include <SilikoCore/Engine.h>
@@ -24,7 +25,9 @@
 #include <SilikoCore/Node.h>
 #include <SilikoCore/Value.h>
 
-SilikoValue *SilikoEvaluate(SilikoEngine *engine, const SilikoNode *node)
+SilikoValue *SilikoEvaluate(
+    SilikoEngine *engine,
+    const SilikoNode *node)
 {
 	if (!node || !engine)
         return SilikoValueCreateFromError(SilikoErrorNullObject);
@@ -35,27 +38,27 @@ SilikoValue *SilikoEvaluate(SilikoEngine *engine, const SilikoNode *node)
 		return SilikoValueCopy(SilikoNodeGetValue(node));
 	case SilikoNodeBranch:
     {
-        SilikoValue **Arguments = NULL;
+        SilikoValue **args = NULL;
 
         int child_count = SilikoNodeCountChildren(node);
         if (child_count)
         {
-            if (!(Arguments = calloc(child_count, sizeof(*Arguments))))
+            if (!(args = calloc(child_count, sizeof(*args))))
                 return NULL;
 
             for(int i = 0; i < child_count; i++)
             {
-                Arguments[i] = SilikoEvaluate(
+                args[i] = SilikoEvaluate(
                     engine,
                     SilikoNodeFetchChild(node, i));
-                if(SilikoValueGetStatus(Arguments[i])
+                if(SilikoValueGetStatus(args[i])
                     == SilikoValueError)
                 {
-                    SilikoValue *error = Arguments[i];
-                    Arguments[i] = NULL;
+                    SilikoValue *error = args[i];
+                    args[i] = NULL;
                     for (int j = 0; j < i; j++)
-                        SilikoValueDestroy(Arguments[j]);
-                    free(Arguments);
+                        SilikoValueDestroy(args[j]);
+                    free(args);
                     return error;
                 }
             }
@@ -63,13 +66,14 @@ SilikoValue *SilikoEvaluate(SilikoEngine *engine, const SilikoNode *node)
 
         SilikoValue *result
             = SilikoEngineCallFunction(
-                engine, SilikoNodeGetId(node), child_count, Arguments);
-        free(Arguments);
+                engine, SilikoNodeGetId(node), child_count, args);
+        free(args);
 
         if (SilikoNodeIsNegated(node))
             SilikoValueNegate(result);
-        return result;    }
-        default: // Shouldn't happen, but just in case.
-            return SilikoValueCreateFromError(SilikoErrorSyntax);
+        return result;
+    }
+    default:
+        return SilikoValueCreateFromError(SilikoErrorSyntax);
 	}
 }

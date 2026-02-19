@@ -41,7 +41,7 @@ SilikoValue *SilikoEngineCallFunction(
     SilikoEngine* object,
     const char *function_name,
     int argc,
-    const SilikoValue **argv);
+    SilikoValue **argv);
 
 SILIKOCORE_EXPORT
 SilikoFunction *SilikoEngineFetchFunction(

@@ -68,6 +68,5 @@ int SilikoInstallMathFunctions(SilikoEngine *engine)
 		&& SilikoEngineInstallFunction(engine, "tanh",
 			SilikoPureFunctionCreate(SilikoMathTanh))
 		&& SilikoEngineInstallFunction(engine, "trunc",
-			SilikoPureFunctionCreate(SilikoMathTrunc))
-;
+			SilikoPureFunctionCreate(SilikoMathTrunc));
 }

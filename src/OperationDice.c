@@ -23,6 +23,7 @@
 // <https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/emt.html> and
 // <https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/emt64.html>.
 
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -63,8 +64,8 @@ static inline unsigned long long int Twist(
 		^ (v&1 ? MatrixA : 0));
 }
 
-static SilikoValue *call(void *void_state, int argc, SilikoValue **argv);
-static void destroy(void *object);
+static SilikoValue *call(void *state, int argc, SilikoValue **argv);
+static void destroy(void *state);
 
 static const struct SilikoFunctionVTable OperationDiceVTable = {
     .destroy = destroy,
@@ -73,31 +74,32 @@ static const struct SilikoFunctionVTable OperationDiceVTable = {
 
 struct DiceState
 {
-	unsigned long long int Table[TABLE_SIZE];
-	size_t Index;
+	unsigned long long int table[TABLE_SIZE];
+	size_t index;
 };
 
-static unsigned long long int genrand(struct DiceState *object)
+static inline
+unsigned long long int genrand(struct DiceState *state)
 {
-	if (object->Index >= TableSize)
+	if (state->index >= TableSize)
 	{
 		int i = 0;
 		for(; i < (TableSize - TableBreak); i++)
-			object->Table[i] = object->Table[i+TableBreak]
-				^ Twist(object->Table[i], object->Table[i+1]);
+			state->table[i] = state->table[i+TableBreak]
+				^ Twist(state->table[i], state->table[i+1]);
 		for(; i < (TableSize - 1); i++)
-			object->Table[i] = object->Table[i+TableBreak-TableSize]
-				^ Twist(object->Table[i], object->Table[i+1]);
-		object->Table[i] = object->Table[TableBreak-1]
-				^ Twist(object->Table[i], object->Table[0]);
+			state->table[i] = state->table[i+TableBreak-TableSize]
+				^ Twist(state->table[i], state->table[i+1]);
+		state->table[i] = state->table[TableBreak-1]
+				^ Twist(state->table[i], state->table[0]);
 
-		object->Index = 0;
+		state->index = 0;
 	}
 
-	return Temper(object->Table[object->Index++]);
+	return Temper(state->table[state->index++]);
 }
 
-static SilikoValue *call(void *void_state, int argc, SilikoValue **argv)
+static SilikoValue *call(void *state, int argc, SilikoValue **argv)
 {
     if (argc != 2)
 		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
@@ -116,14 +118,14 @@ static SilikoValue *call(void *void_state, int argc, SilikoValue **argv)
 
 	long long int result = 0;
 	for (int i = 1; i <= count; i++)
-		result += (genrand(void_state) % faces) + 1;
+		result += (genrand(state) % faces) + 1;
 	return SilikoValueCreateFromInteger(result);
 }
 
 
-static void destroy(void *object)
+static void destroy(void *state)
 {
-	free(object);
+	free(state);
 }
 
 SilikoFunction *SilikoOperationDiceCreate(unsigned long long int seed)
@@ -135,13 +137,13 @@ SilikoFunction *SilikoOperationDiceCreate(unsigned long long int seed)
 	if (seed == 0)
 		seed = ((unsigned long long int)time(NULL)) & TimeMask;
 
-	state->Table[0] = seed;
+	state->table[0] = seed;
 	for(int i = 1; i < TableSize; i++)
-		state->Table[i]
+		state->table[i]
 			= Multiplier
-			* (state->Table[i-1]
-				^ (state->Table[i-1] >> SeedShift)) + i;
-	state->Index = TableSize;
+			* (state->table[i-1]
+				^ (state->table[i-1] >> SeedShift)) + i;
+	state->index = TableSize;
 
     SilikoFunction *object =
         SilikoFunctionCreate(&OperationDiceVTable, state);

@@ -17,6 +17,7 @@
 // License along with Siliko. If not, see
 // <http://www.gnu.org/licenses/>.
 
+
 #include <stdlib.h>
 
 #include <SilikoCore/Input.h>
@@ -27,9 +28,13 @@
 #include <SilikoCore/Value.h>
 
 static SilikoNode *GetExpression(SilikoLexer *lexer);
-static SilikoNode *GetExpressionRest(SilikoLexer *lexer, SilikoNode*);
+static SilikoNode *GetExpressionRest(
+	SilikoLexer *lexer,
+	SilikoNode *branch);
 static SilikoNode *GetTerm(SilikoLexer *lexer);
-static SilikoNode *GetTermRest(SilikoLexer *lexer, SilikoNode*);
+static SilikoNode *GetTermRest(
+	SilikoLexer *lexer,
+	SilikoNode *branch);
 static SilikoNode *GetExponent(SilikoLexer *lexer);
 static SilikoNode *GetExponentRest(SilikoLexer *lexer);
 static SilikoNode *GetRoll(SilikoLexer *lexe);
@@ -38,21 +43,46 @@ static SilikoNode *GetAtom(SilikoLexer *lexer);
 static SilikoNode *GetNumber(SilikoLexer *lexer);
 static SilikoNode *GetUnsignedNumber(SilikoLexer *lexer);
 static SilikoNode *GetFunctionCall(SilikoLexer *lexer);
-static void GetArguments(SilikoLexer *lexer, SilikoNode *rVal);
+static void GetArguments(SilikoLexer *lexer, SilikoNode *branch);
+
+SilikoNode *SilikoParseInfix(SilikoInput *input)
+{
+	if (!input)
+		return NULL;
+
+	SilikoLexer *lexer = SilikoLexerCreate(input, -1);
+
+	if (!lexer)
+		return NULL;
+
+	SilikoNode *result = GetExpression(lexer);
+
+	if (SilikoTokenGetStatus(
+		SilikoLexerGetToken(lexer)) != SilikoTokenEndOfInput)
+	{
+		SilikoNodeDestroy(result);
+		result = SilikoNodeCreateFromError(SilikoErrorSyntax);
+	}
+	SilikoLexerDestroy(lexer);
+	return result;
+}
 
 static SilikoNode *GetExpression(SilikoLexer *lexer)
 {
-	SilikoNode *leftOperand = GetTerm(lexer);
-	if (!leftOperand)
+	SilikoNode *left_operand = GetTerm(lexer);
+	if (!left_operand)
 		return NULL;
 
-	return GetExpressionRest(lexer, leftOperand);
+	return GetExpressionRest(lexer, left_operand);
 }
 
-static SilikoNode *GetExpressionRest(SilikoLexer *lexer, SilikoNode *leftSide)
+static SilikoNode *GetExpressionRest(
+	SilikoLexer *lexer,
+	SilikoNode *left_side)
 {
-	if (SilikoTokenGetStatus(SilikoLexerGetToken(lexer)) != SilikoTokenCharacter)
-		return leftSide;
+	if (SilikoTokenGetStatus(SilikoLexerGetToken(lexer))
+			!= SilikoTokenCharacter)
+		return left_side;
 
 	char *operation = NULL;
 	switch (SilikoTokenGetCharacter(SilikoLexerGetToken(lexer)))
@@ -64,27 +94,27 @@ static SilikoNode *GetExpressionRest(SilikoLexer *lexer, SilikoNode *leftSide)
 		operation = "subtract";
 		break;
 	default:
-		return leftSide;
+		return left_side;
 	}
 	SilikoLexerAdvance(lexer);
 
-	SilikoNode *branchNode = SilikoNodeCreateBranch(operation);
-	if (!branchNode)
+	SilikoNode *branch_node = SilikoNodeCreateBranch(operation);
+	if (!branch_node)
 	{
-		SilikoNodeDestroy(leftSide);
+		SilikoNodeDestroy(left_side);
 		return NULL;
 	}
-	SilikoNodePushRight(branchNode, leftSide);
+	SilikoNodePushRight(branch_node, left_side);
 
-	SilikoNode *nextOperand = GetTerm(lexer);
-	if (!nextOperand)
+	SilikoNode *next_operand = GetTerm(lexer);
+	if (!next_operand)
 	{
-		SilikoNodeDestroy(branchNode);
+		SilikoNodeDestroy(branch_node);
 		return NULL;
 	}
-	SilikoNodePushRight(branchNode, nextOperand);
+	SilikoNodePushRight(branch_node, next_operand);
 
-	return GetExpressionRest(lexer, branchNode);
+	return GetExpressionRest(lexer, branch_node);
 }
 
 static SilikoNode *GetTerm(SilikoLexer *lexer)
@@ -96,11 +126,14 @@ static SilikoNode *GetTerm(SilikoLexer *lexer)
 	return GetTermRest(lexer, leftOperand);
 }
 
-static SilikoNode *GetTermRest(SilikoLexer *lexer, SilikoNode *leftSide)
+static SilikoNode *GetTermRest(
+	SilikoLexer *lexer,
+	SilikoNode *left_side)
 {
 	char *operation = NULL;
-	if (SilikoTokenGetStatus(SilikoLexerGetToken(lexer)) != SilikoTokenCharacter)
-		return leftSide;
+	if (SilikoTokenGetStatus(SilikoLexerGetToken(lexer))
+			!= SilikoTokenCharacter)
+		return left_side;
 
 	switch (SilikoTokenGetCharacter(SilikoLexerGetToken(lexer)))
 	{
@@ -111,60 +144,59 @@ static SilikoNode *GetTermRest(SilikoLexer *lexer, SilikoNode *leftSide)
 		operation = "divide";
 		break;
 	default:
-		return leftSide;
+		return left_side;
 	}
 	SilikoLexerAdvance(lexer);
 
-	SilikoNode *branchNode = SilikoNodeCreateBranch(operation);
-	if (!branchNode)
+	SilikoNode *branch_node = SilikoNodeCreateBranch(operation);
+	if (!branch_node)
 	{
-		SilikoNodeDestroy(leftSide);
+		SilikoNodeDestroy(left_side);
 		return NULL;
 	}
-	SilikoNodePushRight(branchNode, leftSide);
+	SilikoNodePushRight(branch_node, left_side);
 
-	SilikoNode *nextOperand = GetExponent(lexer);
-	if (!nextOperand)
+	SilikoNode *next_operand = GetExponent(lexer);
+	if (!next_operand)
 	{
-		SilikoNodeDestroy(branchNode);
+		SilikoNodeDestroy(branch_node);
 		return NULL;
 	}
-	SilikoNodePushRight(branchNode, nextOperand);
+	SilikoNodePushRight(branch_node, next_operand);
 
-	return GetTermRest(lexer, branchNode);
+	return GetTermRest(lexer, branch_node);
 }
 
 static SilikoNode *GetExponent(SilikoLexer *lexer)
 {
-	SilikoNode *leftValue = NULL;
-	SilikoNode *rest = NULL;
-	SilikoNode * rVal = NULL;
-
-	if (!(leftValue = GetRoll(lexer)))
+	SilikoNode *left_value = GetRoll(lexer);
+	if (!left_value)
 		return NULL;
 
-	if (!(rest = GetExponentRest(lexer)))
+	SilikoNode *rest = GetExponentRest(lexer);
+	if (!rest)
 	{
-		SilikoNodeDestroy(leftValue);
+		SilikoNodeDestroy(left_value);
 		return NULL;
 	}
 
 	if (SilikoNodeGetStatus(rest) == SilikoNodeNothing)
 	{
 		SilikoNodeDestroy(rest);
-		return leftValue;
+		return left_value;
 	}
 
-	if (!(rVal = SilikoNodeCreateBranch("power")))
+	SilikoNode *branch = SilikoNodeCreateBranch("power");
+	if (!branch)
 	{
-		SilikoNodeDestroy(leftValue);
+		SilikoNodeDestroy(left_value);
 		SilikoNodeDestroy(rest);
 		return NULL;
 	}
 
-	SilikoNodePushRight(rVal, leftValue);
-	SilikoNodePushRight(rVal, rest);
-	return rVal;
+	SilikoNodePushRight(branch, left_value);
+	SilikoNodePushRight(branch, rest);
+	return branch;
 }
 
 static SilikoNode *GetExponentRest(SilikoLexer *lexer)
@@ -200,36 +232,34 @@ static SilikoNode *GetExponentRest(SilikoLexer *lexer)
 
 static SilikoNode *GetRoll(SilikoLexer *lexer)
 {
-	SilikoNode *leftValue = NULL;
-	SilikoNode *rest = NULL;
-	SilikoNode *rVal;
-
-	if (!(leftValue = GetAtom(lexer)))
+	SilikoNode *left_value = GetAtom(lexer);
+	if (!left_value)
 		return NULL;
 
-	if (!(rest = GetRollRest(lexer)))
+	SilikoNode *rest = GetRollRest(lexer);
+	if (!rest)
 	{
-		SilikoNodeDestroy(leftValue);
+		SilikoNodeDestroy(left_value);
 		return NULL;
 	}
-
 
 	if (SilikoNodeGetStatus(rest) == SilikoNodeNothing)
 	{
 		SilikoNodeDestroy(rest);
-		return leftValue;
+		return left_value;
 	}
 
-	if (!(rVal = SilikoNodeCreateBranch("dice")))
+	SilikoNode *branch = SilikoNodeCreateBranch("dice");
+	if (!branch)
 	{
-		SilikoNodeDestroy(leftValue);
+		SilikoNodeDestroy(left_value);
 		SilikoNodeDestroy(rest);
 		return NULL;
 	}
 
-	SilikoNodePushRight(rVal, leftValue);
-	SilikoNodePushRight(rVal, rest);
-	return rVal;
+	SilikoNodePushRight(branch, left_value);
+	SilikoNodePushRight(branch, rest);
+	return branch;
 }
 
 static SilikoNode *GetRollRest(SilikoLexer *lexer)
@@ -246,8 +276,8 @@ static SilikoNode *GetRollRest(SilikoLexer *lexer)
 			!= SilikoTokenInteger)
 		return SilikoNodeCreateFromError(SilikoErrorSyntax);
 
-	long long int value = SilikoTokenGetInteger(
-		SilikoLexerGetToken(lexer));
+	long long int value
+		= SilikoTokenGetInteger(SilikoLexerGetToken(lexer));
 	SilikoLexerAdvance(lexer);
 	return SilikoNodeCreateFromInteger(value);
 }
@@ -359,7 +389,7 @@ static SilikoNode *GetFunctionCall(SilikoLexer *lexer)
 			!= SilikoTokenId)
 		return SilikoNodeCreateFromError(SilikoErrorSyntax);
 
-	SilikoNode *rVal =
+	SilikoNode *branch =
 		SilikoNodeCreateBranch(
 			SilikoTokenGetId(
 				SilikoLexerGetToken(lexer)));
@@ -370,36 +400,40 @@ static SilikoNode *GetFunctionCall(SilikoLexer *lexer)
 		&& SilikoTokenGetCharacter(SilikoLexerGetToken(lexer))
 			!= '(')
 	{
-		SilikoNodePushRight(rVal, SilikoNodeCreateFromError(SilikoErrorSyntax));
-		return rVal;
+		SilikoNodePushRight(
+			branch,
+			SilikoNodeCreateFromError(SilikoErrorSyntax));
+		return branch;
 	}
 	SilikoLexerAdvance(lexer);
 
-	GetArguments(lexer, rVal);
+	GetArguments(lexer, branch);
 
 	if (SilikoTokenGetStatus(SilikoLexerGetToken(lexer))
 			!= SilikoTokenCharacter
 		&& SilikoTokenGetCharacter(SilikoLexerGetToken(lexer))
 			!= ')')
 	{
-		SilikoNodePushRight(rVal, SilikoNodeCreateFromError(SilikoErrorSyntax));
-		return rVal;
+		SilikoNodePushRight(
+			branch,
+			SilikoNodeCreateFromError(SilikoErrorSyntax));
+		return branch;
 	}
 	SilikoLexerAdvance(lexer);
 
-	return rVal;
+	return branch;
 }
 
-static void GetArguments(SilikoLexer *lexer, SilikoNode *rVal)
+static void GetArguments(SilikoLexer *lexer, SilikoNode *branch)
 {
 	while(-1)
 	{
 		SilikoNode *Expression = GetExpression(lexer);
-		SilikoNodePushRight(rVal, Expression);
+		SilikoNodePushRight(branch, Expression);
 
 		if ((SilikoNodeGetStatus(Expression) == SilikoNodeLeaf
-				&& SilikoValueGetStatus(SilikoNodeGetValue(Expression))
-					== SilikoValueError)
+			&& SilikoValueGetStatus(SilikoNodeGetValue(Expression))
+				== SilikoValueError)
 			|| (SilikoTokenGetStatus(SilikoLexerGetToken(lexer))
 				== SilikoTokenCharacter
 				&& SilikoTokenGetCharacter(SilikoLexerGetToken(lexer))
@@ -412,31 +446,11 @@ static void GetArguments(SilikoLexer *lexer, SilikoNode *rVal)
 			|| SilikoTokenGetCharacter(SilikoLexerGetToken(lexer))
 				!= ',')
 		{
-			SilikoNodePushRight(rVal, SilikoNodeCreateFromError(SilikoErrorSyntax));
+			SilikoNodePushRight(
+				branch,
+				SilikoNodeCreateFromError(SilikoErrorSyntax));
 			break;
 		}
 		SilikoLexerAdvance(lexer);
 	}
-}
-
-
-SilikoNode *SilikoParseInfix(SilikoInput *Input)
-{
-	if (!Input)
-		return NULL;
-
-	SilikoLexer *lexer = SilikoLexerCreate(Input, -1);
-
-	if (!lexer)
-		return NULL;
-
-	SilikoNode *rVal = GetExpression(lexer);
-
-	if (SilikoTokenGetStatus(SilikoLexerGetToken(lexer)) != SilikoTokenEndOfInput)
-	{
-		SilikoNodeDestroy(rVal);
-		rVal = SilikoNodeCreateFromError(SilikoErrorSyntax);
-	}
-	SilikoLexerDestroy(lexer);
-	return rVal;
 }

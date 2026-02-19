@@ -33,13 +33,13 @@ struct StringInputState
 	char *current;
 };
 
-static int Advance(void *void_state)
+static int Advance(void *state)
 {
-	struct StringInputState *state = void_state;
+	struct StringInputState *typed_state = state;
 
-	if (state->current)
+	if (typed_state->current)
 	{
-		state->current++;
+		typed_state->current++;
 		return -1;
 	}
 	else
@@ -48,19 +48,19 @@ static int Advance(void *void_state)
 	}
 }
 
-static char GetCharacter(void *void_state)
+static char GetCharacter(void *state)
 {
-	struct StringInputState *state = void_state;
-
-	return *state->current;
+	struct StringInputState *typed_state = state;
+	return *typed_state->current;
 }
 
-static void Destroy(void *void_state)
+static void Destroy(void *state)
 {
-	struct StringInputState *state = void_state;
-
 	if (state)
-		free(state->string);
+	{
+		struct StringInputState *typed_state = state;
+		free(typed_state->string);
+	}
 	free(state);
 }
 
@@ -72,7 +72,7 @@ static const struct SilikoInputVTable vTable = {
 
 SilikoInput *SilikoStringInputCreate(const char *source)
 {
-	struct StringInputState *state = malloc(sizeof(*state));
+	struct StringInputState *state = malloc(sizeof *state);
 	if (!state)
 		return NULL;
 
