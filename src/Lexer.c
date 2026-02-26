@@ -33,9 +33,10 @@ struct SilikoLexer
 	int supportDice;
 };
 
-/* Values taken from Google Calculator 2011-07-06 */
-#define EULER 2.71828183
-#define PI    3.14159265
+// Taken from The Art of Computer Programming, Volume 2, Third Edition
+// By Donald E. Knuth
+static const double Pi =    0x3.243f6a8885a30p0;
+static const double Euler = 0x2.b7e151628aed2p0;
 
 static inline int
 IsOperator(int character)
@@ -295,11 +296,11 @@ void SilikoLexerAdvance(SilikoLexer *object)
 		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateEuler:
-		SilikoTokenAssignFromReal(object->token, EULER);
+		SilikoTokenAssignFromReal(object->token, Euler);
 		dfa_state = DfaFinish;
 		break;
 	case DfaTerminatePi:
-		SilikoTokenAssignFromReal(object->token, PI);
+		SilikoTokenAssignFromReal(object->token, Pi);
 		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateCharacter:
