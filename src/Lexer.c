@@ -292,7 +292,8 @@ void SilikoLexerAdvance(SilikoLexer *object)
 		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateReal:
-		SilikoTokenAssignFromReal(object->token, atof(lexeme.buffer));
+		SilikoTokenAssignFromReal(object->token,
+			strtof(lexeme.buffer, NULL));
 		dfa_state = DfaFinish;
 		break;
 	case DfaTerminateEuler:
