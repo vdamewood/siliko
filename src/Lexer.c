@@ -80,7 +80,6 @@ enum SilikoDfaState
 	DfaTerminateEndOfInput,
 	DfaFinish
 };
-typedef enum SilikoDfaState SilikoDfaState;
 
 struct Lexeme
 {
@@ -88,9 +87,8 @@ struct Lexeme
 	size_t current;
 	size_t end;
 };
-typedef struct Lexeme Lexeme;
 
-static int Append(Lexeme *object, char new_character)
+static int Append(struct Lexeme *object, char new_character)
 {
 	if (object->current == object->end)
 	{
@@ -111,6 +109,40 @@ static int Append(Lexeme *object, char new_character)
 	return -1;
 }
 
+SilikoLexer *SilikoLexerCreate(
+	SilikoInput *source_input,
+	int support_dice)
+{
+	SilikoLexer *object = malloc(sizeof *object);
+	if (!object)
+		return NULL;
+
+	SilikoToken *new_token = SilikoTokenCreate();
+	if (!new_token)
+	{
+		free(object);
+		return NULL;
+	}
+
+	object->input = source_input;
+	object->token = new_token;
+	object->error = 0;
+	object->supportDice = support_dice;
+	SilikoLexerAdvance(object);
+
+	return object;
+}
+
+void SilikoLexerDestroy(SilikoLexer *object)
+{
+	if (object)
+	{
+		SilikoInputDestroy(object->input);
+		SilikoTokenDestroy(object->token);
+		free(object);
+	}
+}
+
 void SilikoLexerAdvance(SilikoLexer *object)
 {
 	if (!object)
@@ -120,14 +152,14 @@ void SilikoLexerAdvance(SilikoLexer *object)
 			|| object->error)
 		return;
 
-	Lexeme lexeme = {malloc(4), 0, 4};
+	struct Lexeme lexeme = {malloc(4), 0, 4};
 	if (!(lexeme.buffer))
 	{
 		object->error = -1;
 		return;
 	}
 
-	SilikoDfaState dfa_state = DfaStart;
+	enum SilikoDfaState dfa_state = DfaStart;
 	while (dfa_state != DfaFinish)
 	switch (dfa_state)
 	{
@@ -322,40 +354,6 @@ void SilikoLexerAdvance(SilikoLexer *object)
 		break;
 	}
 	free(lexeme.buffer);
-}
-
-SilikoLexer *SilikoLexerCreate(
-	SilikoInput *source_input,
-	int support_dice)
-{
-	SilikoLexer *object = malloc(sizeof *object);
-	if (!object)
-		return NULL;
-
-	SilikoToken *new_token = SilikoTokenCreate();
-	if (!new_token)
-	{
-		free(object);
-		return NULL;
-	}
-
-	object->input = source_input;
-	object->token = new_token;
-	object->error = 0;
-	object->supportDice = support_dice;
-	SilikoLexerAdvance(object);
-
-	return object;
-}
-
-void SilikoLexerDestroy(SilikoLexer *object)
-{
-	if (object)
-	{
-		SilikoInputDestroy(object->input);
-		SilikoTokenDestroy(object->token);
-		free(object);
-	}
 }
 
 const SilikoToken *SilikoLexerGetToken(SilikoLexer *object)

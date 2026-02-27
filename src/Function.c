@@ -42,6 +42,12 @@ SilikoFunction *SilikoFunctionCreate(
     return object;
 }
 
+void SilikoFunctionDestroy(SilikoFunction *object)
+{
+    if (object)
+        object->v_table->destroy(object->state);
+}
+
 SilikoValue *SilikoFunctionCall(
     SilikoFunction *object,
     int argc,
@@ -50,10 +56,4 @@ SilikoValue *SilikoFunctionCall(
     if (!object)
         return SilikoValueCreateFromError(SilikoErrorNullObject);
     return object->v_table->call(object->state, argc, argv);
-}
-
-void SilikoFunctionDestroy(SilikoFunction *object)
-{
-    if (object)
-        object->v_table->destroy(object->state);
 }

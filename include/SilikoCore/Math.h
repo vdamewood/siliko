@@ -90,6 +90,7 @@ SilikoValue *SilikoMathTanh(int argc, SilikoValue **argv);
 SILIKOCORE_EXPORT
 SilikoValue *SilikoMathTrunc(int argc, SilikoValue **argv);
 
+
 SILIKOCORE_EXPORT
 int SilikoInstallMathFunctions(SilikoEngine *destination);
 

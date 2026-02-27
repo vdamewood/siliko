@@ -92,7 +92,6 @@ void SilikoNodeAssign(
 	SilikoNode *object,
 	const SilikoNode *sright_side);
 
-
 SILIKOCORE_EXPORT
 size_t SilikoNodeCountChildren(
 	const SilikoNode *object);

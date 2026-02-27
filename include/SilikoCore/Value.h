@@ -64,6 +64,7 @@ SilikoValue *SilikoValueCopy(const SilikoValue *source);
 SILIKOCORE_EXPORT
 void SilikoValueDestroy(SilikoValue *object);
 
+
 SILIKOCORE_EXPORT
 void SilikoValueAssignFromError(
 	SilikoValue *object,

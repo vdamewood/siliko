@@ -34,6 +34,16 @@ struct SilikoValue
 	};
 };
 
+SilikoValue *SilikoValueCreate(void)
+{
+    SilikoValue *object = malloc(sizeof *object);
+    if(!object)
+        return NULL;
+
+    SilikoValueAssignFromInteger(object, 0);
+    return object;
+}
+
 SilikoValue *SilikoValueCreateFromError(enum SilikoError source)
 {
     SilikoValue *object = malloc(sizeof *object);
@@ -77,53 +87,6 @@ SilikoValue *SilikoValueCopy(const SilikoValue *other)
 void SilikoValueDestroy(SilikoValue *object)
 {
     free(object);
-}
-
-enum SilikoError SilikoValueGetError(const SilikoValue *object)
-{
-    if (!object)
-        return SilikoErrorNullObject;
-
-    switch (object->status)
-    {
-    case SilikoValueError:
-        return object->error;
-    case SilikoValueInteger:
-    case SilikoValueReal:
-        return SilikoErrorNone;
-    }
-}
-
-long long int SilikoValueGetInteger(const SilikoValue *object)
-{
-    if (!object)
-        return 0;
-
-    switch (object->status)
-    {
-    case SilikoValueError:
-        return 0;
-    case SilikoValueInteger:
-        return object->integer;
-    case SilikoValueReal:
-        return (long long int)object->real;
-    }
-}
-
-double SilikoValueGetReal(const SilikoValue *object)
-{
-    if (!object)
-        return NAN;
-
-    switch (object->status)
-    {
-    case SilikoValueError:
-        return NAN;
-    case SilikoValueInteger:
-        return (double)object->integer;
-    case SilikoValueReal:
-        return object->real;
-    }
 }
 
 void SilikoValueAssignFromError(
@@ -181,6 +144,61 @@ void SilikoValueAssign(
     }
 }
 
+enum SilikoValueStatus SilikoValueGetStatus(const SilikoValue *object)
+{
+    if (!object)
+        return SilikoValueError;
+
+    return object->status;
+}
+
+enum SilikoError SilikoValueGetError(const SilikoValue *object)
+{
+    if (!object)
+        return SilikoErrorNullObject;
+
+    switch (object->status)
+    {
+    case SilikoValueError:
+        return object->error;
+    case SilikoValueInteger:
+    case SilikoValueReal:
+        return SilikoErrorNone;
+    }
+}
+
+long long int SilikoValueGetInteger(const SilikoValue *object)
+{
+    if (!object)
+        return 0;
+
+    switch (object->status)
+    {
+    case SilikoValueError:
+        return 0;
+    case SilikoValueInteger:
+        return object->integer;
+    case SilikoValueReal:
+        return (long long int)object->real;
+    }
+}
+
+double SilikoValueGetReal(const SilikoValue *object)
+{
+    if (!object)
+        return NAN;
+
+    switch (object->status)
+    {
+    case SilikoValueError:
+        return NAN;
+    case SilikoValueInteger:
+        return (double)object->integer;
+    case SilikoValueReal:
+        return object->real;
+    }
+}
+
 void SilikoValueNegate(SilikoValue *object)
 {
     if (!object)
@@ -198,12 +216,4 @@ void SilikoValueNegate(SilikoValue *object)
         // Ignore. Silence warnings.
         break;
     }
-}
-
-enum SilikoValueStatus SilikoValueGetStatus(const SilikoValue *object)
-{
-    if (!object)
-        return SilikoValueError;
-
-    return object->status;
 }

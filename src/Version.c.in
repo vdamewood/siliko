@@ -19,11 +19,30 @@
 
 #include <SilikoCore/Version.h>
 
-const unsigned int  SilikoVersionMajor               = @SilikoCore_VERSION_MAJOR@;
-const unsigned int  SilikoVersionMinor               = @SilikoCore_VERSION_MINOR@;
-const unsigned int  SilikoVersionPatch               = @SilikoCore_VERSION_PATCH@;
-const char          SilikoVersionPrereleaseSuffix[]  = "@SILIKO_CORE_PRERELEASE_SUFFIX@";
-const char          SilikoVersionPackageSuffix[]     = "@SILIKO_CORE_PACKAGE_SUFFIX@";
-const char          SilikoVersionString[]            = "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@";
-const char          SilikoVersionStringWithPackage[] = "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@";
-const char          SilikoVersionCopyright[]         = "@SILIKO_CORE_COPYRIGHT@";
+const unsigned int
+SilikoVersionMajor = @SilikoCore_VERSION_MAJOR@;
+
+const unsigned int
+SilikoVersionMinor = @SilikoCore_VERSION_MINOR@;
+
+const unsigned int
+SilikoVersionPatch = @SilikoCore_VERSION_PATCH@;
+
+const char
+SilikoVersionPrereleaseSuffix[] = "@SILIKO_CORE_PRERELEASE_SUFFIX@";
+
+const char
+SilikoVersionPackageSuffix[] = "@SILIKO_CORE_PACKAGE_SUFFIX@";
+
+const char
+SilikoVersionString[] =
+    "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@";
+
+const char
+SilikoVersionStringWithPackage[] =
+    "@SilikoCore_VERSION@"
+    "@SILIKO_CORE_PRERELEASE_SUFFIX@"
+    "@SILIKO_CORE_PACKAGE_SUFFIX@";
+
+const char
+SilikoVersionCopyright[] = "@SILIKO_CORE_COPYRIGHT@";

@@ -85,6 +85,46 @@ void SilikoEngineDestroy(SilikoEngine *object)
 	free(object);
 }
 
+SilikoValue *SilikoEngineCallFunction(
+	SilikoEngine *object,
+	const char *name,
+	int argc,
+	SilikoValue **argv)
+{
+	if (!object)
+		return SilikoValueCreateFromError(SilikoErrorNullObject);
+
+	SilikoFunction *function
+		= SilikoEngineFetchFunction(object, name);
+
+	if (!function)
+		return SilikoValueCreateFromError(SilikoErrorFunctionName);
+
+	return SilikoFunctionCall(function, argc, argv);
+}
+
+SilikoFunction *SilikoEngineFetchFunction(
+	SilikoEngine *object,
+	const char *name)
+{
+	if (!object)
+		return NULL;
+
+	uint8_t index = hash(name);
+	struct SilikoFunctionChain *current = object->table[index];
+
+	while (current)
+		if (strcmp(name, current->id) != 0)
+			current = current->next;
+		else
+			break;
+
+	if (current)
+		return current->function;
+	else
+		return NULL;
+}
+
 int SilikoEngineInstallFunction(
 	SilikoEngine *object,
 	const char *name,
@@ -118,44 +158,4 @@ int SilikoEngineInstallFunction(
 	}
 
 	return -1;
-}
-
-SilikoFunction *SilikoEngineFetchFunction(
-	SilikoEngine *object,
-	const char *name)
-{
-	if (!object)
-		return NULL;
-
-	uint8_t index = hash(name);
-	struct SilikoFunctionChain *current = object->table[index];
-
-	while (current)
-		if (strcmp(name, current->id) != 0)
-			current = current->next;
-		else
-			break;
-
-	if (current)
-		return current->function;
-	else
-		return NULL;
-}
-
-SilikoValue *SilikoEngineCallFunction(
-	SilikoEngine *object,
-	const char *name,
-	int argc,
-	SilikoValue **argv)
-{
-	if (!object)
-		return SilikoValueCreateFromError(SilikoErrorNullObject);
-
-	SilikoFunction *function
-		= SilikoEngineFetchFunction(object, name);
-
-	if (!function)
-		return SilikoValueCreateFromError(SilikoErrorFunctionName);
-
-	return SilikoFunctionCall(function, argc, argv);
 }

@@ -41,6 +41,15 @@ SilikoInput *SilikoInputCreate(
 	return object;
 }
 
+void SilikoInputDestroy(SilikoInput *object)
+{
+	if (object)
+	{
+		object->v_table->destroy(object->state);
+		free(object);
+	}
+}
+
 int SilikoInputAdvance(SilikoInput *object)
 {
 	if (!object)
@@ -53,13 +62,4 @@ char SilikoInputGetCharacter(SilikoInput *object)
 	if (!object)
 		return '\0';
 	return object->v_table->getCharacter(object->state);
-}
-
-void SilikoInputDestroy(SilikoInput *object)
-{
-	if (object)
-	{
-		object->v_table->destroy(object->state);
-		free(object);
-	}
 }

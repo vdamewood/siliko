@@ -49,6 +49,7 @@ int SilikoInputAdvance(SilikoInput *object);
 SILIKOCORE_EXPORT
 char SilikoInputGetCharacter(SilikoInput *object);
 
+
 SILIKOCORE_EXPORT
 SilikoInput *SilikoStringInputCreate(const char *input_string);
 

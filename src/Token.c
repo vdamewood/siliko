@@ -241,7 +241,6 @@ void SilikoTokenAssign(SilikoToken *object, const SilikoToken *source)
     }
 }
 
-
 enum SilikoTokenStatus SilikoTokenGetStatus(const SilikoToken *object)
 {
     if (!object)
