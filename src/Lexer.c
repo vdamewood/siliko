@@ -31,9 +31,11 @@ struct SilikoLexer
 	SilikoToken *token;
 	int error;
 	int supportDice;
+	int supportConstants;
 };
 
-// Taken from The Art of Computer Programming, Volume 2, Third Edition
+// Taken from
+// The Art of Computer Programming, Volume 2, Third Edition
 // By Donald E. Knuth
 static const double Pi =    0x3.243f6a8885a30p0;
 static const double Euler = 0x2.b7e151628aed2p0;
@@ -111,7 +113,8 @@ static int Append(struct Lexeme *object, char new_character)
 
 SilikoLexer *SilikoLexerCreate(
 	SilikoInput *source_input,
-	int support_dice)
+	int support_dice,
+	int support_constants)
 {
 	SilikoLexer *object = malloc(sizeof *object);
 	if (!object)
@@ -128,6 +131,7 @@ SilikoLexer *SilikoLexerCreate(
 	object->token = new_token;
 	object->error = 0;
 	object->supportDice = support_dice;
+	object->supportConstants = support_constants;
 	SilikoLexerAdvance(object);
 
 	return object;
@@ -180,13 +184,15 @@ void SilikoLexerAdvance(SilikoLexer *object)
 			SilikoInputAdvance(object->input);
 			dfa_state = DfaDice;
 		}
-		else if (SilikoInputGetCharacter(object->input) == 'e')
+		else if (object->supportConstants
+			&& SilikoInputGetCharacter(object->input) == 'e')
 		{
 			Append(&lexeme, SilikoInputGetCharacter(object->input));
 			SilikoInputAdvance(object->input);
 			dfa_state = DfaEuler;
 		}
-		else if (SilikoInputGetCharacter(object->input) == 'p')
+		else if (object->supportConstants
+			&& SilikoInputGetCharacter(object->input) == 'p')
 		{
 			Append(&lexeme, SilikoInputGetCharacter(object->input));
 			SilikoInputAdvance(object->input);

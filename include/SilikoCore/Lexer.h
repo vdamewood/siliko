@@ -29,18 +29,20 @@ typedef struct SilikoLexer SilikoLexer;
 
 SILIKO_EXPORT_C_API
 
-SILIKOCORE_EXPORT SilikoLexer *
-SilikoLexerCreate(SilikoInput *source, int support_dice);
+SILIKOCORE_EXPORT
+SilikoLexer *SilikoLexerCreate(
+    SilikoInput *source,
+    int support_dice,
+    int support_constants);
 
-SILIKOCORE_EXPORT void
-SilikoLexerDestroy(SilikoLexer *object);
+SILIKOCORE_EXPORT
+void SilikoLexerDestroy(SilikoLexer *object);
 
+SILIKOCORE_EXPORT
+void SilikoLexerAdvance(SilikoLexer *object);
 
-SILIKOCORE_EXPORT void
-SilikoLexerAdvance(SilikoLexer *object);
-
-SILIKOCORE_EXPORT const SilikoToken *
-SilikoLexerGetToken(SilikoLexer *object);
+SILIKOCORE_EXPORT
+const SilikoToken *SilikoLexerGetToken(SilikoLexer *object);
 
 SILIKO_END_C_API
 
