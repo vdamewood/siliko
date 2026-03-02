@@ -84,6 +84,7 @@ set_target_properties(SilikoCore PROPERTIES
 	VISIBILITY_INLINES_HIDDEN On
 	VERSION                   ${PROJECT_VERSION}
 	SOVERSION                 ${PROJECT_VERSION_MAJOR}
+	DEBUG_POSTFIX             "-debug"
 )
 
 # Some systems provide math.h functions in a seperate library called
