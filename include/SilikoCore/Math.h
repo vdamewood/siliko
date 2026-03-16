@@ -92,7 +92,7 @@ SilikoValue *SilikoMathTrunc(int argc, SilikoValue **argv);
 
 
 SILIKOCORE_EXPORT
-int SilikoInstallMathFunctions(SilikoEngine *destination);
+bool SilikoInstallMathFunctions(SilikoEngine *destination);
 
 SILIKO_END_C_API
 

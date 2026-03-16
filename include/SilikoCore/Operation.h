@@ -46,7 +46,7 @@ SILIKOCORE_EXPORT
 SilikoFunction *SilikoOperationDiceCreate(unsigned long long int seed);
 
 SILIKOCORE_EXPORT
-int SilikoInstallOperations(SilikoEngine *destination);
+bool SilikoInstallOperations(SilikoEngine *destination);
 
 SILIKO_END_C_API
 

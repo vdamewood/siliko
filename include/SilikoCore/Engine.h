@@ -21,6 +21,8 @@
 #if !defined SILIKO_CORE_ENGINE_H
 #define SILIKO_CORE_ENGINE_H
 
+#include <stdbool.h>
+
 #include <SilikoCore/Api.h>
 #include <SilikoCore/Function.h>
 #include <SilikoCore/Value.h>
@@ -49,7 +51,7 @@ SilikoFunction *SilikoEngineFetchFunction(
     const char *function_name);
 
 SILIKOCORE_EXPORT
-int SilikoEngineInstallFunction(
+bool SilikoEngineInstallFunction(
     SilikoEngine* object,
     const char *function_name,
     SilikoFunction *new_function);

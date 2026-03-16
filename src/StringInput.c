@@ -33,18 +33,18 @@ struct StringInputState
 	char *current;
 };
 
-static int Advance(void *state)
+static bool Advance(void *state)
 {
 	struct StringInputState *typed_state = state;
 
 	if (typed_state->current)
 	{
 		typed_state->current++;
-		return -1;
+		return true;
 	}
 	else
 	{
-		return 0;
+		return false;
 	}
 }
 

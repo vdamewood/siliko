@@ -30,8 +30,8 @@ struct SilikoLexer
 	SilikoInput *input;
 	SilikoToken *token;
 	int error;
-	int supportDice;
-	int supportConstants;
+	bool supportDice;
+	bool supportConstants;
 };
 
 // Taken from
@@ -113,8 +113,8 @@ static int Append(struct Lexeme *object, char new_character)
 
 SilikoLexer *SilikoLexerCreate(
 	SilikoInput *source_input,
-	int support_dice,
-	int support_constants)
+	bool support_dice,
+	bool support_constants)
 {
 	SilikoLexer *object = malloc(sizeof *object);
 	if (!object)

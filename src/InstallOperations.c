@@ -22,10 +22,10 @@
 #include <SilikoCore/Function.h>
 #include <SilikoCore/Operation.h>
 
-int SilikoInstallOperations(SilikoEngine *engine)
+bool SilikoInstallOperations(SilikoEngine *engine)
 {
 	if (!engine)
-		return 0;
+		return false;
 
 	return SilikoEngineInstallFunction(engine, "add",
 			SilikoPureFunctionCreate(SilikoOperationAdd))

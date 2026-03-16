@@ -50,10 +50,10 @@ void SilikoInputDestroy(SilikoInput *object)
 	}
 }
 
-int SilikoInputAdvance(SilikoInput *object)
+bool SilikoInputAdvance(SilikoInput *object)
 {
 	if (!object)
-		return 0;
+		return false;
 	return object->v_table->advance(object->state);
 }
 

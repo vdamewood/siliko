@@ -21,6 +21,8 @@
 #if !defined SILIKO_CORE_LEXER_H
 #define SILIKO_CORE_LEXER_H
 
+#include <stdbool.h>
+
 #include <SilikoCore/Api.h>
 #include <SilikoCore/Input.h>
 #include <SilikoCore/Token.h>
@@ -32,8 +34,8 @@ SILIKO_EXPORT_C_API
 SILIKOCORE_EXPORT
 SilikoLexer *SilikoLexerCreate(
     SilikoInput *source,
-    int support_dice,
-    int support_constants);
+    bool support_dice,
+    bool support_constants);
 
 SILIKOCORE_EXPORT
 void SilikoLexerDestroy(SilikoLexer *object);

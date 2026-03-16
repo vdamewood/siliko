@@ -22,10 +22,10 @@
 #include <SilikoCore/Function.h>
 #include <SilikoCore/Math.h>
 
-int SilikoInstallMathFunctions(SilikoEngine *engine)
+bool SilikoInstallMathFunctions(SilikoEngine *engine)
 {
 	if (!engine)
-		return 0;
+		return false;
 
 	return SilikoEngineInstallFunction(engine, "abs",
 			SilikoPureFunctionCreate(SilikoMathAbs))

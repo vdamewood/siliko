@@ -33,7 +33,7 @@ struct Branch
 	char *id;
 	size_t count;
 	size_t capacity;
-	int isNegated;
+	bool isNegated;
 	SilikoNode **children;
 };
 
@@ -163,7 +163,7 @@ static struct Branch *NewBranch(const char* source_id)
 
 	object->id = new_id;
 	object->count = 0;
-	object->isNegated = 0;
+	object->isNegated = false;
 	object->capacity = default_size;
 	object->children = new_children;
 
@@ -384,14 +384,14 @@ const char *SilikoNodeGetId(const SilikoNode *object)
 	return object->branch->id;
 }
 
-static int ExpandChildren(SilikoNode *object)
+static bool ExpandChildren(SilikoNode *object)
 {
 	int new_capacity = object->branch->capacity * 2;
 	SilikoNode **new_children =
 		calloc(new_capacity, sizeof *new_children);
 
 	if (!new_children)
-		return 0;
+		return false;
 
 	memcpy(
 		new_children,
@@ -401,54 +401,54 @@ static int ExpandChildren(SilikoNode *object)
 
 	object->branch->children = new_children;
 	object->branch->capacity = new_capacity;
-	return -1;
+	return true;
 }
 
-int SilikoNodeInsertCopy(
+bool SilikoNodeInsertCopy(
 	SilikoNode *object,
 	size_t position,
 	const SilikoNode *new_child)
 {
 	if (!object || !new_child)
-		return 0;
+		return false;
 
 	SilikoNode *new_child_copy = SilikoNodeCopy(new_child);
 	if (!new_child_copy)
-		return 0;
+		return false;
 
 	if (!SilikoNodeInsert(object, position, new_child_copy))
 	{
 		SilikoNodeDestroy(new_child_copy);
-		return 0;
+		return false;
 	}
 
-	return -1;
+	return true;
 }
 
-int SilikoNodeInsert(
+bool SilikoNodeInsert(
 	SilikoNode *object,
 	size_t position,
 	SilikoNode *new_child)
 {
 	if (!object || !new_child || OutOfBounds(object, position))
-		return 0;
+		return false;
 
 	if (object->branch->count == object->branch->capacity)
 		if (!ExpandChildren(object))
-			return 0;
+			return false;
 
 	for (int i = object->branch->count; i > position; i--)
 		object->branch->children[i] = object->branch->children[i-1];
 
 	object->branch->children[position] = new_child;
 	object->branch->count++;
-	return -1;
+	return true;
 }
 
-int SilikoNodeIsNegated(const SilikoNode *object)
+bool SilikoNodeIsNegated(const SilikoNode *object)
 {
 	if (!object)
-		return 0;
+		return false;
 
 	switch (object->status)
 	{
@@ -460,12 +460,12 @@ int SilikoNodeIsNegated(const SilikoNode *object)
 		case SilikoValueReal:
 			return SilikoValueGetReal(object->leaf) < 0.0;
 		default:
-			return 0;
+			return false;
 		}
 	case SilikoNodeBranch:
 		return object->branch->isNegated;
 	default:
-		return 0;
+		return false;
 	}
 }
 
@@ -505,75 +505,75 @@ SilikoNode *SilikoNodePruneChild(SilikoNode *parent, size_t child_index)
 	return child;
 }
 
-int SilikoNodePushCopyLeft(
+bool SilikoNodePushCopyLeft(
 	SilikoNode *object,
 	const SilikoNode *new_child)
 {
 	if (!object || !new_child)
-		return 0;
+		return false;
 
 	SilikoNode *new_child_copy = SilikoNodeCopy(new_child);
 	if (!new_child_copy)
-		return 0;
+		return false;
 
 	if (!SilikoNodePushLeft(object, new_child_copy))
 	{
 		SilikoNodeDestroy(new_child_copy);
-		return 0;
+		return false;
 	}
 
-	return -1;
+	return true;
 }
 
-int SilikoNodePushLeft(SilikoNode *object, SilikoNode *new_child)
+bool SilikoNodePushLeft(SilikoNode *object, SilikoNode *new_child)
 {
 	if (!object || !new_child)
-		return 0;
+		return false;
 
 	if (object->branch->count == object->branch->capacity)
 		if (!ExpandChildren(object))
-			return 0;
+			return false;
 
 	for (int i = object->branch->count; i >= 1; i--)
 		object->branch->children[i] = object->branch->children[i-1];
 
 	object->branch->children[0] = new_child;
 	object->branch->count++;
-	return -1;
+	return true;
 }
 
-int SilikoNodePushCopyRight(
+bool SilikoNodePushCopyRight(
 	SilikoNode *object,
 	const SilikoNode *new_child)
 {
 	if (!object || !new_child)
-		return 0;
+		return false;
 
 	SilikoNode *new_child_copy = SilikoNodeCopy(new_child);
 	if (!new_child_copy)
-		return 0;
+		return false;
 
 	if (!SilikoNodePushRight(object, new_child_copy))
 	{
 		SilikoNodeDestroy(new_child_copy);
-		return 0;
+		return false;
 	}
 
-	return -1;
+	return true;
 }
 
-int SilikoNodePushRight(SilikoNode *object, SilikoNode *new_child)
+bool SilikoNodePushRight(SilikoNode *object, SilikoNode *new_child)
 {
 	if (!object || !new_child)
-		return 0;
+		return false;
 
 	if (object->branch->count == object->branch->capacity)
 		if (!ExpandChildren(object))
-			return 0;
+			return false;
 
 	object->branch->children[object->branch->count] = new_child;
 	object->branch->count++;
-	return -1;
+	return true;
 }
 
 enum SilikoNodeStatus SilikoNodeGetStatus(const SilikoNode *object)

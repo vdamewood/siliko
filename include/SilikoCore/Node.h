@@ -21,6 +21,7 @@
 #if !defined SILIKO_CORE_NODE_H
 #define SILIKO_CORE_NODE_H
 
+#include <stdbool.h>
 #include <stddef.h>
 
 #include <SilikoCore/Api.h>
@@ -106,19 +107,19 @@ const char *SilikoNodeGetId(
 	const SilikoNode *object);
 
 SILIKOCORE_EXPORT
-int SilikoNodeInsertCopy(
+bool SilikoNodeInsertCopy(
 	SilikoNode *object,
 	size_t position,
 	const SilikoNode *new_child);
 
 SILIKOCORE_EXPORT
-int SilikoNodeInsert(
+bool SilikoNodeInsert(
 	SilikoNode *object,
 	size_t position,
 	SilikoNode *new_child);
 
 SILIKOCORE_EXPORT
-int SilikoNodeIsNegated(
+bool SilikoNodeIsNegated(
 	const SilikoNode *object);
 
 SILIKOCORE_EXPORT
@@ -131,22 +132,22 @@ SilikoNode *SilikoNodePruneChild(
 	size_t child_index);
 
 SILIKOCORE_EXPORT
-int SilikoNodePushCopyLeft(
+bool SilikoNodePushCopyLeft(
 	SilikoNode *object,
 	const SilikoNode *new_child);
 
 SILIKOCORE_EXPORT
-int SilikoNodePushLeft(
+bool SilikoNodePushLeft(
 	SilikoNode *object,
 	SilikoNode *new_child);
 
 SILIKOCORE_EXPORT
-int SilikoNodePushCopyRight(
+bool SilikoNodePushCopyRight(
 	SilikoNode *object,
 	const SilikoNode *new_child);
 
 SILIKOCORE_EXPORT
-int SilikoNodePushRight(
+bool SilikoNodePushRight(
 	SilikoNode *object,
 	SilikoNode *new_child);
 

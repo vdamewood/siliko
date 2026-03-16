@@ -125,18 +125,18 @@ SilikoFunction *SilikoEngineFetchFunction(
 		return NULL;
 }
 
-int SilikoEngineInstallFunction(
+bool SilikoEngineInstallFunction(
 	SilikoEngine *object,
 	const char *name,
 	SilikoFunction *function)
 {
 	if (!object)
-		return 0;
+		return false;
 
 	uint8_t index = hash(name);
 	struct SilikoFunctionChain  *new_node = malloc(sizeof *new_node);
 	if (!new_node)
-		return 0;
+		return false;
 
 	new_node->id = strdup(name);
 	new_node->function = function;
@@ -157,5 +157,5 @@ int SilikoEngineInstallFunction(
 		object->table[index] = new_node;
 	}
 
-	return -1;
+	return true;
 }

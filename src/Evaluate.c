@@ -46,7 +46,7 @@ SilikoValue *SilikoEvaluate(
             if (!(args = calloc(child_count, sizeof(*args))))
                 return NULL;
 
-            for(int i = 0; i < child_count; i++)
+            for (int i = 0; i < child_count; i++)
             {
                 args[i] = SilikoEvaluate(
                     engine,

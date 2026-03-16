@@ -21,6 +21,8 @@
 #if !defined SILIKO_CORE_INPUT_H
 #define SILIKO_CORE_INPUT_H
 
+#include <stdbool.h>
+
 #include <SilikoCore/Api.h>
 
 typedef struct SilikoInput SilikoInput;
@@ -29,7 +31,7 @@ SILIKO_EXPORT_C_API
 
 struct SilikoInputVTable
 {
-	int (*advance)(void *state);
+	bool (*advance)(void *state);
 	char (*getCharacter)(void *state);
 	void (*destroy)(void *state);
 };
@@ -44,7 +46,7 @@ void SilikoInputDestroy(SilikoInput *object);
 
 
 SILIKOCORE_EXPORT
-int SilikoInputAdvance(SilikoInput *object);
+bool SilikoInputAdvance(SilikoInput *object);
 
 SILIKOCORE_EXPORT
 char SilikoInputGetCharacter(SilikoInput *object);
