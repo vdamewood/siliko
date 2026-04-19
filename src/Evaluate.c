@@ -26,54 +26,54 @@
 #include <SilikoCore/Value.h>
 
 SilikoValue *SilikoEvaluate(
-    SilikoEngine *engine,
-    const SilikoNode *node)
+	SilikoEngine *engine,
+	const SilikoNode *node)
 {
 	if (!node || !engine)
-        return SilikoValueCreateFromError(SilikoErrorNullObject);
+		return SilikoValueCreateFromError(SilikoErrorNullObject);
 
 	switch (SilikoNodeGetStatus(node))
 	{
 	case SilikoNodeLeaf:
 		return SilikoValueCopy(SilikoNodeGetValue(node));
 	case SilikoNodeBranch:
-    {
-        SilikoValue **args = NULL;
+	{
+		SilikoValue **args = NULL;
 
-        int child_count = SilikoNodeCountChildren(node);
-        if (child_count)
-        {
-            if (!(args = calloc(child_count, sizeof(*args))))
-                return NULL;
+		int child_count = SilikoNodeCountChildren(node);
+		if (child_count)
+		{
+			if (!(args = calloc(child_count, sizeof(*args))))
+				return NULL;
 
-            for (int i = 0; i < child_count; i++)
-            {
-                args[i] = SilikoEvaluate(
-                    engine,
-                    SilikoNodeFetchChild(node, i));
-                if(SilikoValueGetStatus(args[i])
-                    == SilikoValueError)
-                {
-                    SilikoValue *error = args[i];
-                    args[i] = NULL;
-                    for (int j = 0; j < i; j++)
-                        SilikoValueDestroy(args[j]);
-                    free(args);
-                    return error;
-                }
-            }
-        }
+			for (int i = 0; i < child_count; i++)
+			{
+				args[i] = SilikoEvaluate(
+					engine,
+					SilikoNodeFetchChild(node, i));
+				if(SilikoValueGetStatus(args[i])
+					== SilikoValueError)
+				{
+					SilikoValue *error = args[i];
+					args[i] = NULL;
+					for (int j = 0; j < i; j++)
+						SilikoValueDestroy(args[j]);
+					free(args);
+					return error;
+				}
+			}
+		}
 
-        SilikoValue *result
-            = SilikoEngineCallFunction(
-                engine, SilikoNodeGetId(node), child_count, args);
-        free(args);
+		SilikoValue *result
+			= SilikoEngineCallFunction(
+				engine, SilikoNodeGetId(node), child_count, args);
+		free(args);
 
-        if (SilikoNodeIsNegated(node))
-            SilikoValueNegate(result);
-        return result;
-    }
-    default:
-        return SilikoValueCreateFromError(SilikoErrorSyntax);
+		if (SilikoNodeIsNegated(node))
+			SilikoValueNegate(result);
+		return result;
+	}
+	default:
+		return SilikoValueCreateFromError(SilikoErrorSyntax);
 	}
 }

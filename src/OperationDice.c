@@ -68,8 +68,8 @@ static SilikoValue *call(void *state, int argc, SilikoValue **argv);
 static void destroy(void *state);
 
 static const struct SilikoFunctionVTable OperationDiceVTable = {
-    .destroy = destroy,
-    .call = call,
+	.destroy = destroy,
+	.call = call,
 };
 
 struct DiceState
@@ -101,7 +101,7 @@ unsigned long long int genrand(struct DiceState *state)
 
 static SilikoValue *call(void *state, int argc, SilikoValue **argv)
 {
-    if (argc != 2)
+	if (argc != 2)
 		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
 
 	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
@@ -145,9 +145,9 @@ SilikoFunction *SilikoOperationDiceCreate(unsigned long long int seed)
 				^ (state->table[i-1] >> SeedShift)) + i;
 	state->index = TableSize;
 
-    SilikoFunction *object =
-        SilikoFunctionCreate(&OperationDiceVTable, state);
-    if (!object)
-        destroy(state);
+	SilikoFunction *object =
+		SilikoFunctionCreate(&OperationDiceVTable, state);
+	if (!object)
+		destroy(state);
 	return object;
 }

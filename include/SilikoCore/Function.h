@@ -41,19 +41,19 @@ SilikoFunction *SilikoFunctionCreate(
 
 SILIKOCORE_EXPORT
 void SilikoFunctionDestroy(
-    SilikoFunction *object);
+	SilikoFunction *object);
 
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoFunctionCall(
-    SilikoFunction *object,
-    int argc,
-    SilikoValue **argv);
+	SilikoFunction *object,
+	int argc,
+	SilikoValue **argv);
 
 
 SILIKOCORE_EXPORT
 SilikoFunction *SilikoPureFunctionCreate(
-    SilikoValue *(*function)(int argc, SilikoValue **argv));
+	SilikoValue *(*function)(int argc, SilikoValue **argv));
 
 
 SILIKO_END_C_API

@@ -30,8 +30,8 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoEvaluate(
-    SilikoEngine *engine,
-    const SilikoNode *node);
+	SilikoEngine *engine,
+	const SilikoNode *node);
 
 SILIKO_END_C_API
 

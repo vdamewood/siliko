@@ -44,7 +44,7 @@ static uint8_t hash(const char *input)
 	uint16_t remainder = 0;
 
 	for (const uint8_t *i = (const uint8_t *)input; *i; i++)
-        remainder = ((remainder << 1) + *i) % TableSize;
+		remainder = ((remainder << 1) + *i) % TableSize;
 
 	return remainder;
 }

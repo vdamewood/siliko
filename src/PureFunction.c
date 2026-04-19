@@ -25,7 +25,7 @@
 
 struct FunctionState
 {
-    SilikoValue *(*function)(int argc, SilikoValue **argv);
+	SilikoValue *(*function)(int argc, SilikoValue **argv);
 };
 
 static SilikoValue *Call(void *state, int argc, SilikoValue **argv);
@@ -37,30 +37,30 @@ static const struct SilikoFunctionVTable VTable = {
 
 static SilikoValue *Call(void *state, int argc, SilikoValue **argv)
 {
-    struct FunctionState *typed_state = state;
-    return typed_state->function(argc, argv);
+	struct FunctionState *typed_state = state;
+	return typed_state->function(argc, argv);
 }
 
 static void Destroy(void *state)
 {
-    free(state);
+	free(state);
 }
 
 SilikoFunction *SilikoPureFunctionCreate(
-    SilikoValue *(*source_function)(int argc, SilikoValue **argv))
+	SilikoValue *(*source_function)(int argc, SilikoValue **argv))
 {
-    struct FunctionState *object_state = malloc(sizeof(*object_state));
-    if (!object_state)
-        return NULL;
-    object_state->function = source_function;
+	struct FunctionState *object_state = malloc(sizeof(*object_state));
+	if (!object_state)
+		return NULL;
+	object_state->function = source_function;
 
-    SilikoFunction *object
-        = SilikoFunctionCreate(&VTable, object_state);
-    if (!object)
-    {
-        free(object_state);
-        return NULL;
-    }
+	SilikoFunction *object
+		= SilikoFunctionCreate(&VTable, object_state);
+	if (!object)
+	{
+		free(object_state);
+		return NULL;
+	}
 
-    return object;
+	return object;
 }

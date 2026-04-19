@@ -33,9 +33,9 @@ SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
 SilikoLexer *SilikoLexerCreate(
-    SilikoInput *source,
-    bool support_dice,
-    bool support_constants);
+	SilikoInput *source,
+	bool support_dice,
+	bool support_constants);
 
 SILIKOCORE_EXPORT
 void SilikoLexerDestroy(SilikoLexer *object);

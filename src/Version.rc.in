@@ -44,23 +44,23 @@ FILEOS           VOS__WINDOWS32
 FILETYPE         LIB_TYPE
 FILESUBTYPE      VFT2_UNKNOWN
 BEGIN
-    BLOCK "StringFileInfo"
-    BEGIN
-        BLOCK "040904E4"
-        BEGIN
-            VALUE "CompanyName",      "No Company"
-            VALUE "FileDescription",  "@SilikoCore_DESCRIPTION@"
-            VALUE "FileVersion",      "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@"
-            VALUE "InternalName",     "Siliko Core"
-            VALUE "LegalCopyright",   "@SILIKO_CORE_COPYRIGHT@"
-            VALUE "OriginalFilename", STRINGIFY_MACRO(SILIKO_CORE_ORIGINAL_FILENAME)
-            VALUE "ProductName",      "Siliko Core"
-            VALUE "ProductVersion",   "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@"
-        END
-    END
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904E4"
+		BEGIN
+			VALUE "CompanyName",      "No Company"
+			VALUE "FileDescription",  "@SilikoCore_DESCRIPTION@"
+			VALUE "FileVersion",      "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@"
+			VALUE "InternalName",     "Siliko Core"
+			VALUE "LegalCopyright",   "@SILIKO_CORE_COPYRIGHT@"
+			VALUE "OriginalFilename", STRINGIFY_MACRO(SILIKO_CORE_ORIGINAL_FILENAME)
+			VALUE "ProductName",      "Siliko Core"
+			VALUE "ProductVersion",   "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@"
+		END
+	END
 
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x409, 1252
-    END
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x409, 1252
+	END
 END
