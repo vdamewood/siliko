@@ -40,19 +40,19 @@ void SilikoEngineDestroy(SilikoEngine *object);
 
 SILIKOCORE_EXPORT
 SilikoValue *SilikoEngineCallFunction(
-	SilikoEngine* object,
+	SilikoEngine *object,
 	const char *function_name,
 	int argc,
 	SilikoValue **argv);
 
 SILIKOCORE_EXPORT
 SilikoFunction *SilikoEngineFetchFunction(
-	SilikoEngine* object,
+	SilikoEngine *object,
 	const char *function_name);
 
 SILIKOCORE_EXPORT
 bool SilikoEngineInstallFunction(
-	SilikoEngine* object,
+	SilikoEngine *object,
 	const char *function_name,
 	SilikoFunction *new_function);
 

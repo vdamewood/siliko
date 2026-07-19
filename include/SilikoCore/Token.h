@@ -27,12 +27,12 @@ typedef struct SilikoToken SilikoToken;
 
 enum SilikoTokenStatus
 {
-		SilikoTokenUnset = 0,
-		SilikoTokenInteger,
-		SilikoTokenReal,
-		SilikoTokenCharacter,
-		SilikoTokenId,
-		SilikoTokenEndOfInput
+	SilikoTokenUnset = 0,
+	SilikoTokenInteger,
+	SilikoTokenReal,
+	SilikoTokenCharacter,
+	SilikoTokenId,
+	SilikoTokenEndOfInput
 };
 
 SILIKO_EXPORT_C_API
