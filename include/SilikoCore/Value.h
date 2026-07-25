@@ -83,7 +83,7 @@ void SilikoValueAssignFromReal(
 SILIKOCORE_EXPORT
 void SilikoValueAssign(
 	SilikoValue *object,
-	const SilikoValue *sright_side);
+	const SilikoValue *right_side);
 
 SILIKOCORE_EXPORT
 enum SilikoValueStatus SilikoValueGetStatus(

@@ -54,7 +54,7 @@ SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCreateFromValue(SilikoValue *source);
 
 SILIKOCORE_EXPORT
-SilikoNode *SilikoNodeCreateBranch(const char *function_Name);
+SilikoNode *SilikoNodeCreateBranch(const char *function_name);
 
 SILIKOCORE_EXPORT
 SilikoNode *SilikoNodeCopy(const SilikoNode *source);
@@ -91,7 +91,7 @@ void SilikoNodeAssignBranch(
 SILIKOCORE_EXPORT
 void SilikoNodeAssign(
 	SilikoNode *object,
-	const SilikoNode *sright_side);
+	const SilikoNode *right_side);
 
 SILIKOCORE_EXPORT
 size_t SilikoNodeCountChildren(
