@@ -22,13 +22,13 @@
 #define SILIKO_CORE_PARSE_INFIX_H
 
 #include <SilikoCore/Api.h>
-#include <SilikoCore/Input.h>
+#include <SilikoCore/Lexer.h>
 #include <SilikoCore/Node.h>
 
 SILIKO_EXPORT_C_API
 
 SILIKOCORE_EXPORT
-SilikoNode *SilikoParseInfix(SilikoInput *input);
+SilikoNode *SilikoParseInfix(SilikoLexer *lexer);
 
 SILIKO_END_C_API
 

@@ -45,13 +45,8 @@ static SilikoNode *GetUnsignedNumber(SilikoLexer *lexer);
 static SilikoNode *GetFunctionCall(SilikoLexer *lexer);
 static void GetArguments(SilikoLexer *lexer, SilikoNode *branch);
 
-SilikoNode *SilikoParseInfix(SilikoInput *input)
+SilikoNode *SilikoParseInfix(SilikoLexer *lexer)
 {
-	if (!input)
-		return NULL;
-
-	SilikoLexer *lexer = SilikoLexerCreate(input, -1, -1);
-
 	if (!lexer)
 		return NULL;
 
