@@ -76,6 +76,7 @@ void SilikoEngineDestroy(SilikoEngine *object)
 			{
 				struct SilikoFunctionChain *next = current->next;
 				free(current->id);
+				SilikoFunctionDestroy(current->function);
 				free(current);
 				current = next;
 			}
