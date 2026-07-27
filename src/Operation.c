@@ -171,15 +171,23 @@ SilikoValue *SilikoOperationPower(int argc, SilikoValue **argv)
 	if (argc < 1)
 		return SilikoValueCreateFromError(SilikoErrorFunctionArguments);
 
-	if (SilikoValueGetStatus(argv[0]) == SilikoValueError)
-		return SilikoValueCopy(argv[0]);
+	SilikoValue **error = NULL;
+	long long int i = argc - 1;
 
-	double result = SilikoValueGetReal(argv[0]);
-	for (int i = 1; i < argc; i++)
+	if (SilikoValueGetStatus(argv[i]) == SilikoValueError)
+		error = &argv[i];
+	double result = SilikoValueGetReal(argv[i]);
+
+	for (i--; i >= 0; i--)
 	{
-		if(SilikoValueGetStatus(argv[i]) == SilikoValueError)
-			return SilikoValueCopy(argv[i]);
-		result = pow(result, SilikoValueGetReal(argv[i]));
+		if (SilikoValueGetStatus(argv[i]) == SilikoValueError)
+			error = &argv[i];
+		if (!error)
+			result = pow(SilikoValueGetReal(argv[i]), result);
 	}
+
+	if (error)
+		return SilikoValueCopy(*error);
+
 	return SilikoValueCreateFromReal(result);
 }
